@@ -67,7 +67,7 @@ function Endpoint() {
       <input ref={inputRef} type="text" size={50} defaultValue={getEndpoint()} />{" "}
       <button onClick={change}>Change</button>
       {" / "}
-      <button onClick={() => changeTo("production")}>Change to production</button>
+      <button onClick={() => changeTo("production")}>Change to PrototypeNet</button>
       {" / "}
       <button onClick={() => changeTo("local")}>Change to local</button>
     </div>
