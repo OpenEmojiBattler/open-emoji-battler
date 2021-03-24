@@ -15,7 +15,7 @@ export function Top() {
                   <strong>Open Emoji Battler</strong>
                   <span>
                     {" "}
-                    is an open-source indie blockchain game, led by the community, working on-chain.
+                    is an open-source indie blockchain game, led by the community, running on-chain.
                   </span>
                 </h1>
               </div>
