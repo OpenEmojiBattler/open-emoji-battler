@@ -36,6 +36,10 @@ pub fn authority_keys_from_seed(s: &str) -> (AuraId, GrandpaId) {
     (get_from_seed::<AuraId>(s), get_from_seed::<GrandpaId>(s))
 }
 
+pub fn production_config() -> Result<ChainSpec, String> {
+    ChainSpec::from_json_bytes(&include_bytes!("../specs/production-raw.json")[..])
+}
+
 pub fn staging_config() -> Result<ChainSpec, String> {
     ChainSpec::from_json_bytes(&include_bytes!("../specs/staging-raw.json")[..])
 }
