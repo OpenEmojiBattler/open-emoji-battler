@@ -8,15 +8,17 @@ import { tx, query, connected, getEnv } from "common"
 
 const main = async () => {
   const envName = process.argv[2]
-  const adminMnemonic = process.argv[3]
+  const admin = process.argv[3]
 
   await cryptoWaitReady()
 
   const keyring = new Keyring({ ss58Format: 42, type: "sr25519" })
 
-  const adminPair = adminMnemonic
-    ? keyring.addFromMnemonic(adminMnemonic)
-    : keyring.addFromUri("//Alice")
+  if (!admin) {
+    console.log("Use Alice")
+  }
+
+  const adminPair = admin ? keyring.addFromMnemonic(admin) : keyring.addFromUri("//Alice")
 
   const code = fs
     .readFileSync(

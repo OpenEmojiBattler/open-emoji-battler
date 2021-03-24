@@ -5,8 +5,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "set-code:dev": "ts-node setCode.ts local",
-    "set-code:staging": "ts-node setCode.ts staging \"$OEB_STAGING_ADMIN_MNEMONIC\"",
-    "set-code:production": "ts-node setCode.ts production \"$OEB_PRODUCTION_ADMIN_MNEMONIC\"",
+    "set-code:staging": "ts-node setCode.ts staging \"$OEB_STAGING_ADMIN\"",
+    "set-code:production": "ts-node setCode.ts production \"$OEB_PRODUCTION_ADMIN\"",
     "check-ts": "tsc -p . --noEmit"
   },
   "dependencies": {

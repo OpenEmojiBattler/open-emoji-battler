@@ -8,7 +8,7 @@ import availableEmoBaseIds from "./availableEmoBaseIds.json"
 
 const main = async () => {
   const envName = process.argv[2]
-  const adminMnemonic = process.argv[3]
+  const admin = process.argv[3]
 
   await connected(getEnv(envName).endpoint, async () => {
     const basesMap = new Map()
@@ -23,9 +23,11 @@ const main = async () => {
     await cryptoWaitReady()
     const keyring = new Keyring({ ss58Format: 42, type: "sr25519" })
 
-    const adminPair = adminMnemonic
-      ? keyring.addFromMnemonic(adminMnemonic)
-      : keyring.addFromUri("//Alice")
+    if (!admin) {
+      console.log("Use Alice")
+    }
+
+    const adminPair = admin ? keyring.addFromMnemonic(admin) : keyring.addFromUri("//Alice")
 
     const h = await sudo(
       (t) => t.game.updateEmoBases(bases, fixedBaseIds, builtBaseIds, true),
