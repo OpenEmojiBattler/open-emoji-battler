@@ -20,13 +20,37 @@ export function Top() {
                 </h1>
               </div>
               <div className={"block"}>
-                <a>Intro & How to Play</a>
+                <a
+                  href="https://forum.open-emoji-battler.community/t/topic/17"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Intro & How to Play
+                </a>
                 <span className={"mx-3"}>•</span>
-                <a>Forum</a>
+                <a
+                  href="https://forum.open-emoji-battler.community/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Forum
+                </a>
                 <span className={"mx-3"}>•</span>
-                <a>Twitter</a>
+                <a
+                  href="https://twitter.com/OEB_community"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Twitter
+                </a>
                 <span className={"mx-3"}>•</span>
-                <a>Source Code</a>
+                <a
+                  href="https://github.com/OpenEmojiBattler/open-emoji-battler"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Source Code
+                </a>
               </div>
             </div>
             <div style={{ width: "550px" }}>
