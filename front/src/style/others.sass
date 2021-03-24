@@ -1,0 +1,158 @@
+div.top-container
+  max-width: 1100px
+  width: auto
+  margin: 0 auto
+
+div.player-icon-and-text-box
+  display: inline-block
+  > div
+    display: flex
+    align-items: center
+    border: 1px solid $grey
+    border-radius: $border-radius
+    padding: 0.75rem
+    > div:first-child
+      margin-right: 0.75rem
+    > div:not(:first-child)
+      text-align: left
+
+.rivals-toggle
+  user-select: none
+  align-items: stretch
+  display: flex
+
+  > div
+    font-size: 0.875em
+    display: flex
+    border-color: $white1
+    border-style: solid
+    border-width: 1px
+    align-items: center
+    padding: 4px 8px
+    cursor: pointer
+
+    &.rivals-toggle-active
+      background-color: $white1
+      color: $black1
+      cursor: default
+
+      strong
+        color: currentColor
+
+    &:not(.rivals-toggle-active):hover
+      background-color: $black2
+
+    &:first-child
+      border-top-left-radius: $border-radius-big
+      border-bottom-left-radius: $border-radius-big
+
+    &:not(:first-child):not(:last-child)
+      border-right-style: none
+      border-left-style: none
+
+    &:last-child
+      border-top-right-radius: $border-radius-big
+      border-bottom-right-radius: $border-radius-big
+
+    > div:first-child
+      margin-right: 8px
+
+.has-moon:after
+  font-size: 30px
+  content: ''
+  animation-name: moon
+  animation-duration: 1s
+  animation-timing-function: linear
+  animation-iteration-count: infinite
+
+@keyframes moon
+  0%
+    content: '🌑'
+  12%
+    content: '🌒'
+  25%
+    content: '🌓'
+  37%
+    content: '🌔'
+  50%
+    content: '🌕'
+  62%
+    content: '🌖'
+  75%
+    content: '🌗'
+  87%
+    content: '🌘'
+  100%
+    content: '🌑'
+
+button.has-check
+  &:after
+    padding-left: 4px
+    content: "✔"
+
+button.has-clock
+  &:after
+    padding-left: 4px
+    font-size: 24px
+    content: ""
+    animation-name: clock
+    animation-duration: 4s
+    animation-timing-function: linear
+    animation-iteration-count: infinite
+
+@keyframes clock
+  0%
+    content: '🕛'
+  4%
+    content: '🕧'
+  8%
+    content: '🕐'
+  12%
+    content: '🕜'
+  16%
+    content: '🕑'
+  21%
+    content: '🕝'
+  25%
+    content: '🕒'
+  29%
+    content: '🕞'
+  33%
+    content: '🕓'
+  37%
+    content: '🕟'
+  42%
+    content: '🕔'
+  46%
+    content: '🕠'
+  50%
+    content: '🕕'
+  54%
+    content: '🕡'
+  58%
+    content: '🕖'
+  63%
+    content: '🕢'
+  67%
+    content: '🕗'
+  71%
+    content: '🕣'
+  75%
+    content: '🕘'
+  79%
+    content: '🕤'
+  84%
+    content: '🕙'
+  88%
+    content: '🕥'
+  92%
+    content: '🕚'
+  96%
+    content: '🕦'
+  100%
+    content: '🕛'
+
+// https://github.com/polkadot-js/extension/blob/a0897fdec84037ac56d5277bb9b5f528bf82a2d1/packages/extension-ui/src/components/Identicon.tsx#L45-L48
+svg.identicon
+  > circle:first-of-type
+    display: none

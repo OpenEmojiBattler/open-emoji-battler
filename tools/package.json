@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "tools",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "scripts": {
+    "generate-codec-types": "ts-node generateCodecTypes.ts",
+    "lint": "prettier --write './**/*.ts'",
+    "check-ts": "tsc -p . --noEmit"
+  },
+  "dependencies": {
+    "common": "0.1.0"
+  }
+}

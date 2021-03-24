@@ -1,0 +1,459 @@
+{
+  "mtc_Emo": {
+    "id": "u16",
+    "base_id": "u16"
+  },
+  "mtc_GradeAndBoard": {
+    "grade": "u8",
+    "board": "mtc_Board"
+  },
+  "mtc_Board": "(Vec<mtc_BoardEmo>)",
+  "mtc_BoardEmo": {
+    "mtc_emo_ids": "Vec<u16>",
+    "base_id": "u16",
+    "attributes": "emo_Attributes"
+  },
+  "mtc_Ghost": {
+    "history": "Vec<mtc_GradeAndGhostBoard>"
+  },
+  "mtc_GradeAndGhostBoard": {
+    "grade": "u8",
+    "board": "mtc_GhostBoard"
+  },
+  "mtc_GhostBoard": "(Vec<mtc_GhostBoardEmo>)",
+  "mtc_GhostBoardEmo": {
+    "base_id": "u16",
+    "attributes": "emo_Attributes"
+  },
+  "mtc_GhostState_Active": {
+    "health": "u8"
+  },
+  "mtc_GhostState_Retired": {
+    "final_turn": "u8"
+  },
+  "mtc_GhostState": {
+    "_enum": {
+      "Active": "mtc_GhostState_Active",
+      "Retired": "mtc_GhostState_Retired"
+    }
+  },
+  "mtc_shop_Catalog": "(Vec<mtc_shop_CatalogLine>)",
+  "mtc_shop_CatalogLine": "(Vec<mtc_Emo>)",
+  "mtc_shop_PlayerOperation_Buy": {
+    "mtc_emo_id": "u16",
+    "index": "u8"
+  },
+  "mtc_shop_PlayerOperation_Sell": {
+    "index": "u8"
+  },
+  "mtc_shop_PlayerOperation_Move": {
+    "indexes": "Vec<u8>"
+  },
+  "mtc_shop_PlayerOperation": {
+    "_enum": {
+      "Buy": "mtc_shop_PlayerOperation_Buy",
+      "Sell": "mtc_shop_PlayerOperation_Sell",
+      "Move": "mtc_shop_PlayerOperation_Move",
+      "NextCatalogLine": null,
+      "Upgrade": null
+    }
+  },
+  "mtc_shop_BoardLogs": "(Vec<mtc_shop_BoardLog>)",
+  "mtc_shop_BoardLog_Add": {
+    "index": "u8",
+    "board_emo": "mtc_BoardEmo"
+  },
+  "mtc_shop_BoardLog_Remove": {
+    "index": "u8"
+  },
+  "mtc_shop_BoardLog_Move": {
+    "from_index": "u8",
+    "to_index": "u8"
+  },
+  "mtc_shop_BoardLog_IncreaseStats": {
+    "index": "u8",
+    "attack": "u16",
+    "health": "u16",
+    "calculated_attack": "u16",
+    "calculated_health": "u16"
+  },
+  "mtc_shop_BoardLog_AddAbility": {
+    "index": "u8",
+    "ability": "emo_ability_Ability",
+    "is_target_triple": "bool"
+  },
+  "mtc_shop_BoardLog_Triple": {
+    "removed_indexes": "Vec<u8>"
+  },
+  "mtc_shop_BoardLog": {
+    "_enum": {
+      "Add": "mtc_shop_BoardLog_Add",
+      "Remove": "mtc_shop_BoardLog_Remove",
+      "Move": "mtc_shop_BoardLog_Move",
+      "IncreaseStats": "mtc_shop_BoardLog_IncreaseStats",
+      "AddAbility": "mtc_shop_BoardLog_AddAbility",
+      "Triple": "mtc_shop_BoardLog_Triple"
+    }
+  },
+  "mtc_battle_Logs": "(Vec<mtc_battle_Log>)",
+  "mtc_battle_Log_Attack": {
+    "attack_player_index": "u8",
+    "attack_emo_index": "u8",
+    "defense_emo_index": "u8"
+  },
+  "mtc_battle_Log_Damage": {
+    "player_index": "u8",
+    "emo_index": "u8",
+    "damage": "u16",
+    "health": "u16"
+  },
+  "mtc_battle_Log_Remove": {
+    "player_index": "u8",
+    "emo_index": "u8"
+  },
+  "mtc_battle_Log_Add": {
+    "player_index": "u8",
+    "emo_index": "u8",
+    "base_id": "u16",
+    "attributes": "emo_Attributes"
+  },
+  "mtc_battle_Log_IncreaseStats": {
+    "player_index": "u8",
+    "emo_index": "u8",
+    "attack": "u16",
+    "health": "u16",
+    "calculated_attack": "u16",
+    "calculated_health": "u16"
+  },
+  "mtc_battle_Log_DecreaseStats": {
+    "player_index": "u8",
+    "emo_index": "u8",
+    "attack": "u16",
+    "health": "u16",
+    "calculated_attack": "u16",
+    "calculated_health": "u16"
+  },
+  "mtc_battle_Log_AddBattleAbility": {
+    "player_index": "u8",
+    "emo_index": "u8",
+    "ability": "emo_ability_battle_Battle",
+    "is_emo_triple": "bool"
+  },
+  "mtc_battle_Log_RemoveBattleAbility": {
+    "player_index": "u8",
+    "emo_index": "u8",
+    "ability_index": "u8",
+    "ability": "emo_ability_battle_Battle"
+  },
+  "mtc_battle_Log": {
+    "_enum": {
+      "Attack": "mtc_battle_Log_Attack",
+      "Damage": "mtc_battle_Log_Damage",
+      "Remove": "mtc_battle_Log_Remove",
+      "Add": "mtc_battle_Log_Add",
+      "IncreaseStats": "mtc_battle_Log_IncreaseStats",
+      "DecreaseStats": "mtc_battle_Log_DecreaseStats",
+      "AddBattleAbility": "mtc_battle_Log_AddBattleAbility",
+      "RemoveBattleAbility": "mtc_battle_Log_RemoveBattleAbility"
+    }
+  },
+  "emo_Bases": "(BTreeMap<u16, emo_Base>)",
+  "emo_Base": {
+    "id": "u16",
+    "typ": "emo_Typ",
+    "codepoint": "u32",
+    "grade": "u8",
+    "attack": "u16",
+    "health": "u16",
+    "abilities": "Vec<emo_ability_Ability>"
+  },
+  "emo_Typ": {
+    "_enum": {
+      "Human": null,
+      "Nature": null,
+      "Food": null,
+      "Object": null
+    }
+  },
+  "emo_Attributes": {
+    "attack": "u16",
+    "health": "u16",
+    "abilities": "Vec<emo_ability_Ability>",
+    "is_triple": "bool"
+  },
+  "emo_ability_Ability": {
+    "_enum": {
+      "Shop": "(emo_ability_shop_Shop)",
+      "Battle": "(emo_ability_battle_Battle)"
+    }
+  },
+  "emo_ability_shop_Shop": {
+    "_enum": {
+      "Pre": "(emo_ability_shop_Pre)",
+      "Peri": "(emo_ability_shop_Peri)",
+      "Special": "(emo_ability_shop_Special)"
+    }
+  },
+  "emo_ability_shop_Pre": {
+    "_enum": {
+      "Normal": "(emo_ability_shop_NormalAction)",
+      "Random": "(emo_ability_shop_RandomAction)"
+    }
+  },
+  "emo_ability_shop_Peri_AsOneself": {
+    "trigger": "emo_ability_shop_PeriAsOneselfTrigger",
+    "action": "emo_ability_shop_NormalAction"
+  },
+  "emo_ability_shop_Peri_AsAlly": {
+    "trigger": "emo_ability_shop_PeriAsAllyTrigger",
+    "action": "emo_ability_shop_PeriAsAllyAction"
+  },
+  "emo_ability_shop_Peri": {
+    "_enum": {
+      "AsOneself": "emo_ability_shop_Peri_AsOneself",
+      "AsAlly": "emo_ability_shop_Peri_AsAlly"
+    }
+  },
+  "emo_ability_shop_Special": {
+    "_enum": {
+      "Placeholder": null
+    }
+  },
+  "emo_ability_shop_PeriAsOneselfTrigger_AllySet": {
+    "typ_and_triple": "emo_ability_TypOptAndIsTripleOpt"
+  },
+  "emo_ability_shop_PeriAsOneselfTrigger": {
+    "_enum": {
+      "Set": null,
+      "Sell": null,
+      "AllySet": "emo_ability_shop_PeriAsOneselfTrigger_AllySet"
+    }
+  },
+  "emo_ability_shop_PeriAsAllyTrigger_AllySet": {
+    "typ_and_triple": "emo_ability_TypOptAndIsTripleOpt"
+  },
+  "emo_ability_shop_PeriAsAllyTrigger": {
+    "_enum": {
+      "AllySet": "emo_ability_shop_PeriAsAllyTrigger_AllySet"
+    }
+  },
+  "emo_ability_shop_PeriAsAllyAction": {
+    "_enum": {
+      "OneselfTripleNormal": "(emo_ability_shop_NormalAction)",
+      "Custom": "(emo_ability_shop_AsAllyAction)"
+    }
+  },
+  "emo_ability_shop_NormalAction_SetEmo": {
+    "base_id": "u16"
+  },
+  "emo_ability_shop_NormalAction_IncreaseStats": {
+    "target": "emo_ability_Target",
+    "attack": "u16",
+    "health": "u16"
+  },
+  "emo_ability_shop_NormalAction_IncreaseStatsByEmoCount": {
+    "target": "emo_ability_Target",
+    "count_condition": "emo_ability_TypOptAndIsTripleOpt",
+    "attack": "u16",
+    "health": "u16"
+  },
+  "emo_ability_shop_NormalAction_IncreaseStatsByGrade": {
+    "target": "emo_ability_Target",
+    "attack": "u16",
+    "health": "u16"
+  },
+  "emo_ability_shop_NormalAction_IncreaseStatsOfAdjacentMenagerie": {
+    "attack": "u16",
+    "health": "u16"
+  },
+  "emo_ability_shop_NormalAction_AddAbility": {
+    "target": "emo_ability_Target",
+    "ability": "Box<emo_ability_Ability>"
+  },
+  "emo_ability_shop_NormalAction_GetCoin": {
+    "coin": "u8"
+  },
+  "emo_ability_shop_NormalAction_GetCoinByEmoCountDiv": {
+    "count_condition": "emo_ability_TypOptAndIsTripleOpt",
+    "divisor": "u8"
+  },
+  "emo_ability_shop_NormalAction": {
+    "_enum": {
+      "SetEmo": "emo_ability_shop_NormalAction_SetEmo",
+      "IncreaseStats": "emo_ability_shop_NormalAction_IncreaseStats",
+      "IncreaseStatsByEmoCount": "emo_ability_shop_NormalAction_IncreaseStatsByEmoCount",
+      "IncreaseStatsByGrade": "emo_ability_shop_NormalAction_IncreaseStatsByGrade",
+      "IncreaseStatsOfAdjacentMenagerie": "emo_ability_shop_NormalAction_IncreaseStatsOfAdjacentMenagerie",
+      "AddAbility": "emo_ability_shop_NormalAction_AddAbility",
+      "GetCoin": "emo_ability_shop_NormalAction_GetCoin",
+      "GetCoinByEmoCountDiv": "emo_ability_shop_NormalAction_GetCoinByEmoCountDiv"
+    }
+  },
+  "emo_ability_shop_RandomAction_IncreaseStatsOfMenagerie": {
+    "typ_count": "u8",
+    "attack": "u16",
+    "health": "u16"
+  },
+  "emo_ability_shop_RandomAction": {
+    "_enum": {
+      "IncreaseStatsOfMenagerie": "emo_ability_shop_RandomAction_IncreaseStatsOfMenagerie"
+    }
+  },
+  "emo_ability_shop_AsAllyAction": {
+    "_enum": {
+      "TriggerSetActions": null
+    }
+  },
+  "emo_ability_battle_Battle": {
+    "_enum": {
+      "General": "(emo_ability_battle_General)",
+      "Special": "(emo_ability_battle_Special)"
+    }
+  },
+  "emo_ability_battle_General_AsOneself": {
+    "trigger": "emo_ability_battle_GeneralAsOneselfTrigger",
+    "action": "emo_ability_battle_NormalAction"
+  },
+  "emo_ability_battle_General_AsAlly": {
+    "trigger": "emo_ability_battle_GeneralAsAllyTrigger",
+    "action": "emo_ability_battle_GeneralAsAllyAction"
+  },
+  "emo_ability_battle_General": {
+    "_enum": {
+      "AsOneself": "emo_ability_battle_General_AsOneself",
+      "AsAlly": "emo_ability_battle_General_AsAlly"
+    }
+  },
+  "emo_ability_battle_Special": {
+    "_enum": {
+      "Shield": null,
+      "Attractive": null,
+      "AttackLowestAttack": null
+    }
+  },
+  "emo_ability_battle_GeneralAsOneselfTrigger_AllyRetire": {
+    "typ_and_triple": "emo_ability_TypOptAndIsTripleOpt"
+  },
+  "emo_ability_battle_GeneralAsOneselfTrigger_RivalRetire": {
+    "typ_and_triple": "emo_ability_TypOptAndIsTripleOpt"
+  },
+  "emo_ability_battle_GeneralAsOneselfTrigger_AllyBattleAbilityRemoved": {
+    "typ_and_triple": "emo_ability_TypOptAndIsTripleOpt",
+    "excludes_same_base": "bool",
+    "ability": "Box<emo_ability_battle_Battle>"
+  },
+  "emo_ability_battle_GeneralAsOneselfTrigger": {
+    "_enum": {
+      "Pre": null,
+      "Retire": null,
+      "AllyRetire": "emo_ability_battle_GeneralAsOneselfTrigger_AllyRetire",
+      "RivalRetire": "emo_ability_battle_GeneralAsOneselfTrigger_RivalRetire",
+      "AllyBattleAbilityRemoved": "emo_ability_battle_GeneralAsOneselfTrigger_AllyBattleAbilityRemoved"
+    }
+  },
+  "emo_ability_battle_GeneralAsAllyTrigger_AllySet": {
+    "typ_and_triple": "emo_ability_TypOptAndIsTripleOpt"
+  },
+  "emo_ability_battle_GeneralAsAllyTrigger_AllyRetire": {
+    "typ_and_triple": "emo_ability_TypOptAndIsTripleOpt"
+  },
+  "emo_ability_battle_GeneralAsAllyTrigger": {
+    "_enum": {
+      "AllySet": "emo_ability_battle_GeneralAsAllyTrigger_AllySet",
+      "AllyRetire": "emo_ability_battle_GeneralAsAllyTrigger_AllyRetire"
+    }
+  },
+  "emo_ability_battle_GeneralAsAllyAction": {
+    "_enum": {
+      "OneselfTripleNormal": "(emo_ability_battle_NormalAction)",
+      "Custom": "(emo_ability_battle_AsAllyAction)"
+    }
+  },
+  "emo_ability_battle_NormalAction_SetEmo": {
+    "side": "emo_ability_Side",
+    "base_id": "u16"
+  },
+  "emo_ability_battle_NormalAction_SetEmosByAttackDiv": {
+    "side": "emo_ability_Side",
+    "base_id": "u16",
+    "divisor": "u8"
+  },
+  "emo_ability_battle_NormalAction_IncreaseStats": {
+    "target_or_random": "emo_ability_TargetOrRandom",
+    "attack": "u16",
+    "health": "u16"
+  },
+  "emo_ability_battle_NormalAction_DecreaseStats": {
+    "target_or_random": "emo_ability_TargetOrRandom",
+    "attack": "u16",
+    "health": "u16"
+  },
+  "emo_ability_battle_NormalAction_IncreaseStatsByEmoCount": {
+    "side": "emo_ability_Side",
+    "target_or_random": "emo_ability_TargetOrRandom",
+    "count_condition": "emo_ability_TypOptAndIsTripleOpt",
+    "attack": "u16",
+    "health": "u16"
+  },
+  "emo_ability_battle_NormalAction_AddBattleAbility": {
+    "target_or_random": "emo_ability_TargetOrRandom",
+    "ability": "Box<emo_ability_battle_Battle>"
+  },
+  "emo_ability_battle_NormalAction_DamageAll": {
+    "side": "emo_ability_Side",
+    "damage": "u16"
+  },
+  "emo_ability_battle_NormalAction": {
+    "_enum": {
+      "SetEmo": "emo_ability_battle_NormalAction_SetEmo",
+      "SetEmosByAttackDiv": "emo_ability_battle_NormalAction_SetEmosByAttackDiv",
+      "IncreaseStats": "emo_ability_battle_NormalAction_IncreaseStats",
+      "DecreaseStats": "emo_ability_battle_NormalAction_DecreaseStats",
+      "IncreaseStatsByEmoCount": "emo_ability_battle_NormalAction_IncreaseStatsByEmoCount",
+      "AddBattleAbility": "emo_ability_battle_NormalAction_AddBattleAbility",
+      "DamageAll": "emo_ability_battle_NormalAction_DamageAll"
+    }
+  },
+  "emo_ability_battle_AsAllyAction": {
+    "_enum": {
+      "TriggerRetireActions": null
+    }
+  },
+  "emo_ability_TargetOrRandom_Random": {
+    "typ_and_triple": "emo_ability_TypOptAndIsTripleOpt",
+    "count": "u8"
+  },
+  "emo_ability_TargetOrRandom": {
+    "_enum": {
+      "Target": "(emo_ability_Target)",
+      "Random": "emo_ability_TargetOrRandom_Random"
+    }
+  },
+  "emo_ability_Target_Others": {
+    "destination": "emo_ability_Destination",
+    "typ_and_triple": "emo_ability_TypOptAndIsTripleOpt"
+  },
+  "emo_ability_Target": {
+    "_enum": {
+      "Oneself": null,
+      "Others": "emo_ability_Target_Others"
+    }
+  },
+  "emo_ability_Destination": {
+    "_enum": {
+      "Left": null,
+      "Right": null,
+      "All": null
+    }
+  },
+  "emo_ability_TypOptAndIsTripleOpt": {
+    "typ_opt": "Option<emo_Typ>",
+    "is_triple_opt": "Option<bool>"
+  },
+  "emo_ability_Side": {
+    "_enum": {
+      "Ally": null,
+      "Rival": null
+    }
+  }
+}

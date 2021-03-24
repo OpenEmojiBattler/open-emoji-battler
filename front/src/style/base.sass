@@ -1,0 +1,443 @@
+.block
+  &:not(:last-child)
+    margin-bottom: 1.5rem
+
+.control
+  -moz-appearance: none
+  -webkit-appearance: none
+  align-items: center
+  border: 2px solid transparent
+  border-radius: $border-radius-big
+  box-shadow: none
+  display: inline-flex
+  font-size: 1rem
+  height: 2.5em
+  justify-content: flex-start
+  line-height: 1.5
+  padding-bottom: calc(0.5em - 2px)
+  padding-left: calc(0.75em - 2px)
+  padding-right: calc(0.75em - 2px)
+  padding-top: calc(0.5em - 2px)
+  position: relative
+  vertical-align: top
+  // States
+  &:focus,
+  &.is-focused,
+  &:active,
+  &.is-active
+    outline: none
+  &[disabled]
+    cursor: not-allowed
+
+.overlay
+  bottom: 0
+  left: 0
+  position: absolute
+  right: 0
+  top: 0
+
+@each $property, $shortcut in ("margin": "m", "padding": "p")
+  @each $name, $value in ("0": 0, "1": 0.25rem, "2": 0.5rem, "3": 0.75rem, "4": 1rem, "5": 1.5rem, "6": 3rem)
+    // All directions
+    .#{$shortcut}-#{$name}
+      #{$property}: $value !important
+    // Cardinal directions
+    @each $direction, $suffix in ("top": "t", "right": "r", "bottom": "b", "left": "l")
+      .#{$shortcut}#{$suffix}-#{$name}
+        #{$property}-#{$direction}: $value !important
+    // Horizontal axis
+    .#{$shortcut}x-#{$name}
+      #{$property}-left: $value !important
+      #{$property}-right: $value !important
+    // Vertical axis
+    .#{$shortcut}y-#{$name}
+      #{$property}-top: $value !important
+      #{$property}-bottom: $value !important
+
+$size-1: 3rem
+$size-2: 2.5rem
+$size-3: 2rem
+$size-4: 1.5rem
+$size-5: 1.25rem
+$size-6: 1rem
+$size-7: 0.75rem
+$sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7
+@each $size in $sizes
+  $i: index($sizes, $size)
+  .is-size-#{$i}
+    font-size: $size !important
+
+.button
+  @extend .control
+  user-select: none
+  border-color: $white1
+  border-width: 2px
+  color: $white1
+  background-color: transparent
+  cursor: pointer
+  justify-content: center
+  padding: calc(0.5em - 2px) 1em
+  text-align: center
+  white-space: nowrap
+  text-decoration: none
+  // States
+  &:hover,
+  &.is-hovered,
+  &:focus,
+  &.is-focused,
+  &:active,
+  &.is-active
+    border-color: $white0
+    color: $white0
+  // Colors
+  &.is-strong
+    box-shadow: 0 0 0.75em rgba(100%, 100%, 100%, 0.4)
+    transition-duration: .1s
+    transition-property: box-shadow
+
+    background-color: $white1
+    border-color: transparent
+    color: $black1
+    &:hover,
+    &.is-hovered,
+    &:focus,
+    &.is-focused,
+    &:active,
+    &.is-active
+      box-shadow: 0 0 1em rgba(100%, 100%, 100%, 0.4)
+      border-color: transparent
+  // Sizes
+  &.is-small
+    border-radius: $border-radius
+    font-size: 0.75rem
+  &.is-normal
+    font-size: 1rem
+  &.is-medium
+    font-size: 1.25rem
+  &.is-large
+    font-size: 1.5rem
+  // Modifiers
+  &[disabled]
+    opacity: 0.5
+
+.buttons
+  align-items: center
+  display: flex
+  flex-wrap: wrap
+  justify-content: flex-start
+  .button
+    margin-right: 0.5rem
+    margin-bottom: 0.5rem
+  &:last-child
+    margin-bottom: -0.5rem
+  &:not(:last-child)
+    margin-bottom: 1rem
+
+.container
+  flex-grow: 1
+  margin: 0 auto
+  position: relative
+  width: 1100px
+
+.tag
+  align-items: center
+  background-color: $black2
+  border-radius: $border-radius
+  color: $white1
+  display: inline-flex
+  font-size: 0.75rem
+  height: 2em
+  justify-content: center
+  line-height: 1.5
+  padding-left: 0.75em
+  padding-right: 0.75em
+  white-space: nowrap
+
+.title,
+.subtitle
+  @extend .block
+  word-break: break-word
+
+.title
+  color: $white0
+  font-size: 2rem
+  font-weight: 600
+  line-height: 1.125
+
+.subtitle
+  color: $white1
+  font-size: 1.25rem
+  font-weight: 400
+  line-height: 1.25
+
+.dropdown
+  display: inline-flex
+  position: relative
+  vertical-align: top
+  &.is-active,
+  &.is-hoverable:hover
+    .dropdown-menu
+      display: block
+  &.is-right
+    .dropdown-menu
+      left: auto
+      right: 0
+  &.is-up
+    .dropdown-menu
+      bottom: 100%
+      padding-bottom: 4px
+      padding-top: initial
+      top: auto
+
+  .dropdown-menu
+    display: none
+    min-width: 12rem
+    padding-top: 4px
+    position: absolute
+    top: 100%
+    z-index: 20
+
+  .dropdown-content
+    background-color: $black2
+    border-radius: $border-radius
+    padding-bottom: 0.5rem
+    padding-top: 0.5rem
+
+  .dropdown-item
+    color: $white1
+    display: block
+    font-size: 0.875rem
+    line-height: 1.5
+    padding: 0.375rem 1rem
+    position: relative
+
+  a.dropdown-item
+    text-decoration: none
+    text-align: inherit
+    white-space: nowrap
+    width: 100%
+    &:hover
+      background-color: $black3
+      color: $white0
+    &.is-active
+      background-color: $black4
+      color: $white0
+      cursor: default
+
+.level
+  @extend .block
+  align-items: center
+  justify-content: space-between
+  display: flex
+
+  & > .level-item
+    flex-grow: 1
+
+  .level-item
+    align-items: center
+    display: flex
+    flex-basis: auto
+    flex-grow: 0
+    flex-shrink: 0
+    justify-content: center
+    .title,
+    .subtitle
+      margin-bottom: 0
+
+  .level-left,
+  .level-right
+    display: flex
+    flex-basis: auto
+    flex-grow: 0
+    flex-shrink: 0
+
+  .level-left
+    align-items: center
+    justify-content: flex-start
+
+  .level-right
+    align-items: center
+    justify-content: flex-end
+
+  .level-left .level-item:not(:last-child),
+  .level-right .level-item:not(:last-child)
+      margin-right: 0.75rem
+
+.modal
+  @extend .overlay
+  align-items: center
+  display: none
+  flex-direction: column
+  justify-content: center
+  overflow: hidden
+  position: fixed
+  z-index: 40
+  // Modifiers
+  &.is-active
+    display: flex
+
+.modal-background
+  @extend .overlay
+  background-color: rgba(0, 0, 0, 0.5)
+
+.modal-content
+  margin: 0 20px
+  max-height: calc(100vh - 160px)
+  overflow: auto
+  position: relative
+
+  > div
+    background-color: $black2
+    padding: 1rem
+    border-radius: $border-radius
+
+.section
+  padding: 3rem 1.5rem
+
+footer.footer
+  padding-top: 1rem
+  padding-bottom: 2rem
+  color: $grey
+  text-align: center
+
+.navbar
+  min-height: 3.25rem
+  position: relative
+  box-shadow: 0 2px 0 0 $black2
+
+  & > .container
+    align-items: stretch
+    display: flex
+    min-height: 3.25rem
+
+  .navbar-brand
+    align-items: stretch
+    display: flex
+    flex-shrink: 0
+    min-height: 3.25rem
+  .navbar-item
+    display: block
+    line-height: 1.5
+    padding: 0.5rem 0.75rem
+    position: relative
+  .navbar-item
+    flex-grow: 0
+    flex-shrink: 0
+    align-items: center
+    display: flex
+  a.navbar-item
+    text-decoration: none
+    color: $white1
+    &:hover
+      text-decoration: underline
+      color: $white0
+
+.navbar-menu,
+.navbar-start,
+.navbar-end
+  align-items: stretch
+  display: flex
+.navbar-menu
+  flex-grow: 1
+  flex-shrink: 0
+.navbar-menu
+  padding: 0.5rem 0
+  &.is-active
+    display: block
+
+.content
+  @extend .block
+  // Inline
+  li + li
+    margin-top: 0.25em
+  // Block
+  p,
+  dl,
+  ol,
+  ul,
+  blockquote,
+  pre,
+  table
+    &:not(:last-child)
+      margin-bottom: 1em
+  ol
+    list-style-position: outside
+    margin-left: 2em
+    margin-top: 1em
+    &:not([type])
+      list-style-type: decimal
+      &.is-lower-alpha
+        list-style-type: lower-alpha
+      &.is-lower-roman
+        list-style-type: lower-roman
+      &.is-upper-alpha
+        list-style-type: upper-alpha
+      &.is-upper-roman
+        list-style-type: upper-roman
+  ul
+    list-style: disc outside
+    margin-left: 2em
+    margin-top: 1em
+    ul
+      list-style-type: circle
+      margin-top: 0.5em
+      ul
+        list-style-type: square
+
+.tabs
+  @extend .block
+  align-items: stretch
+  display: flex
+  justify-content: space-between
+  overflow: hidden
+  overflow-x: auto
+  white-space: nowrap
+  a
+    align-items: center
+    border-bottom-color: $grey
+    border-bottom-style: solid
+    border-bottom-width: 1px
+    display: flex
+    justify-content: center
+    margin-bottom: -1px
+    padding: 0.5em 1em
+    vertical-align: top
+    &:hover
+      border-bottom-color: $white0
+      color: $white0
+  li
+    display: block
+    &.is-active
+      a
+        border-bottom-color: $grey
+        text-decoration: none
+  ul
+    align-items: center
+    border-bottom-color: $grey
+    border-bottom-style: solid
+    border-bottom-width: 1px
+    display: flex
+    flex-grow: 1
+    flex-shrink: 0
+    justify-content: flex-start
+
+.table
+  @extend .block
+  td,
+  th
+    border: 1px solid $grey
+    border-width: 0 0 1px
+    padding: 0.5em 0.75em
+    vertical-align: top
+  &.is-narrow
+    td,
+    th
+      padding: 0.25em 0.5em
+  > thead > tr > th
+    color: $white0
+    border-width: 0 0 2px
+  > tbody > tr
+    &:last-child
+      > td,
+      > th
+        border-bottom-width: 0

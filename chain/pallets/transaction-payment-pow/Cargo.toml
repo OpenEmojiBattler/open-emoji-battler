@@ -1,0 +1,27 @@
+[package]
+name = 'pallet-transaction-payment-pow'
+version = '0.1.0'
+edition = '2018'
+license = "Apache-2.0"
+
+[dependencies]
+common = { path = '../../../common/rs', version = '0.1.0', default-features = false }
+parity-scale-codec = { version = "2.0.0", default-features = false, features = ['derive']}
+pallet-transaction-payment = { version = '3.0.0', default-features = false}
+pallet-sudo = { version = '3.0.0', default-features = false }
+sp-runtime = { version = '3.0.0', default-features = false}
+sp-std = { version = '3.0.0', default-features = false}
+frame-support = { default-features = false, version = '3.0.0' }
+frame-system = { default-features = false, version = '3.0.0' }
+
+[features]
+default = ['std']
+std = [
+    'common/std',
+    'parity-scale-codec/std',
+    'frame-support/std',
+    'frame-system/std',
+    'sp-std/std',
+    'sp-runtime/std',
+    'pallet-transaction-payment/std',
+]

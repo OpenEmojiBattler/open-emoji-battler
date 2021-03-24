@@ -1,0 +1,2340 @@
+[
+  {
+    "id": 1,
+    "typ": "Nature",
+    "codepoint": 128000,
+    "grade": 1,
+    "attack": 10,
+    "health": 10,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "SetEmo": {
+                  "side": "Ally",
+                  "base_id": 2
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "typ": "Nature",
+    "codepoint": 128001,
+    "grade": 1,
+    "attack": 20,
+    "health": 20,
+    "abilities": []
+  },
+  {
+    "id": 3,
+    "typ": "Nature",
+    "codepoint": 128022,
+    "grade": 1,
+    "attack": 20,
+    "health": 20,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "AllyRetire": {
+                  "typ_and_triple": {
+                    "typ_opt": "Nature",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Oneself": null
+                    }
+                  },
+                  "attack": 20,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "typ": "Nature",
+    "codepoint": 128019,
+    "grade": 3,
+    "attack": 20,
+    "health": 20,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "SetEmosByAttackDiv": {
+                  "side": "Ally",
+                  "base_id": 5,
+                  "divisor": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "typ": "Nature",
+    "codepoint": 128035,
+    "grade": 1,
+    "attack": 10,
+    "health": 10,
+    "abilities": []
+  },
+  {
+    "id": 6,
+    "typ": "Nature",
+    "codepoint": 129419,
+    "grade": 2,
+    "attack": 30,
+    "health": 10,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "SetEmo": {
+                  "side": "Ally",
+                  "base_id": 7
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "SetEmo": {
+                  "side": "Ally",
+                  "base_id": 7
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "typ": "Nature",
+    "codepoint": 128027,
+    "grade": 1,
+    "attack": 10,
+    "health": 10,
+    "abilities": []
+  },
+  {
+    "id": 8,
+    "typ": "Nature",
+    "codepoint": 129423,
+    "grade": 3,
+    "attack": 90,
+    "health": 70,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "SetEmo": {
+                  "side": "Rival",
+                  "base_id": 9
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "typ": "Nature",
+    "codepoint": 129435,
+    "grade": 1,
+    "attack": 30,
+    "health": 30,
+    "abilities": []
+  },
+  {
+    "id": 10,
+    "typ": "Nature",
+    "codepoint": 128032,
+    "grade": 4,
+    "attack": 60,
+    "health": 50,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "SetEmo": {
+                  "side": "Ally",
+                  "base_id": 11
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "SetEmo": {
+                  "side": "Ally",
+                  "base_id": 11
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "typ": "Nature",
+    "codepoint": 128031,
+    "grade": 1,
+    "attack": 20,
+    "health": 20,
+    "abilities": []
+  },
+  {
+    "id": 12,
+    "typ": "Nature",
+    "codepoint": 129429,
+    "grade": 6,
+    "attack": 70,
+    "health": 70,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "SetEmo": {
+                  "side": "Ally",
+                  "base_id": 4
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "SetEmo": {
+                  "side": "Ally",
+                  "base_id": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "typ": "Nature",
+    "codepoint": 129409,
+    "grade": 6,
+    "attack": 50,
+    "health": 50,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsAlly": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Nature",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "OneselfTripleNormal": {
+                  "IncreaseStats": {
+                    "target": {
+                      "Oneself": null
+                    },
+                    "attack": 50,
+                    "health": 50
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsAlly": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Nature",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "OneselfTripleNormal": {
+                  "IncreaseStats": {
+                    "target_or_random": {
+                      "Target": {
+                        "Oneself": null
+                      }
+                    },
+                    "attack": 50,
+                    "health": 50
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "typ": "Nature",
+    "codepoint": 128008,
+    "grade": 2,
+    "attack": 20,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsAlly": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Nature",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "OneselfTripleNormal": {
+                  "IncreaseStats": {
+                    "target": {
+                      "Oneself": null
+                    },
+                    "attack": 20,
+                    "health": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsAlly": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Nature",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "OneselfTripleNormal": {
+                  "IncreaseStats": {
+                    "target_or_random": {
+                      "Target": {
+                        "Oneself": null
+                      }
+                    },
+                    "attack": 30,
+                    "health": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "typ": "Nature",
+    "codepoint": 129440,
+    "grade": 3,
+    "attack": 40,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": "Nature",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 20,
+                  "health": 30
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "AddAbility": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": "Nature",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "ability": {
+                    "Battle": {
+                      "Special": "Attractive"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "typ": "Human",
+    "codepoint": 128515,
+    "grade": 1,
+    "attack": 10,
+    "health": 10,
+    "abilities": [
+      {
+        "Battle": {
+          "Special": "Shield"
+        }
+      },
+      {
+        "Battle": {
+          "Special": "Attractive"
+        }
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "typ": "Human",
+    "codepoint": 129402,
+    "grade": 1,
+    "attack": 20,
+    "health": 10,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "AddBattleAbility": {
+                  "target_or_random": {
+                    "Random": {
+                      "typ_and_triple": {
+                        "typ_opt": null,
+                        "is_triple_opt": null
+                      },
+                      "count": 1
+                    }
+                  },
+                  "ability": {
+                    "Special": "Shield"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "typ": "Human",
+    "codepoint": 129392,
+    "grade": 2,
+    "attack": 30,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "All",
+                      "typ_and_triple": {
+                        "typ_opt": "Human",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 20,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "typ": "Human",
+    "codepoint": 129315,
+    "grade": 3,
+    "attack": 50,
+    "health": 30,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "AllyBattleAbilityRemoved": {
+                  "typ_and_triple": {
+                    "typ_opt": null,
+                    "is_triple_opt": null
+                  },
+                  "excludes_same_base": true,
+                  "ability": {
+                    "Special": "Shield"
+                  }
+                }
+              },
+              "action": {
+                "AddBattleAbility": {
+                  "target_or_random": {
+                    "Target": {
+                      "Oneself": null
+                    }
+                  },
+                  "ability": {
+                    "Special": "Shield"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "typ": "Human",
+    "codepoint": 129321,
+    "grade": 4,
+    "attack": 10,
+    "health": 20,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": "Human",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 10,
+                  "health": 20
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "AddAbility": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": "Human",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "ability": {
+                    "Battle": {
+                      "Special": "Shield"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "AddAbility": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": "Human",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "ability": {
+                    "Battle": {
+                      "Special": "Attractive"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "typ": "Human",
+    "codepoint": 129395,
+    "grade": 5,
+    "attack": 30,
+    "health": 60,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "AllyBattleAbilityRemoved": {
+                  "typ_and_triple": {
+                    "typ_opt": null,
+                    "is_triple_opt": null
+                  },
+                  "excludes_same_base": false,
+                  "ability": {
+                    "Special": "Shield"
+                  }
+                }
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Oneself": null
+                    }
+                  },
+                  "attack": 20,
+                  "health": 20
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "typ": "Human",
+    "codepoint": 128561,
+    "grade": 6,
+    "attack": 70,
+    "health": 40,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "AddBattleAbility": {
+                  "target_or_random": {
+                    "Target": {
+                      "Others": {
+                        "destination": "All",
+                        "typ_and_triple": {
+                          "typ_opt": "Human",
+                          "is_triple_opt": null
+                        }
+                      }
+                    }
+                  },
+                  "ability": {
+                    "Special": "Shield"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "typ": "Food",
+    "codepoint": 127857,
+    "grade": 1,
+    "attack": 10,
+    "health": 20,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Food",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Oneself": null
+                  },
+                  "attack": 10,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "typ": "Food",
+    "codepoint": 127839,
+    "grade": 1,
+    "attack": 20,
+    "health": 10,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "SetEmo": {
+                  "base_id": 25
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "typ": "Food",
+    "codepoint": 129474,
+    "grade": 1,
+    "attack": 10,
+    "health": 10,
+    "abilities": []
+  },
+  {
+    "id": 26,
+    "typ": "Food",
+    "codepoint": 127813,
+    "grade": 1,
+    "attack": 20,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": "Food",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 10,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "typ": "Food",
+    "codepoint": 129384,
+    "grade": 2,
+    "attack": 30,
+    "health": 30,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Pre": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Others": {
+                        "destination": "All",
+                        "typ_and_triple": {
+                          "typ_opt": "Food",
+                          "is_triple_opt": null
+                        }
+                      }
+                    }
+                  },
+                  "attack": 20,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "DecreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Others": {
+                        "destination": "All",
+                        "typ_and_triple": {
+                          "typ_opt": "Food",
+                          "is_triple_opt": null
+                        }
+                      }
+                    }
+                  },
+                  "attack": 20,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "typ": "Food",
+    "codepoint": 127834,
+    "grade": 2,
+    "attack": 20,
+    "health": 40,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Pre": null
+              },
+              "action": {
+                "IncreaseStatsByEmoCount": {
+                  "side": "Ally",
+                  "target_or_random": {
+                    "Target": {
+                      "Oneself": null
+                    }
+                  },
+                  "count_condition": {
+                    "typ_opt": "Food",
+                    "is_triple_opt": null
+                  },
+                  "attack": 10,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Pre": null
+              },
+              "action": {
+                "IncreaseStatsByEmoCount": {
+                  "side": "Rival",
+                  "target_or_random": {
+                    "Target": {
+                      "Oneself": null
+                    }
+                  },
+                  "count_condition": {
+                    "typ_opt": "Food",
+                    "is_triple_opt": null
+                  },
+                  "attack": 10,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "AllyRetire": {
+                  "typ_and_triple": {
+                    "typ_opt": "Food",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "DecreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Oneself": null
+                    }
+                  },
+                  "attack": 10,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "RivalRetire": {
+                  "typ_and_triple": {
+                    "typ_opt": "Food",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "DecreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Oneself": null
+                    }
+                  },
+                  "attack": 10,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "typ": "Food",
+    "codepoint": 127829,
+    "grade": 3,
+    "attack": 20,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "All",
+                      "typ_and_triple": {
+                        "typ_opt": "Food",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 0,
+                  "health": 20
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "typ": "Food",
+    "codepoint": 127823,
+    "grade": 3,
+    "attack": 40,
+    "health": 40,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "All",
+                      "typ_and_triple": {
+                        "typ_opt": "Food",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 10,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "typ": "Food",
+    "codepoint": 127812,
+    "grade": 4,
+    "attack": 10,
+    "health": 20,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": "Food",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 500,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "typ": "Food",
+    "codepoint": 127874,
+    "grade": 5,
+    "attack": 60,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "All",
+                      "typ_and_triple": {
+                        "typ_opt": "Food",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 20,
+                  "health": 20
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Others": {
+                        "destination": "All",
+                        "typ_and_triple": {
+                          "typ_opt": "Food",
+                          "is_triple_opt": null
+                        }
+                      }
+                    }
+                  },
+                  "attack": 20,
+                  "health": 20
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "typ": "Nature",
+    "codepoint": 129412,
+    "grade": 2,
+    "attack": 20,
+    "health": 20,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Others": {
+                        "destination": "All",
+                        "typ_and_triple": {
+                          "typ_opt": null,
+                          "is_triple_opt": null
+                        }
+                      }
+                    }
+                  },
+                  "attack": 10,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "typ": "Food",
+    "codepoint": 129377,
+    "grade": 2,
+    "attack": 20,
+    "health": 20,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStatsOfAdjacentMenagerie": {
+                  "attack": 10,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "typ": "Nature",
+    "codepoint": 128026,
+    "grade": 5,
+    "attack": 20,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsAlly": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": null,
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "Custom": "TriggerSetActions"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "typ": "Food",
+    "codepoint": 129379,
+    "grade": 5,
+    "attack": 10,
+    "health": 50,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsAlly": {
+              "trigger": {
+                "AllyRetire": {
+                  "typ_and_triple": {
+                    "typ_opt": null,
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "Custom": "TriggerRetireActions"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "typ": "Nature",
+    "codepoint": 128009,
+    "grade": 5,
+    "attack": 20,
+    "health": 10,
+    "abilities": [
+      {
+        "Shop": {
+          "Pre": {
+            "Random": {
+              "IncreaseStatsOfMenagerie": {
+                "typ_count": 4,
+                "attack": 20,
+                "health": 10
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "typ": "Human",
+    "codepoint": 129398,
+    "grade": 6,
+    "attack": 70,
+    "health": 50,
+    "abilities": [
+      {
+        "Battle": {
+          "Special": "AttackLowestAttack"
+        }
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "typ": "Nature",
+    "codepoint": 128062,
+    "grade": 6,
+    "attack": 20,
+    "health": 30,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "DamageAll": {
+                  "side": "Rival",
+                  "damage": 30
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "DamageAll": {
+                  "side": "Ally",
+                  "damage": 30
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "typ": "Object",
+    "codepoint": 128218,
+    "grade": 1,
+    "attack": 20,
+    "health": 20,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Sell": null
+              },
+              "action": {
+                "SetEmo": {
+                  "base_id": 42
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "typ": "Object",
+    "codepoint": 128211,
+    "grade": 1,
+    "attack": 20,
+    "health": 20,
+    "abilities": []
+  },
+  {
+    "id": 43,
+    "typ": "Object",
+    "codepoint": 129518,
+    "grade": 2,
+    "attack": 20,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Object",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Oneself": null
+                  },
+                  "attack": 0,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "Special": "Attractive"
+        }
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "typ": "Object",
+    "codepoint": 128227,
+    "grade": 2,
+    "attack": 30,
+    "health": 20,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Object",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": "Object",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 10,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "typ": "Object",
+    "codepoint": 128142,
+    "grade": 2,
+    "attack": 30,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Sell": null
+              },
+              "action": {
+                "GetCoin": {
+                  "coin": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 46,
+    "typ": "Object",
+    "codepoint": 128190,
+    "grade": 3,
+    "attack": 30,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Object",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Oneself": null
+                  },
+                  "attack": 10,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "typ": "Object",
+    "codepoint": 128229,
+    "grade": 3,
+    "attack": 40,
+    "health": 40,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "GetCoinByEmoCountDiv": {
+                  "count_condition": {
+                    "typ_opt": "Object",
+                    "is_triple_opt": null
+                  },
+                  "divisor": 2
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "typ": "Object",
+    "codepoint": 128185,
+    "grade": 4,
+    "attack": 60,
+    "health": 60,
+    "abilities": [
+      {
+        "Shop": {
+          "Pre": {
+            "Normal": {
+              "IncreaseStatsByEmoCount": {
+                "target": {
+                  "Oneself": null
+                },
+                "count_condition": {
+                  "typ_opt": null,
+                  "is_triple_opt": true
+                },
+                "attack": 20,
+                "health": 20
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "typ": "Object",
+    "codepoint": 129522,
+    "grade": 4,
+    "attack": 20,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": null,
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 10,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "AddAbility": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": null,
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "ability": {
+                    "Battle": {
+                      "Special": "Attractive"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Right",
+                      "typ_and_triple": {
+                        "typ_opt": null,
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 10,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "AddAbility": {
+                  "target": {
+                    "Others": {
+                      "destination": "Right",
+                      "typ_and_triple": {
+                        "typ_opt": null,
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "ability": {
+                    "Battle": {
+                      "Special": "Attractive"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "typ": "Object",
+    "codepoint": 129520,
+    "grade": 4,
+    "attack": 30,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStatsOfAdjacentMenagerie": {
+                  "attack": 30,
+                  "health": 20
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 51,
+    "typ": "Object",
+    "codepoint": 128184,
+    "grade": 5,
+    "attack": 60,
+    "health": 60,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Object",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "GetCoin": {
+                  "coin": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "typ": "Object",
+    "codepoint": 128230,
+    "grade": 5,
+    "attack": 40,
+    "health": 40,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "GetCoinByEmoCountDiv": {
+                  "count_condition": {
+                    "typ_opt": "Object",
+                    "is_triple_opt": null
+                  },
+                  "divisor": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "typ": "Object",
+    "codepoint": 128241,
+    "grade": 6,
+    "attack": 50,
+    "health": 10,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Object",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "IncreaseStatsByEmoCount": {
+                  "target": {
+                    "Oneself": null
+                  },
+                  "count_condition": {
+                    "typ_opt": "Object",
+                    "is_triple_opt": null
+                  },
+                  "attack": 0,
+                  "health": 10
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 54,
+    "typ": "Object",
+    "codepoint": 129516,
+    "grade": 6,
+    "attack": 40,
+    "health": 40,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsAlly": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Object",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "OneselfTripleNormal": {
+                  "IncreaseStatsByGrade": {
+                    "target": {
+                      "Others": {
+                        "destination": "Left",
+                        "typ_and_triple": {
+                          "typ_opt": "Object",
+                          "is_triple_opt": null
+                        }
+                      }
+                    },
+                    "attack": 10,
+                    "health": 10
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "typ": "Food",
+    "codepoint": 127853,
+    "grade": 6,
+    "attack": 40,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": "Food",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 100,
+                  "health": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Right",
+                      "typ_and_triple": {
+                        "typ_opt": "Food",
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 0,
+                  "health": 100
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 56,
+    "typ": "Human",
+    "codepoint": 129322,
+    "grade": 2,
+    "attack": 10,
+    "health": 20,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Pre": null
+              },
+              "action": {
+                "SetEmo": {
+                  "side": "Rival",
+                  "base_id": 57
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 57,
+    "typ": "Human",
+    "codepoint": 129313,
+    "grade": 2,
+    "attack": 10,
+    "health": 10,
+    "abilities": [
+      {
+        "Battle": {
+          "Special": "Attractive"
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "DecreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Others": {
+                        "destination": "All",
+                        "typ_and_triple": {
+                          "typ_opt": null,
+                          "is_triple_opt": null
+                        }
+                      }
+                    }
+                  },
+                  "attack": 0,
+                  "health": 20
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 58,
+    "typ": "Human",
+    "codepoint": 128519,
+    "grade": 3,
+    "attack": 30,
+    "health": 40,
+    "abilities": [
+      {
+        "Battle": {
+          "Special": "Shield"
+        }
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "typ": "Human",
+    "codepoint": 128128,
+    "grade": 3,
+    "attack": 30,
+    "health": 10,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "AddAbility": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": null,
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "ability": {
+                    "Battle": {
+                      "General": {
+                        "AsOneself": {
+                          "trigger": {
+                            "Retire": null
+                          },
+                          "action": {
+                            "SetEmo": {
+                              "side": "Ally",
+                              "base_id": 60
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "AddAbility": {
+                  "target": {
+                    "Others": {
+                      "destination": "Left",
+                      "typ_and_triple": {
+                        "typ_opt": null,
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "ability": {
+                    "Battle": {
+                      "General": {
+                        "AsOneself": {
+                          "trigger": {
+                            "Retire": null
+                          },
+                          "action": {
+                            "SetEmo": {
+                              "side": "Ally",
+                              "base_id": 60
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "typ": "Human",
+    "codepoint": 128123,
+    "grade": 1,
+    "attack": 10,
+    "health": 10,
+    "abilities": []
+  },
+  {
+    "id": 61,
+    "typ": "Human",
+    "codepoint": 129327,
+    "grade": 4,
+    "attack": 50,
+    "health": 60,
+    "abilities": [
+      {
+        "Shop": {
+          "Pre": {
+            "Normal": {
+              "SetEmo": {
+                "base_id": 62
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 62,
+    "typ": "Human",
+    "codepoint": 128526,
+    "grade": 1,
+    "attack": 20,
+    "health": 10,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsOneself": {
+              "trigger": {
+                "Set": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target": {
+                    "Others": {
+                      "destination": "Right",
+                      "typ_and_triple": {
+                        "typ_opt": null,
+                        "is_triple_opt": null
+                      }
+                    }
+                  },
+                  "attack": 30,
+                  "health": 40
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "typ": "Nature",
+    "codepoint": 128025,
+    "grade": 5,
+    "attack": 40,
+    "health": 40,
+    "abilities": [
+      {
+        "Battle": {
+          "General": {
+            "AsOneself": {
+              "trigger": {
+                "Retire": null
+              },
+              "action": {
+                "IncreaseStats": {
+                  "target_or_random": {
+                    "Target": {
+                      "Others": {
+                        "destination": "All",
+                        "typ_and_triple": {
+                          "typ_opt": "Nature",
+                          "is_triple_opt": null
+                        }
+                      }
+                    }
+                  },
+                  "attack": 40,
+                  "health": 40
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+]

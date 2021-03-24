@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"],
+      "@polkadot/api/augment": ["../common/js/src/interfaces/augment-api.ts"],
+      "@polkadot/types/augment": ["../common/js/src/interfaces/augment-types.ts"]
+    }
+  },
+  "include": ["src/**/*", "scripts/**/*"]
+}

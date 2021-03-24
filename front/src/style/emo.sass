@@ -1,0 +1,185 @@
+@use "sass:map"
+
+$_typs: ("food": 0, "human": 72, "nature": 144, "object": 216, "foobar": 288)
+$typs: map.keys($_typs)
+
+:root
+  @each $n, $h in $_typs
+    --emo-color-#{$n}: hsl(#{$h}, 30%, 20%)
+
+$emo-width: 64px
+$emo-height: 93px
+
+div.emo
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif
+  box-sizing: border-box
+  -moz-osx-font-smoothing: grayscale
+  -webkit-font-smoothing: antialiased
+  font-size: 16px
+  font-weight: 400
+  color: #eee
+  cursor: default
+
+  > div.emo-body-outer
+    position: relative
+    width: $emo-width
+    height: $emo-height
+    background-color: #888
+    border-radius: 2px
+
+    > div.emo-body-inner
+      top: 1px
+      left: 1px
+      width: $emo-width - 2px
+      height: $emo-height - 2px
+      position: relative
+      border-radius: 2px
+      line-height: 1
+
+      > div
+        position: absolute
+        width: 100%
+
+      > div.emo-body-inner-emoji
+        top: 25px
+        font-size: 45px
+        text-align: center
+
+      > div.emo-body-inner-grade
+        top: 4px
+        left: 2px
+        font-size: 17px
+        color: #fff
+        width: 17px
+        text-align: center
+
+      > div.emo-body-inner-specials
+        top: 4px
+        left: 25px
+        width: 32px
+        text-align: right
+
+      > div.emo-body-inner-bottom
+        top: 73px
+        display: flex
+        justify-content: center
+        font-size: 13px
+
+        > div
+          flex: 1 1 0%
+          text-align: center
+
+  @each $n in $typs
+    &.emo-typ-#{$n} > div.emo-body-outer > div.emo-body-inner
+      background-color: var(--emo-color-#{$n})
+
+  &.emo-triple > div.emo-body-outer
+    background: linear-gradient(to right bottom, #FBF5B7, #BF953F 40%, #FBF5B7)
+
+    > div.emo-body-inner
+      > div.emo-body-inner-grade
+        color: #FBF5B7
+
+  > div.emo-info-outer
+    position: relative
+
+    > div.emo-info-inner
+      position: absolute
+      top: 2px
+      left: -10px
+      display: none
+      width: 350px
+      text-align: left
+      background-color: #333
+      border-radius: 2px
+      padding: 1rem
+
+      > div:first-child
+        margin-bottom: 6px
+        > strong
+          color: #fff
+          font-weight: 700
+        > span
+          align-items: center
+          background-color: #222
+          border-radius: 2px
+          color: #eee
+          display: inline-flex
+          font-size: 0.75rem
+          height: 2em
+          justify-content: center
+          line-height: 1.5
+          padding-left: 0.75em
+          padding-right: 0.75em
+          white-space: nowrap
+
+  @each $n in $typs
+    &.emo-typ-#{$n} > div.emo-info-outer > div.emo-info-inner > div:first-child
+      > span
+        background-color: var(--emo-color-#{$n})
+      > span::after
+        content: '#{$n}'
+        text-transform: capitalize
+
+  > div.emo-body-outer:hover + div.emo-info-outer > div.emo-info-inner
+    display: block
+    z-index: 20
+
+  &.emo-inactive
+    background-color: #111
+
+    > div.emo-body-outer
+      opacity: 0.5
+
+div.emo-group
+  $space: 4px
+
+  display: inline-block
+  vertical-align: top
+  padding: $space * 2
+  min-width: $space * 2 * 2 + ($emo-width + $space * 2) * 7
+  min-height: $space * 2 * 2 + ($emo-height + $space * 2)
+
+  &.emo-group-highlight
+    background-color: #222
+    border-radius: 2px
+
+  > div.emo-group-line
+    display: flex
+    margin-bottom: $space
+
+    &:first-child
+      margin-top: $space
+
+    &.emo-group-line-controls
+      height: 30px
+      > div
+        text-align: center
+        > button.button
+          border-width: 1px
+
+    &.emo-group-line-center
+      justify-content: center
+
+    &.emo-group-line-emo
+      height: $emo-height
+
+    > div
+      width: $emo-width
+      margin-left: $space
+      margin-right: $space
+
+table.emo-table
+  @extend .block
+  td,
+  th
+    border: 1px solid #888
+    border-width: 0 0 1px
+    padding: 0.25em 0.5em
+    vertical-align: top
+  th
+    font-weight: 700
+  tr
+    &:last-child
+      td
+        border-bottom-width: 0

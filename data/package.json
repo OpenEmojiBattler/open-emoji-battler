@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "data",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "scripts": {
+    "seed:dev": "ts-node ./seed.ts local",
+    "seed:staging": "ts-node ./seed.ts staging \"$OEB_STAGING_ADMIN_MNEMONIC\"",
+    "seed:production": "ts-node ./seed.ts production \"$OEB_PRODUCTION_ADMIN_MNEMONIC\"",
+    "lint": "prettier --write '*.{ts,json}'",
+    "check-ts": "tsc -p . --noEmit"
+  },
+  "dependencies": {
+    "common": "0.1.0"
+  }
+}

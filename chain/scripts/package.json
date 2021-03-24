@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "chainscripts",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "scripts": {
+    "set-code:dev": "ts-node setCode.ts local",
+    "set-code:staging": "ts-node setCode.ts staging \"$OEB_STAGING_ADMIN_MNEMONIC\"",
+    "set-code:production": "ts-node setCode.ts production \"$OEB_PRODUCTION_ADMIN_MNEMONIC\"",
+    "check-ts": "tsc -p . --noEmit"
+  },
+  "dependencies": {
+    "common": "0.1.0"
+  }
+}

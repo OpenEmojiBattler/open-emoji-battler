@@ -1,0 +1,32 @@
+[package]
+name = "common"
+version = "0.1.0"
+edition = "2018"
+license = "Apache-2.0"
+
+[dependencies]
+rand = { version = "0.7.3", default-features = false, features=['alloc'] }
+rand_pcg = "0.2.1"
+parity-scale-codec = { version = '2.0.0', default-features = false, features = ['derive'] }
+sp-std = { version = '3.0.0', default-features = false }
+anyhow = { version = "1.0.37", default-features = false }
+blake2-rfc = { version = "0.2.18", default-features = false }
+libm = { version = "0.2.1", default-features = false }
+
+[dev-dependencies]
+hex = { version = "0.4.2" }
+criterion = "0.3.3"
+
+[features]
+default = ['std', 'view-logs']
+std = [
+    'rand/std',
+    'parity-scale-codec/std',
+    'sp-std/std',
+    'anyhow/std',
+]
+view-logs = []
+
+[[bench]]
+name = "my_benchmark"
+harness = false
