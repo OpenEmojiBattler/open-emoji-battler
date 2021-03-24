@@ -1,6 +1,6 @@
 {
-  "name": "Open Emoji Battler Staging",
-  "id": "open_emoji_battler_staging",
+  "name": "Open Emoji Battler",
+  "id": "open_emoji_battler",
   "chainType": "Live",
   "bootNodes": [],
   "telemetryEndpoints": null,
@@ -16,13 +16,13 @@
       },
       "palletAura": {
         "authorities": [
-          "5CUjuk73cG59HNizCH8QscoGFmyLpnKGSaDz5WjRJc6xTTdE"
+          "5EhATWa5qa4r4tPLVGF3irYqbM7TpWzwM2ciic84J4g31HdS"
         ]
       },
       "palletGrandpa": {
         "authorities": [
           [
-            "5GBXjkdJ7nsJjFk3bruzLqvNT7upfmD7dbxeJXcPbkvoQcCa",
+            "5HkfbKuQoxyQCukxU4vd7KhgGfE98s2VHWXQ9JmVFATHbnyg",
             1
           ]
         ]
@@ -31,7 +31,7 @@
         "balances": []
       },
       "palletSudo": {
-        "key": "5CUjuk73cG59HNizCH8QscoGFmyLpnKGSaDz5WjRJc6xTTdE"
+        "key": "5EhATWa5qa4r4tPLVGF3irYqbM7TpWzwM2ciic84J4g31HdS"
       }
     }
   }
