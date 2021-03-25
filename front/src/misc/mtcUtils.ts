@@ -184,7 +184,7 @@ export const finishBattle = (
     mtcState.seed
   )
 
-  const upgradeCoin = mtcState.upgradeCoin ? Math.max(mtcState.upgradeCoin - 1, 0) : null
+  const upgradeCoin = mtcState.upgradeCoin === null ? null : Math.max(mtcState.upgradeCoin - 1, 0)
 
   return {
     mtcState: { ...mtcState, ...state, turn: mtcState.turn + 1, upgradeCoin, battleGhostIndex },

@@ -75,7 +75,7 @@ export function Nav(props: {
               props.disabled || props.upgradeCoin === null || props.upgradeCoin > props.coin
             }
           >
-            Upgrade {props.upgradeCoin ? getCoinText(props.upgradeCoin) : ""}
+            Upgrade {props.upgradeCoin === null ? "" : getCoinText(props.upgradeCoin)}
           </button>
           {props.finishFn.kind === "pow" ? (
             <PowButtonWrapper onClick={props.finishFn.fn} disabled={props.disabled} />
