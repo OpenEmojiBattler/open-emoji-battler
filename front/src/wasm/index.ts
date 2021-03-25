@@ -44,7 +44,7 @@ export const buildPool = (
   )
 
 export const startShop = (board: mtc_Board, seed: string, emoBases: EmoBases) =>
-  decodeForShop(start_shop(board.toU8a(), BigInt(seed), emoBases.codec.toU8a()))
+  decodeForShop(start_shop(board.toU8a(), seed, emoBases.codec.toU8a()))
 
 export const addEmo = (
   board: mtc_Board,
@@ -79,7 +79,7 @@ export const marchPvg = (
 ) => {
   const [boardGrade, ghostBoardGrade, logs]: [u8, u8, mtc_battle_Logs] = createType(
     "(u8, u8, mtc_battle_Logs)" as any,
-    march_pvg(board.toU8a(), ghostBoard.toU8a(), BigInt(seed), emoBases.codec.toU8a())
+    march_pvg(board.toU8a(), ghostBoard.toU8a(), seed, emoBases.codec.toU8a())
   )
   return [boardGrade.toNumber(), ghostBoardGrade.toNumber(), logs] as const
 }
@@ -95,13 +95,13 @@ export const getGradeAndGhostBoard = (
   )
 
 export const getCatalog = (pool: Vec<mtc_Emo>, board: mtc_Board, seed: string) =>
-  createType("mtc_shop_Catalog", get_catalog(pool.toU8a(), board.toU8a(), BigInt(seed)))
+  createType("mtc_shop_Catalog", get_catalog(pool.toU8a(), board.toU8a(), seed))
 
 export const selectBattleGhostIndex = (
   ghostStates: Vec<mtc_GhostState>,
   previousIndex: number,
   seed: string
-) => select_battle_ghost_index(ghostStates.toU8a(), previousIndex, BigInt(seed))
+) => select_battle_ghost_index(ghostStates.toU8a(), previousIndex, seed)
 
 export const battleAll = (
   board: mtc_Board,
@@ -124,7 +124,7 @@ export const battleAll = (
       ghostStates.toU8a(),
       battleGhostIndex,
       turn,
-      BigInt(seed),
+      seed,
       emoBases.codec.toU8a()
     )
   )

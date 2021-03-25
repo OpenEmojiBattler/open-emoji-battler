@@ -6,10 +6,10 @@ export function init_hook(): void;
 /**
 * @param {Uint8Array} pool 
 * @param {Uint8Array} board 
-* @param {BigInt} seed 
+* @param {string} seed 
 * @returns {Uint8Array} 
 */
-export function get_catalog(pool: Uint8Array, board: Uint8Array, seed: BigInt): Uint8Array;
+export function get_catalog(pool: Uint8Array, board: Uint8Array, seed: string): Uint8Array;
 /**
 * @param {Uint16Array} selected_built_base_ids 
 * @param {Uint8Array} emo_bases 
@@ -20,11 +20,11 @@ export function get_catalog(pool: Uint8Array, board: Uint8Array, seed: BigInt): 
 export function build_pool(selected_built_base_ids: Uint16Array, emo_bases: Uint8Array, fixed_base_ids: Uint16Array, built_base_ids: Uint16Array): Uint8Array;
 /**
 * @param {Uint8Array} board 
-* @param {BigInt} seed 
+* @param {string} seed 
 * @param {Uint8Array} emo_bases 
 * @returns {Uint8Array} 
 */
-export function start_shop(board: Uint8Array, seed: BigInt, emo_bases: Uint8Array): Uint8Array;
+export function start_shop(board: Uint8Array, seed: string, emo_bases: Uint8Array): Uint8Array;
 /**
 * @param {Uint8Array} board 
 * @param {Uint16Array} mtc_emo_ids 
@@ -62,18 +62,18 @@ export function get_upgrade_coin(grade: number): number | undefined;
 /**
 * @param {Uint8Array} states 
 * @param {number} previous_index 
-* @param {BigInt} seed 
+* @param {string} seed 
 * @returns {number} 
 */
-export function select_battle_ghost_index(states: Uint8Array, previous_index: number, seed: BigInt): number;
+export function select_battle_ghost_index(states: Uint8Array, previous_index: number, seed: string): number;
 /**
 * @param {Uint8Array} board 
 * @param {Uint8Array} ghost_board 
-* @param {BigInt} seed 
+* @param {string} seed 
 * @param {Uint8Array} emo_bases 
 * @returns {Uint8Array} 
 */
-export function march_pvg(board: Uint8Array, ghost_board: Uint8Array, seed: BigInt, emo_bases: Uint8Array): Uint8Array;
+export function march_pvg(board: Uint8Array, ghost_board: Uint8Array, seed: string, emo_bases: Uint8Array): Uint8Array;
 /**
 * @param {Uint8Array} board 
 * @param {number} grade 
@@ -82,11 +82,11 @@ export function march_pvg(board: Uint8Array, ghost_board: Uint8Array, seed: BigI
 * @param {Uint8Array} ghost_states 
 * @param {number} battle_ghost_index 
 * @param {number} turn 
-* @param {BigInt} seed 
+* @param {string} seed 
 * @param {Uint8Array} emo_bases 
 * @returns {Uint8Array} 
 */
-export function battle_all(board: Uint8Array, grade: number, health: number, ghosts: Uint8Array, ghost_states: Uint8Array, battle_ghost_index: number, turn: number, seed: BigInt, emo_bases: Uint8Array): Uint8Array;
+export function battle_all(board: Uint8Array, grade: number, health: number, ghosts: Uint8Array, ghost_states: Uint8Array, battle_ghost_index: number, turn: number, seed: string, emo_bases: Uint8Array): Uint8Array;
 /**
 * @param {Uint8Array} grade_and_ghost_boards 
 * @param {Uint8Array} ghost_state 
