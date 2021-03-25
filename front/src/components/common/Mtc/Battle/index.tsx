@@ -107,7 +107,7 @@ function PlayerBox(props: {
                 </span>
               )}
             </strong>
-            , Grade <strong>{getGradeText(props.grade)}</strong>
+            , Grade <span>{getGradeText(props.grade)}</span>
           </div>
         </div>
       </div>

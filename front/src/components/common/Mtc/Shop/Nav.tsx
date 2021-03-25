@@ -44,9 +44,9 @@ export function Nav(props: {
         <div className={"level-item mr-4"}>
           <p>
             Grade{" "}
-            <strong className={"is-size-5"}>
+            <span className={"is-size-5"}>
               <AnimeNumber number={props.grade} numberToString={(n) => getGradeText(`${n}`)} />
-            </strong>
+            </span>
           </p>
         </div>
         <div className={"level-item mr-4"}>

@@ -275,7 +275,7 @@ function RivalsToggle(props: {
           <strong>{getShortAddress(addr)}</strong>
           <br />
           Health <strong style={health === 0 ? { color: "lightsalmon" } : {}}>{health}</strong>,
-          Grade <strong>{getGradeText(grade)}</strong>
+          Grade <span>{getGradeText(grade)}</span>
           <br />
           {i === props.battleGhostIndex ? <strong>Next Battle</strong> : <></>}
         </div>
