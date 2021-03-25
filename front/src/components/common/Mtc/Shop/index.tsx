@@ -138,7 +138,7 @@ export function Shop(props: {
           grade={props.mtcState.grade}
           upgradeFn={() => {
             const upgradeCoin = props.mtcState.upgradeCoin
-            if (!upgradeCoin) {
+            if (upgradeCoin === null) {
               throw new Error("invalid state: upgradeCoin null")
             }
             setShopState((s) => ({
