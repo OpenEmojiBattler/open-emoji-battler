@@ -52,9 +52,60 @@ function passArray8ToWasm0(arg, malloc) {
     return ptr;
 }
 
-const u32CvtShim = new Uint32Array(2);
+const lTextEncoder = typeof TextEncoder === 'undefined' ? (0, module.require)('util').TextEncoder : TextEncoder;
 
-const uint64CvtShim = new BigUint64Array(u32CvtShim.buffer);
+let cachedTextEncoder = new lTextEncoder('utf-8');
+
+const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
+    ? function (arg, view) {
+    return cachedTextEncoder.encodeInto(arg, view);
+}
+    : function (arg, view) {
+    const buf = cachedTextEncoder.encode(arg);
+    view.set(buf);
+    return {
+        read: arg.length,
+        written: buf.length
+    };
+});
+
+function passStringToWasm0(arg, malloc, realloc) {
+
+    if (realloc === undefined) {
+        const buf = cachedTextEncoder.encode(arg);
+        const ptr = malloc(buf.length);
+        getUint8Memory0().subarray(ptr, ptr + buf.length).set(buf);
+        WASM_VECTOR_LEN = buf.length;
+        return ptr;
+    }
+
+    let len = arg.length;
+    let ptr = malloc(len);
+
+    const mem = getUint8Memory0();
+
+    let offset = 0;
+
+    for (; offset < len; offset++) {
+        const code = arg.charCodeAt(offset);
+        if (code > 0x7F) break;
+        mem[ptr + offset] = code;
+    }
+
+    if (offset !== len) {
+        if (offset !== 0) {
+            arg = arg.slice(offset);
+        }
+        ptr = realloc(ptr, len, len = offset + arg.length * 3);
+        const view = getUint8Memory0().subarray(ptr + offset, ptr + len);
+        const ret = encodeString(arg, view);
+
+        offset += ret.written;
+    }
+
+    WASM_VECTOR_LEN = offset;
+    return ptr;
+}
 
 let cachegetInt32Memory0 = null;
 function getInt32Memory0() {
@@ -70,7 +121,7 @@ function getArrayU8FromWasm0(ptr, len) {
 /**
 * @param {Uint8Array} pool
 * @param {Uint8Array} board
-* @param {BigInt} seed
+* @param {string} seed
 * @returns {Uint8Array}
 */
 export function get_catalog(pool, board, seed) {
@@ -78,10 +129,9 @@ export function get_catalog(pool, board, seed) {
     var len0 = WASM_VECTOR_LEN;
     var ptr1 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
     var len1 = WASM_VECTOR_LEN;
-    uint64CvtShim[0] = seed;
-    const low2 = u32CvtShim[0];
-    const high2 = u32CvtShim[1];
-    wasm.get_catalog(8, ptr0, len0, ptr1, len1, low2, high2);
+    var ptr2 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len2 = WASM_VECTOR_LEN;
+    wasm.get_catalog(8, ptr0, len0, ptr1, len1, ptr2, len2);
     var r0 = getInt32Memory0()[8 / 4 + 0];
     var r1 = getInt32Memory0()[8 / 4 + 1];
     var v3 = getArrayU8FromWasm0(r0, r1).slice();
@@ -129,19 +179,18 @@ export function build_pool(selected_built_base_ids, emo_bases, fixed_base_ids, b
 
 /**
 * @param {Uint8Array} board
-* @param {BigInt} seed
+* @param {string} seed
 * @param {Uint8Array} emo_bases
 * @returns {Uint8Array}
 */
 export function start_shop(board, seed, emo_bases) {
     var ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
     var len0 = WASM_VECTOR_LEN;
-    uint64CvtShim[0] = seed;
-    const low1 = u32CvtShim[0];
-    const high1 = u32CvtShim[1];
+    var ptr1 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len1 = WASM_VECTOR_LEN;
     var ptr2 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
     var len2 = WASM_VECTOR_LEN;
-    wasm.start_shop(8, ptr0, len0, low1, high1, ptr2, len2);
+    wasm.start_shop(8, ptr0, len0, ptr1, len1, ptr2, len2);
     var r0 = getInt32Memory0()[8 / 4 + 0];
     var r1 = getInt32Memory0()[8 / 4 + 1];
     var v3 = getArrayU8FromWasm0(r0, r1).slice();
@@ -230,23 +279,22 @@ export function get_upgrade_coin(grade) {
 /**
 * @param {Uint8Array} states
 * @param {number} previous_index
-* @param {BigInt} seed
+* @param {string} seed
 * @returns {number}
 */
 export function select_battle_ghost_index(states, previous_index, seed) {
     var ptr0 = passArray8ToWasm0(states, wasm.__wbindgen_malloc);
     var len0 = WASM_VECTOR_LEN;
-    uint64CvtShim[0] = seed;
-    const low1 = u32CvtShim[0];
-    const high1 = u32CvtShim[1];
-    var ret = wasm.select_battle_ghost_index(ptr0, len0, previous_index, low1, high1);
+    var ptr1 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len1 = WASM_VECTOR_LEN;
+    var ret = wasm.select_battle_ghost_index(ptr0, len0, previous_index, ptr1, len1);
     return ret;
 }
 
 /**
 * @param {Uint8Array} board
 * @param {Uint8Array} ghost_board
-* @param {BigInt} seed
+* @param {string} seed
 * @param {Uint8Array} emo_bases
 * @returns {Uint8Array}
 */
@@ -255,12 +303,11 @@ export function march_pvg(board, ghost_board, seed, emo_bases) {
     var len0 = WASM_VECTOR_LEN;
     var ptr1 = passArray8ToWasm0(ghost_board, wasm.__wbindgen_malloc);
     var len1 = WASM_VECTOR_LEN;
-    uint64CvtShim[0] = seed;
-    const low2 = u32CvtShim[0];
-    const high2 = u32CvtShim[1];
+    var ptr2 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len2 = WASM_VECTOR_LEN;
     var ptr3 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
     var len3 = WASM_VECTOR_LEN;
-    wasm.march_pvg(8, ptr0, len0, ptr1, len1, low2, high2, ptr3, len3);
+    wasm.march_pvg(8, ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3);
     var r0 = getInt32Memory0()[8 / 4 + 0];
     var r1 = getInt32Memory0()[8 / 4 + 1];
     var v4 = getArrayU8FromWasm0(r0, r1).slice();
@@ -276,7 +323,7 @@ export function march_pvg(board, ghost_board, seed, emo_bases) {
 * @param {Uint8Array} ghost_states
 * @param {number} battle_ghost_index
 * @param {number} turn
-* @param {BigInt} seed
+* @param {string} seed
 * @param {Uint8Array} emo_bases
 * @returns {Uint8Array}
 */
@@ -287,12 +334,11 @@ export function battle_all(board, grade, health, ghosts, ghost_states, battle_gh
     var len1 = WASM_VECTOR_LEN;
     var ptr2 = passArray8ToWasm0(ghost_states, wasm.__wbindgen_malloc);
     var len2 = WASM_VECTOR_LEN;
-    uint64CvtShim[0] = seed;
-    const low3 = u32CvtShim[0];
-    const high3 = u32CvtShim[1];
+    var ptr3 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len3 = WASM_VECTOR_LEN;
     var ptr4 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
     var len4 = WASM_VECTOR_LEN;
-    wasm.battle_all(8, ptr0, len0, grade, health, ptr1, len1, ptr2, len2, battle_ghost_index, turn, low3, high3, ptr4, len4);
+    wasm.battle_all(8, ptr0, len0, grade, health, ptr1, len1, ptr2, len2, battle_ghost_index, turn, ptr3, len3, ptr4, len4);
     var r0 = getInt32Memory0()[8 / 4 + 0];
     var r1 = getInt32Memory0()[8 / 4 + 1];
     var v5 = getArrayU8FromWasm0(r0, r1).slice();
@@ -335,61 +381,6 @@ function addHeapObject(obj) {
 
     heap[idx] = obj;
     return idx;
-}
-
-const lTextEncoder = typeof TextEncoder === 'undefined' ? (0, module.require)('util').TextEncoder : TextEncoder;
-
-let cachedTextEncoder = new lTextEncoder('utf-8');
-
-const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
-    ? function (arg, view) {
-    return cachedTextEncoder.encodeInto(arg, view);
-}
-    : function (arg, view) {
-    const buf = cachedTextEncoder.encode(arg);
-    view.set(buf);
-    return {
-        read: arg.length,
-        written: buf.length
-    };
-});
-
-function passStringToWasm0(arg, malloc, realloc) {
-
-    if (realloc === undefined) {
-        const buf = cachedTextEncoder.encode(arg);
-        const ptr = malloc(buf.length);
-        getUint8Memory0().subarray(ptr, ptr + buf.length).set(buf);
-        WASM_VECTOR_LEN = buf.length;
-        return ptr;
-    }
-
-    let len = arg.length;
-    let ptr = malloc(len);
-
-    const mem = getUint8Memory0();
-
-    let offset = 0;
-
-    for (; offset < len; offset++) {
-        const code = arg.charCodeAt(offset);
-        if (code > 0x7F) break;
-        mem[ptr + offset] = code;
-    }
-
-    if (offset !== len) {
-        if (offset !== 0) {
-            arg = arg.slice(offset);
-        }
-        ptr = realloc(ptr, len, len = offset + arg.length * 3);
-        const view = getUint8Memory0().subarray(ptr + offset, ptr + len);
-        const ret = encodeString(arg, view);
-
-        offset += ret.written;
-    }
-
-    WASM_VECTOR_LEN = offset;
-    return ptr;
 }
 
 export const __wbg_log_682923c8ea4d4d53 = function(arg0, arg1) {

@@ -23,11 +23,11 @@ pub fn init_hook() {
 }
 
 #[wasm_bindgen]
-pub fn get_catalog(pool: &[u8], board: &[u8], seed: u64) -> Vec<u8> {
+pub fn get_catalog(pool: &[u8], board: &[u8], seed: &str) -> Vec<u8> {
     mtc::shop::catalog::get_catalog(
         &mtc::decoders::decode_mtc_emos(pool),
         &mtc::decoders::decode_board(board),
-        seed,
+        seed.parse().unwrap(),
     )
     .unwrap()
     .encode()
@@ -51,12 +51,12 @@ pub fn build_pool(
 }
 
 #[wasm_bindgen]
-pub fn start_shop(board: &[u8], seed: u64, emo_bases: &[u8]) -> Vec<u8> {
+pub fn start_shop(board: &[u8], seed: &str, emo_bases: &[u8]) -> Vec<u8> {
     decode_and_encode_for_shop(board, |board, logs| {
         mtc::shop::board::start_shop(
             board,
             logs,
-            seed,
+            seed.parse().unwrap(),
             &mtc::decoders::decode_emo_bases(emo_bases),
         )
     })
@@ -114,21 +114,21 @@ pub fn get_upgrade_coin(grade: u8) -> Option<u8> {
 }
 
 #[wasm_bindgen]
-pub fn select_battle_ghost_index(states: &[u8], previous_index: u8, seed: u64) -> u8 {
+pub fn select_battle_ghost_index(states: &[u8], previous_index: u8, seed: &str) -> u8 {
     mtc::battle::organizer::select_battle_ghost_index(
         &mtc::decoders::decode_ghost_states(states),
         previous_index,
-        seed,
+        seed.parse().unwrap(),
     )
     .unwrap()
 }
 
 #[wasm_bindgen]
-pub fn march_pvg(board: &[u8], ghost_board: &[u8], seed: u64, emo_bases: &[u8]) -> Vec<u8> {
+pub fn march_pvg(board: &[u8], ghost_board: &[u8], seed: &str, emo_bases: &[u8]) -> Vec<u8> {
     mtc::battle::organizer::march_pvg(
         &mtc::decoders::decode_board(board),
         &mtc::decoders::decode_ghost_board(ghost_board),
-        seed,
+        seed.parse().unwrap(),
         &mtc::decoders::decode_emo_bases(emo_bases),
     )
     .map_err(|e| {
@@ -154,7 +154,7 @@ pub fn battle_all(
     ghost_states: &[u8],
     battle_ghost_index: u8,
     turn: u8,
-    seed: u64,
+    seed: &str,
     emo_bases: &[u8],
 ) -> Vec<u8> {
     let mut health = health;
@@ -168,7 +168,7 @@ pub fn battle_all(
         &mtc::decoders::decode_ghosts(ghosts),
         battle_ghost_index,
         turn,
-        seed,
+        seed.parse().unwrap(),
         &mtc::decoders::decode_emo_bases(emo_bases),
     )
     .unwrap();
