@@ -23,6 +23,8 @@ function Inner(props: { bases: EmoBases }) {
   const [ghostBoard, setGhostBoard] = React.useState<mtc_GhostBoard | null>(null)
 
   React.useEffect(() => {
+    let isMounted = true
+
     query((q) => q.game.deckFixedEmoBaseIds()).then((idsOpt) => {
       if (idsOpt.isNone) {
         return
@@ -62,10 +64,16 @@ function Inner(props: { bases: EmoBases }) {
         }
       }
 
-      setSeed(`${Math.round(Math.random() * 10000)}`)
-      setBoard(createType("mtc_Board", _board))
-      setGhostBoard(createType("mtc_GhostBoard", _ghostBoard))
+      if (isMounted) {
+        setSeed(`${Math.round(Math.random() * 10000)}`)
+        setBoard(createType("mtc_Board", _board))
+        setGhostBoard(createType("mtc_GhostBoard", _ghostBoard))
+      }
     })
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   if (seed === null || board === null || ghostBoard === null) {
