@@ -78,12 +78,7 @@ export function Top() {
           <h1 className={"title"}>What is this?</h1>
           <div className={"content"}>
             <ul>
-              <li>
-                async PvP auto battler
-                <ul>
-                  <li>the game mechanics were inspired by Hearthstone Battlegrounds</li>
-                </ul>
-              </li>
+              <li>async PvP auto battler</li>
               <li>with your favorite emoji (EMO)</li>
               <li>forum-driven development</li>
               <li>
