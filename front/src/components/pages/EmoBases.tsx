@@ -11,13 +11,13 @@ import { get_pool_emo_count_by_grade } from "~/wasm/raw"
 import { GlobalAsyncContext, useGlobalAsync } from "~/components/App/Frame/tasks"
 import { Loading } from "~/components/common/Loading"
 
-const tabs = ["All Emos List", "Available Emos By Grades"] as const
+const tabs = ["All EMOs", "Available EMOs By Grades"] as const
 type Tab = typeof tabs[number]
 
 export function EmoBases() {
   const globalAsync = React.useContext(GlobalAsyncContext)
 
-  const [tab, setTab] = React.useState<Tab>("All Emos List")
+  const [tab, setTab] = React.useState<Tab>("All EMOs")
 
   if (!globalAsync) {
     return <Loading />
@@ -39,7 +39,7 @@ export function EmoBases() {
             })}
           </ul>
         </div>
-        {tab === "All Emos List" ? (
+        {tab === "All EMOs" ? (
           <AllEmosList bases={bases} />
         ) : (
           <AvailableEmosByGrades bases={bases} />
