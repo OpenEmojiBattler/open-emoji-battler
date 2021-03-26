@@ -13,7 +13,8 @@ import { buildTypes, KeyringPairOrAddressAndSigner, extractTxArgs } from "./util
 let endpoint = ""
 let apiPromise: ApiPromise | null = null
 const registry = new TypeRegistry()
-registry.register(buildTypes())
+const types = buildTypes()
+registry.register(types)
 
 export const connected = async (endpoint: string, f: () => Promise<any>) => {
   let api: ApiPromise | null = null
@@ -38,9 +39,12 @@ export const connect = async (newEndpoint: string) => {
   }
 
   endpoint = newEndpoint
+  // if we don't pass `types` here,
+  // it seems the types data will be cleared when the runtime upgrade occurs
   apiPromise = await ApiPromise.create({
     provider: new WsProvider(newEndpoint),
     registry,
+    types,
   })
   return apiPromise
 }
