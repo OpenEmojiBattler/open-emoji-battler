@@ -1,24 +1,14 @@
 // run `cargo build --release -p open-emoji-battler-runtime` to build wasm
 import fs from "fs"
 
-import { cryptoWaitReady } from "@polkadot/util-crypto"
-import { Keyring } from "@polkadot/keyring"
-
-import { tx, query, connected, getEnv } from "common"
+import { tx, query, connected } from "common"
+import { getEndpointAndKeyringPair } from "common/src/scriptUtils"
 
 const main = async () => {
-  const envName = process.argv[2]
-  const admin = process.argv[3]
-
-  await cryptoWaitReady()
-
-  const keyring = new Keyring({ ss58Format: 42, type: "sr25519" })
-
-  if (!admin) {
-    console.log("Use Alice")
-  }
-
-  const adminPair = admin ? keyring.addFromMnemonic(admin) : keyring.addFromUri("//Alice")
+  const { endpoint, keyringPair } = await getEndpointAndKeyringPair(
+    process.argv[2],
+    process.argv[3]
+  )
 
   const code = fs
     .readFileSync(
@@ -27,12 +17,12 @@ const main = async () => {
     .toString("hex")
   console.log(`Code: ${code.length / 2} bytes`)
 
-  await connected(getEnv(envName).endpoint, async () => {
+  await connected(endpoint, async () => {
     await showSpecVersion()
 
     const h = await tx(
       (t) => t.sudo.sudoUncheckedWeight(t.system.setCode(`0x${code}`), 0),
-      adminPair
+      keyringPair
     )
     console.log(h.toString())
   })

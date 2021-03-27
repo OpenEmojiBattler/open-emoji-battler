@@ -2336,5 +2336,71 @@
         }
       }
     ]
+  },
+  {
+    "id": 64,
+    "typ": "Nature",
+    "codepoint": 128008,
+    "grade": 2,
+    "attack": 20,
+    "health": 30,
+    "abilities": [
+      {
+        "Shop": {
+          "Peri": {
+            "AsAlly": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Nature",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "OneselfTripleNormal": {
+                  "IncreaseStats": {
+                    "target": {
+                      "Oneself": null
+                    },
+                    "attack": 30,
+                    "health": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "Battle": {
+          "General": {
+            "AsAlly": {
+              "trigger": {
+                "AllySet": {
+                  "typ_and_triple": {
+                    "typ_opt": "Nature",
+                    "is_triple_opt": null
+                  }
+                }
+              },
+              "action": {
+                "OneselfTripleNormal": {
+                  "IncreaseStats": {
+                    "target_or_random": {
+                      "Target": {
+                        "Oneself": null
+                      }
+                    },
+                    "attack": 30,
+                    "health": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
   }
 ]
