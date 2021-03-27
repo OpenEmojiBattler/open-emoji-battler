@@ -1,7 +1,8 @@
-import { createType, query, connected, sudo } from "common"
+import { query, connected, sudo } from "common"
 import { getEndpointAndKeyringPair } from "common/src/scriptUtils"
 
-import emoBases from "./emoBases.json"
+import { loadEmoBases } from "./utils"
+
 import availableEmoBaseIds from "./availableEmoBaseIds.json"
 
 const main = async () => {
@@ -11,11 +12,6 @@ const main = async () => {
   )
 
   await connected(endpoint, async () => {
-    const basesMap = new Map()
-    for (const m of emoBases) {
-      basesMap.set(m.id, m)
-    }
-
     const {
       baseIds: oldBaseIds,
       fixedIds: oldFixedIds,
@@ -25,7 +21,7 @@ const main = async () => {
     const h = await sudo(
       (t) =>
         t.game.updateEmoBases(
-          createType("emo_Bases", [basesMap]),
+          loadEmoBases(),
           availableEmoBaseIds.fixed,
           availableEmoBaseIds.built,
           false
