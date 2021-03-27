@@ -1,16 +1,16 @@
-import { Keyring } from "@polkadot/keyring"
-import { cryptoWaitReady } from "@polkadot/util-crypto"
-
-import { createType, query, connected, getEnv, sudo } from "common"
+import { createType, query, connected, sudo } from "common"
+import { getEndpointAndKeyringPair } from "common/src/scriptUtils"
 
 import emoBases from "./emoBases.json"
 import availableEmoBaseIds from "./availableEmoBaseIds.json"
 
 const main = async () => {
-  const envName = process.argv[2]
-  const admin = process.argv[3]
+  const { endpoint, keyringPair } = await getEndpointAndKeyringPair(
+    process.argv[2],
+    process.argv[3]
+  )
 
-  await connected(getEnv(envName).endpoint, async () => {
+  await connected(endpoint, async () => {
     const basesMap = new Map()
     for (const m of emoBases) {
       basesMap.set(m.id, m)
@@ -20,18 +20,9 @@ const main = async () => {
     const fixedBaseIds = availableEmoBaseIds.fixed
     const builtBaseIds = availableEmoBaseIds.built
 
-    await cryptoWaitReady()
-    const keyring = new Keyring({ ss58Format: 42, type: "sr25519" })
-
-    if (!admin) {
-      console.log("Use Alice")
-    }
-
-    const adminPair = admin ? keyring.addFromMnemonic(admin) : keyring.addFromUri("//Alice")
-
     const h = await sudo(
       (t) => t.game.updateEmoBases(bases, fixedBaseIds, builtBaseIds, true),
-      adminPair
+      keyringPair
     )
 
     console.log(h.toString())

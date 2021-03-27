@@ -10,6 +10,19 @@ import { base64 } from "./pow/optimized.wrap"
 import { getWasmSolver } from "./pow/wasm"
 import * as definitions from "./interfaces/definitions"
 
+import envs from "./envs.json"
+type EnvNames = keyof typeof envs
+export const getEnv = (envName: any) => {
+  if (!envName) {
+    throw new Error(`no envName: ${envName}`)
+  }
+  const env = envs[envName as EnvNames]
+  if (!env) {
+    throw new Error(`undefined env: ${envName}`)
+  }
+  return env
+}
+
 export const buildTypes = () => {
   let types: RegistryTypes = {
     Address: "MultiAddress",
