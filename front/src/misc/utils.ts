@@ -46,3 +46,8 @@ export const shuffleArray = <T>(array: T[]) => {
     ;[array[i], array[j]] = [array[j], array[i]]
   }
 }
+
+export const sampleArray = <T>(array: T[], count: number) => {
+  shuffleArray(array)
+  return array.slice(0, count)
+}
