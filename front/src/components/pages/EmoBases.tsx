@@ -73,7 +73,12 @@ function AllEmosList(props: { bases: emo_Base[] }) {
         <tbody>
           {props.bases
             .filter((b) => typ === "All" || typ === b.typ.toString())
-            .sort((a, b) => compareGrades(a.grade.toString(), b.grade.toString()))
+            .sort((a, b) => {
+              if (a.grade.toNumber() !== b.grade.toNumber()) {
+                return a.grade.toNumber() - b.grade.toNumber()
+              }
+              return a.codepoint.toNumber() - b.codepoint.toNumber()
+            })
             .map((b) => (
               <tr key={b.id.toString()}>
                 <td>{b.id.toString()}</td>
@@ -82,7 +87,14 @@ function AllEmosList(props: { bases: emo_Base[] }) {
                 >
                   {b.typ.type}
                 </td>
-                <td style={{ fontSize: "30px" }}>{getEmoBaseEmoji(b)}</td>
+                <td>
+                  <div style={{ fontSize: "30px" }}>{getEmoBaseEmoji(b)}</div>
+                  <div style={{ fontSize: "10px" }}>
+                    {b.codepoint.toString(10)}
+                    <br />
+                    {b.codepoint.toString(16)}
+                  </div>
+                </td>
                 <td>{getEmoBaseName(b)}</td>
                 <td>{b.grade.toString()}</td>
                 <td>{b.attack.toString()}</td>
