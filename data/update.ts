@@ -1,7 +1,7 @@
-import { query, connected, sudo } from "common"
+import { connected, sudo } from "common"
 import { getEndpointAndKeyringPair } from "common/src/scriptUtils"
 
-import { loadEmoBases } from "./utils"
+import { loadEmoBases, getCurrentIds } from "./utils"
 
 import availableEmoBaseIds from "./availableEmoBaseIds.json"
 
@@ -10,6 +10,7 @@ const main = async () => {
     process.argv[2],
     process.argv[3]
   )
+  const emoBases = loadEmoBases()
 
   await connected(endpoint, async () => {
     const {
@@ -21,7 +22,7 @@ const main = async () => {
     const h = await sudo(
       (t) =>
         t.game.updateEmoBases(
-          loadEmoBases(),
+          emoBases,
           availableEmoBaseIds.fixed,
           availableEmoBaseIds.built,
           false
@@ -43,22 +44,6 @@ const main = async () => {
     console.log("built")
     showDiff(oldBuiltIds, newBuiltIds)
   })
-}
-
-const getCurrentIds = async () => {
-  const baseIds = Array.from((await query((q) => q.game.emoBases())).unwrap()[0].keys()).map((id) =>
-    id.toString()
-  )
-  const fixedIds = (await query((q) => q.game.deckFixedEmoBaseIds()))
-    .unwrap()
-    .toArray()
-    .map((id) => id.toString())
-  const builtIds = (await query((q) => q.game.deckBuiltEmoBaseIds()))
-    .unwrap()
-    .toArray()
-    .map((id) => id.toString())
-
-  return { baseIds, fixedIds, builtIds }
 }
 
 const showDiff = <T>(oldArr: T[], newArr: T[]) => {

@@ -1,4 +1,4 @@
-import { createType } from "common"
+import { createType, query } from "common"
 
 import emoBases from "./emoBases.json"
 
@@ -18,4 +18,20 @@ export const loadEmoBases = () => {
   }
 
   return createType("emo_Bases", [basesMap])
+}
+
+export const getCurrentIds = async () => {
+  const baseIds = Array.from((await query((q) => q.game.emoBases())).unwrap()[0].keys()).map((id) =>
+    id.toString()
+  )
+  const fixedIds = (await query((q) => q.game.deckFixedEmoBaseIds()))
+    .unwrap()
+    .toArray()
+    .map((id) => id.toString())
+  const builtIds = (await query((q) => q.game.deckBuiltEmoBaseIds()))
+    .unwrap()
+    .toArray()
+    .map((id) => id.toString())
+
+  return { baseIds, fixedIds, builtIds }
 }

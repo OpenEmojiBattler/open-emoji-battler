@@ -1,7 +1,8 @@
-import { createType, query, connected, sudo } from "common"
+import { connected, sudo } from "common"
 import { getEndpointAndKeyringPair } from "common/src/scriptUtils"
 
-import emoBases from "./emoBases.json"
+import { loadEmoBases, getCurrentIds } from "./utils"
+
 import availableEmoBaseIds from "./availableEmoBaseIds.json"
 
 const main = async () => {
@@ -9,27 +10,19 @@ const main = async () => {
     process.argv[2],
     process.argv[3]
   )
+  const bases = loadEmoBases()
 
   await connected(endpoint, async () => {
-    const basesMap = new Map()
-    for (const m of emoBases) {
-      basesMap.set(m.id, m)
-    }
-    const bases = createType("emo_Bases", [basesMap])
-
-    const fixedBaseIds = availableEmoBaseIds.fixed
-    const builtBaseIds = availableEmoBaseIds.built
-
     const h = await sudo(
-      (t) => t.game.updateEmoBases(bases, fixedBaseIds, builtBaseIds, true),
+      (t) =>
+        t.game.updateEmoBases(bases, availableEmoBaseIds.fixed, availableEmoBaseIds.built, true),
       keyringPair
     )
 
     console.log(h.toString())
 
-    console.log("bases", (await query((q) => q.game.emoBases())).unwrap().toJSON())
-    console.log("fixed", (await query((q) => q.game.deckFixedEmoBaseIds())).unwrap().toJSON())
-    console.log("built", (await query((q) => q.game.deckBuiltEmoBaseIds())).unwrap().toJSON())
+    const { baseIds, fixedIds, builtIds } = await getCurrentIds()
+    console.log(baseIds, fixedIds, builtIds)
   })
 }
 
