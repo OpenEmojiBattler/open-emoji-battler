@@ -1,11 +1,14 @@
 import * as React from "react"
 
-import { EmoBase } from "~/components/common/Emo"
-import { MtcShopBoard } from "../common/MtcShopBoard"
-import { MtcBattleBoards } from "../common/MtcBattleBoards"
-import { GlobalAsyncContext, useGlobalAsync } from "~/components/App/Frame/tasks"
-import { Loading } from "../common/Loading"
 import { createType, emo_Base, mtc_Board } from "common"
+
+import { boardSize } from "~/misc/constants"
+
+import { EmoBase } from "~/components/common/Emo"
+import { MtcShopBoard } from "~/components/common/MtcShopBoard"
+import { MtcBattleBoards } from "~/components/common/MtcBattleBoards"
+import { GlobalAsyncContext, useGlobalAsync } from "~/components/App/Frame/tasks"
+import { Loading } from "~/components/common/Loading"
 
 export function MtcDebug() {
   const globalAsync = React.useContext(GlobalAsyncContext)
@@ -52,9 +55,9 @@ function Shop(props: {
   return (
     <>
       <div className={"block"}>
-        <BasesMemo
+        <Bases
           selectBase={setSelectedBase}
-          // disabled={isBoardOperating}
+          disabled={isBoardOperating || props.board.length >= boardSize}
         />
       </div>
       <div className={"block"}>
@@ -100,12 +103,7 @@ function Shop(props: {
   )
 }
 
-const BasesMemo = React.memo(Bases)
-
-function Bases(props: {
-  selectBase: (m: emo_Base) => void
-  // disabled: boolean
-}) {
+function Bases(props: { selectBase: (m: emo_Base) => void; disabled: boolean }) {
   const bases = Array.from(useGlobalAsync().emoBases.codec[0].values())
 
   return (
@@ -116,7 +114,7 @@ function Bases(props: {
           <div key={m.id.toString()} style={{ padding: "2px" }}>
             <button
               className={"button is-small"}
-              // disabled={props.disabled}
+              disabled={props.disabled}
               onClick={() => props.selectBase(m)}
             >
               Buy
