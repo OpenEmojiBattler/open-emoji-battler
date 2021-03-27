@@ -15,22 +15,60 @@ const main = async () => {
     for (const m of emoBases) {
       basesMap.set(m.id, m)
     }
-    const bases = createType("emo_Bases", [basesMap])
 
-    const fixedBaseIds = availableEmoBaseIds.fixed
-    const builtBaseIds = availableEmoBaseIds.built
+    const {
+      baseIds: oldBaseIds,
+      fixedIds: oldFixedIds,
+      builtIds: oldBuiltIds,
+    } = await getCurrentIds()
 
     const h = await sudo(
-      (t) => t.game.updateEmoBases(bases, fixedBaseIds, builtBaseIds, true),
+      (t) =>
+        t.game.updateEmoBases(
+          createType("emo_Bases", [basesMap]),
+          availableEmoBaseIds.fixed,
+          availableEmoBaseIds.built,
+          false
+        ),
       keyringPair
     )
-
     console.log(h.toString())
 
-    console.log("bases", (await query((q) => q.game.emoBases())).unwrap().toJSON())
-    console.log("fixed", (await query((q) => q.game.deckFixedEmoBaseIds())).unwrap().toJSON())
-    console.log("built", (await query((q) => q.game.deckBuiltEmoBaseIds())).unwrap().toJSON())
+    const {
+      baseIds: newBaseIds,
+      fixedIds: newFixedIds,
+      builtIds: newBuiltIds,
+    } = await getCurrentIds()
+
+    console.log("bases")
+    showDiff(oldBaseIds, newBaseIds)
+    console.log("fixed")
+    showDiff(oldFixedIds, newFixedIds)
+    console.log("built")
+    showDiff(oldBuiltIds, newBuiltIds)
   })
+}
+
+const getCurrentIds = async () => {
+  const baseIds = Array.from((await query((q) => q.game.emoBases())).unwrap()[0].keys()).map((id) =>
+    id.toString()
+  )
+  const fixedIds = (await query((q) => q.game.deckFixedEmoBaseIds()))
+    .unwrap()
+    .toArray()
+    .map((id) => id.toString())
+  const builtIds = (await query((q) => q.game.deckBuiltEmoBaseIds()))
+    .unwrap()
+    .toArray()
+    .map((id) => id.toString())
+
+  return { baseIds, fixedIds, builtIds }
+}
+
+const showDiff = <T>(oldArr: T[], newArr: T[]) => {
+  const added = newArr.filter((n) => !oldArr.includes(n))
+  const deleted = oldArr.filter((n) => !newArr.includes(n))
+  console.log(`added: ${added.join(", ")}, deleted: ${deleted.join(", ")}`)
 }
 
 main().catch(console.error)
