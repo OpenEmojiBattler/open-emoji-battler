@@ -6,7 +6,7 @@ use common::{
         battle::organizer::{battle_all, select_battle_ghost_index},
         ep::{calculate_new_ep, get_ep_band, EP_BANDWIDTH, EP_UNFINISH_PENALTY, INITIAL_EP},
         result::build_ghost_from_history,
-        setup::{build_pool, build_initial_ghost_states, GHOST_COUNT, PLAYER_INITIAL_HEALTH},
+        setup::{build_initial_ghost_states, build_pool, GHOST_COUNT, PLAYER_INITIAL_HEALTH},
         shop::{
             coin::{decrease_upgrade_coin, get_upgrade_coin},
             player_operation::verify_player_operations_and_update,
@@ -502,7 +502,7 @@ impl<T: Config> Pallet<T> {
     ) -> Result<(), Error<T>> {
         let ep = Self::_update_ep(account_id, place, &ghost_states, ghost_eps)?;
 
-        if place == 1 {
+        if place < 4 {
             Self::_register_ghost(account_id, ep, grade_and_board_history);
         }
 
@@ -558,7 +558,7 @@ impl<T: Config> Pallet<T> {
         {
             ghost_with_data.1 = ep;
             ghost_with_data.2 = ghost;
-        } else if ghosts_with_data.len() <= 20 {
+        } else if ghosts_with_data.len() < 20 {
             ghosts_with_data.push((account_id.clone(), ep, ghost));
         } else {
             ghosts_with_data.remove(0);
