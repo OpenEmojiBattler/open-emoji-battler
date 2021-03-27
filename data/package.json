@@ -7,6 +7,9 @@
     "seed:dev": "ts-node ./seed.ts local",
     "seed:staging": "ts-node ./seed.ts staging \"$OEB_STAGING_ADMIN\"",
     "seed:production": "ts-node ./seed.ts production \"$OEB_PRODUCTION_ADMIN\"",
+    "update:dev": "ts-node ./update.ts local",
+    "update:staging": "ts-node ./update.ts staging \"$OEB_STAGING_ADMIN\"",
+    "update:production": "ts-node ./update.ts production \"$OEB_PRODUCTION_ADMIN\"",
     "lint": "prettier --write '*.{ts,json}'",
     "check-ts": "tsc -p . --noEmit"
   },
