@@ -69,7 +69,7 @@ export function Battle(props: { mtcState: MtcState; finish: () => void }) {
           />
           <PlayerBox
             address={playerAddress}
-            name={"Me"}
+            name={"You"}
             health={props.mtcState.health}
             healthDamage={playerHealthDamage}
             grade={`${props.mtcState.grade}`}
