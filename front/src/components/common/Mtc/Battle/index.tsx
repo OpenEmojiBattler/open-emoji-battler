@@ -28,10 +28,10 @@ export function Battle(props: { mtcState: MtcState; finish: () => void }) {
 
   const onBoardsFinish = (playerBoardGrade: number, rivalBoardGrade: number) => {
     if (playerBoardGrade !== 0) {
-      setRivalHealthDamage(playerBoardGrade)
+      setRivalHealthDamage(playerBoardGrade + props.mtcState.grade)
     }
     if (rivalBoardGrade !== 0) {
-      setPlayerHealthDamage(rivalBoardGrade)
+      setPlayerHealthDamage(rivalBoardGrade + gradeAndBoardGhost.grade.toNumber())
     }
   }
 
@@ -69,7 +69,7 @@ export function Battle(props: { mtcState: MtcState; finish: () => void }) {
           />
           <PlayerBox
             address={playerAddress}
-            name={"Me"}
+            name={"You"}
             health={props.mtcState.health}
             healthDamage={playerHealthDamage}
             grade={`${props.mtcState.grade}`}

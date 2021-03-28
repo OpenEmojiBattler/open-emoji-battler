@@ -178,7 +178,7 @@ export function Shop(props: {
             />
           </div>
           <div style={{ width: "50%" }}>
-            <h2 className={"title is-size-4"}>My Board</h2>
+            <h2 className={"title is-size-4"}>Your Board</h2>
             <div className={"block"}>
               <MtcShopBoard
                 board={props.mtcState.board}
