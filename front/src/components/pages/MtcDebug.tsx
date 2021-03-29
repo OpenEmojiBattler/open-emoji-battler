@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { createType, emo_Base, mtc_Board } from "common"
+import { createType, emo_Base, mtc_Board, mtc_GhostBoard } from "common"
 
 import { boardSize } from "~/misc/constants"
 
@@ -13,7 +13,10 @@ import { Loading } from "~/components/common/Loading"
 export function MtcDebug() {
   const globalAsync = React.useContext(GlobalAsyncContext)
   const [phase, setPhase] = React.useState<"shop" | "battle">("shop")
-  const [board, setBoardEmos] = React.useState<mtc_Board>(() => createType("mtc_Board", []))
+  const [board, setBoard] = React.useState<mtc_Board>(() => createType("mtc_Board", []))
+  const [ghostBoard, setGhostBoard] = React.useState<mtc_GhostBoard>(() =>
+    createType("mtc_GhostBoard", [])
+  )
 
   if (!globalAsync) {
     return <Loading />
@@ -23,16 +26,21 @@ export function MtcDebug() {
     setPhase("shop")
   }
 
-  let e
-  if (phase === "shop") {
-    e = <Shop startBattle={() => setPhase("battle")} board={board} updateBoardEmos={setBoardEmos} />
-  } else {
-    e = <Battle board={board} finishBattle={finishBattle} />
-  }
-
   return (
     <section className="section">
-      <div className={"container"}>{e}</div>
+      <div className={"container"}>
+        {phase === "shop" ? (
+          <Shop
+            startBattle={() => setPhase("battle")}
+            board={board}
+            setBoard={setBoard}
+            ghostBoard={ghostBoard}
+            setGhostBoard={setGhostBoard}
+          />
+        ) : (
+          <Battle board={board} ghostBoard={ghostBoard} finishBattle={finishBattle} />
+        )}
+      </div>
     </section>
   )
 }
@@ -42,7 +50,9 @@ let mtcEmoIdGenerator = 1
 function Shop(props: {
   startBattle: () => void
   board: mtc_Board
-  updateBoardEmos: (board: mtc_Board) => void
+  setBoard: (board: mtc_Board) => void
+  ghostBoard: mtc_GhostBoard
+  setGhostBoard: (board: mtc_GhostBoard) => void
 }) {
   const emoBases = useGlobalAsync().emoBases.codec[0]
   const [selectedBase, setSelectedBase] = React.useState<emo_Base | null>(null)
@@ -72,7 +82,27 @@ function Shop(props: {
           }}
           onFinishOperation={(_, board) => {
             setIsBoardOperating(false)
-            props.updateBoardEmos(board)
+            props.setBoard(board)
+          }}
+          mtcEmoForSet={
+            selectedBase
+              ? createType("mtc_Emo", { id: `${mtcEmoIdGenerator++}`, base_id: selectedBase.id })
+              : null
+          }
+        />
+        <div style={{ display: "inline-block", width: "10px" }} />
+        <MtcShopBoard
+          board={ghostBoardToBoard(props.ghostBoard)}
+          preShopSeed={`${Math.round(Math.random() * 10000)}`}
+          onStartOperation={(op) => {
+            setIsBoardOperating(true)
+            if (op.kind === "set") {
+              setSelectedBase(null)
+            }
+          }}
+          onFinishOperation={(_, board) => {
+            setIsBoardOperating(false)
+            props.setGhostBoard(boardToGhostBoard(board))
           }}
           mtcEmoForSet={
             selectedBase
@@ -126,14 +156,7 @@ function Bases(props: { selectBase: (m: emo_Base) => void; disabled: boolean }) 
   )
 }
 
-function Battle(props: { board: mtc_Board; finishBattle: () => void }) {
-  const ghostBoardEmos = createType(
-    "mtc_GhostBoard",
-    props.board.map((e) => ({
-      base_id: e.base_id,
-      attributes: e.attributes,
-    }))
-  )
+function Battle(props: { board: mtc_Board; ghostBoard: mtc_GhostBoard; finishBattle: () => void }) {
   const seed = `${Math.round(Math.random() * 10000)}`
 
   return (
@@ -146,7 +169,7 @@ function Battle(props: { board: mtc_Board; finishBattle: () => void }) {
       <div className={"block"}>
         <MtcBattleBoards
           board={props.board}
-          ghostBoard={ghostBoardEmos}
+          ghostBoard={props.ghostBoard}
           seed={seed}
           hasReplayButton={true}
         />
@@ -154,3 +177,22 @@ function Battle(props: { board: mtc_Board; finishBattle: () => void }) {
     </>
   )
 }
+
+const boardToGhostBoard = (board: mtc_Board) =>
+  createType(
+    "mtc_GhostBoard",
+    board.map((e) => ({
+      base_id: e.base_id,
+      attributes: e.attributes,
+    }))
+  )
+
+const ghostBoardToBoard = (ghostBoard: mtc_GhostBoard) =>
+  createType(
+    "mtc_Board",
+    ghostBoard.map((e) => ({
+      mtc_emo_ids: [],
+      base_id: e.base_id,
+      attributes: e.attributes,
+    }))
+  )
