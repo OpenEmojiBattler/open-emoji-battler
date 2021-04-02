@@ -90,8 +90,13 @@ export function Top() {
           <h1 className={"title"}>What is this?</h1>
           <div className={"content"}>
             <ul>
-              <li>async PvP auto battler</li>
-              <li>with your favorite emoji (EMO)</li>
+              <li>
+                async PvP auto battler
+                <ul>
+                  <li>strategic intense battles</li>
+                </ul>
+              </li>
+              <li>with your favorite emojis (EMOs) 😁</li>
               <li>forum-driven development</li>
               <li>
                 on-chain game building on Substrate
@@ -100,14 +105,12 @@ export function Top() {
                 </ul>
               </li>
               <li>
-                smooth transactions
+                smooth UX
                 <ul>
-                  <li>feeless, using per-tx PoW (experimental)</li>
+                  <li>feeless transactions, using per-tx PoW (experimental)</li>
                   <li>
-                    implicit tx with temporary session accounts
-                    <ul>
-                      <li>you don't need to manually sign tx every time in the game</li>
-                    </ul>
+                    you only need to sign one transaction on the popup manually at the beginning of
+                    the game
                   </li>
                 </ul>
               </li>
@@ -118,8 +121,8 @@ export function Top() {
           <h1 className={"title"}>Future</h1>
           <div className={"content"}>
             <ul>
-              <li>more fun game, new features</li>
-              <li>NFT</li>
+              <li>introduce more fun game, new features</li>
+              <li>distribute NFTs</li>
               <li>use DOT or KSM</li>
               <li>become a decentralized sustainable project</li>
               <li>and more...</li>
