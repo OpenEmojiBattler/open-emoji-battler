@@ -25,15 +25,11 @@ export function Top() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Intro & How to Play
+                  <strong>Intro & How to Play</strong>
                 </a>
                 <span className={"mx-3"}>•</span>
-                <a
-                  href="https://forum.open-emoji-battler.community/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Forum
+                <a href="https://youtu.be/ah3-sWMATSM" target="_blank" rel="noopener noreferrer">
+                  Demo Video
                 </a>
                 <span className={"mx-3"}>•</span>
                 <a
@@ -45,11 +41,27 @@ export function Top() {
                 </a>
                 <span className={"mx-3"}>•</span>
                 <a
+                  href="https://forum.open-emoji-battler.community/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Forum
+                </a>
+                <br />
+                <a
                   href="https://github.com/OpenEmojiBattler/open-emoji-battler"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Source Code
+                </a>
+                <span className={"mx-3"}>•</span>
+                <a
+                  href="https://forum.open-emoji-battler.community/t/topic/18"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Japanese プレイ方法
                 </a>
               </div>
             </div>
