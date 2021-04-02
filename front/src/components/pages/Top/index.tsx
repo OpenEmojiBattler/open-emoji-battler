@@ -25,15 +25,11 @@ export function Top() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Intro & How to Play
+                  <strong>Intro & How to Play</strong>
                 </a>
                 <span className={"mx-3"}>•</span>
-                <a
-                  href="https://forum.open-emoji-battler.community/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Forum
+                <a href="https://youtu.be/ah3-sWMATSM" target="_blank" rel="noopener noreferrer">
+                  Demo Video
                 </a>
                 <span className={"mx-3"}>•</span>
                 <a
@@ -45,11 +41,27 @@ export function Top() {
                 </a>
                 <span className={"mx-3"}>•</span>
                 <a
+                  href="https://forum.open-emoji-battler.community/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Forum
+                </a>
+                <br />
+                <a
                   href="https://github.com/OpenEmojiBattler/open-emoji-battler"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Source Code
+                </a>
+                <span className={"mx-3"}>•</span>
+                <a
+                  href="https://forum.open-emoji-battler.community/t/topic/18"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Japanese プレイ方法
                 </a>
               </div>
             </div>
@@ -78,8 +90,13 @@ export function Top() {
           <h1 className={"title"}>What is this?</h1>
           <div className={"content"}>
             <ul>
-              <li>async PvP auto battler</li>
-              <li>with your favorite emoji (EMO)</li>
+              <li>
+                async PvP auto battler
+                <ul>
+                  <li>strategic intense battles</li>
+                </ul>
+              </li>
+              <li>with your favorite emojis (EMOs) 😁</li>
               <li>forum-driven development</li>
               <li>
                 on-chain game building on Substrate
@@ -88,14 +105,12 @@ export function Top() {
                 </ul>
               </li>
               <li>
-                smooth transactions
+                smooth UX
                 <ul>
-                  <li>feeless, using per-tx PoW (experimental)</li>
+                  <li>feeless transactions, using per-tx PoW (experimental)</li>
                   <li>
-                    implicit tx with temporary session accounts
-                    <ul>
-                      <li>you don't need to manually sign tx every time in the game</li>
-                    </ul>
+                    you only need to sign one transaction on the popup manually at the beginning of
+                    the game
                   </li>
                 </ul>
               </li>
@@ -106,8 +121,8 @@ export function Top() {
           <h1 className={"title"}>Future</h1>
           <div className={"content"}>
             <ul>
-              <li>more fun game, new features</li>
-              <li>NFT</li>
+              <li>introduce more fun game, new features</li>
+              <li>distribute NFTs</li>
               <li>use DOT or KSM</li>
               <li>become a decentralized sustainable project</li>
               <li>and more...</li>
