@@ -5,7 +5,8 @@ $typs: map.keys($_typs)
 
 :root
   @each $n, $h in $_typs
-    --emo-color-#{$n}: hsl(#{$h}, 30%, 20%)
+    --emo-color-#{$n}: hsl(#{$h}, 40%, 20%)
+    --emo-color-light-#{$n}: hsl(#{$h}, 40%, 30%)
 
 $emo-width: 64px
 $emo-height: 93px
@@ -24,8 +25,8 @@ div.emo
     position: relative
     width: $emo-width
     height: $emo-height
-    background-color: #888
-    border-radius: 2px
+    background-color: #777
+    border-radius: 4px
 
     > div.emo-body-inner
       top: 1px
@@ -33,7 +34,8 @@ div.emo
       width: $emo-width - 2px
       height: $emo-height - 2px
       position: relative
-      border-radius: 2px
+      border-radius: 4px
+      box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.5)
       line-height: 1
 
       > div
@@ -41,40 +43,55 @@ div.emo
         width: 100%
 
       > div.emo-body-inner-emoji
-        top: 25px
+        top: 23px
         font-size: 45px
         text-align: center
 
       > div.emo-body-inner-grade
-        top: 4px
-        left: 2px
-        font-size: 17px
+        top: 3px
+        left: 5px
+        font-size: 19px
         color: #fff
-        width: 17px
-        text-align: center
+        text-shadow: black 0px 0px 8px
+        text-align: left
 
       > div.emo-body-inner-specials
         top: 4px
-        left: 25px
+        left: 26px
         width: 32px
         text-align: right
 
-      > div.emo-body-inner-bottom
-        top: 73px
+      > div.emo-body-inner-attack, > div.emo-body-inner-health
+        width: 21px
+        height: 21px
+        color: #fff
+        text-shadow: black 0px 0px 1px
+        font-family: "Times New Roman", "YuMincho", "Hiragino Mincho ProN", "Yu Mincho", "MS PMincho", serif
+        font-weight: bold
+        font-size: 16px
         display: flex
         justify-content: center
-        font-size: 13px
 
-        > div
-          flex: 1 1 0%
-          text-align: center
+      > div.emo-body-inner-attack
+        top: 68px
+        left: 2px
+        padding-top: 4px
+        // Based on https://icons.getbootstrap.com/icons/pentagon-fill/
+        background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%23063ec7' viewBox='0 0 16 16'><path style='transform:scale(0.9);transform-origin:center;' stroke='rgba(128,128,128,0.6)' stroke-width='1' d='m8 0 8 6.5-3 9.5H3L0 6.5 8 0z'/></svg>")
+
+      > div.emo-body-inner-health
+        top: 70px
+        left: 40px
+        padding-top: 2px
+        // Based on https://icons.getbootstrap.com/icons/heart-fill/
+        background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%23b01b19' viewBox='0 0 16 16'><path style='transform:scale(0.9);transform-origin:center;' stroke='rgba(128,128,128,0.6)' stroke-width='1' fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>")
 
   @each $n in $typs
     &.emo-typ-#{$n} > div.emo-body-outer > div.emo-body-inner
-      background-color: var(--emo-color-#{$n})
+      background-image: radial-gradient(circle closest-side, var(--emo-color-light-#{$n}), var(--emo-color-#{$n}))
 
   &.emo-triple > div.emo-body-outer
-    background: linear-gradient(to right bottom, #FBF5B7, #BF953F 40%, #FBF5B7)
+    background-image: linear-gradient(to right bottom, #FBF5B7, #BF953F 40%, #FBF5B7)
 
     > div.emo-body-inner
       > div.emo-body-inner-grade

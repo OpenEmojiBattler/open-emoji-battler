@@ -63,7 +63,10 @@ const createBody = (emoji: string, grade: string, attributes: emo_Attributes) =>
   inner.appendChild(createEmoji(emoji))
   inner.appendChild(createGrade(grade))
   inner.appendChild(createSpecials(attributes.abilities))
-  inner.appendChild(createBottom(attributes.attack.toString(), attributes.health.toString()))
+
+  const [attack, health] = createBottom(attributes.attack.toString(), attributes.health.toString())
+  inner.appendChild(attack)
+  inner.appendChild(health)
 
   return outer
 }
@@ -115,20 +118,15 @@ const createSpecials = (abilities: emo_ability_Ability[]) => {
 }
 
 const createBottom = (attack: string, health: string) => {
-  const e = document.createElement("div")
-  e.className = "emo-body-inner-bottom"
-
   const attackElement = document.createElement("div")
-  attackElement.className = "emo-body-inner-bottom-attack"
+  attackElement.className = "emo-body-inner-attack"
   attackElement.textContent = attack
-  e.appendChild(attackElement)
 
   const healthElement = document.createElement("div")
-  healthElement.className = "emo-body-inner-bottom-health"
+  healthElement.className = "emo-body-inner-health"
   healthElement.textContent = health
-  e.appendChild(healthElement)
 
-  return e
+  return [attackElement, healthElement] as const
 }
 
 const createInfo = (emoji: string, attributes: emo_Attributes, emoBases: EmoBases) => {
@@ -219,11 +217,11 @@ export const removeInfoAbility = (element: HTMLDivElement, abilityIndex: number)
     [abilityIndex].remove()
 
 export const updateEmoAttackElement = (element: HTMLDivElement, attack: string) => {
-  element.getElementsByClassName("emo-body-inner-bottom-attack")[0].textContent = attack
+  element.getElementsByClassName("emo-body-inner-attack")[0].textContent = attack
 }
 
 export const updateEmoHealthElement = (element: HTMLDivElement, health: string) => {
-  element.getElementsByClassName("emo-body-inner-bottom-health")[0].textContent = health
+  element.getElementsByClassName("emo-body-inner-health")[0].textContent = health
 }
 
 export const addSpecialToEmoElement = (element: HTMLDivElement, special: string) => {
