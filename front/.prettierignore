@@ -2,3 +2,4 @@
 /wasm
 *.sass
 *.sh
+*.svg
