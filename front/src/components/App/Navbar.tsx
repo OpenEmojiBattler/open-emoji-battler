@@ -5,14 +5,19 @@ import { getEnv } from "common"
 import { InternalLink } from "../common/InternalLink"
 import { getEndpoint } from "./Frame/tasks"
 
+import SymbolSVG from "~/svg/symbol.svg"
+import TypeSVG from "~/svg/type.svg"
+
 export function Navbar() {
   return (
     <nav className={"navbar"}>
       <div className={"container"}>
         <div className={"navbar-brand"}>
-          <InternalLink className={"navbar-item"} to={"/"}>
-            <strong className={"is-size-5"}>Open Emoji Battler</strong>
-          </InternalLink>
+          <InternalLink
+            className={"navbar-item logo"}
+            to={"/"}
+            innerHTML={`${SymbolSVG}${TypeSVG}`}
+          />
           <span className={"navbar-item"}>
             <NetName />
           </span>

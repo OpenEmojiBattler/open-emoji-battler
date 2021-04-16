@@ -11,12 +11,21 @@ const isRouteIdWithParamsObj = (arg: any): arg is RouteIdWithParamsObj => {
 export class InternalLink extends React.Component<{
   to: RouteId | RouteIdWithParamsObj
   className?: string
+  innerHTML?: string
 }> {
   aRef = React.createRef<HTMLAnchorElement>()
 
   render = () => {
     return (
-      <a href={this.getPath()} onClick={this.go} className={this.props.className} ref={this.aRef}>
+      <a
+        href={this.getPath()}
+        onClick={this.go}
+        className={this.props.className}
+        ref={this.aRef}
+        dangerouslySetInnerHTML={
+          this.props.innerHTML ? { __html: this.props.innerHTML } : undefined
+        }
+      >
         {this.props.children}
       </a>
     )

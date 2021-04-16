@@ -4,3 +4,8 @@ declare module "*.worker.ts" {
   }
   export default WorkerLoaderWorker
 }
+
+declare module "*.svg" {
+  const content: string
+  export default content
+}
