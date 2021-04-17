@@ -39,7 +39,7 @@ export const addEmoToBoard = async (
   await animateIndefinitely(
     emoElement,
     { width: emoElementWidth, margin: emoElementMargin },
-    { duration }
+    { duration, easing: "ease-in-out" }
   )
   await animateIndefinitely(body, { opacity: "1" }, { duration })
 }
@@ -52,7 +52,7 @@ export const removeEmoFromBoard = async (
   const emoElement = getChildDivByIndex(boardElement, index)
   const body = getFirstDivByClass(emoElement, "emo-body-outer")
 
-  await animateIndefinitely(body, { opacity: "0" }, { duration })
+  await animateIndefinitely(body, { opacity: "0", filter: "blur(6px)" }, { duration })
   await animateIndefinitely(emoElement, { width: "0px", margin: "0px" }, { duration })
 
   emoElement.remove()
@@ -72,13 +72,31 @@ export const updateStats = async (
   const color = kind === "increase" ? "positive" : "negative"
   const sym = kind === "increase" ? "+" : ""
 
-  const pros: Promise<void>[] = []
+  const pros: Promise<any>[] = []
   if (attack !== 0) {
-    pros.push(showText(emoElement, color, `attack: ${sym}${attack}`))
+    pros.push(showText(emoElement, "attack", color, `${sym}${attack}`))
   }
   if (health !== 0) {
-    pros.push(showText(emoElement, color, `health: ${sym}${health}`))
+    pros.push(showText(emoElement, "health", color, `${sym}${health}`))
   }
+
+  const body = getFirstDivByClass(emoElement, "emo-body-outer")
+  if (kind === "increase") {
+    pros.push(
+      body.animate(
+        { filter: ["brightness(1)", "brightness(1.4)", "brightness(1)"] },
+        { duration: 600 }
+      ).finished
+    )
+  } else {
+    pros.push(
+      body.animate(
+        { filter: ["brightness(1)", "brightness(0.6)", "brightness(1)"] },
+        { duration: 600 }
+      ).finished
+    )
+  }
+
   await Promise.all(pros)
 
   if (kind === "increase") {
@@ -98,16 +116,26 @@ export const updateStats = async (
   }
 }
 
-export const showText = async (
+const showText = async (
   element: HTMLDivElement,
+  attackOrHealth: "attack" | "health",
   color: "positive" | "negative",
   text: string
 ) => {
   const e = document.createElement("div")
   e.textContent = text
-  e.style.color = color === "positive" ? "lightgreen" : "lightsalmon"
-  e.style.fontSize = "12px"
-  e.style.textAlign = "center"
+
+  if (attackOrHealth === "attack") {
+    e.classList.add("emo-attack-diff")
+  } else {
+    e.classList.add("emo-health-diff")
+  }
+  if (color === "positive") {
+    e.classList.add("oeb-positive")
+  } else {
+    e.classList.add("oeb-negative")
+  }
+
   e.style.opacity = "0"
 
   element.appendChild(e)

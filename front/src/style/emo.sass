@@ -20,6 +20,7 @@ div.emo
   font-weight: 400
   color: #eee
   cursor: default
+  position: relative
 
   > div.emo-body-outer
     position: relative
@@ -65,11 +66,11 @@ div.emo
         text-align: right
 
       > div.emo-body-inner-attack, > div.emo-body-inner-health
+        @extend .oeb-serif
         width: 21px
         height: 21px
         color: #fff
         text-shadow: black 0px 0px 1px
-        font-family: "Times New Roman", "YuMincho", "Hiragino Mincho ProN", "Yu Mincho", "MS PMincho", serif
         font-weight: bold
         font-size: 16px
         display: flex
@@ -94,6 +95,15 @@ div.emo
         // Based on https://icons.getbootstrap.com/icons/heart-fill/
         background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%23b01b19' viewBox='0 0 16 16'><path style='transform:scale(0.9);transform-origin:center;' stroke='rgba(128,128,128,0.6)' stroke-width='1' fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>")
 
+      > div.emo-body-inner-damage
+        @extend .oeb-serif
+        top: 30px
+        font-size: 28px
+        font-weight: bold
+        color: #e80309
+        text-align: center
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5), -1px  1px 1px rgba(0, 0, 0, 0.5), 1px -1px 1px rgba(0, 0, 0, 0.5), -1px -1px 1px rgba(0, 0, 0, 0.5), 1px 0px 1px rgba(0, 0, 0, 0.5), 0px 1px 1px rgba(0, 0, 0, 0.5), -1px 0px 1px rgba(0, 0, 0, 0.5), 0px -1px 1px rgba(0, 0, 0, 0.5)
+
   @each $n in $typs
     &.emo-typ-#{$n} > div.emo-body-outer > div.emo-body-inner
       background-image: radial-gradient(circle closest-side, var(--emo-color-light-#{$n}), var(--emo-color-#{$n}))
@@ -107,6 +117,17 @@ div.emo
 
         &.emo-body-inner-grade-highlight
           color: yellow
+
+  > div.emo-attack-diff, div.emo-health-diff
+    position: absolute
+    top: 90px
+    font-size: 14px
+
+  > div.emo-attack-diff
+    left: 0px
+
+  > div.emo-health-diff
+    right: 0px
 
   > div.emo-info-outer
     position: relative
@@ -217,3 +238,6 @@ table.emo-table
 
 .oeb-negative
   color: #ffa3d1
+
+.oeb-serif
+  font-family: "Times New Roman", "YuMincho", "Hiragino Mincho ProN", "Yu Mincho", "MS PMincho", serif
