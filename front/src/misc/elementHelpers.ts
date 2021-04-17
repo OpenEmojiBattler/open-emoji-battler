@@ -1,6 +1,6 @@
 export const getFirstDivByClass = (element: HTMLDivElement, className: string) => {
   const e = element.getElementsByClassName(className)[0]
-  if (e.tagName === "DIV") {
+  if (e && e.tagName === "DIV") {
     return e as HTMLDivElement
   }
   throw new Error(`getFirstDivByClass: not found div: ${className}`)
@@ -8,7 +8,7 @@ export const getFirstDivByClass = (element: HTMLDivElement, className: string) =
 
 export const getFirstSpanByClass = (element: HTMLDivElement, className: string) => {
   const e = element.getElementsByClassName(className)[0]
-  if (e.tagName === "SPAN") {
+  if (e && e.tagName === "SPAN") {
     return e as HTMLSpanElement
   }
   throw new Error(`getFirstSpanByClass: not found span: ${className}`)

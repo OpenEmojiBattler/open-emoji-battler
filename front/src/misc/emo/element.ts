@@ -8,7 +8,7 @@ import {
 
 import type { EmoBases } from "~/misc/types"
 import { shieldText, attractiveText } from "~/misc/constants"
-import { getFirstSpanByClass } from "~/misc/elementHelpers"
+import { getFirstDivByClass, getFirstSpanByClass } from "~/misc/elementHelpers"
 import { getGradeText, getEmoName, findEmoBase, getEmoBaseEmoji } from "../mtcUtils"
 import { buildEmoAbilityText } from "./abilityText"
 
@@ -220,8 +220,32 @@ export const updateEmoAttackElement = (element: HTMLDivElement, attack: string) 
   element.getElementsByClassName("emo-body-inner-attack")[0].textContent = attack
 }
 
+export const updateEmoAttackPositive = (element: HTMLDivElement, attack: string) => {
+  const e = getFirstDivByClass(element, "emo-body-inner-attack")
+  e.classList.add("emo-body-inner-stats-positive")
+  e.textContent = attack
+}
+
+export const updateEmoAttackNegative = (element: HTMLDivElement, attack: string) => {
+  const e = getFirstDivByClass(element, "emo-body-inner-attack")
+  e.classList.add("emo-body-inner-stats-negative")
+  e.textContent = attack
+}
+
 export const updateEmoHealthElement = (element: HTMLDivElement, health: string) => {
   element.getElementsByClassName("emo-body-inner-health")[0].textContent = health
+}
+
+export const updateEmoHealthPositive = (element: HTMLDivElement, health: string) => {
+  const e = getFirstDivByClass(element, "emo-body-inner-health")
+  e.classList.add("emo-body-inner-stats-positive")
+  e.textContent = health
+}
+
+export const updateEmoHealthNegative = (element: HTMLDivElement, health: string) => {
+  const e = getFirstDivByClass(element, "emo-body-inner-health")
+  e.classList.add("emo-body-inner-stats-negative")
+  e.textContent = health
 }
 
 export const addSpecialToEmoElement = (element: HTMLDivElement, special: string) => {

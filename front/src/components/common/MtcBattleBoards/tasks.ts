@@ -17,12 +17,12 @@ import {
 
 import type { EmoBases } from "~/misc/types"
 import {
-  updateEmoHealthElement,
   addSpecialToEmoElement,
   removeSpecialToEmoElement,
   addInfoAbility,
   removeInfoAbility,
   createEmoElementWithBoardEmo,
+  updateEmoHealthNegative,
 } from "~/misc/emo/element"
 import { sleep } from "~/misc/utils"
 import {
@@ -166,7 +166,7 @@ const damage = async (boards: Boards, params: mtc_battle_Log_Damage) => {
   emoElement.appendChild(damageEl)
   await damageEl.animate({ opacity: ["0", "1", "0"] }, { duration: 500 }).finished
   damageEl.remove()
-  updateEmoHealthElement(emoElement, `${params.health}`)
+  updateEmoHealthNegative(emoElement, `${params.health}`)
   await sleep(300)
 }
 

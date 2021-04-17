@@ -9,8 +9,10 @@ import {
 } from "~/misc/elementHelpers"
 import {
   createEmoElementWithBoardEmo,
-  updateEmoAttackElement,
-  updateEmoHealthElement,
+  updateEmoAttackPositive,
+  updateEmoAttackNegative,
+  updateEmoHealthPositive,
+  updateEmoHealthNegative,
 } from "~/misc/emo/element"
 
 export const emoElementWidth = "64px" // ses $emo-width
@@ -79,8 +81,21 @@ export const updateStats = async (
   }
   await Promise.all(pros)
 
-  updateEmoAttackElement(emoElement, calculatedAttack)
-  updateEmoHealthElement(emoElement, calculatedHealth)
+  if (kind === "increase") {
+    if (attack !== 0) {
+      updateEmoAttackPositive(emoElement, calculatedAttack)
+    }
+    if (health !== 0) {
+      updateEmoHealthPositive(emoElement, calculatedHealth)
+    }
+  } else {
+    if (attack !== 0) {
+      updateEmoAttackNegative(emoElement, calculatedAttack)
+    }
+    if (health !== 0) {
+      updateEmoHealthNegative(emoElement, calculatedHealth)
+    }
+  }
 }
 
 export const showText = async (
