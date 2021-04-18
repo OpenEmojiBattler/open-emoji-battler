@@ -29,7 +29,9 @@ export function Result(props: {
           </div>
         </nav>
         <div style={{ textAlign: "center" }}>
-          <h2 className={"title"}>{getRankingString(props.resultState.place)}</h2>
+          <h2 className={"title"}>
+            <Ranking place={props.resultState.place} />
+          </h2>
           <Ep previousEp={props.mtcState.previousEp} newEp={props.resultState.ep} />
           <div className={"block"}>
             <div className={"emo-group emo-group-highlight"}>
@@ -54,6 +56,18 @@ export function Result(props: {
       </div>
     </section>
   )
+}
+
+function Ranking(props: { place: number }) {
+  let cssClass = ""
+  if (props.place === 1) {
+    cssClass = "first-place-text"
+  }
+  if (props.place === 2) {
+    cssClass = "second-place-text"
+  }
+
+  return <span className={cssClass}>{getRankingString(props.place)}</span>
 }
 
 function Ep(props: { previousEp: number; newEp: number }) {
