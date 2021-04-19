@@ -50,11 +50,8 @@ export const removeEmoFromBoard = async (
   const body = getEmoBodyOuterFromEmo(emoElement)
 
   await animateIndefinitely(body, { opacity: "0", filter: "blur(6px)" }, { duration })
-  await animateIndefinitely(
-    emoElement,
-    { width: "0px", margin: "0px" },
-    { duration, easing: "ease-in-out" }
-  )
+  await emoElement.animate({ width: "0px", margin: "0px" }, { duration, easing: "ease-in-out" })
+    .finished
 
   emoElement.remove()
 }

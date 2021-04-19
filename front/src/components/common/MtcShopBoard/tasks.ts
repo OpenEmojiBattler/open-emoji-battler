@@ -133,21 +133,21 @@ const add = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Add, emoBa
 
   if (isTriple) {
     const { left, top } = emoElement.getBoundingClientRect()
+    const x = Math.floor(left + emoElementWidth / 2)
+    const y = Math.floor(top + emoElementHeight / 2)
+
     emoElement.style.zIndex = "2"
+
     const pros: Promise<void>[] = []
     for (let i = 0; i < 20; i++) {
-      pros.push(
-        createParticle(
-          Math.floor(left + emoElementWidth / 2),
-          Math.floor(top + emoElementHeight / 2)
-        )
-      )
+      pros.push(createParticle(x, y))
     }
     Promise.all(pros).then(() => {
       if (emoElement.style.zIndex === "2") {
         emoElement.style.zIndex = "auto"
       }
     })
+
     await sleep(1000)
   }
 }
@@ -238,7 +238,7 @@ const triple = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Triple)
       const body = getEmoBodyOuterFromEmo(emoElement)
 
       await animateIndefinitely(body, { opacity: "0", filter: "saturate(3)" }, { duration: 500 })
-      await animateIndefinitely(emoElement, { width: "0px", margin: "0px" }, { duration: 200 })
+      await emoElement.animate({ width: "0px", margin: "0px" }, { duration: 200 }).finished
 
       emoElement.remove()
     })
@@ -258,17 +258,15 @@ const setupEmoLineEmosElement = (
 const createParticle = async (x: number, y: number) => {
   const particle = document.createElement("i")
   particle.classList.add("mtc-shop-particle")
-  document.body.appendChild(particle)
 
   const size = Math.floor(Math.random() * 10 + 5)
   particle.style.width = `${size}px`
   particle.style.height = `${size}px`
-  particle.style.background = `hsl(${Math.random() * 30 + 30}, ${Math.floor(
+  particle.style.backgroundColor = `hsl(${Math.random() * 30 + 30}, ${Math.floor(
     Math.random() * 40 + 50
   )}%, ${Math.floor(Math.random() * 40 + 50)}%)`
 
-  const destinationX = Math.floor(x + (Math.random() - 0.5) * 2 * 100)
-  const destinationY = Math.floor(y + (Math.random() - 0.5) * 2 * 100)
+  document.body.appendChild(particle)
 
   return particle
     .animate(
@@ -278,7 +276,9 @@ const createParticle = async (x: number, y: number) => {
           opacity: 1,
         },
         {
-          transform: `translate(${destinationX}px, ${destinationY}px)`,
+          transform: `translate(${Math.floor(x + (Math.random() - 0.5) * 2 * 100)}px, ${Math.floor(
+            y + (Math.random() - 0.5) * 2 * 100
+          )}px)`,
           opacity: 0,
         },
       ],

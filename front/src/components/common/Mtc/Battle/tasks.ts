@@ -40,10 +40,12 @@ const animateBox = async (
   if (!lostBoxEl) {
     return
   }
-  await Promise.all([
-    animateIndefinitely(wonBoxEl, { transform: "scale(1.1)" }, { duration: 200 }),
-    animateIndefinitely(lostBoxEl, { transform: "scale(1.1)" }, { duration: 200 }),
-  ])
+
+  await Promise.all(
+    [wonBoxEl, lostBoxEl].map((e) =>
+      animateIndefinitely(e, { transform: "scale(1.1)" }, { duration: 200 })
+    )
+  )
 
   // highlight box grade
   const gradeEl = querySelector(`#mtc-battle-${wonSide}-box .mtc-battle-player-box-grade`)
@@ -55,7 +57,6 @@ const animateBox = async (
 
   // animate boxes
   wonBoxEl.style.zIndex = "1"
-  await sleep(300)
   await Promise.all([
     wonBoxEl.animate(
       {
@@ -130,10 +131,11 @@ const animateBox = async (
   ])
   await sleep(200)
 
-  await Promise.all([
-    animateIndefinitely(wonBoxEl, { transform: "scale(1)" }, { duration: 200 }),
-    animateIndefinitely(lostBoxEl, { transform: "scale(1)" }, { duration: 200 }),
-  ])
+  await Promise.all(
+    [wonBoxEl, lostBoxEl].map((e) =>
+      animateIndefinitely(e, { transform: "scale(1)" }, { duration: 200 })
+    )
+  )
 }
 
 const querySelectorAll = (selectors: string) =>
