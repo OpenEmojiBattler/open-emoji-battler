@@ -146,6 +146,6 @@ const showText = async (
 
   element.appendChild(e)
 
-  await animateIndefinitely(e, { opacity: ["0", "1", "0"] }, { duration: 600 })
+  await animateIndefinitely(e, { opacity: ["0", "1", "1", "0"] }, { duration: 800 })
   e.remove()
 }

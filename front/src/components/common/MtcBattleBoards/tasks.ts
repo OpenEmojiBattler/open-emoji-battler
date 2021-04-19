@@ -241,42 +241,28 @@ const damage = async (boards: Boards, params: mtc_battle_Log_Damage) => {
   damageEl.classList.add("emo-body-inner-damage")
   damageEl.textContent = params.damage.toString()
   damageEl.style.opacity = "0"
-  damageEl.style.transform = "translateY(4px)"
   inner.appendChild(damageEl)
 
   await Promise.all([
-    damageEl
-      .animate(
-        [
-          {
-            opacity: "0",
-            transform: "translateY(4px)",
-          },
-          {
-            opacity: "1",
-            transform: "translateY(0px)",
-            offset: 0.1,
-          },
-          {
-            opacity: "1",
-            transform: "translateY(0px)",
-            offset: 0.9,
-          },
-          {
-            opacity: "0",
-            transform: "translateY(4px)",
-          },
-        ],
-        { duration: 900 }
-      )
-      .finished.then(() => damageEl.remove()),
-    sleep(300).then(() => updateEmoHealthNegative(emoElement, `${params.health}`)),
+    animateIndefinitely(
+      damageEl,
+      {
+        opacity: ["0", "1", "1"],
+        transform: ["scale(0.7)", "scale(1.3)", "scale(0.9)", "scale(1)"],
+      },
+      { duration: 600, easing: "ease" }
+    ),
+    sleep(400).then(() => updateEmoHealthNegative(emoElement, `${params.health}`)),
   ])
+  await sleep(500)
+  await damageEl.animate({ opacity: "0" }, { duration: 100 }).finished
+  damageEl.remove()
+  await sleep(200)
 }
 
 const remove = async (boards: Boards, params: mtc_battle_Log_Remove) => {
   const boardElement = boards[params.player_index.toNumber()]
-  await removeEmoFromBoard(boardElement, params.emo_index.toNumber(), 200)
+  await removeEmoFromBoard(boardElement, params.emo_index.toNumber(), 300)
 }
 
 const add = async (boards: Boards, params: mtc_battle_Log_Add, emoBases: EmoBases) => {

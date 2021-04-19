@@ -97,12 +97,13 @@ div.emo
 
       > div.emo-body-inner-damage
         @extend .oeb-serif
-        top: 30px
-        font-size: 28px
+        top: 28px
+        font-size: 40px
         font-weight: bold
         color: #e80309
-        text-align: center
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5), -1px  1px 1px rgba(0, 0, 0, 0.5), 1px -1px 1px rgba(0, 0, 0, 0.5), -1px -1px 1px rgba(0, 0, 0, 0.5), 1px 0px 1px rgba(0, 0, 0, 0.5), 0px 1px 1px rgba(0, 0, 0, 0.5), -1px 0px 1px rgba(0, 0, 0, 0.5), 0px -1px 1px rgba(0, 0, 0, 0.5)
+        display: flex
+        justify-content: center
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8), -1px  1px 1px rgba(0, 0, 0, 0.8), 1px -1px 1px rgba(0, 0, 0, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.8), 1px 0px 1px rgba(0, 0, 0, 0.8), 0px 1px 1px rgba(0, 0, 0, 0.8), -1px 0px 1px rgba(0, 0, 0, 0.8), 0px -1px 1px rgba(0, 0, 0, 0.8)
 
   @each $n in $typs
     &.emo-typ-#{$n} > div.emo-body-outer > div.emo-body-inner
