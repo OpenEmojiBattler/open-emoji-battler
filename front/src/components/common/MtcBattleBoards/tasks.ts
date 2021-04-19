@@ -203,13 +203,12 @@ const attack = async (boards: Boards, params: mtc_battle_Log_Attack) => {
     attackerBody.animate(
       [
         { transform: "translate(0px, 0px)" },
-        { transform: `translate(0px, ${isAttackPlayerZero ? "" : "-"}2px)`, offset: 0.3 },
-        { transform: `translate(${xDiff}px, ${isAttackPlayerZero ? "-" : ""}40px)` },
+        { transform: `translate(${xDiff}px, ${isAttackPlayerZero ? "-" : ""}30px)` },
         { transform: "translate(0px, 0px)" },
       ],
-      { duration: 700, composite: "add", easing: "ease-in-out" }
+      { duration: 500, composite: "add", easing: "ease" }
     ).finished,
-    sleep(550).then(
+    sleep(300).then(
       () =>
         defenderBody.animate(
           {

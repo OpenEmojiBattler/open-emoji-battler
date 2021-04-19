@@ -14,6 +14,7 @@ import {
   updateEmoHealthPositive,
   updateEmoHealthNegative,
 } from "~/misc/emo/element"
+import { sleep } from "../utils"
 
 export const emoElementWidth = 64 // ses $emo-width
 export const emoElementHeight = 93 // ses $emo-height
@@ -100,7 +101,7 @@ export const updateStats = async (
     )
   }
 
-  await Promise.all(pros)
+  await sleep(400)
 
   if (kind === "increase") {
     if (attack !== 0) {
@@ -117,6 +118,8 @@ export const updateStats = async (
       updateEmoHealthNegative(emoElement, calculatedHealth)
     }
   }
+
+  await Promise.all(pros)
 }
 
 const showText = async (
