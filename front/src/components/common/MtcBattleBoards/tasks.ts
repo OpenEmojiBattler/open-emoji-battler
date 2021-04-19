@@ -77,15 +77,17 @@ export const animate = async (
     if (l.isIncreaseStats) {
       const asIncreaseStats = l.asIncreaseStats
 
-      if (logs[i]?.isIncreaseStats) {
-        const nextParams = logs[i].asIncreaseStats
-        if (isSameUpdatingStatsDiff(asIncreaseStats, nextParams)) {
-          stack.push(increaseStats(boards, asIncreaseStats))
-          continue
-        }
+      const next = i + 1
+      if (
+        logs[next]?.isIncreaseStats &&
+        isSameUpdatingStatsDiff(asIncreaseStats, logs[next].asIncreaseStats)
+      ) {
+        stack.push(increaseStats(boards, asIncreaseStats))
+        continue
       }
 
       if (stack.length > 0) {
+        stack.push(increaseStats(boards, asIncreaseStats))
         await Promise.all(stack)
         stack = []
         continue
@@ -97,15 +99,17 @@ export const animate = async (
     if (l.isDecreaseStats) {
       const asDecreaseStats = l.asDecreaseStats
 
-      if (logs[i]?.isDecreaseStats) {
-        const nextParams = logs[i].asDecreaseStats
-        if (isSameUpdatingStatsDiff(asDecreaseStats, nextParams)) {
-          stack.push(decreaseStats(boards, asDecreaseStats))
-          continue
-        }
+      const next = i + 1
+      if (
+        logs[next]?.isDecreaseStats &&
+        isSameUpdatingStatsDiff(asDecreaseStats, logs[next].asDecreaseStats)
+      ) {
+        stack.push(decreaseStats(boards, asDecreaseStats))
+        continue
       }
 
       if (stack.length > 0) {
+        stack.push(decreaseStats(boards, asDecreaseStats))
         await Promise.all(stack)
         stack = []
         continue
