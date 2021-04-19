@@ -15,9 +15,10 @@ import {
   updateEmoHealthNegative,
 } from "~/misc/emo/element"
 
-export const emoElementWidth = "64px" // ses $emo-width
+export const emoElementWidth = 64 // ses $emo-width
+export const emoElementHeight = 93 // ses $emo-height
 export const emoElementMargin = "0px 4px" // ses $space
-export const emoElementWithMarginWidth = "72px" // ses $emo-width
+export const emoElementWithMarginWidth = 72 // ses $emo-width
 
 export const addEmoToBoard = async (
   boardElement: HTMLDivElement,
@@ -38,10 +39,12 @@ export const addEmoToBoard = async (
 
   await animateIndefinitely(
     emoElement,
-    { width: emoElementWidth, margin: emoElementMargin },
+    { width: `${emoElementWidth}px`, margin: emoElementMargin },
     { duration, easing: "ease-in-out" }
   )
   await animateIndefinitely(body, { opacity: "1" }, { duration })
+
+  return emoElement
 }
 
 export const removeEmoFromBoard = async (
