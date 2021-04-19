@@ -184,10 +184,18 @@ const attack = async (boards: Boards, params: mtc_battle_Log_Attack) => {
   const isAttackPlayerZero = params.attack_player_index.isZero()
   let xDiff = defenderBody.getBoundingClientRect().left - attackerBody.getBoundingClientRect().left
   if (xDiff > 0) {
-    xDiff -= 30
+    if (xDiff < 300) {
+      xDiff -= 30
+    } else {
+      xDiff -= 60
+    }
   }
   if (xDiff < 0) {
-    xDiff += 30
+    if (xDiff > -300) {
+      xDiff += 30
+    } else {
+      xDiff += 60
+    }
   }
 
   attackerBody.style.zIndex = "1"
@@ -231,6 +239,8 @@ const attack = async (boards: Boards, params: mtc_battle_Log_Attack) => {
     animateIndefinitely(attackerBody, { transform: "scale(1.0)" }, { duration: 200 }),
     animateIndefinitely(defenderBody, { transform: "scale(1.0)" }, { duration: 200 }),
   ])
+
+  await sleep(100)
 }
 
 const damage = async (boards: Boards, params: mtc_battle_Log_Damage) => {

@@ -116,14 +116,16 @@ const animate = async (element: HTMLDivElement, logs: mtc_shop_BoardLogs, emoBas
 }
 
 const add = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Add, emoBases: EmoBases) => {
+  const isTriple = params.board_emo.attributes.is_triple.isTrue
   const emoElement = await addEmoToBoard(
     element,
     params.board_emo,
     params.index.toNumber(),
     emoBases,
-    100
+    isTriple ? 250 : 150
   )
-  if (params.board_emo.attributes.is_triple.isTrue) {
+
+  if (isTriple) {
     const { left, top } = emoElement.getBoundingClientRect()
     emoElement.style.zIndex = "2"
     const pros: Promise<void>[] = []
@@ -145,7 +147,7 @@ const add = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Add, emoBa
 }
 
 const remove = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Remove) => {
-  await removeEmoFromBoard(element, params.index.toNumber(), 100)
+  await removeEmoFromBoard(element, params.index.toNumber(), 150)
 }
 
 const move = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Move) => {
@@ -162,7 +164,7 @@ const move = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Move) => 
   emoElement1.style.zIndex = "2"
   emoElement2.style.zIndex = "1"
 
-  const opt: KeyframeAnimationOptions = { duration: 100 }
+  const opt: KeyframeAnimationOptions = { duration: 150, easing: "ease-in-out" }
   if (fromIndex > toIndex) {
     await Promise.all([
       emoElement1.animate({ transform: `translateX(-${emoElementWithMarginWidth}px)` }, opt)
