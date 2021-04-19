@@ -11,11 +11,16 @@ import {
 } from "common"
 
 import type { EmoBases } from "~/misc/types"
-import { sleep } from "~/misc/utils"
-import { animateIndefinitely, getChildDivByIndex, getFirstDivByClass } from "~/misc/elementHelpers"
-import { addInfoAbility, createEmoElementWithBoardEmo, getSpecialElement } from "~/misc/emo/element"
 import { startShop, addEmo, sellEmo, moveEmo } from "~/wasm"
 import { emoBuyCoin } from "~/misc/constants"
+import { sleep } from "~/misc/utils"
+import { animateIndefinitely, getChildDivByIndex } from "~/misc/elementHelpers"
+import {
+  getEmoBodyFromEmo,
+  addInfoAbility,
+  createEmoWithBoardEmo,
+  getSpecial,
+} from "~/misc/emo/element"
 import {
   removeEmoFromBoard,
   emoElementWithMarginWidth,
@@ -117,6 +122,7 @@ const animate = async (element: HTMLDivElement, logs: mtc_shop_BoardLogs, emoBas
 
 const add = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Add, emoBases: EmoBases) => {
   const isTriple = params.board_emo.attributes.is_triple.isTrue
+
   const emoElement = await addEmoToBoard(
     element,
     params.board_emo,
@@ -216,7 +222,7 @@ const addAbility = async (
     return
   }
 
-  const special = getSpecialElement(emoElement, params.ability.asBattle.asSpecial.type)
+  const special = getSpecial(emoElement, params.ability.asBattle.asSpecial.type)
 
   const originalSize = window.getComputedStyle(special).getPropertyValue("font-size")
 
@@ -229,7 +235,7 @@ const triple = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Triple)
   await Promise.all(
     Array.from(params.removed_indexes).map(async (index) => {
       const emoElement = getChildDivByIndex(element, index)
-      const body = getFirstDivByClass(emoElement, "emo-body-outer")
+      const body = getEmoBodyFromEmo(emoElement)
 
       await animateIndefinitely(body, { opacity: "0", filter: "saturate(3)" }, { duration: 500 })
       await animateIndefinitely(emoElement, { width: "0px", margin: "0px" }, { duration: 200 })
@@ -245,13 +251,13 @@ const setupEmoLineEmosElement = (
   emoBases: EmoBases
 ) => {
   for (const boardEmo of board) {
-    emoLineEmosElement.appendChild(createEmoElementWithBoardEmo(boardEmo, emoBases))
+    emoLineEmosElement.appendChild(createEmoWithBoardEmo(boardEmo, emoBases))
   }
 }
 
 const createParticle = async (x: number, y: number) => {
   const particle = document.createElement("i")
-  particle.classList.add("particle")
+  particle.classList.add("mtc-shop-particle")
   document.body.appendChild(particle)
 
   const size = Math.floor(Math.random() * 10 + 5)

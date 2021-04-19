@@ -8,7 +8,7 @@ import {
   getChildDivByIndex,
 } from "~/misc/elementHelpers"
 import {
-  createEmoElementWithBoardEmo,
+  createEmoWithBoardEmo,
   updateEmoAttackPositive,
   updateEmoAttackNegative,
   updateEmoHealthPositive,
@@ -28,7 +28,7 @@ export const addEmoToBoard = async (
   emoBases: EmoBases,
   duration: number
 ) => {
-  const emoElement = createEmoElementWithBoardEmo(boardEmo, emoBases)
+  const emoElement = createEmoWithBoardEmo(boardEmo, emoBases)
   emoElement.style.width = "0px"
   emoElement.style.margin = "0px 0px"
 

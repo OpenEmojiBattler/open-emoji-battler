@@ -16,14 +16,6 @@ import {
 } from "common"
 
 import type { EmoBases } from "~/misc/types"
-import {
-  addSpecialToEmoElement,
-  removeSpecialToEmoElement,
-  addInfoAbility,
-  removeInfoAbility,
-  createEmoElementWithBoardEmo,
-  updateEmoHealthNegative,
-} from "~/misc/emo/element"
 import { sleep } from "~/misc/utils"
 import {
   getFirstDivByClass,
@@ -31,6 +23,15 @@ import {
   getChildDivByIndex,
   removeAllChildren,
 } from "~/misc/elementHelpers"
+import {
+  addSpecial,
+  removeSpecial,
+  addInfoAbility,
+  removeInfoAbility,
+  createEmoWithBoardEmo,
+  updateEmoHealthNegative,
+  getEmoBodyFromEmo,
+} from "~/misc/emo/element"
 import { addEmoToBoard, removeEmoFromBoard, updateStats } from "~/misc/emo/elementAnimations"
 
 type Boards = [HTMLDivElement, HTMLDivElement]
@@ -144,15 +145,15 @@ const setupBoards = async (
   const animes: Promise<void>[] = []
 
   for (const e of playerBoard) {
-    const el = createEmoElementWithBoardEmo(e, emoBases)
-    const body = getFirstDivByClass(el, "emo-body-outer")
+    const el = createEmoWithBoardEmo(e, emoBases)
+    const body = getEmoBodyFromEmo(el)
     body.style.opacity = "0"
     playerBoardElement.appendChild(el)
     animes.push(animateIndefinitely(body, { opacity: "1" }, { duration: 500 }))
   }
   for (const e of rivalBoard) {
-    const el = createEmoElementWithBoardEmo(e, emoBases)
-    const body = getFirstDivByClass(el, "emo-body-outer")
+    const el = createEmoWithBoardEmo(e, emoBases)
+    const body = getEmoBodyFromEmo(el)
     body.style.opacity = "0"
     rivalBoardElement.appendChild(el)
     animes.push(animateIndefinitely(body, { opacity: "1" }, { duration: 500 }))
@@ -330,7 +331,7 @@ const addBattleAbility = async (
   if (!params.ability.isSpecial) {
     return
   }
-  addSpecialToEmoElement(emoElement, params.ability.asSpecial.type)
+  addSpecial(emoElement, params.ability.asSpecial.type)
   await sleep(300)
 }
 
@@ -340,7 +341,7 @@ const removeBattleAbility = async (boards: Boards, params: mtc_battle_Log_Remove
   removeInfoAbility(emoElement, params.ability_index.toNumber())
 
   if (params.ability.isSpecial) {
-    removeSpecialToEmoElement(emoElement, params.ability.asSpecial.type)
+    removeSpecial(emoElement, params.ability.asSpecial.type)
   }
 
   await sleep(300)
@@ -350,7 +351,7 @@ const getEmoElement = (boards: Boards, playerIndex: u8, emoIndex: u8) =>
   getChildDivByIndex(boards[playerIndex.toNumber()], emoIndex.toNumber())
 
 const getEmoElementBody = (boards: Boards, playerIndex: u8, emoIndex: u8) =>
-  getFirstDivByClass(getEmoElement(boards, playerIndex, emoIndex), "emo-body-outer")
+  getEmoBodyFromEmo(getEmoElement(boards, playerIndex, emoIndex))
 
 const switchPlayerIndex = (index: u8) =>
   index.isZero() ? createType("u8", 1) : createType("u8", 0)

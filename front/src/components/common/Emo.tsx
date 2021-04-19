@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { createEmoElement } from "~/misc/emo/element"
+import { createEmo } from "~/misc/emo/element"
 import { createType, emo_Attributes, emo_Base, emo_Typ } from "common"
 import { removeAllChildren } from "~/misc/elementHelpers"
 import { useGlobalAsync } from "~/components/App/Frame/tasks"
@@ -45,7 +45,7 @@ export function Emo(props: {
     if (!container) {
       throw new Error("ref element not found")
     }
-    const emoElement = createEmoElement(
+    const emoElement = createEmo(
       props.emoji,
       props.typ,
       props.grade,

@@ -12,7 +12,7 @@ import { getFirstDivByClass, getFirstSpanByClass } from "~/misc/elementHelpers"
 import { getGradeText, getEmoName, findEmoBase, getEmoBaseEmoji } from "../mtcUtils"
 import { buildEmoAbilityText } from "./abilityText"
 
-export const createEmoElement = (
+export const createEmo = (
   emoji: string,
   typ: emo_Typ,
   grade: string,
@@ -28,12 +28,12 @@ export const createEmoElement = (
   return emo
 }
 
-export const createEmoElementWithBoardEmo = (
+export const createEmoWithBoardEmo = (
   boardEmo: mtc_BoardEmo | mtc_GhostBoardEmo,
   emoBases: EmoBases
 ) => {
   const base = findEmoBase(boardEmo.base_id, emoBases)
-  return createEmoElement(
+  return createEmo(
     getEmoBaseEmoji(base),
     base.typ,
     base.grade.toString(),
@@ -216,10 +216,6 @@ export const removeInfoAbility = (element: HTMLDivElement, abilityIndex: number)
     .getElementsByTagName("tr")
     [abilityIndex].remove()
 
-export const updateEmoAttackElement = (element: HTMLDivElement, attack: string) => {
-  element.getElementsByClassName("emo-body-inner-attack")[0].textContent = attack
-}
-
 export const updateEmoAttackPositive = (element: HTMLDivElement, attack: string) => {
   const e = getFirstDivByClass(element, "emo-body-inner-attack")
   e.classList.add("emo-body-inner-stats-positive")
@@ -230,10 +226,6 @@ export const updateEmoAttackNegative = (element: HTMLDivElement, attack: string)
   const e = getFirstDivByClass(element, "emo-body-inner-attack")
   e.classList.add("emo-body-inner-stats-negative")
   e.textContent = attack
-}
-
-export const updateEmoHealthElement = (element: HTMLDivElement, health: string) => {
-  element.getElementsByClassName("emo-body-inner-health")[0].textContent = health
 }
 
 export const updateEmoHealthPositive = (element: HTMLDivElement, health: string) => {
@@ -248,27 +240,24 @@ export const updateEmoHealthNegative = (element: HTMLDivElement, health: string)
   e.textContent = health
 }
 
-export const addSpecialToEmoElement = (element: HTMLDivElement, special: string) => {
-  getSpecialElement(element, special).style.display = "inline"
+export const addSpecial = (element: HTMLDivElement, special: string) => {
+  getSpecial(element, special).style.display = "inline"
 }
 
-export const removeSpecialToEmoElement = (element: HTMLDivElement, special: string) => {
-  getSpecialElement(element, special).style.display = "none"
+export const removeSpecial = (element: HTMLDivElement, special: string) => {
+  getSpecial(element, special).style.display = "none"
 }
 
-export const getSpecialElement = (element: HTMLDivElement, special: string) => {
+export const getSpecial = (element: HTMLDivElement, special: string) => {
   switch (special) {
     case "Shield":
-      return getEmoShieldElement(element)
+      return getFirstSpanByClass(element, "emo-body-inner-specials-shield")
     case "Attractive":
-      return getEmoAttractiveElement(element)
+      return getFirstSpanByClass(element, "emo-body-inner-specials-attractive")
     default:
       throw new Error(`undefined special type: ${special}`)
   }
 }
 
-const getEmoShieldElement = (element: HTMLDivElement) =>
-  getFirstSpanByClass(element, "emo-body-inner-specials-shield")
-
-const getEmoAttractiveElement = (element: HTMLDivElement) =>
-  getFirstSpanByClass(element, "emo-body-inner-specials-attractive")
+export const getEmoBodyFromEmo = (emoElement: HTMLDivElement) =>
+  getFirstDivByClass(emoElement, "emo-body-outer")
