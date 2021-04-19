@@ -16,21 +16,19 @@ import {
 } from "common"
 
 import type { EmoBases } from "~/misc/types"
+import { sleep } from "~/misc/utils"
+import { animateIndefinitely, getChildDivByIndex, removeAllChildren } from "~/misc/elementHelpers"
 import {
-  updateEmoHealthElement,
-  addSpecialToEmoElement,
-  removeSpecialToEmoElement,
+  addSpecial,
+  removeSpecial,
   addInfoAbility,
   removeInfoAbility,
-  createEmoElementWithBoardEmo,
+  createEmoWithBoardEmo,
+  getEmoBodyOuterFromEmo,
+  updateEmoStat,
+  createEmoDamage,
+  getEmoBodyInnerFromEmo,
 } from "~/misc/emo/element"
-import { sleep } from "~/misc/utils"
-import {
-  getFirstDivByClass,
-  animateIndefinitely,
-  getChildDivByIndex,
-  removeAllChildren,
-} from "~/misc/elementHelpers"
 import { addEmoToBoard, removeEmoFromBoard, updateStats } from "~/misc/emo/elementAnimations"
 
 type Boards = [HTMLDivElement, HTMLDivElement]
@@ -43,7 +41,7 @@ export const animate = async (
   logs: mtc_battle_Logs,
   emoBases: EmoBases
 ) => {
-  const boards = setupBoards(
+  const boards = await setupBoards(
     playerBoardElement,
     rivalBoardElement,
     playerBoard,
@@ -51,9 +49,13 @@ export const animate = async (
     emoBases
   )
 
-  await sleep(800)
+  const stack: Promise<void>[] = []
 
-  for (const l of logs) {
+  await sleep(700)
+
+  for (let i = 0; i < logs.length; i++) {
+    const l = logs[i]
+
     if (l.isAttack) {
       await attack(boards, l.asAttack)
       continue
@@ -71,11 +73,23 @@ export const animate = async (
       continue
     }
     if (l.isIncreaseStats) {
-      await increaseStats(boards, l.asIncreaseStats)
+      await updateStatsBatch(
+        boards,
+        l.asIncreaseStats,
+        logs[i + 1]?.isIncreaseStats ? logs[i + 1].asIncreaseStats : null,
+        stack,
+        increaseStats
+      )
       continue
     }
     if (l.isDecreaseStats) {
-      await decreaseStats(boards, l.asDecreaseStats)
+      await updateStatsBatch(
+        boards,
+        l.asDecreaseStats,
+        logs[i + 1]?.isDecreaseStats ? logs[i + 1].asDecreaseStats : null,
+        stack,
+        decreaseStats
+      )
       continue
     }
     if (l.isAddBattleAbility) {
@@ -91,24 +105,64 @@ export const animate = async (
   }
 }
 
-const setupBoards = (
+const setupBoards = async (
   playerBoardElement: HTMLDivElement,
   rivalBoardElement: HTMLDivElement,
   playerBoard: mtc_Board,
   rivalBoard: mtc_GhostBoard,
   emoBases: EmoBases
-): Boards => {
+): Promise<Boards> => {
   removeAllChildren(playerBoardElement)
   removeAllChildren(rivalBoardElement)
 
-  for (const e of playerBoard) {
-    playerBoardElement.appendChild(createEmoElementWithBoardEmo(e, emoBases))
-  }
-  for (const e of rivalBoard) {
-    rivalBoardElement.appendChild(createEmoElementWithBoardEmo(e, emoBases))
+  const pros: Promise<void>[] = []
+
+  for (const [board, boardElement] of [
+    [playerBoard, playerBoardElement],
+    [rivalBoard, rivalBoardElement],
+  ] as const) {
+    for (const e of board) {
+      const el = createEmoWithBoardEmo(e, emoBases)
+      const body = getEmoBodyOuterFromEmo(el)
+      body.style.opacity = "0"
+      boardElement.appendChild(el)
+      pros.push(animateIndefinitely(body, { opacity: "1" }, { duration: 500 }))
+    }
   }
 
+  await Promise.all(pros)
+
   return [playerBoardElement, rivalBoardElement]
+}
+
+const updateStatsBatch = async <
+  T extends mtc_battle_Log_IncreaseStats | mtc_battle_Log_DecreaseStats
+>(
+  boards: Boards,
+  current: T,
+  next: T | null,
+  stack: Promise<void>[],
+  fn: (boards: Boards, params: T) => Promise<void>
+) => {
+  if (
+    next &&
+    current.player_index.eq(next.player_index) &&
+    current.attack.eq(next.attack) &&
+    current.health.eq(next.health)
+  ) {
+    stack.push(fn(boards, current))
+    return
+  }
+
+  if (stack.length > 0) {
+    stack.push(fn(boards, current))
+    await Promise.all(stack)
+    stack.length = 0
+    return
+  }
+
+  await fn(boards, current)
+  return
 }
 
 const attack = async (boards: Boards, params: mtc_battle_Log_Attack) => {
@@ -122,57 +176,101 @@ const attack = async (boards: Boards, params: mtc_battle_Log_Attack) => {
     switchPlayerIndex(params.attack_player_index),
     params.defense_emo_index
   )
+  const isAttackPlayerZero = params.attack_player_index.isZero()
+  let xDiff = defenderBody.getBoundingClientRect().left - attackerBody.getBoundingClientRect().left
+  if (xDiff > 0) {
+    if (xDiff < 300) {
+      xDiff -= 30
+    } else {
+      xDiff -= 60
+    }
+  }
+  if (xDiff < 0) {
+    if (xDiff > -300) {
+      xDiff += 30
+    } else {
+      xDiff += 60
+    }
+  }
 
-  await Promise.all([
-    animateIndefinitely(attackerBody, { transform: "scale(1.05)" }, { duration: 200 }),
-    animateIndefinitely(defenderBody, { transform: "scale(1.05)" }, { duration: 200 }),
-  ])
+  attackerBody.style.zIndex = "1"
+
+  await Promise.all(
+    [attackerBody, defenderBody].map((b) =>
+      animateIndefinitely(b, { transform: "scale(1.05)" }, { duration: 200 })
+    )
+  )
 
   await sleep(300)
 
-  await attackerBody.animate(
-    {
-      transform: [
-        "translateY(0%)",
-        `translateY(${params.attack_player_index.isZero() ? "-10" : "10"}%)`,
-        "translateY(0%)",
+  await Promise.all([
+    attackerBody.animate(
+      [
+        { transform: "translate(0px, 0px)" },
+        { transform: `translate(${xDiff}px, ${isAttackPlayerZero ? "-" : ""}30px)` },
+        { transform: "translate(0px, 0px)" },
       ],
-    },
-    { duration: 300, composite: "add" }
-  ).finished
+      { duration: 500, composite: "add", easing: "ease" }
+    ).finished,
+    sleep(300).then(
+      () =>
+        defenderBody.animate(
+          {
+            transform: [
+              "translateY(0px)",
+              `translateY(${isAttackPlayerZero ? "-5" : "5"}px)`,
+              "translateY(0px)",
+            ],
+          },
+          { duration: 300, composite: "add", easing: "ease-out" }
+        ).finished
+    ),
+  ])
 
-  await defenderBody.animate(
-    {
-      transform: ["translateX(0%)", "translateX(5%)", "translateX(-5%)", "translateX(0%)"],
-    },
-    { duration: 300, composite: "add" }
-  ).finished
+  attackerBody.style.zIndex = "auto"
 
   await sleep(200)
 
-  await Promise.all([
-    animateIndefinitely(attackerBody, { transform: "scale(1.0)" }, { duration: 200 }),
-    animateIndefinitely(defenderBody, { transform: "scale(1.0)" }, { duration: 200 }),
-  ])
+  await Promise.all(
+    [attackerBody, defenderBody].map((b) =>
+      animateIndefinitely(b, { transform: "scale(1)" }, { duration: 200 })
+    )
+  )
+
+  await sleep(100)
 }
 
 const damage = async (boards: Boards, params: mtc_battle_Log_Damage) => {
   const emoElement = getEmoElement(boards, params.player_index, params.emo_index)
-  const damageEl = document.createElement("div")
-  damageEl.textContent = params.damage.toString()
-  damageEl.style.color = "lightsalmon"
-  damageEl.style.fontSize = "large"
+
+  const inner = getEmoBodyInnerFromEmo(emoElement)
+  const damageEl = createEmoDamage(params.damage.toString())
   damageEl.style.opacity = "0"
-  emoElement.appendChild(damageEl)
-  await damageEl.animate({ opacity: ["0", "1", "0"] }, { duration: 500 }).finished
+  inner.appendChild(damageEl)
+
+  await Promise.all([
+    animateIndefinitely(
+      damageEl,
+      {
+        opacity: ["0", "1", "1"],
+        transform: ["scale(0.7)", "scale(1.3)", "scale(0.9)", "scale(1)"],
+      },
+      { duration: 600, easing: "ease" }
+    ),
+    sleep(400).then(() => updateEmoStat(emoElement, "health", "negative", `${params.health}`)),
+  ])
+
+  await sleep(500)
+
+  await damageEl.animate({ opacity: "0" }, { duration: 100 }).finished
   damageEl.remove()
-  updateEmoHealthElement(emoElement, `${params.health}`)
-  await sleep(300)
+
+  await sleep(200)
 }
 
 const remove = async (boards: Boards, params: mtc_battle_Log_Remove) => {
   const boardElement = boards[params.player_index.toNumber()]
-  await removeEmoFromBoard(boardElement, params.emo_index.toNumber(), 200)
+  await removeEmoFromBoard(boardElement, params.emo_index.toNumber(), 300)
 }
 
 const add = async (boards: Boards, params: mtc_battle_Log_Add, emoBases: EmoBases) => {
@@ -188,7 +286,7 @@ const add = async (boards: Boards, params: mtc_battle_Log_Add, emoBases: EmoBase
 const increaseStats = async (boards: Boards, params: mtc_battle_Log_IncreaseStats) => {
   await updateStats(
     boards[params.player_index.toNumber()],
-    "increase",
+    "positive",
     params.emo_index.toNumber(),
     params.attack.toNumber(),
     params.health.toNumber(),
@@ -202,7 +300,7 @@ const increaseStats = async (boards: Boards, params: mtc_battle_Log_IncreaseStat
 const decreaseStats = async (boards: Boards, params: mtc_battle_Log_DecreaseStats) => {
   await updateStats(
     boards[params.player_index.toNumber()],
-    "decrease",
+    "negative",
     params.emo_index.toNumber(),
     params.attack.toNumber(),
     params.health.toNumber(),
@@ -230,7 +328,9 @@ const addBattleAbility = async (
   if (!params.ability.isSpecial) {
     return
   }
-  addSpecialToEmoElement(emoElement, params.ability.asSpecial.type)
+
+  addSpecial(emoElement, params.ability.asSpecial.type)
+
   await sleep(300)
 }
 
@@ -240,7 +340,7 @@ const removeBattleAbility = async (boards: Boards, params: mtc_battle_Log_Remove
   removeInfoAbility(emoElement, params.ability_index.toNumber())
 
   if (params.ability.isSpecial) {
-    removeSpecialToEmoElement(emoElement, params.ability.asSpecial.type)
+    removeSpecial(emoElement, params.ability.asSpecial.type)
   }
 
   await sleep(300)
@@ -250,7 +350,7 @@ const getEmoElement = (boards: Boards, playerIndex: u8, emoIndex: u8) =>
   getChildDivByIndex(boards[playerIndex.toNumber()], emoIndex.toNumber())
 
 const getEmoElementBody = (boards: Boards, playerIndex: u8, emoIndex: u8) =>
-  getFirstDivByClass(getEmoElement(boards, playerIndex, emoIndex), "emo-body-outer")
+  getEmoBodyOuterFromEmo(getEmoElement(boards, playerIndex, emoIndex))
 
 const switchPlayerIndex = (index: u8) =>
   index.isZero() ? createType("u8", 1) : createType("u8", 0)

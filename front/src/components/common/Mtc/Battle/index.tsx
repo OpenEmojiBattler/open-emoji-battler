@@ -5,14 +5,13 @@ import { getGradeAndGhostBoard } from "~/wasm"
 import { isDevelopment } from "~/misc/utils"
 import { zeroAddress } from "~/misc/constants"
 import { AccountContext } from "~/components/App/Frame/tasks"
+import { animateFinish } from "./tasks"
 
 import { MtcBattleBoards } from "~/components/common/MtcBattleBoards"
 import { Identicon } from "~/components/common/Identicon"
 
 export function Battle(props: { mtcState: MtcState; finish: () => void }) {
   const account = React.useContext(AccountContext)
-  const [playerHealthDamage, setPlayerHealthDamage] = React.useState(0)
-  const [rivalHealthDamage, setRivalHealthDamage] = React.useState(0)
 
   const playerAddress = account ? account.player.address : zeroAddress
   const gradeAndBoardGhost = getGradeAndGhostBoard(
@@ -25,15 +24,6 @@ export function Battle(props: { mtcState: MtcState; finish: () => void }) {
   const rivalHealth = getHealthFromState(
     props.mtcState.ghostStates[props.mtcState.battleGhostIndex]
   )
-
-  const onBoardsFinish = (playerBoardGrade: number, rivalBoardGrade: number) => {
-    if (playerBoardGrade !== 0) {
-      setRivalHealthDamage(playerBoardGrade + props.mtcState.grade)
-    }
-    if (rivalBoardGrade !== 0) {
-      setPlayerHealthDamage(rivalBoardGrade + gradeAndBoardGhost.grade.toNumber())
-    }
-  }
 
   return (
     <section className={"section"}>
@@ -52,27 +42,36 @@ export function Battle(props: { mtcState: MtcState; finish: () => void }) {
             </div>
           </div>
         </nav>
-        <div style={{ textAlign: "center" }}>
+        <div id={"mtc-battle"} style={{ textAlign: "center" }}>
           <PlayerBox
             address={rivalAddress}
             name={null}
             health={rivalHealth}
-            healthDamage={rivalHealthDamage}
             grade={gradeAndBoardGhost.grade.toString()}
+            isPlayer={false}
           />
           <MtcBattleBoards
             board={props.mtcState.board}
             ghostBoard={gradeAndBoardGhost.board}
             seed={props.mtcState.seed}
             hasReplayButton={isDevelopment}
-            onFinish={onBoardsFinish}
+            onFinish={(playerBoardGrade: number, rivalBoardGrade: number) =>
+              animateFinish(
+                props.mtcState.grade,
+                gradeAndBoardGhost.grade.toNumber(),
+                playerBoardGrade,
+                rivalBoardGrade,
+                props.mtcState.health,
+                rivalHealth
+              )
+            }
           />
           <PlayerBox
             address={playerAddress}
             name={"You"}
             health={props.mtcState.health}
-            healthDamage={playerHealthDamage}
             grade={`${props.mtcState.grade}`}
+            isPlayer={true}
           />
         </div>
       </div>
@@ -84,30 +83,24 @@ function PlayerBox(props: {
   address: string
   name: string | null
   health: number
-  healthDamage: number
   grade: string
+  isPlayer: boolean
 }) {
   return (
     <div className={"block"}>
-      <div className={"player-icon-and-text-box"}>
-        <div>
+      <div
+        id={`mtc-battle-${props.isPlayer ? "player" : "rival"}-box`}
+        className={"player-icon-and-text-box"}
+      >
+        <div className={"player-icon-and-text-box-main"}>
           <div>
             <Identicon address={props.address} size={48} />
           </div>
           <div>
             <strong>{props.name ? props.name : getShortAddress(props.address)}</strong>
             <br />
-            Health{" "}
-            <strong>
-              {props.healthDamage === 0 ? (
-                props.health
-              ) : (
-                <span style={{ color: "lightsalmon" }}>
-                  {Math.max(props.health - props.healthDamage, 0)} (-{props.healthDamage})
-                </span>
-              )}
-            </strong>
-            , Grade <span>{getGradeText(props.grade)}</span>
+            Health <strong className={"mtc-battle-player-box-health"}>{props.health}</strong>, Grade{" "}
+            <span className={"mtc-battle-player-box-grade"}>{getGradeText(props.grade)}</span>
           </div>
         </div>
       </div>

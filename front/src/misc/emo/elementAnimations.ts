@@ -3,19 +3,16 @@ import { mtc_BoardEmo } from "common"
 import type { EmoBases } from "~/misc/types"
 import {
   animateIndefinitely,
-  getFirstDivByClass,
   insertElementByIndex,
   getChildDivByIndex,
 } from "~/misc/elementHelpers"
-import {
-  createEmoElementWithBoardEmo,
-  updateEmoAttackElement,
-  updateEmoHealthElement,
-} from "~/misc/emo/element"
+import { createEmoWithBoardEmo, updateEmoStat, getEmoBodyOuterFromEmo } from "~/misc/emo/element"
+import { sleep } from "../utils"
 
-export const emoElementWidth = "64px" // ses $emo-width
+export const emoElementWidth = 64 // ses $emo-width
+export const emoElementHeight = 93 // ses $emo-height
 export const emoElementMargin = "0px 4px" // ses $space
-export const emoElementWithMarginWidth = "72px" // ses $emo-width
+export const emoElementWithMarginWidth = 72 // ses $emo-width
 
 export const addEmoToBoard = async (
   boardElement: HTMLDivElement,
@@ -24,22 +21,24 @@ export const addEmoToBoard = async (
   emoBases: EmoBases,
   duration: number
 ) => {
-  const emoElement = createEmoElementWithBoardEmo(boardEmo, emoBases)
+  const emoElement = createEmoWithBoardEmo(boardEmo, emoBases)
   emoElement.style.width = "0px"
   emoElement.style.margin = "0px 0px"
 
   // avoid touching emoElement's opacity for the stacking context, for hover info's z-index
-  const body = getFirstDivByClass(emoElement, "emo-body-outer")
+  const body = getEmoBodyOuterFromEmo(emoElement)
   body.style.opacity = "0"
 
   insertElementByIndex(boardElement, emoElement, index)
 
   await animateIndefinitely(
     emoElement,
-    { width: emoElementWidth, margin: emoElementMargin },
-    { duration }
+    { width: `${emoElementWidth}px`, margin: emoElementMargin },
+    { duration, easing: "ease-in-out" }
   )
   await animateIndefinitely(body, { opacity: "1" }, { duration })
+
+  return emoElement
 }
 
 export const removeEmoFromBoard = async (
@@ -48,17 +47,18 @@ export const removeEmoFromBoard = async (
   duration: number
 ) => {
   const emoElement = getChildDivByIndex(boardElement, index)
-  const body = getFirstDivByClass(emoElement, "emo-body-outer")
+  const body = getEmoBodyOuterFromEmo(emoElement)
 
-  await animateIndefinitely(body, { opacity: "0" }, { duration })
-  await animateIndefinitely(emoElement, { width: "0px", margin: "0px" }, { duration })
+  await animateIndefinitely(body, { opacity: "0", filter: "blur(6px)" }, { duration })
+  await emoElement.animate({ width: "0px", margin: "0px" }, { duration, easing: "ease-in-out" })
+    .finished
 
   emoElement.remove()
 }
 
 export const updateStats = async (
   boardElement: HTMLDivElement,
-  kind: "increase" | "decrease",
+  positiveOrNegative: "positive" | "negative",
   emoIndex: number,
   attack: number,
   health: number,
@@ -66,37 +66,55 @@ export const updateStats = async (
   calculatedHealth: string
 ) => {
   const emoElement = getChildDivByIndex(boardElement, emoIndex)
+  const pros: Promise<any>[] = []
 
-  const color = kind === "increase" ? "positive" : "negative"
-  const sym = kind === "increase" ? "+" : ""
-
-  const pros: Promise<void>[] = []
   if (attack !== 0) {
-    pros.push(showText(emoElement, color, `attack: ${sym}${attack}`))
+    pros.push(showStatsText(emoElement, positiveOrNegative, "attack", attack))
   }
   if (health !== 0) {
-    pros.push(showText(emoElement, color, `health: ${sym}${health}`))
+    pros.push(showStatsText(emoElement, positiveOrNegative, "health", health))
   }
-  await Promise.all(pros)
 
-  updateEmoAttackElement(emoElement, calculatedAttack)
-  updateEmoHealthElement(emoElement, calculatedHealth)
+  pros.push(
+    getEmoBodyOuterFromEmo(emoElement).animate(
+      {
+        filter: [
+          "brightness(1)",
+          `brightness(${positiveOrNegative === "positive" ? "1.4" : "0.6"}`,
+          "brightness(1)",
+        ],
+      },
+      { duration: 600 }
+    ).finished
+  )
+
+  await sleep(400)
+
+  if (attack !== 0) {
+    updateEmoStat(emoElement, "attack", positiveOrNegative, calculatedAttack)
+  }
+  if (health !== 0) {
+    updateEmoStat(emoElement, "health", positiveOrNegative, calculatedHealth)
+  }
+
+  await Promise.all(pros)
 }
 
-export const showText = async (
+const showStatsText = async (
   element: HTMLDivElement,
-  color: "positive" | "negative",
-  text: string
+  positiveOrNegative: "positive" | "negative",
+  attackOrHealth: "attack" | "health",
+  value: number
 ) => {
   const e = document.createElement("div")
-  e.textContent = text
-  e.style.color = color === "positive" ? "lightgreen" : "lightsalmon"
-  e.style.fontSize = "12px"
-  e.style.textAlign = "center"
+
+  e.textContent = `${positiveOrNegative === "positive" ? "+" : ""}${value}`
+  e.classList.add(`emo-${attackOrHealth}-diff`)
+  e.classList.add(`oeb-${positiveOrNegative}`)
   e.style.opacity = "0"
 
   element.appendChild(e)
 
-  await animateIndefinitely(e, { opacity: ["0", "1", "0"] }, { duration: 600 })
+  await e.animate({ opacity: ["0", "1", "1", "0"] }, { duration: 800 }).finished
   e.remove()
 }

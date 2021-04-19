@@ -1,3 +1,12 @@
+.oeb-positive
+  color: #c8ff1e
+
+.oeb-negative
+  color: #ffa3d1
+
+.oeb-serif
+  font-family: "Times New Roman", "YuMincho", "Hiragino Mincho ProN", "Yu Mincho", "MS PMincho", serif
+
 div.top-container
   max-width: 1100px
   width: auto
@@ -5,7 +14,9 @@ div.top-container
 
 div.player-icon-and-text-box
   display: inline-block
-  > div
+  position: relative
+  > div.player-icon-and-text-box-main
+    background-color: #111
     display: flex
     align-items: center
     border: 1px solid $grey
@@ -15,6 +26,16 @@ div.player-icon-and-text-box
       margin-right: 0.75rem
     > div:not(:first-child)
       text-align: left
+  > div.player-icon-and-text-box-damage
+    @extend .oeb-serif
+    position: absolute
+    top: 50px
+    width: 100%
+    font-size: 34px
+    font-weight: bold
+    color: #e80309
+    text-align: center
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5), -1px  1px 1px rgba(0, 0, 0, 0.5), 1px -1px 1px rgba(0, 0, 0, 0.5), -1px -1px 1px rgba(0, 0, 0, 0.5), 1px 0px 1px rgba(0, 0, 0, 0.5), 0px 1px 1px rgba(0, 0, 0, 0.5), -1px 0px 1px rgba(0, 0, 0, 0.5), 0px -1px 1px rgba(0, 0, 0, 0.5)
 
 .rivals-toggle
   user-select: none
@@ -56,6 +77,35 @@ div.player-icon-and-text-box
 
     > div:first-child
       margin-right: 8px
+
+i.mtc-shop-particle
+  position: fixed
+  top: 0
+  left: 0
+  border-radius: 50%
+  pointer-events: none
+  opacity: 0
+  z-index: 1
+
+span.second-place-text
+  text-shadow: 0 0 3px cyan
+
+span.first-place-text
+  background-image: linear-gradient(90deg, rgba(186,148,62,1) 0%, rgba(236,172,32,1) 20%, rgba(186,148,62,1) 39%, rgba(249,244,180,1) 50%, rgba(186,148,62,1) 60%, rgba(236,172,32,1) 80%, rgba(186,148,62,1) 100%)
+  background-size: 300%
+  background-position: right
+  background-clip: text
+  -webkit-background-clip: text
+  color: transparent
+  animation: first-place-text-animation 6s infinite
+
+@keyframes first-place-text-animation
+  0%
+    background-position: right
+  50%
+    background-position: left
+  100%
+    background-position: right
 
 .has-moon:after
   font-size: 30px

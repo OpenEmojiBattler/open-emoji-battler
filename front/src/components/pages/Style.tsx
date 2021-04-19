@@ -9,7 +9,6 @@ export function Style() {
   if (!globalAsync) {
     return <Loading />
   }
-
   return (
     <section className="section">
       <div className={"container"}>

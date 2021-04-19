@@ -11,16 +11,23 @@ import {
 } from "common"
 
 import type { EmoBases } from "~/misc/types"
-import { sleep } from "~/misc/utils"
-import { animateIndefinitely, getChildDivByIndex } from "~/misc/elementHelpers"
-import { addInfoAbility, createEmoElementWithBoardEmo, getSpecialElement } from "~/misc/emo/element"
 import { startShop, addEmo, sellEmo, moveEmo } from "~/wasm"
 import { emoBuyCoin } from "~/misc/constants"
+import { sleep } from "~/misc/utils"
+import { animateIndefinitely, getChildDivByIndex } from "~/misc/elementHelpers"
+import {
+  getEmoBodyOuterFromEmo,
+  addInfoAbility,
+  createEmoWithBoardEmo,
+  getSpecial,
+} from "~/misc/emo/element"
 import {
   removeEmoFromBoard,
   emoElementWithMarginWidth,
   addEmoToBoard,
   updateStats,
+  emoElementWidth,
+  emoElementHeight,
 } from "~/misc/emo/elementAnimations"
 
 export type Operation =
@@ -114,11 +121,39 @@ const animate = async (element: HTMLDivElement, logs: mtc_shop_BoardLogs, emoBas
 }
 
 const add = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Add, emoBases: EmoBases) => {
-  await addEmoToBoard(element, params.board_emo, params.index.toNumber(), emoBases, 100)
+  const isTriple = params.board_emo.attributes.is_triple.isTrue
+
+  const emoElement = await addEmoToBoard(
+    element,
+    params.board_emo,
+    params.index.toNumber(),
+    emoBases,
+    isTriple ? 250 : 150
+  )
+
+  if (isTriple) {
+    const { left, top } = emoElement.getBoundingClientRect()
+    const x = Math.floor(left + emoElementWidth / 2)
+    const y = Math.floor(top + emoElementHeight / 2)
+
+    emoElement.style.zIndex = "2"
+
+    const pros: Promise<void>[] = []
+    for (let i = 0; i < 20; i++) {
+      pros.push(createParticle(x, y))
+    }
+    Promise.all(pros).then(() => {
+      if (emoElement.style.zIndex === "2") {
+        emoElement.style.zIndex = "auto"
+      }
+    })
+
+    await sleep(1000)
+  }
 }
 
 const remove = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Remove) => {
-  await removeEmoFromBoard(element, params.index.toNumber(), 100)
+  await removeEmoFromBoard(element, params.index.toNumber(), 150)
 }
 
 const move = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Move) => {
@@ -135,26 +170,33 @@ const move = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Move) => 
   emoElement1.style.zIndex = "2"
   emoElement2.style.zIndex = "1"
 
-  const opt: KeyframeAnimationOptions = { duration: 100 }
+  const opt: KeyframeAnimationOptions = { duration: 150, easing: "ease-in-out" }
   if (fromIndex > toIndex) {
     await Promise.all([
-      emoElement1.animate({ transform: `translateX(-${emoElementWithMarginWidth})` }, opt).finished,
-      emoElement2.animate({ transform: `translateX(${emoElementWithMarginWidth})` }, opt).finished,
+      emoElement1.animate({ transform: `translateX(-${emoElementWithMarginWidth}px)` }, opt)
+        .finished,
+      emoElement2.animate({ transform: `translateX(${emoElementWithMarginWidth}px)` }, opt)
+        .finished,
     ])
     element.insertBefore(emoElement1, emoElement2)
   } else {
     await Promise.all([
-      emoElement1.animate({ transform: `translateX(${emoElementWithMarginWidth})` }, opt).finished,
-      emoElement2.animate({ transform: `translateX(-${emoElementWithMarginWidth})` }, opt).finished,
+      emoElement1.animate({ transform: `translateX(${emoElementWithMarginWidth}px)` }, opt)
+        .finished,
+      emoElement2.animate({ transform: `translateX(-${emoElementWithMarginWidth}px)` }, opt)
+        .finished,
     ])
     element.insertBefore(emoElement2, emoElement1)
   }
+
+  emoElement1.style.zIndex = "auto"
+  emoElement2.style.zIndex = "auto"
 }
 
 const increaseStats = async (element: HTMLDivElement, params: mtc_shop_BoardLog_IncreaseStats) => {
   await updateStats(
     element,
-    "increase",
+    "positive",
     params.index.toNumber(),
     params.attack.toNumber(),
     params.health.toNumber(),
@@ -180,7 +222,7 @@ const addAbility = async (
     return
   }
 
-  const special = getSpecialElement(emoElement, params.ability.asBattle.asSpecial.type)
+  const special = getSpecial(emoElement, params.ability.asBattle.asSpecial.type)
 
   const originalSize = window.getComputedStyle(special).getPropertyValue("font-size")
 
@@ -191,7 +233,15 @@ const addAbility = async (
 
 const triple = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Triple) => {
   await Promise.all(
-    Array.from(params.removed_indexes).map((index) => removeEmoFromBoard(element, index, 100))
+    Array.from(params.removed_indexes).map(async (index) => {
+      const emoElement = getChildDivByIndex(element, index)
+      const body = getEmoBodyOuterFromEmo(emoElement)
+
+      await animateIndefinitely(body, { opacity: "0", filter: "saturate(3)" }, { duration: 500 })
+      await emoElement.animate({ width: "0px", margin: "0px" }, { duration: 200 }).finished
+
+      emoElement.remove()
+    })
   )
 }
 
@@ -201,6 +251,42 @@ const setupEmoLineEmosElement = (
   emoBases: EmoBases
 ) => {
   for (const boardEmo of board) {
-    emoLineEmosElement.appendChild(createEmoElementWithBoardEmo(boardEmo, emoBases))
+    emoLineEmosElement.appendChild(createEmoWithBoardEmo(boardEmo, emoBases))
   }
+}
+
+const createParticle = async (x: number, y: number) => {
+  const particle = document.createElement("i")
+  particle.classList.add("mtc-shop-particle")
+
+  const size = Math.floor(Math.random() * 10 + 5)
+  particle.style.width = `${size}px`
+  particle.style.height = `${size}px`
+  particle.style.backgroundColor = `hsl(${Math.random() * 30 + 30}, ${Math.floor(
+    Math.random() * 40 + 50
+  )}%, ${Math.floor(Math.random() * 40 + 50)}%)`
+
+  document.body.appendChild(particle)
+
+  return particle
+    .animate(
+      [
+        {
+          transform: `translate(${Math.floor(x - size / 2)}px, ${Math.floor(y - size / 2)}px)`,
+          opacity: 1,
+        },
+        {
+          transform: `translate(${Math.floor(x + (Math.random() - 0.5) * 2 * 100)}px, ${Math.floor(
+            y + (Math.random() - 0.5) * 2 * 100
+          )}px)`,
+          opacity: 0,
+        },
+      ],
+      {
+        duration: Math.floor(500 + Math.random() * 1000),
+        easing: "ease-out",
+        delay: Math.floor(Math.random() * 200),
+      }
+    )
+    .finished.then(() => particle.remove())
 }
