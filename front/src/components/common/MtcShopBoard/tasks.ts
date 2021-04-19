@@ -16,7 +16,7 @@ import { emoBuyCoin } from "~/misc/constants"
 import { sleep } from "~/misc/utils"
 import { animateIndefinitely, getChildDivByIndex } from "~/misc/elementHelpers"
 import {
-  getEmoBodyFromEmo,
+  getEmoBodyOuterFromEmo,
   addInfoAbility,
   createEmoWithBoardEmo,
   getSpecial,
@@ -235,7 +235,7 @@ const triple = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Triple)
   await Promise.all(
     Array.from(params.removed_indexes).map(async (index) => {
       const emoElement = getChildDivByIndex(element, index)
-      const body = getEmoBodyFromEmo(emoElement)
+      const body = getEmoBodyOuterFromEmo(emoElement)
 
       await animateIndefinitely(body, { opacity: "0", filter: "saturate(3)" }, { duration: 500 })
       await animateIndefinitely(emoElement, { width: "0px", margin: "0px" }, { duration: 200 })

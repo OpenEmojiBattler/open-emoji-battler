@@ -6,7 +6,7 @@ import {
   insertElementByIndex,
   getChildDivByIndex,
 } from "~/misc/elementHelpers"
-import { createEmoWithBoardEmo, updateEmoStat, getEmoBodyFromEmo } from "~/misc/emo/element"
+import { createEmoWithBoardEmo, updateEmoStat, getEmoBodyOuterFromEmo } from "~/misc/emo/element"
 import { sleep } from "../utils"
 
 export const emoElementWidth = 64 // ses $emo-width
@@ -26,7 +26,7 @@ export const addEmoToBoard = async (
   emoElement.style.margin = "0px 0px"
 
   // avoid touching emoElement's opacity for the stacking context, for hover info's z-index
-  const body = getEmoBodyFromEmo(emoElement)
+  const body = getEmoBodyOuterFromEmo(emoElement)
   body.style.opacity = "0"
 
   insertElementByIndex(boardElement, emoElement, index)
@@ -47,7 +47,7 @@ export const removeEmoFromBoard = async (
   duration: number
 ) => {
   const emoElement = getChildDivByIndex(boardElement, index)
-  const body = getEmoBodyFromEmo(emoElement)
+  const body = getEmoBodyOuterFromEmo(emoElement)
 
   await animateIndefinitely(body, { opacity: "0", filter: "blur(6px)" }, { duration })
   await animateIndefinitely(
@@ -79,7 +79,7 @@ export const updateStats = async (
   }
 
   pros.push(
-    getEmoBodyFromEmo(emoElement).animate(
+    getEmoBodyOuterFromEmo(emoElement).animate(
       {
         filter: [
           "brightness(1)",

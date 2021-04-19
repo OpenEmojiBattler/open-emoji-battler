@@ -246,5 +246,15 @@ export const getSpecial = (element: HTMLDivElement, special: string) => {
   }
 }
 
-export const getEmoBodyFromEmo = (emoElement: HTMLDivElement) =>
+export const getEmoBodyOuterFromEmo = (emoElement: HTMLDivElement) =>
   getFirstDivByClass(emoElement, "emo-body-outer")
+
+export const getEmoBodyInnerFromEmo = (emoElement: HTMLDivElement) =>
+  getFirstDivByClass(emoElement, "emo-body-inner")
+
+export const createEmoDamage = (damage: string) => {
+  const e = document.createElement("div")
+  e.classList.add("emo-body-inner-damage")
+  e.textContent = damage
+  return e
+}
