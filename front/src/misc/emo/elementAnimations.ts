@@ -3,17 +3,10 @@ import { mtc_BoardEmo } from "common"
 import type { EmoBases } from "~/misc/types"
 import {
   animateIndefinitely,
-  getFirstDivByClass,
   insertElementByIndex,
   getChildDivByIndex,
 } from "~/misc/elementHelpers"
-import {
-  createEmoWithBoardEmo,
-  updateEmoAttackPositive,
-  updateEmoAttackNegative,
-  updateEmoHealthPositive,
-  updateEmoHealthNegative,
-} from "~/misc/emo/element"
+import { createEmoWithBoardEmo, updateEmoStat, getEmoBodyFromEmo } from "~/misc/emo/element"
 import { sleep } from "../utils"
 
 export const emoElementWidth = 64 // ses $emo-width
@@ -33,7 +26,7 @@ export const addEmoToBoard = async (
   emoElement.style.margin = "0px 0px"
 
   // avoid touching emoElement's opacity for the stacking context, for hover info's z-index
-  const body = getFirstDivByClass(emoElement, "emo-body-outer")
+  const body = getEmoBodyFromEmo(emoElement)
   body.style.opacity = "0"
 
   insertElementByIndex(boardElement, emoElement, index)
@@ -54,7 +47,7 @@ export const removeEmoFromBoard = async (
   duration: number
 ) => {
   const emoElement = getChildDivByIndex(boardElement, index)
-  const body = getFirstDivByClass(emoElement, "emo-body-outer")
+  const body = getEmoBodyFromEmo(emoElement)
 
   await animateIndefinitely(body, { opacity: "0", filter: "blur(6px)" }, { duration })
   await animateIndefinitely(
@@ -68,7 +61,7 @@ export const removeEmoFromBoard = async (
 
 export const updateStats = async (
   boardElement: HTMLDivElement,
-  kind: "increase" | "decrease",
+  positiveOrNegative: "positive" | "negative",
   emoIndex: number,
   attack: number,
   health: number,
@@ -76,80 +69,55 @@ export const updateStats = async (
   calculatedHealth: string
 ) => {
   const emoElement = getChildDivByIndex(boardElement, emoIndex)
-
-  const color = kind === "increase" ? "positive" : "negative"
-  const sym = kind === "increase" ? "+" : ""
-
   const pros: Promise<any>[] = []
+
   if (attack !== 0) {
-    pros.push(showText(emoElement, "attack", color, `${sym}${attack}`))
+    pros.push(showStatsText(emoElement, positiveOrNegative, "attack", attack))
   }
   if (health !== 0) {
-    pros.push(showText(emoElement, "health", color, `${sym}${health}`))
+    pros.push(showStatsText(emoElement, positiveOrNegative, "health", health))
   }
 
-  const body = getFirstDivByClass(emoElement, "emo-body-outer")
-  if (kind === "increase") {
-    pros.push(
-      body.animate(
-        { filter: ["brightness(1)", "brightness(1.4)", "brightness(1)"] },
-        { duration: 600 }
-      ).finished
-    )
-  } else {
-    pros.push(
-      body.animate(
-        { filter: ["brightness(1)", "brightness(0.6)", "brightness(1)"] },
-        { duration: 600 }
-      ).finished
-    )
-  }
+  pros.push(
+    getEmoBodyFromEmo(emoElement).animate(
+      {
+        filter: [
+          "brightness(1)",
+          `brightness(${positiveOrNegative === "positive" ? "1.4" : "0.6"}`,
+          "brightness(1)",
+        ],
+      },
+      { duration: 600 }
+    ).finished
+  )
 
   await sleep(400)
 
-  if (kind === "increase") {
-    if (attack !== 0) {
-      updateEmoAttackPositive(emoElement, calculatedAttack)
-    }
-    if (health !== 0) {
-      updateEmoHealthPositive(emoElement, calculatedHealth)
-    }
-  } else {
-    if (attack !== 0) {
-      updateEmoAttackNegative(emoElement, calculatedAttack)
-    }
-    if (health !== 0) {
-      updateEmoHealthNegative(emoElement, calculatedHealth)
-    }
+  if (attack !== 0) {
+    updateEmoStat(emoElement, "attack", positiveOrNegative, calculatedAttack)
+  }
+  if (health !== 0) {
+    updateEmoStat(emoElement, "health", positiveOrNegative, calculatedHealth)
   }
 
   await Promise.all(pros)
 }
 
-const showText = async (
+const showStatsText = async (
   element: HTMLDivElement,
+  positiveOrNegative: "positive" | "negative",
   attackOrHealth: "attack" | "health",
-  color: "positive" | "negative",
-  text: string
+  value: number
 ) => {
   const e = document.createElement("div")
-  e.textContent = text
 
-  if (attackOrHealth === "attack") {
-    e.classList.add("emo-attack-diff")
-  } else {
-    e.classList.add("emo-health-diff")
-  }
-  if (color === "positive") {
-    e.classList.add("oeb-positive")
-  } else {
-    e.classList.add("oeb-negative")
-  }
-
+  e.textContent = `${positiveOrNegative === "positive" ? "+" : ""}${value}`
+  e.classList.add(`emo-${attackOrHealth}-diff`)
+  e.classList.add(`oeb-${positiveOrNegative}`)
   e.style.opacity = "0"
 
   element.appendChild(e)
 
-  await animateIndefinitely(e, { opacity: ["0", "1", "1", "0"] }, { duration: 800 })
+  await e.animate({ opacity: ["0", "1", "1", "0"] }, { duration: 800 }).finished
   e.remove()
 }

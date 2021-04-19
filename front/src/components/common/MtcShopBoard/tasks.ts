@@ -196,7 +196,7 @@ const move = async (element: HTMLDivElement, params: mtc_shop_BoardLog_Move) => 
 const increaseStats = async (element: HTMLDivElement, params: mtc_shop_BoardLog_IncreaseStats) => {
   await updateStats(
     element,
-    "increase",
+    "positive",
     params.index.toNumber(),
     params.attack.toNumber(),
     params.health.toNumber(),

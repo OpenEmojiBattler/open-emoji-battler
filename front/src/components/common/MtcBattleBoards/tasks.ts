@@ -29,8 +29,8 @@ import {
   addInfoAbility,
   removeInfoAbility,
   createEmoWithBoardEmo,
-  updateEmoHealthNegative,
   getEmoBodyFromEmo,
+  updateEmoStat,
 } from "~/misc/emo/element"
 import { addEmoToBoard, removeEmoFromBoard, updateStats } from "~/misc/emo/elementAnimations"
 
@@ -263,7 +263,7 @@ const damage = async (boards: Boards, params: mtc_battle_Log_Damage) => {
       },
       { duration: 600, easing: "ease" }
     ),
-    sleep(400).then(() => updateEmoHealthNegative(emoElement, `${params.health}`)),
+    sleep(400).then(() => updateEmoStat(emoElement, "health", "negative", `${params.health}`)),
   ])
   await sleep(500)
   await damageEl.animate({ opacity: "0" }, { duration: 100 }).finished
@@ -289,7 +289,7 @@ const add = async (boards: Boards, params: mtc_battle_Log_Add, emoBases: EmoBase
 const increaseStats = async (boards: Boards, params: mtc_battle_Log_IncreaseStats) => {
   await updateStats(
     boards[params.player_index.toNumber()],
-    "increase",
+    "positive",
     params.emo_index.toNumber(),
     params.attack.toNumber(),
     params.health.toNumber(),
@@ -303,7 +303,7 @@ const increaseStats = async (boards: Boards, params: mtc_battle_Log_IncreaseStat
 const decreaseStats = async (boards: Boards, params: mtc_battle_Log_DecreaseStats) => {
   await updateStats(
     boards[params.player_index.toNumber()],
-    "decrease",
+    "negative",
     params.emo_index.toNumber(),
     params.attack.toNumber(),
     params.health.toNumber(),

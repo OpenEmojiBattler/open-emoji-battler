@@ -216,28 +216,15 @@ export const removeInfoAbility = (element: HTMLDivElement, abilityIndex: number)
     .getElementsByTagName("tr")
     [abilityIndex].remove()
 
-export const updateEmoAttackPositive = (element: HTMLDivElement, attack: string) => {
-  const e = getFirstDivByClass(element, "emo-body-inner-attack")
-  e.classList.add("emo-body-inner-stats-positive")
-  e.textContent = attack
-}
-
-export const updateEmoAttackNegative = (element: HTMLDivElement, attack: string) => {
-  const e = getFirstDivByClass(element, "emo-body-inner-attack")
-  e.classList.add("emo-body-inner-stats-negative")
-  e.textContent = attack
-}
-
-export const updateEmoHealthPositive = (element: HTMLDivElement, health: string) => {
-  const e = getFirstDivByClass(element, "emo-body-inner-health")
-  e.classList.add("emo-body-inner-stats-positive")
-  e.textContent = health
-}
-
-export const updateEmoHealthNegative = (element: HTMLDivElement, health: string) => {
-  const e = getFirstDivByClass(element, "emo-body-inner-health")
-  e.classList.add("emo-body-inner-stats-negative")
-  e.textContent = health
+export const updateEmoStat = (
+  emoElement: HTMLDivElement,
+  attackOrHealth: "attack" | "health",
+  positiveOrNegative: "positive" | "negative",
+  value: string
+) => {
+  const e = getFirstDivByClass(emoElement, `emo-body-inner-${attackOrHealth}`)
+  e.classList.add(`emo-body-inner-stats-${positiveOrNegative}`)
+  e.textContent = value
 }
 
 export const addSpecial = (element: HTMLDivElement, special: string) => {
