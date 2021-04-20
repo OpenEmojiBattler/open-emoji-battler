@@ -17,7 +17,7 @@ export function Accounts(props: { ep: number; injectedAccounts: InjectedAccountW
       </div>
       <div className={"block"}>
         <div className={"player-icon-and-text-box"}>
-          <div>
+          <div className={"player-icon-and-text-box-main"}>
             <div>
               <Identicon address={playerAddress} size={48} />
             </div>
