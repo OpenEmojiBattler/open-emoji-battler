@@ -6,13 +6,13 @@ impl mtc::Board {
     pub fn get_emo(&self, emo_index: u8) -> Result<&mtc::BoardEmo> {
         self.0
             .get(emo_index as usize)
-            .ok_or_else(|| anyhow!("emo not found: {}", emo_index))
+            .ok_or_else(|| anyhow!("emo not found: index {}", emo_index))
     }
 
     pub fn get_emo_mut(&mut self, emo_index: u8) -> Result<&mut mtc::BoardEmo> {
         self.0
             .get_mut(emo_index as usize)
-            .ok_or_else(|| anyhow!("emo for mut not found: {}", emo_index))
+            .ok_or_else(|| anyhow!("emo for mut not found: index {}", emo_index))
     }
 
     pub fn emos(&self) -> Vec<&mtc::BoardEmo> {

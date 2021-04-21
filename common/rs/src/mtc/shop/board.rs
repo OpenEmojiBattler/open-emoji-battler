@@ -964,7 +964,7 @@ fn process_triple(
     new_emo_index: u8,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
-    let target_base_id = board.get_emo(new_emo_index)?.base_id;
+    let target_base_id = board.get_emo(new_emo_index)?.base_id; // here?
     let same_base_not_triple_indexes = board
         .emos_with_indexes()
         .into_iter()
@@ -1081,4 +1081,27 @@ fn build_triple_abilities(
     abilities.append(&mut additional_abilities);
 
     abilities
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_emo() {
+        let base_id = 1;
+        let mut emo_base: emo::Base = Default::default();
+        emo_base.id = base_id;
+
+        let mut board: mtc::Board = Default::default();
+        let mut logs = mtc::shop::BoardLogs::new();
+        let mut emo_bases = emo::Bases::new();
+        emo_bases.add(emo_base);
+
+        add_emo(&mut board, &mut logs, &[], base_id, false, 0, &emo_bases).unwrap();
+        add_emo(&mut board, &mut logs, &[], base_id, false, 2, &emo_bases).unwrap();
+        let c = add_emo(&mut board, &mut logs, &[], base_id, false, 4, &emo_bases).unwrap();
+
+        assert_eq!(c, 5);
+    }
 }

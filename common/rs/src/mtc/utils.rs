@@ -46,6 +46,10 @@ impl emo::Bases {
         Self(Default::default())
     }
 
+    pub fn add(&mut self, base: emo::Base) {
+        self.0.insert(base.id, base);
+    }
+
     pub fn find(&self, id: u16) -> Result<&emo::Base> {
         self.0
             .get(&id)
