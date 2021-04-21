@@ -96,7 +96,7 @@ impl ShopBoard {
             board
                 .0
                 .into_iter()
-                .map(|e| ShopBoardEmo::from_board_emo(e))
+                .map(ShopBoardEmo::from_board_emo)
                 .collect(),
         )
     }

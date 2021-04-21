@@ -901,11 +901,7 @@ fn get_right_emo(
     } else {
         origin_index + 1
     } as usize;
-    if let Some(e) = board.0.get_mut(target_index) {
-        Some((e, target_index as u8))
-    } else {
-        None
-    }
+    board.0.get_mut(target_index).map(|e| (e, target_index as u8))
 }
 
 fn get_left_emo(
