@@ -964,7 +964,7 @@ fn process_triple(
     new_emo_index: u8,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
-    let target_base_id = board.get_emo(new_emo_index)?.base_id; // here?
+    let target_base_id = board.get_emo(new_emo_index)?.base_id; // here!
     let same_base_not_triple_indexes = board
         .emos_with_indexes()
         .into_iter()
@@ -1087,20 +1087,36 @@ fn build_triple_abilities(
 mod tests {
     use super::*;
 
+    fn setup_emo_bases() -> emo::Bases {
+        let mut emo_base1: emo::Base = Default::default();
+        emo_base1.id = 1;
+
+        let mut emo_base2: emo::Base = Default::default();
+        emo_base2.id = 2;
+        emo_base2.abilities = vec![emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(
+            emo::ability::shop::Peri::AsOneself {
+                trigger: emo::ability::shop::PeriAsOneselfTrigger::Set,
+                action: emo::ability::shop::NormalAction::SetEmo {
+                    base_id: emo_base1.id,
+                },
+            },
+        ))];
+        let mut emo_bases = emo::Bases::new();
+        emo_bases.add(emo_base1);
+        emo_bases.add(emo_base2);
+
+        emo_bases
+    }
+
     #[test]
     fn test_add_emo() {
-        let base_id = 1;
-        let mut emo_base: emo::Base = Default::default();
-        emo_base.id = base_id;
-
         let mut board: mtc::Board = Default::default();
         let mut logs = mtc::shop::BoardLogs::new();
-        let mut emo_bases = emo::Bases::new();
-        emo_bases.add(emo_base);
+        let emo_bases = setup_emo_bases();
 
-        add_emo(&mut board, &mut logs, &[], base_id, false, 0, &emo_bases).unwrap();
-        add_emo(&mut board, &mut logs, &[], base_id, false, 2, &emo_bases).unwrap();
-        let c = add_emo(&mut board, &mut logs, &[], base_id, false, 4, &emo_bases).unwrap();
+        add_emo(&mut board, &mut logs, &[], 2, false, 0, &emo_bases).unwrap();
+        add_emo(&mut board, &mut logs, &[], 2, false, 2, &emo_bases).unwrap();
+        let c = add_emo(&mut board, &mut logs, &[], 2, false, 4, &emo_bases).unwrap();
 
         assert_eq!(c, 5);
     }
