@@ -1039,7 +1039,7 @@ fn build_triple_emo(
         is_triple: true,
     };
 
-    Ok(ShopBoardEmo::new_with_attributes(
+    Ok(ShopBoardEmo::from_attributes(
         mtc_emo_ids,
         base.id,
         attributes,

@@ -14,7 +14,7 @@ pub struct ShopBoardEmo {
 }
 
 impl ShopBoardEmo {
-    pub fn new_from_board_emo(board_emo: mtc::BoardEmo) -> Self {
+    pub fn from_board_emo(board_emo: mtc::BoardEmo) -> Self {
         let mtc::BoardEmo {
             mtc_emo_ids,
             base_id,
@@ -30,20 +30,25 @@ impl ShopBoardEmo {
     }
 
     pub fn into_board_emo(self) -> mtc::BoardEmo {
-        let Self { mtc_emo_ids, base_id, attributes, .. } = self;
+        let Self {
+            mtc_emo_ids,
+            base_id,
+            attributes,
+            ..
+        } = self;
 
         mtc::BoardEmo {
             mtc_emo_ids,
             base_id,
-            attributes
+            attributes,
         }
     }
 
     pub fn new_with_base(mtc_emo_ids: Vec<u16>, base: &emo::Base, is_triple: bool) -> Self {
-        Self::new_with_attributes(mtc_emo_ids, base.id, build_emo_attributes(base, is_triple))
+        Self::from_attributes(mtc_emo_ids, base.id, build_emo_attributes(base, is_triple))
     }
 
-    pub fn new_with_attributes(
+    pub fn from_attributes(
         mtc_emo_ids: Vec<u16>,
         base_id: u16,
         attributes: emo::Attributes,
@@ -86,12 +91,12 @@ fn generate_shop_board_emo_id() -> u16 {
 pub struct ShopBoard(pub Vec<ShopBoardEmo>);
 
 impl ShopBoard {
-    pub fn new_from_board(board: mtc::Board) -> Self {
+    pub fn from_board(board: mtc::Board) -> Self {
         Self(
             board
                 .0
                 .into_iter()
-                .map(|e| ShopBoardEmo::new_from_board_emo(e))
+                .map(|e| ShopBoardEmo::from_board_emo(e))
                 .collect(),
         )
     }

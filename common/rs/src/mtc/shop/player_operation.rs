@@ -34,7 +34,7 @@ pub fn verify_player_operations_and_update(
     let logs = &mut mtc::shop::BoardLogs::new();
     let catalog = get_catalog(&pool, &board, seed)?;
 
-    let mut shop_board = ShopBoard::new_from_board(board);
+    let mut shop_board = ShopBoard::from_board(board);
 
     coin = coin.saturating_add(start_shop(&mut shop_board, logs, seed, emo_bases)?);
 
