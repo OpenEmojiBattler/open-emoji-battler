@@ -197,10 +197,13 @@ pub fn get_pool_emo_count_by_grade(grade: u8) -> u8 {
 
 fn decode_and_encode_for_shop<F>(board: &[u8], f: F) -> Vec<u8>
 where
-    F: Fn(&mut codec_types::mtc::Board, &mut codec_types::mtc::shop::BoardLogs) -> Result<u8>,
+    F: Fn(&mut mtc::shop::common::ShopBoard, &mut codec_types::mtc::shop::BoardLogs) -> Result<u8>,
 {
-    let mut board = mtc::decoders::decode_board(board);
+    let mut shop_board =
+        mtc::shop::common::ShopBoard::from_board(mtc::decoders::decode_board(board));
     let mut logs = codec_types::mtc::shop::BoardLogs::new();
-    let coin = f(&mut board, &mut logs).unwrap();
-    (board, logs, coin).encode()
+
+    let coin = f(&mut shop_board, &mut logs).unwrap();
+
+    (shop_board.into_board(), logs, coin).encode()
 }

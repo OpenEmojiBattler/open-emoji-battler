@@ -317,9 +317,9 @@ impl<T: Config> Pallet<T> {
 
         let (turn, mut grade, mut board) = get_turn_and_grade_and_board(&grade_and_board_history);
 
-        Self::_verify_player_operations_and_update(
+        board = Self::_verify_player_operations_and_update(
             &account_id,
-            &mut board,
+            board,
             &mut grade,
             &mut upgrade_coin,
             &player_operations,
@@ -368,13 +368,13 @@ impl<T: Config> Pallet<T> {
 
     fn _verify_player_operations_and_update(
         account_id: &T::AccountId,
-        board: &mut mtc::Board,
+        board: mtc::Board,
         grade: &mut u8,
         upgrade_coin: &mut Option<u8>,
         player_operations: &[mtc_shop_PlayerOperation],
         turn: u8,
         emo_bases: &emo::Bases,
-    ) -> Result<(), Error<T>> {
+    ) -> Result<mtc::Board, Error<T>> {
         let pool = PlayerPool::<T>::get(account_id).ok_or(<Error<T>>::PlayerPoolNone)?;
         let old_seed = PlayerSeed::<T>::get(account_id).ok_or(<Error<T>>::PlayerSeedNone)?;
 

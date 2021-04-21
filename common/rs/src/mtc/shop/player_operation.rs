@@ -4,6 +4,7 @@ use crate::{
         board::{add_emo, sell_emo, start_shop},
         catalog::get_catalog,
         coin::{get_initial_coin_by_turn, get_upgrade_coin},
+        common::ShopBoard,
     },
 };
 use anyhow::{anyhow, bail, ensure, Result};
@@ -15,7 +16,7 @@ const LAST_GRADE: u8 = 6;
 const MULLIGAN_COUNT: u8 = 2;
 
 pub fn verify_player_operations_and_update(
-    board: &mut mtc::Board,
+    board: mtc::Board,
     grade: &mut u8,
     upgrade_coin: &mut Option<u8>,
     ops: &[mtc::shop::PlayerOperation],
@@ -23,7 +24,7 @@ pub fn verify_player_operations_and_update(
     seed: u64,
     turn: u8,
     emo_bases: &emo::Bases,
-) -> Result<()> {
+) -> Result<mtc::Board> {
     ensure!(ops.len() < 150, "too big ops");
 
     let mut coin = get_initial_coin_by_turn(turn);
@@ -31,15 +32,17 @@ pub fn verify_player_operations_and_update(
     let mut next_catalog_line_counter = 0u8;
     let mut sold_mtc_emo_ids = Vec::<u16>::new();
     let logs = &mut mtc::shop::BoardLogs::new();
-    let catalog = get_catalog(&pool, board, seed)?;
+    let catalog = get_catalog(&pool, &board, seed)?;
 
-    coin = coin.saturating_add(start_shop(board, logs, seed, emo_bases)?);
+    let mut shop_board = ShopBoard::from_board(board);
+
+    coin = coin.saturating_add(start_shop(&mut shop_board, logs, seed, emo_bases)?);
 
     for op in ops.iter() {
         match op {
             mtc::shop::PlayerOperation::Buy { mtc_emo_id, index } => {
                 buy(
-                    board,
+                    &mut shop_board,
                     &mut coin,
                     logs,
                     *grade,
@@ -53,7 +56,7 @@ pub fn verify_player_operations_and_update(
             }
             mtc::shop::PlayerOperation::Sell { index } => {
                 sell(
-                    board,
+                    &mut shop_board,
                     &mut coin,
                     &mut sold_mtc_emo_ids,
                     logs,
@@ -62,7 +65,7 @@ pub fn verify_player_operations_and_update(
                 )?;
             }
             mtc::shop::PlayerOperation::Move { indexes } => {
-                mov(board, indexes)?;
+                mov(&mut shop_board, indexes)?;
             }
             mtc::shop::PlayerOperation::NextCatalogLine => {
                 next_catalog_line(
@@ -78,11 +81,11 @@ pub fn verify_player_operations_and_update(
         }
     }
 
-    Ok(())
+    Ok(shop_board.into_board())
 }
 
 fn buy(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     grade: u8,
@@ -133,7 +136,7 @@ fn buy(
 }
 
 fn sell(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     coin: &mut u8,
     sold_mtc_emo_ids: &mut Vec<u16>,
     logs: &mut mtc::shop::BoardLogs,
@@ -146,7 +149,7 @@ fn sell(
     Ok(())
 }
 
-fn mov(board: &mut mtc::Board, result_indexes: &[u8]) -> Result<()> {
+fn mov(board: &mut ShopBoard, result_indexes: &[u8]) -> Result<()> {
     let mut current_indexes = board.emo_indexes();
     let result_indexes_len = result_indexes.len();
 
@@ -210,21 +213,22 @@ fn upgrade(grade: &mut u8, upgrade_coin: &mut Option<u8>, coin: &mut u8) -> Resu
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::mtc::shop::common::ShopBoardEmo;
 
     #[test]
     fn test_mov() {
-        let mut board_emo0: mtc::BoardEmo = Default::default();
+        let mut board_emo0: ShopBoardEmo = Default::default();
         board_emo0.mtc_emo_ids = vec![0];
-        let mut board_emo1: mtc::BoardEmo = Default::default();
+        let mut board_emo1: ShopBoardEmo = Default::default();
         board_emo1.mtc_emo_ids = vec![1];
-        let mut board_emo2: mtc::BoardEmo = Default::default();
+        let mut board_emo2: ShopBoardEmo = Default::default();
         board_emo2.mtc_emo_ids = vec![2];
-        let mut board_emo3: mtc::BoardEmo = Default::default();
+        let mut board_emo3: ShopBoardEmo = Default::default();
         board_emo3.mtc_emo_ids = vec![3];
-        let mut board_emo4: mtc::BoardEmo = Default::default();
+        let mut board_emo4: ShopBoardEmo = Default::default();
         board_emo4.mtc_emo_ids = vec![4];
 
-        let mut board = mtc::Board(vec![
+        let mut board = ShopBoard(vec![
             board_emo0, board_emo1, board_emo2, board_emo3, board_emo4,
         ]);
         let result_indexes = vec![0, 3, 4, 1, 2];

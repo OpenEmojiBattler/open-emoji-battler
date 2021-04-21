@@ -1,5 +1,4 @@
 pub mod battle;
-pub mod common;
 pub mod decoders;
 pub mod ep;
 pub mod result;

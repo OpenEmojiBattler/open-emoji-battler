@@ -23,27 +23,13 @@ pub fn build_emo_attributes(base: &emo::Base, is_triple: bool) -> emo::Attribute
     }
 }
 
-impl mtc::BoardEmo {
-    pub fn new_with_base(mtc_emo_ids: Vec<u16>, base: &emo::Base, is_triple: bool) -> Self {
-        Self::new_with_attributes(mtc_emo_ids, base.id, build_emo_attributes(base, is_triple))
-    }
-
-    pub fn new_with_attributes(
-        mtc_emo_ids: Vec<u16>,
-        base_id: u16,
-        attributes: emo::Attributes,
-    ) -> Self {
-        Self {
-            mtc_emo_ids,
-            base_id,
-            attributes,
-        }
-    }
-}
-
 impl emo::Bases {
     pub fn new() -> Self {
         Self(Default::default())
+    }
+
+    pub fn add(&mut self, base: emo::Base) {
+        self.0.insert(base.id, base);
     }
 
     pub fn find(&self, id: u16) -> Result<&emo::Base> {
