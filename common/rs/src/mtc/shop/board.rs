@@ -1,8 +1,11 @@
 use crate::{
     codec_types::*,
-    mtc::utils::{
-        double_attack_and_health_if, is_matched_triple, is_matched_typ_and_triple,
-        BOARD_EMO_MAX_COUNT,
+    mtc::{
+        shop::common::{ShopBoard, ShopBoardEmo},
+        utils::{
+            double_attack_and_health_if, is_matched_triple, is_matched_typ_and_triple,
+            BOARD_EMO_MAX_COUNT,
+        },
     },
 };
 use anyhow::{bail, ensure, Result};
@@ -16,7 +19,7 @@ const EMO_SELL_COIN: u8 = 1;
 
 // return coin
 pub fn start_shop(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     seed: u64,
     emo_bases: &emo::Bases,
@@ -42,7 +45,7 @@ pub fn start_shop(
 
 // return coin
 pub fn sell_emo(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     emo_index: u8,
     emo_bases: &emo::Bases,
@@ -78,7 +81,7 @@ pub fn sell_emo(
 
 // return coin
 pub fn move_emo(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     emo_index: u8,
     is_right: bool,
@@ -112,7 +115,7 @@ pub fn move_emo(
 
 // return coin
 pub fn add_emo(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     mtc_emo_ids: &[u16],
     base_id: u16,
@@ -121,14 +124,14 @@ pub fn add_emo(
     emo_bases: &emo::Bases,
 ) -> Result<u8> {
     let board_emo =
-        mtc::BoardEmo::new_with_base(mtc_emo_ids.to_vec(), emo_bases.find(base_id)?, is_triple);
+        ShopBoardEmo::new_with_base(mtc_emo_ids.to_vec(), emo_bases.find(base_id)?, is_triple);
     add_emo_with_board_emo(board, logs, board_emo, emo_index, emo_bases)
 }
 
 fn add_emo_with_board_emo(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
-    new_board_emo: mtc::BoardEmo,
+    new_board_emo: ShopBoardEmo,
     emo_index: u8,
     emo_bases: &emo::Bases,
 ) -> Result<u8> {
@@ -143,7 +146,7 @@ fn add_emo_with_board_emo(
 
     logs.add(&|| mtc::shop::BoardLog::Add {
         index: emo_index,
-        board_emo: new_board_emo.clone(),
+        board_emo: new_board_emo.clone_as_board_emo(),
     });
     board.insert_emo(emo_index, new_board_emo);
 
@@ -157,7 +160,7 @@ fn add_emo_with_board_emo(
 }
 
 fn call_emo_addition_abilities(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     new_emo_index: u8,
@@ -231,13 +234,13 @@ fn call_emo_addition_abilities(
 }
 
 fn call_ability_action_as_ally(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     action: emo::ability::shop::PeriAsAllyAction,
     oneself_emo_index: u8,
     ally_emo_index: u8,
-    removed_ally_emo: Option<&mtc::BoardEmo>,
+    removed_ally_emo: Option<&ShopBoardEmo>,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
     let is_oneself_emo_triple = board.get_emo(oneself_emo_index)?.attributes.is_triple;
@@ -273,11 +276,11 @@ fn call_ability_action_as_ally(
 }
 
 fn trigger_set_actions(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     ally_emo_index: u8,
-    removed_ally_emo: Option<&mtc::BoardEmo>,
+    removed_ally_emo: Option<&ShopBoardEmo>,
     is_oneself_emo_triple: bool,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
@@ -318,12 +321,12 @@ fn trigger_set_actions(
 }
 
 fn call_ability_action_as_oneself(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     action: emo::ability::shop::NormalAction,
     action_emo_index: u8,
-    removed_action_emo: Option<&mtc::BoardEmo>,
+    removed_action_emo: Option<&ShopBoardEmo>,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
     let is_triple_action = if let Some(e) = removed_action_emo {
@@ -345,12 +348,12 @@ fn call_ability_action_as_oneself(
 }
 
 fn call_ability_action(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     action: emo::ability::shop::NormalAction,
     action_emo_index: u8,
-    removed_action_emo: Option<&mtc::BoardEmo>,
+    removed_action_emo: Option<&ShopBoardEmo>,
     is_triple_action: bool,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
@@ -475,7 +478,7 @@ fn call_ability_action(
 }
 
 fn set_emo(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     action_emo_index: u8,
@@ -505,7 +508,7 @@ fn set_emo(
 }
 
 fn increase_stats(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     action_emo_index: u8,
     is_triple_action: bool,
@@ -529,7 +532,7 @@ fn increase_stats(
 }
 
 fn increase_stats_of_adjacent_menagerie(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     action_emo_index: u8,
     is_triple_action: bool,
@@ -562,7 +565,7 @@ fn increase_stats_of_adjacent_menagerie(
 }
 
 fn increase_stats_by_grade(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     action_emo_index: u8,
     is_triple_action: bool,
@@ -591,7 +594,7 @@ fn increase_stats_by_grade(
 }
 
 fn increase_stats_by_emo_count(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     action_emo_index: u8,
     is_triple_action: bool,
@@ -627,7 +630,7 @@ fn increase_stats_by_emo_count(
 }
 
 fn add_ability(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     emo_index: u8,
     is_emo_removed: bool,
@@ -668,7 +671,7 @@ fn get_coin(gotten_coin: &mut u8, is_triple_action: bool, coin: u8) {
 }
 
 fn get_coin_by_emo_count_div(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     action_emo_index: u8,
     is_action_emo_removed: bool,
     emo_bases: &emo::Bases,
@@ -695,7 +698,7 @@ fn get_coin_by_emo_count_div(
 }
 
 fn call_pre_ability(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     gotten_coin: &mut u8,
     rng: &mut Pcg64Mcg,
     logs: &mut mtc::shop::BoardLogs,
@@ -739,7 +742,7 @@ fn call_pre_ability(
 }
 
 fn increase_stats_of_menagerie(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     rng: &mut Pcg64Mcg,
     logs: &mut mtc::shop::BoardLogs,
     action_emo_index: u8,
@@ -783,7 +786,7 @@ fn increase_stats_of_menagerie(
 
 fn is_matched_typ_and_triple_board_emo(
     typ_and_triple: &emo::ability::TypOptAndIsTripleOpt,
-    board_emo: &mtc::BoardEmo,
+    board_emo: &ShopBoardEmo,
     emo_bases: &emo::Bases,
 ) -> Result<bool> {
     Ok(if typ_and_triple.typ_opt.is_none() {
@@ -798,7 +801,7 @@ fn is_matched_typ_and_triple_board_emo(
 }
 
 fn count_emos_by_typ_and_triple(
-    board: &mtc::Board,
+    board: &ShopBoard,
     emo_index: u8,
     is_emo_removed: bool,
     typ_and_triple: &emo::ability::TypOptAndIsTripleOpt,
@@ -818,12 +821,12 @@ fn count_emos_by_typ_and_triple(
 }
 
 fn get_emos_by_target<'a>(
-    board: &'a mut mtc::Board,
+    board: &'a mut ShopBoard,
     emo_index: u8,
     is_emo_removed: bool,
     target: emo::ability::Target,
     emo_bases: &emo::Bases,
-) -> Result<Vec<(&'a mut mtc::BoardEmo, u8)>> {
+) -> Result<Vec<(&'a mut ShopBoardEmo, u8)>> {
     Ok(match target {
         emo::ability::Target::Oneself => {
             if is_emo_removed {
@@ -847,13 +850,13 @@ fn get_emos_by_target<'a>(
 }
 
 fn get_emos_by_target_others<'a>(
-    board: &'a mut mtc::Board,
+    board: &'a mut ShopBoard,
     emo_index: u8,
     is_emo_removed: bool,
     destination: emo::ability::Destination,
     typ_and_triple: emo::ability::TypOptAndIsTripleOpt,
     emo_bases: &emo::Bases,
-) -> Result<Vec<(&'a mut mtc::BoardEmo, u8)>> {
+) -> Result<Vec<(&'a mut ShopBoardEmo, u8)>> {
     let emos_with_index = match destination {
         emo::ability::Destination::Right => {
             if let Some(t) = get_right_emo(board, emo_index, is_emo_removed) {
@@ -888,10 +891,10 @@ fn get_emos_by_target_others<'a>(
 }
 
 fn get_right_emo(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     origin_index: u8,
     is_removed: bool,
-) -> Option<(&mut mtc::BoardEmo, u8)> {
+) -> Option<(&mut ShopBoardEmo, u8)> {
     let target_index = if is_removed {
         origin_index
     } else {
@@ -905,9 +908,9 @@ fn get_right_emo(
 }
 
 fn get_left_emo(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     origin_index: u8,
-) -> Result<Option<(&mut mtc::BoardEmo, u8)>> {
+) -> Result<Option<(&mut ShopBoardEmo, u8)>> {
     Ok(if let Some(target_index) = origin_index.checked_sub(1) {
         let board_emo = board.get_emo_mut(target_index)?;
         Some((board_emo, target_index))
@@ -917,7 +920,7 @@ fn get_left_emo(
 }
 
 fn add_attack_and_health_to_emos(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
     emo_index: u8,
     is_emo_removed: bool,
@@ -936,7 +939,7 @@ fn add_attack_and_health_to_emos(
 }
 
 fn add_attack_and_health_to_emo(
-    board_emo: &mut mtc::BoardEmo,
+    board_emo: &mut ShopBoardEmo,
     logs: &mut mtc::shop::BoardLogs,
     board_emo_index: u8,
     attack: u16,
@@ -958,7 +961,7 @@ fn add_attack_and_health_to_emo(
 }
 
 fn process_triple(
-    board: &mut mtc::Board,
+    board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     new_emo_index: u8,
@@ -1000,8 +1003,8 @@ fn process_triple(
     Ok(())
 }
 
-fn remove_triple_emos(board: &mut mtc::Board, triple_source_indexes: &[u8]) -> Vec<mtc::BoardEmo> {
-    let mut removed = Vec::<mtc::BoardEmo>::new();
+fn remove_triple_emos(board: &mut ShopBoard, triple_source_indexes: &[u8]) -> Vec<ShopBoardEmo> {
+    let mut removed = Vec::<ShopBoardEmo>::new();
 
     let mut indexes = triple_source_indexes.to_vec();
     indexes.sort_unstable();
@@ -1017,10 +1020,10 @@ fn remove_triple_emos(board: &mut mtc::Board, triple_source_indexes: &[u8]) -> V
 }
 
 fn build_triple_emo(
-    source_board_emos: Vec<mtc::BoardEmo>,
+    source_board_emos: Vec<ShopBoardEmo>,
     target_base_id: u16,
     emo_bases: &emo::Bases,
-) -> Result<mtc::BoardEmo> {
+) -> Result<ShopBoardEmo> {
     let base = emo_bases.find(target_base_id)?;
 
     let (attack, health) = build_triple_emo_nums(&base, &source_board_emos);
@@ -1036,14 +1039,14 @@ fn build_triple_emo(
         is_triple: true,
     };
 
-    Ok(mtc::BoardEmo::new_with_attributes(
+    Ok(ShopBoardEmo::new_with_attributes(
         mtc_emo_ids,
         base.id,
         attributes,
     ))
 }
 
-fn build_triple_emo_nums(base: &emo::Base, source_board_emos: &[mtc::BoardEmo]) -> (u16, u16) {
+fn build_triple_emo_nums(base: &emo::Base, source_board_emos: &[ShopBoardEmo]) -> (u16, u16) {
     let attack_diff = source_board_emos
         .iter()
         .map(|eb| eb.attributes.attack.saturating_sub(base.attack))
@@ -1061,7 +1064,7 @@ fn build_triple_emo_nums(base: &emo::Base, source_board_emos: &[mtc::BoardEmo]) 
 
 fn build_triple_abilities(
     base_abilities: &[emo::ability::Ability],
-    source_board_emos: &[mtc::BoardEmo],
+    source_board_emos: &[ShopBoardEmo],
 ) -> Vec<emo::ability::Ability> {
     let mut abilities = base_abilities.to_vec();
 
@@ -1110,7 +1113,7 @@ mod tests {
 
     #[test]
     fn test_add_emo() {
-        let mut board: mtc::Board = Default::default();
+        let mut board: ShopBoard = Default::default();
         let mut logs = mtc::shop::BoardLogs::new();
         let emo_bases = setup_emo_bases();
 
