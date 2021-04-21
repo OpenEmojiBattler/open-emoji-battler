@@ -901,7 +901,10 @@ fn get_right_emo(
     } else {
         origin_index + 1
     } as usize;
-    board.0.get_mut(target_index).map(|e| (e, target_index as u8))
+    board
+        .0
+        .get_mut(target_index)
+        .map(|e| (e, target_index as u8))
 }
 
 fn get_left_emo(
@@ -1102,6 +1105,7 @@ mod tests {
                 },
             },
         ))];
+
         let mut emo_bases = emo::Bases::new();
         emo_bases.add(emo_base1);
         emo_bases.add(emo_base2);
