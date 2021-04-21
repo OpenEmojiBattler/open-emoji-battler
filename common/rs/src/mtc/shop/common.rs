@@ -105,6 +105,14 @@ impl ShopBoard {
         mtc::Board(self.0.into_iter().map(|e| e.into_board_emo()).collect())
     }
 
+    pub fn get_emo_and_index_by_id(&self, shop_board_emo_id: u16) -> Result<(&ShopBoardEmo, u8)> {
+        self.0
+            .iter()
+            .zip(0u8..)
+            .find(|(e, _)| e.id == shop_board_emo_id)
+            .ok_or_else(|| anyhow!("emo not found: id {}", shop_board_emo_id))
+    }
+
     pub fn get_emo(&self, emo_index: u8) -> Result<&ShopBoardEmo> {
         self.0
             .get(emo_index as usize)

@@ -143,6 +143,7 @@ fn add_emo_with_board_emo(
     let mut gotten_coin = 0;
 
     let is_new_emo_triple = new_board_emo.attributes.is_triple;
+    let new_emo_id = new_board_emo.id;
 
     logs.add(&|| mtc::shop::BoardLog::Add {
         index: emo_index,
@@ -153,7 +154,7 @@ fn add_emo_with_board_emo(
     call_emo_addition_abilities(board, &mut gotten_coin, logs, emo_index, emo_bases)?;
 
     if !is_new_emo_triple {
-        process_triple(board, &mut gotten_coin, logs, emo_index, emo_bases)?;
+        process_triple(board, &mut gotten_coin, logs, new_emo_id, emo_bases)?;
     }
 
     Ok(gotten_coin)
@@ -964,10 +965,11 @@ fn process_triple(
     board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
-    new_emo_index: u8,
+    new_emo_id: u16,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
-    let target_base_id = board.get_emo(new_emo_index)?.base_id; // here!
+    let (target, new_emo_index) = board.get_emo_and_index_by_id(new_emo_id)?;
+    let target_base_id = target.base_id;
     let same_base_not_triple_indexes = board
         .emos_with_indexes()
         .into_iter()
@@ -1121,6 +1123,6 @@ mod tests {
         add_emo(&mut board, &mut logs, &[], 2, false, 2, &emo_bases).unwrap();
         let c = add_emo(&mut board, &mut logs, &[], 2, false, 4, &emo_bases).unwrap();
 
-        assert_eq!(c, 5);
+        assert_eq!(c, 10);
     }
 }
