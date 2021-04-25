@@ -8,7 +8,7 @@ Open Emoji Battler is an open-source indie blockchain game, led by the community
 
 <table><tr><td width="500">
 
-https://user-images.githubusercontent.com/81064017/115993263-01357b80-a60d-11eb-83e5-5cc175e87efc.mp4
+https://user-images.githubusercontent.com/81064017/115994138-aef65980-a610-11eb-80c5-aa1d8cd67584.mp4
 
 </table></tr></td>
 
