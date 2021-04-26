@@ -6,12 +6,12 @@ use common::{
         battle::organizer::{battle_all, select_battle_ghost_index},
         ep::{calculate_new_ep, get_ep_band, EP_BANDWIDTH, EP_UNFINISH_PENALTY, INITIAL_EP},
         result::build_ghost_from_history,
-        setup::{build_initial_ghost_states, build_pool, GHOST_COUNT, PLAYER_INITIAL_HEALTH},
+        setup::{build_initial_ghost_states, build_pool},
         shop::{
             coin::{decrease_upgrade_coin, get_upgrade_coin},
             player_operation::verify_player_operations_and_update,
         },
-        utils::get_turn_and_previous_grade_and_board,
+        utils::{get_turn_and_previous_grade_and_board, GHOST_COUNT, PLAYER_INITIAL_HEALTH},
     },
     utils::partial_bytes_to_u64,
 };
