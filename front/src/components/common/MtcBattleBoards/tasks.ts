@@ -49,7 +49,9 @@ export const animate = async (
     emoBases
   )
 
-  const stack: Promise<void>[] = []
+  const updatingStatsBatchParams: Array<
+    mtc_battle_Log_IncreaseStats | mtc_battle_Log_DecreaseStats
+  > = []
 
   await sleep(700)
 
@@ -77,7 +79,7 @@ export const animate = async (
         boards,
         l.asIncreaseStats,
         logs[i + 1]?.isIncreaseStats ? logs[i + 1].asIncreaseStats : null,
-        stack,
+        updatingStatsBatchParams,
         increaseStats
       )
       continue
@@ -87,7 +89,7 @@ export const animate = async (
         boards,
         l.asDecreaseStats,
         logs[i + 1]?.isDecreaseStats ? logs[i + 1].asDecreaseStats : null,
-        stack,
+        updatingStatsBatchParams,
         decreaseStats
       )
       continue
@@ -141,23 +143,25 @@ const updateStatsBatch = async <
   boards: Boards,
   current: T,
   next: T | null,
-  stack: Promise<void>[],
+  params: T[],
   fn: (boards: Boards, params: T) => Promise<void>
 ) => {
   if (
     next &&
     current.player_index.eq(next.player_index) &&
     current.attack.eq(next.attack) &&
-    current.health.eq(next.health)
+    current.health.eq(next.health) &&
+    !current.emo_index.eq(next.emo_index) &&
+    !params.map((s) => s.emo_index.toNumber()).includes(next.emo_index.toNumber())
   ) {
-    stack.push(fn(boards, current))
+    params.push(current)
     return
   }
 
-  if (stack.length > 0) {
-    stack.push(fn(boards, current))
-    await Promise.all(stack)
-    stack.length = 0
+  if (params.length > 0) {
+    params.push(current)
+    await Promise.all(params.map((s) => fn(boards, s)))
+    params.length = 0
     return
   }
 
