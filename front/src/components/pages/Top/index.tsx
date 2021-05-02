@@ -94,6 +94,7 @@ export function Top() {
                 async PvP auto battler
                 <ul>
                   <li>strategic intense battles</li>
+                  <li>inspired by Hearthstone Battlegrounds</li>
                 </ul>
               </li>
               <li>with your favorite emojis (EMOs) 😁</li>
@@ -101,21 +102,18 @@ export function Top() {
               <li>
                 on-chain game building on Substrate
                 <ul>
-                  <li>Substrate is a blockchain framework used in Polkadot</li>
+                  <li>Substrate is a blockchain framework used in Polkadot and Kusama.</li>
                 </ul>
               </li>
               <li>
                 smooth UX
                 <ul>
                   <li>feeless transactions, using per-tx PoW (experimental)</li>
-                  <li>
-                    you only need to sign one transaction on the popup manually at the beginning of
-                    the game
-                  </li>
+                  <li>You only sign one transaction manually at the beginning of the game.</li>
                 </ul>
               </li>
               <li>fully open-sourced</li>
-              <li>no VC funding</li>
+              <li>no VC funding, independent project</li>
             </ul>
           </div>
           <h1 className={"title"}>Future</h1>
@@ -125,7 +123,12 @@ export function Top() {
               <li>distribute NFTs</li>
               <li>use DOT or KSM</li>
               <li>become a decentralized sustainable project</li>
-              <li>and more...</li>
+              <li>
+                and more...
+                <ul>
+                  <li>What do you want? Join us!</li>
+                </ul>
+              </li>
             </ul>
           </div>
         </div>
