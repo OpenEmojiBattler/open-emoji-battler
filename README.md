@@ -2,7 +2,15 @@
 
 **Open Emoji Battler** is an indie blockchain game, led by the community, running on-chain.
 
-[Website](https://game.open-emoji-battler.community/) • [Forum](https://forum.open-emoji-battler.community/) • [Twitter](https://twitter.com/OEB_community)
+[Website](https://game.open-emoji-battler.community/)
+&nbsp;
+•
+&nbsp;
+[Forum](https://forum.open-emoji-battler.community/)
+&nbsp;
+•
+&nbsp;
+[Twitter](https://twitter.com/OEB_community)
 
 <table><tr><td width="500">
 
