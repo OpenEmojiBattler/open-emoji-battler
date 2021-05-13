@@ -41,7 +41,7 @@ function NetName() {
   const endpoint = getEndpoint()
 
   if (endpoint === getEnv("production").endpoint) {
-    return <span className={"tag"}>PrototypeNet</span>
+    return <span className={"tag"}>BetaNet</span>
   } else {
     return (
       <span className={"tag"} style={{ backgroundColor: "navy" }}>
