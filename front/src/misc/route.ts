@@ -11,21 +11,13 @@ export const convertHashToRoute = (hash: string): Route => {
   let routeId: RouteId = "/not_found"
   let params: string[] = []
 
-  routeIds
-    // .filter(_routeId => routeId !== "/:address")
-    .forEach((_routeId) => {
-      const regExp = new RegExp(`^${_routeId.replace(/:\w+/, "\\w+")}$`)
-      const p = regExp.exec(pathname)
-      if (p) {
-        routeId = _routeId
-        params = p.slice(1) // first element is a matched path, so it's same with routeId
-      }
-    })
-
-  // if (routeId === "/not_found" && pathname.slice(0, 3) === "/0x") {
-  //   routeId = "/:address"
-  //   params = [pathname.slice(1)]
-  // }
+  routeIds.forEach((_routeId) => {
+    const p = new RegExp(`^${_routeId}$`).exec(pathname)
+    if (p) {
+      routeId = _routeId
+      params = p.slice(1) // first element is a matched path, so it's same with routeId
+    }
+  })
 
   return { id: routeId, params: params }
 }
@@ -38,8 +30,4 @@ export const combineRouteIdAndParams = (id: RouteId, obj: object) => {
   }
 
   return path
-}
-
-export const changeLocationHashByRouteId = (id: RouteId) => {
-  window.location.hash = `#${id}`
 }
