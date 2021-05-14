@@ -254,6 +254,8 @@ impl pallet_transaction_payment_pow::Config for Runtime {}
 
 impl pallet_game::Config for Runtime {}
 
+impl pallet_first_airdrop::Config for Runtime {}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
     pub enum Runtime where
@@ -271,6 +273,7 @@ construct_runtime!(
         Sudo: pallet_sudo::{Module, Call, Config<T>, Storage, Event<T>},
         TransactionPaymentPow: pallet_transaction_payment_pow::{Module, Call, Storage},
         Game: pallet_game::{Module, Call, Storage},
+        FirstAirdrop: pallet_first_airdrop::{Module, Call, Storage},
     }
 );
 

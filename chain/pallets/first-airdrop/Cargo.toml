@@ -1,17 +1,12 @@
 [package]
-name = 'pallet-game'
+name = 'pallet-first-airdrop'
 version = '0.1.0'
 edition = '2018'
 license = "Apache-2.0"
 
 [dependencies]
-common = { path = '../../../common/rs', version = '0.1.0', default-features = false }
-hex = { version = "0.4.2", default-features = false }
+pallet-game = { path = '../game', version = '0.1.0', default-features = false}
 parity-scale-codec = { version = "2.0.0", default-features = false, features = ['derive']}
-rand = { version = "0.7.3", default-features = false, features = ["alloc"] }
-rand_pcg = "0.2.1"
-pallet-randomness-collective-flip = { version = '3.0.0', default-features = false }
-sp-std = { version = '3.0.0', default-features = false}
 frame-support = { version = '3.0.0', default-features = false }
 frame-system = { version = '3.0.0', default-features = false }
 
@@ -23,11 +18,8 @@ sp-runtime = { default-features = false, version = '3.0.0' }
 [features]
 default = ['std']
 std = [
-    'common/std',
+    'pallet-game/std',
     'parity-scale-codec/std',
-    'pallet-randomness-collective-flip/std',
     'frame-support/std',
     'frame-system/std',
-    'sp-std/std',
-    'rand/std',
 ]
