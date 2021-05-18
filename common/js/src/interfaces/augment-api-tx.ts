@@ -89,6 +89,10 @@ declare module '@polkadot/api/types/submittable' {
        **/
       transferKeepAlive: AugmentedSubmittable<(dest: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, value: Compact<Balance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [LookupSource, Compact<Balance>]>;
     };
+    firstAirdrop: {
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
+      claim: AugmentedSubmittable<(kusamaAccountId: AccountId | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [AccountId]>;
+    };
     game: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
       finishMtcShop: AugmentedSubmittable<(playerOperations: Vec<mtc_shop_PlayerOperation> | (mtc_shop_PlayerOperation | { Buy: any } | { Sell: any } | { Move: any } | { NextCatalogLine: any } | { Upgrade: any } | string | Uint8Array)[]) => SubmittableExtrinsic<ApiType>, [Vec<mtc_shop_PlayerOperation>]>;

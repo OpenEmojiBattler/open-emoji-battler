@@ -38,6 +38,11 @@ declare module '@polkadot/api/types/storage' {
        **/
       totalIssuance: AugmentedQuery<ApiType, () => Observable<Balance>, []> & QueryableStorageEntry<ApiType, []>;
     };
+    firstAirdrop: {
+      [key: string]: QueryableStorageEntry<ApiType>;
+      playerAirdropDestinationKusamaAccountId: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<AccountId>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
+      playerAirdropDestinationKusamaAccountIdCount: AugmentedQuery<ApiType, () => Observable<Option<u16>>, []> & QueryableStorageEntry<ApiType, []>;
+    };
     game: {
       [key: string]: QueryableStorageEntry<ApiType>;
       deckBuiltEmoBaseIds: AugmentedQuery<ApiType, () => Observable<Option<Vec<u16>>>, []> & QueryableStorageEntry<ApiType, []>;
