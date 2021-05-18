@@ -96,6 +96,10 @@ pub mod pallet {
     #[pallet::storage]
     pub type PlayerBattleGhostIndex<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, u8>;
 
+    #[pallet::storage]
+    pub type PlayerFirstAirdropEligible<T: Config> =
+        StorageMap<_, Blake2_128Concat, T::AccountId, bool>;
+
     #[pallet::error]
     pub enum Error<T> {
         EmoBasesNone,
@@ -504,6 +508,7 @@ impl<T: Config> Pallet<T> {
 
         if place < 4 {
             Self::_register_ghost(account_id, ep, grade_and_board_history);
+            PlayerFirstAirdropEligible::<T>::insert(&account_id, true);
         }
 
         Self::_cleanup_finished(account_id);

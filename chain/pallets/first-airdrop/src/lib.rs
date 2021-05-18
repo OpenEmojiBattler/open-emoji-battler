@@ -27,7 +27,7 @@ pub mod pallet {
     pub enum Error<T> {
         AirdropCountMax,
         AlreadyClaimed,
-        PlayerEpNone,
+        PlayerNotEligible,
     }
 
     #[pallet::hooks]
@@ -51,8 +51,9 @@ pub mod pallet {
                 Error::<T>::AlreadyClaimed
             );
             ensure!(
-                pallet_game::PlayerEp::<T>::contains_key(&player_account_id),
-                Error::<T>::PlayerEpNone
+                pallet_game::PlayerFirstAirdropEligible::<T>::get(&player_account_id)
+                    .unwrap_or(false),
+                Error::<T>::PlayerNotEligible
             );
 
             PlayerAirdropDestinationKusamaAccountId::<T>::insert(
