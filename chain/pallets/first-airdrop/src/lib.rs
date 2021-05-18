@@ -20,12 +20,14 @@ pub mod pallet {
     #[pallet::storage]
     pub type PlayerAirdropDestinationKusamaAccountId<T: Config> =
         StorageMap<_, Blake2_128Concat, T::AccountId, T::AccountId>;
+    #[pallet::storage]
+    pub type PlayerAirdropDestinationKusamaAccountIdCount<T: Config> = StorageValue<_, u16>;
 
     #[pallet::error]
     pub enum Error<T> {
         AirdropCountMax,
+        AlreadyClaimed,
         PlayerEpNone,
-        PlayerEpLow,
     }
 
     #[pallet::hooks]
@@ -40,17 +42,24 @@ pub mod pallet {
         ) -> DispatchResultWithPostInfo {
             let player_account_id = ensure_signed(origin)?;
 
-            let airdropped_count = PlayerAirdropDestinationKusamaAccountId::<T>::iter().count();
-            ensure!(airdropped_count < 500, Error::<T>::AirdropCountMax);
+            let airdropped_count =
+                PlayerAirdropDestinationKusamaAccountIdCount::<T>::get().unwrap_or(0);
 
-            let player_dp = pallet_game::PlayerEp::<T>::get(&player_account_id)
-                .ok_or(Error::<T>::PlayerEpNone)?;
-            ensure!(player_dp > 1000, Error::<T>::PlayerEpLow);
+            ensure!(airdropped_count < 500, Error::<T>::AirdropCountMax);
+            ensure!(
+                !PlayerAirdropDestinationKusamaAccountId::<T>::contains_key(&player_account_id),
+                Error::<T>::AlreadyClaimed
+            );
+            ensure!(
+                pallet_game::PlayerEp::<T>::contains_key(&player_account_id),
+                Error::<T>::PlayerEpNone
+            );
 
             PlayerAirdropDestinationKusamaAccountId::<T>::insert(
                 &player_account_id,
                 kusama_account_id,
             );
+            PlayerAirdropDestinationKusamaAccountIdCount::<T>::put(airdropped_count + 1);
 
             Ok(().into())
         }
