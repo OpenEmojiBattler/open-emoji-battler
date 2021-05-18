@@ -44,7 +44,7 @@ declare module '@polkadot/api/types/errors' {
       [key: string]: AugmentedError<ApiType>;
       AirdropCountMax: AugmentedError<ApiType>;
       AlreadyClaimed: AugmentedError<ApiType>;
-      PlayerEpNone: AugmentedError<ApiType>;
+      PlayerNotEligible: AugmentedError<ApiType>;
     };
     game: {
       [key: string]: AugmentedError<ApiType>;
