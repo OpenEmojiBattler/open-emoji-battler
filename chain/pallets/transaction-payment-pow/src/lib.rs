@@ -161,8 +161,14 @@ where
 
     let pallet_name = call_metadata.pallet_name;
     let function_name = call_metadata.function_name;
-    if pallet_name != "Game"
-        || !["start_mtc", "start_mtc_by_session", "finish_mtc_shop"].contains(&function_name)
+    if !["Game", "FirstAirdrop"].contains(&pallet_name)
+        || ![
+            "start_mtc",
+            "start_mtc_by_session",
+            "finish_mtc_shop",
+            "claim",
+        ]
+        .contains(&function_name)
     {
         debug!("Pow: not allowed call: {}, {}", pallet_name, function_name);
         return Err(());
