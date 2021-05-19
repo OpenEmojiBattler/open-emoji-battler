@@ -22,6 +22,7 @@ rbuild:
 dev:
 	./target/release/open-emoji-battler --dev --base-path=./data
 
+# require native runtime
 .PHONY: dev-with-log
 dev-with-log:
 	RUST_BACKTRACE=1 ./target/release/open-emoji-battler -lpallet_transaction_payment_pow=debug -lpallet_game=debug --dev --base-path=./data
