@@ -21,7 +21,7 @@ import { AccountsDropdown } from "~/components/common/AccountsDropdown"
 import { PowButton } from "~/components/common/PowButton"
 
 const airdropMaxCount = 500
-const endUnixtime = Date.UTC(2021, 5, 31)
+const endUnixtime = Date.UTC(2021, 4, 31)
 const endDate = new Date(endUnixtime)
 
 export function FirstAirdrop() {
