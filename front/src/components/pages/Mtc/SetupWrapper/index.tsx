@@ -1,9 +1,9 @@
 import * as React from "react"
 import BN from "bn.js"
+import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { query } from "common"
 
-import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 import { initialEp } from "~/misc/constants"
 import { Setup } from "../Setup"
 import { setup } from "./tasks"
@@ -44,15 +44,15 @@ export function SetupWrapper(props: {
     if (!account) {
       return
     }
-    let isSubscribed = true
+    let isMounted = true
     query((q) => q.game.playerEp(account.player.address)).then((e) => {
-      if (isSubscribed) {
+      if (isMounted) {
         const ep = e.isSome ? e.unwrap().toNumber() : initialEp
         setEp(ep)
       }
     })
     query((q) => q.game.playerPool.size(account.player.address)).then((p) => {
-      if (isSubscribed && !p.isZero()) {
+      if (isMounted && !p.isZero()) {
         setMessage(
           "The previous match didn't finish normally, and the EP might decrease a little next time."
         )
@@ -61,7 +61,7 @@ export function SetupWrapper(props: {
       }
     })
     return () => {
-      isSubscribed = false
+      isMounted = false
     }
   }, [account && account.player.address])
 

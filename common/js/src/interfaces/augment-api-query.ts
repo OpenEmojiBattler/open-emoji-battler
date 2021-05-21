@@ -38,6 +38,11 @@ declare module '@polkadot/api/types/storage' {
        **/
       totalIssuance: AugmentedQuery<ApiType, () => Observable<Balance>, []> & QueryableStorageEntry<ApiType, []>;
     };
+    firstAirdrop: {
+      [key: string]: QueryableStorageEntry<ApiType>;
+      playerAirdropDestinationKusamaAccountId: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<AccountId>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
+      playerAirdropDestinationKusamaAccountIdCount: AugmentedQuery<ApiType, () => Observable<Option<u16>>, []> & QueryableStorageEntry<ApiType, []>;
+    };
     game: {
       [key: string]: QueryableStorageEntry<ApiType>;
       deckBuiltEmoBaseIds: AugmentedQuery<ApiType, () => Observable<Option<Vec<u16>>>, []> & QueryableStorageEntry<ApiType, []>;
@@ -46,6 +51,7 @@ declare module '@polkadot/api/types/storage' {
       matchmakingGhosts: AugmentedQuery<ApiType, (arg: u16 | AnyNumber | Uint8Array) => Observable<Option<Vec<ITuple<[AccountId, u16, mtc_Ghost]>>>>, [u16]> & QueryableStorageEntry<ApiType, [u16]>;
       playerBattleGhostIndex: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<u8>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
       playerEp: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<u16>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
+      playerFirstAirdropEligible: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<bool>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
       playerGhosts: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<Vec<ITuple<[AccountId, u16, mtc_Ghost]>>>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
       playerGhostStates: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<Vec<mtc_GhostState>>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
       playerGradeAndBoardHistory: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<Vec<mtc_GradeAndBoard>>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;

@@ -1,28 +1,11 @@
 import BN from "bn.js"
 import { web3FromAddress } from "@polkadot/extension-dapp"
-import { mnemonicGenerate } from "@polkadot/util-crypto"
 
 import { createType, query, tx, buildKeyringPair, mtc_Board } from "common"
 
 import type { EmoBases, PlayerAccount, SessionAccount } from "~/misc/types"
 import { isDevelopment, withToggleAsync, checkArraysEquality } from "~/misc/utils"
 import { finishBattle, MtcState, buildInitialMtcState, ResultState } from "~/misc/mtcUtils"
-
-export const buildAndGeneratePlayerAndSessionAccounts = async (playerAddress: string) => {
-  const accountData = await query((q) => q.transactionPaymentPow.accountData(playerAddress))
-  const playerPowCount = accountData.isSome ? accountData.unwrap()[1].toNumber() : 0
-  const playerAccount: PlayerAccount = { address: playerAddress, powCount: playerPowCount }
-
-  const sessionMnemonic = mnemonicGenerate()
-  const sessionAccount: SessionAccount = {
-    address: buildKeyringPair(sessionMnemonic).address,
-    mnemonic: sessionMnemonic,
-    powCount: 0,
-    isActive: false,
-  }
-
-  return { player: playerAccount, session: sessionAccount }
-}
 
 export const start = (
   playerAccount: PlayerAccount,

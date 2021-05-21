@@ -51,3 +51,6 @@ export const sampleArray = <T>(array: T[], count: number) => {
   shuffleArray(array)
   return array.slice(0, count)
 }
+
+export const buildDateString = (date: Date) =>
+  `${date.toLocaleString([], { timeZoneName: "long" })} (${date.toUTCString()})`

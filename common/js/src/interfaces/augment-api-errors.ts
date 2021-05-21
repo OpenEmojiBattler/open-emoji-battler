@@ -40,6 +40,12 @@ declare module '@polkadot/api/types/errors' {
        **/
       VestingBalance: AugmentedError<ApiType>;
     };
+    firstAirdrop: {
+      [key: string]: AugmentedError<ApiType>;
+      AirdropCountMax: AugmentedError<ApiType>;
+      AlreadyClaimed: AugmentedError<ApiType>;
+      PlayerNotEligible: AugmentedError<ApiType>;
+    };
     game: {
       [key: string]: AugmentedError<ApiType>;
       BattleFailed: AugmentedError<ApiType>;

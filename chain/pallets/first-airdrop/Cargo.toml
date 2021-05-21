@@ -1,0 +1,25 @@
+[package]
+name = 'pallet-first-airdrop'
+version = '0.1.0'
+edition = '2018'
+license = "Apache-2.0"
+
+[dependencies]
+pallet-game = { path = '../game', version = '0.1.0', default-features = false}
+parity-scale-codec = { version = "2.0.0", default-features = false, features = ['derive']}
+frame-support = { version = '3.0.0', default-features = false }
+frame-system = { version = '3.0.0', default-features = false }
+
+[dev-dependencies]
+sp-core = { default-features = false, version = '3.0.0' }
+sp-io = { default-features = false, version = '3.0.0' }
+sp-runtime = { default-features = false, version = '3.0.0' }
+
+[features]
+default = ['std']
+std = [
+    'pallet-game/std',
+    'parity-scale-codec/std',
+    'frame-support/std',
+    'frame-system/std',
+]
