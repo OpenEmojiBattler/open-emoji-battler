@@ -96,7 +96,7 @@ function Accounts(props: { airdroppedCount: number }) {
   }, [])
 
   if (message !== "") {
-    return <p>{message}</p>
+    return <p>{message}.</p>
   }
 
   if (injectedAccounts.length === 0 || account === null) {
