@@ -21,6 +21,8 @@ import { AccountsDropdown } from "~/components/common/AccountsDropdown"
 import { PowButton } from "~/components/common/PowButton"
 
 const airdropMaxCount = 500
+const endUnixtime = Date.UTC(2021, 5, 31)
+const endDate = new Date(endUnixtime)
 
 export function FirstAirdrop() {
   const globalAsync = React.useContext(GlobalAsyncContext)
@@ -59,7 +61,8 @@ function Connected() {
   return (
     <>
       <div className="block">
-        TODO: descrinption here
+        TODO: descrinption here, finish at {endDate.toLocaleString([], { timeZoneName: "long" })} (
+        {endDate.toUTCString()})
         <p>
           remaining:{" "}
           {airdroppedCount === null ? (
@@ -149,7 +152,7 @@ function AccountComp(props: { account: Account; airdroppedCount: number }) {
   if (claimedKusamaAddress) {
     return <span>You've already claimed. {claimedKusamaAddress}</span>
   }
-  if (props.airdroppedCount >= airdropMaxCount) {
+  if (props.airdroppedCount >= airdropMaxCount || Date.now() >= endUnixtime) {
     return <span>This airdrop is finished.</span>
   }
   if (isEligible) {
@@ -196,7 +199,6 @@ function Claim(props: { account: Account }) {
         type="text"
         value={kusamaAddress}
         onChange={onInputKusamaAddressChange}
-        className="input"
         size={60}
         placeholder="Enter Kusama Address"
       />
