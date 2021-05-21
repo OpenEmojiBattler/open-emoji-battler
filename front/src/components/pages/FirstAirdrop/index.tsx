@@ -13,7 +13,7 @@ import {
   useWaitingSetter,
 } from "~/components/App/Frame/tasks"
 import { setupAccounts } from "~/misc/accountUtils"
-import { withToggleAsync } from "~/misc/utils"
+import { buildDateString, withToggleAsync } from "~/misc/utils"
 import type { Account } from "~/misc/types"
 
 import { Loading } from "~/components/common/Loading"
@@ -165,18 +165,20 @@ function AccountComp(props: { account: Account; airdroppedCount: number }) {
 function Claim(props: { account: Account }) {
   const setWaiting = useWaitingSetter()
   const [kusamaAddress, setKusamaAddress] = React.useState("")
-  const [isValidKusamaAddress, setIsValidKusamaAddress] = React.useState(true)
+  const [isValidKusamaAddress, setIsValidKusamaAddress] = React.useState(false)
   const [isClaimed, setIsClaimed] = React.useState(false)
 
   const onInputKusamaAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value
     setKusamaAddress(v)
     const [isValid, reason] = checkAddress(v, 2)
-    console.log(reason)
+    if (reason) {
+      console.log(reason)
+    }
     setIsValidKusamaAddress(isValid)
   }
 
-  const onClick = async (solution: BN) => {
+  const onClick = async (solution: BN) =>
     withToggleAsync(setWaiting, async () => {
       const signer = (await web3FromAddress(props.account.player.address)).signer
       await tx(
@@ -186,7 +188,6 @@ function Claim(props: { account: Account }) {
       )
       setIsClaimed(true)
     })
-  }
 
   if (isClaimed) {
     return <>You successfully claimed.</>
@@ -220,6 +221,3 @@ function Claim(props: { account: Account }) {
     </>
   )
 }
-
-const buildDateString = (date: Date) =>
-  `${date.toLocaleString([], { timeZoneName: "long" })} (${date.toUTCString()})`
