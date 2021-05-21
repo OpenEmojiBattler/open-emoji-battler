@@ -61,8 +61,7 @@ function Connected() {
   return (
     <>
       <div className="block">
-        TODO: descrinption here, finish at {endDate.toLocaleString([], { timeZoneName: "long" })} (
-        {endDate.toUTCString()})
+        TODO: descrinption here, finish at {buildDateString(endDate)}
         <p>
           remaining:{" "}
           {airdroppedCount === null ? (
@@ -221,3 +220,6 @@ function Claim(props: { account: Account }) {
     </>
   )
 }
+
+const buildDateString = (date: Date) =>
+  `${date.toLocaleString([], { timeZoneName: "long" })} (${date.toUTCString()})`
