@@ -136,6 +136,8 @@ function AccountComp(props: { account: Account; airdroppedCount: number }) {
       if (claimedAccountOpt.isSome) {
         const kusamaAddress = encodeAddress(claimedAccountOpt.unwrap(), 2)
         setClaimedKusamaAddress(kusamaAddress)
+      } else {
+        setClaimedKusamaAddress(null)
       }
       setIsEligible(isEligibleOpt.isSome ? isEligibleOpt.unwrap().isTrue : false)
     })
