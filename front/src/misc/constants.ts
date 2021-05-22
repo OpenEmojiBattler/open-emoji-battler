@@ -7,7 +7,7 @@ export const routeIds = [
   "/match_debug",
   "/emo_ability_builder",
   "/style",
-  "/first_airdrop",
+  "/play_airdrop",
   "/rmrk_airdrop",
   "/not_found",
 ] as const

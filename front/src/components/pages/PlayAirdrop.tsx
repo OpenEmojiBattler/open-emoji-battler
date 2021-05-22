@@ -24,7 +24,7 @@ const airdropMaxCount = 500
 const endUnixtime = Date.UTC(2021, 4, 31)
 const endDate = new Date(endUnixtime)
 
-export function FirstAirdrop() {
+export function PlayAirdrop() {
   const globalAsync = React.useContext(GlobalAsyncContext)
 
   if (!globalAsync) {
