@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync, createWriteStream } from "fs"
 import { get } from "https"
+
 import { encodeAddress } from "@polkadot/util-crypto"
+import { hexToString } from "@polkadot/util"
 
 const endBlockNum = 7500000 // TODO
 
@@ -23,8 +25,12 @@ const main = async () => {
         console.error("invalid dump")
         return
       }
+      const head = hexToString(call.value).slice(0, 11)
+      if (["RMRK::EMOTE", "rmrk::EMOTE", "RMRK::KANAR", "rmrk::KANAR"].includes(head)) {
+        continue
+      }
       targetAddresses.add(call.caller)
-      remarkHeads.add(call.value.slice(0, 6))
+      remarkHeads.add(head)
     }
   }
 
@@ -32,6 +38,8 @@ const main = async () => {
   console.log("rmrk heads: ", remarkHeads)
 
   const targetAddressesArray = Array.from(targetAddresses)
+  targetAddressesArray.sort()
+
   const targetAddressesArrayForCheck = targetAddressesArray.map((a) => encodeAddress(a, 2))
   if (!checkArraysEquality(targetAddressesArray, targetAddressesArrayForCheck)) {
     console.error("invalid address format")
