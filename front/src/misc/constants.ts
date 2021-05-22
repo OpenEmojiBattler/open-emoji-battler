@@ -8,6 +8,7 @@ export const routeIds = [
   "/emo_ability_builder",
   "/style",
   "/first_airdrop",
+  "/rmrk_airdrop",
   "/not_found",
 ] as const
 export type RouteId = typeof routeIds[number]
