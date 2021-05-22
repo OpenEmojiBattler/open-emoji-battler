@@ -12,12 +12,12 @@ import { setupExtension } from "~/misc/accountUtils"
 import { Loading } from "~/components/common/Loading"
 import { Dropdown } from "~/components/common/Dropdown"
 
+import AllClaimableKusamaAddresses from "./targetAddresses.json"
+
 const kusamaEndpoint =
   "wss://kusama.api.onfinality.io/ws?apikey=7d5a9e1e-713d-46b7-82e8-b01a4de661a2"
 const endUnixtime = Date.UTC(2021, 4, 31) // TODO
 const endDate = new Date(endUnixtime)
-
-const AllClaimableKusamaAddresses: string[] = [] // TODO
 
 interface InjectedAccountWithMetaExt extends InjectedAccountWithMeta {
   kusamaAddress: string
