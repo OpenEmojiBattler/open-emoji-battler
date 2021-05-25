@@ -2,7 +2,7 @@ import { writeFileSync } from "fs"
 import { ApiPromise, WsProvider } from "@polkadot/api"
 import { encodeAddress } from "@polkadot/util-crypto"
 
-const blockHash = "0xTODO"
+const blockHash = "0x1b02a5e276414fdd035dabc352892f644dda9c0f8090d33916f1dcaca2615eac"
 
 const main = async () => {
   const provider = new WsProvider("wss://testnet2.uniquenetwork.io")
