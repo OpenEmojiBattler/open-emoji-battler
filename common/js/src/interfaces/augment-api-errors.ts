@@ -6,7 +6,6 @@ import type { ApiTypes } from '@polkadot/api/types';
 declare module '@polkadot/api/types/errors' {
   export interface AugmentedErrors<ApiType> {
     balances: {
-      [key: string]: AugmentedError<ApiType>;
       /**
        * Beneficiary account must pre-exist
        **/
@@ -39,15 +38,21 @@ declare module '@polkadot/api/types/errors' {
        * Vesting balance too high to send value
        **/
       VestingBalance: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
     };
     firstAirdrop: {
-      [key: string]: AugmentedError<ApiType>;
       AirdropCountMax: AugmentedError<ApiType>;
       AlreadyClaimed: AugmentedError<ApiType>;
       PlayerNotEligible: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
     };
     game: {
-      [key: string]: AugmentedError<ApiType>;
       BattleFailed: AugmentedError<ApiType>;
       BattleGhostSelectionFailed: AugmentedError<ApiType>;
       BuiltEmoBaseIdsNone: AugmentedError<ApiType>;
@@ -69,9 +74,12 @@ declare module '@polkadot/api/types/errors' {
       PlayerSeedNone: AugmentedError<ApiType>;
       PlayerSessionToMainNone: AugmentedError<ApiType>;
       PlayerUpgradeCoinNone: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
     };
     grandpa: {
-      [key: string]: AugmentedError<ApiType>;
       /**
        * Attempt to signal GRANDPA change with one already pending.
        **/
@@ -102,16 +110,22 @@ declare module '@polkadot/api/types/errors' {
        * Cannot signal forced change so soon after last.
        **/
       TooSoon: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
     };
     sudo: {
-      [key: string]: AugmentedError<ApiType>;
       /**
        * Sender must be the Sudo account
        **/
       RequireSudo: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
     };
     system: {
-      [key: string]: AugmentedError<ApiType>;
       /**
        * Failed to extract the runtime version from the new runtime.
        * 
@@ -136,6 +150,10 @@ declare module '@polkadot/api/types/errors' {
        * and the new runtime.
        **/
       SpecVersionNeedsToIncrease: AugmentedError<ApiType>;
+      /**
+       * Generic error
+       **/
+      [key: string]: AugmentedError<ApiType>;
     };
   }
 

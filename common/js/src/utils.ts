@@ -25,8 +25,7 @@ export const getEnv = (envName: any) => {
 
 export const buildTypes = () => {
   let types: RegistryTypes = {
-    Address: "MultiAddress",
-    LookupSource: "MultiAddress",
+    AccountInfo: "AccountInfoWithDualRefCount",
   }
   for (const [n, t] of Object.values(definitions).flatMap((d) => Object.entries(d.types))) {
     types[n] = t

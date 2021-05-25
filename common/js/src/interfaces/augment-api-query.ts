@@ -15,7 +15,6 @@ import type { ApiTypes } from '@polkadot/api/types';
 declare module '@polkadot/api/types/storage' {
   export interface AugmentedQueries<ApiType> {
     balances: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       /**
        * The balance of an account.
        * 
@@ -37,14 +36,20 @@ declare module '@polkadot/api/types/storage' {
        * The total units issued in the system.
        **/
       totalIssuance: AugmentedQuery<ApiType, () => Observable<Balance>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
     firstAirdrop: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       playerAirdropDestinationKusamaAccountId: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<AccountId>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
       playerAirdropDestinationKusamaAccountIdCount: AugmentedQuery<ApiType, () => Observable<Option<u16>>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
     game: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       deckBuiltEmoBaseIds: AugmentedQuery<ApiType, () => Observable<Option<Vec<u16>>>, []> & QueryableStorageEntry<ApiType, []>;
       deckFixedEmoBaseIds: AugmentedQuery<ApiType, () => Observable<Option<Vec<u16>>>, []> & QueryableStorageEntry<ApiType, []>;
       emoBases: AugmentedQuery<ApiType, () => Observable<Option<emo_Bases>>, []> & QueryableStorageEntry<ApiType, []>;
@@ -61,9 +66,12 @@ declare module '@polkadot/api/types/storage' {
       playerSeed: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<u64>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
       playerSessionToMain: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<AccountId>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
       playerUpgradeCoin: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<u8>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
     grandpa: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       /**
        * The number of changes (both in terms of keys and underlying economic responsibilities)
        * in the "set" of Grandpa validators from genesis.
@@ -92,25 +100,34 @@ declare module '@polkadot/api/types/storage' {
        * State of the current authority set.
        **/
       state: AugmentedQuery<ApiType, () => Observable<StoredState>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
     randomnessCollectiveFlip: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       /**
        * Series of block headers from the last 81 blocks that acts as random seed material. This
        * is arranged as a ring buffer with `block_number % 81` being the index into the `Vec` of
        * the oldest hash.
        **/
       randomMaterial: AugmentedQuery<ApiType, () => Observable<Vec<Hash>>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
     sudo: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       /**
        * The `AccountId` of the sudo key.
        **/
       key: AugmentedQuery<ApiType, () => Observable<AccountId>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
     system: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       /**
        * The full account information for a particular account ID.
        **/
@@ -185,9 +202,12 @@ declare module '@polkadot/api/types/storage' {
        * True if we have upgraded so that `type RefCount` is `u32`. False (default) if not.
        **/
       upgradedToU32RefCount: AugmentedQuery<ApiType, () => Observable<bool>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
     timestamp: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       /**
        * Did the timestamp get updated in this block?
        **/
@@ -196,15 +216,25 @@ declare module '@polkadot/api/types/storage' {
        * Current time for the current block.
        **/
       now: AugmentedQuery<ApiType, () => Observable<Moment>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
     transactionPayment: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       nextFeeMultiplier: AugmentedQuery<ApiType, () => Observable<Multiplier>, []> & QueryableStorageEntry<ApiType, []>;
       storageVersion: AugmentedQuery<ApiType, () => Observable<Releases>, []> & QueryableStorageEntry<ApiType, []>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
     transactionPaymentPow: {
-      [key: string]: QueryableStorageEntry<ApiType>;
       accountData: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<Option<ITuple<[BlockNumber, Index]>>>, [AccountId]> & QueryableStorageEntry<ApiType, [AccountId]>;
+      /**
+       * Generic query
+       **/
+      [key: string]: QueryableStorageEntry<ApiType>;
     };
   }
 

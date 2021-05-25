@@ -10,7 +10,6 @@ import type { ApiTypes } from '@polkadot/api/types';
 declare module '@polkadot/api/types/events' {
   export interface AugmentedEvents<ApiType> {
     balances: {
-      [key: string]: AugmentedEvent<ApiType>;
       /**
        * A balance was set by root. \[who, free, reserved\]
        **/
@@ -46,9 +45,12 @@ declare module '@polkadot/api/types/events' {
        * Some balance was unreserved (moved from reserved to free). \[who, value\]
        **/
       Unreserved: AugmentedEvent<ApiType, [AccountId, Balance]>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
     };
     grandpa: {
-      [key: string]: AugmentedEvent<ApiType>;
       /**
        * New authority set has been applied. \[authority_set\]
        **/
@@ -61,9 +63,12 @@ declare module '@polkadot/api/types/events' {
        * Current authority set has been resumed.
        **/
       Resumed: AugmentedEvent<ApiType, []>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
     };
     sudo: {
-      [key: string]: AugmentedEvent<ApiType>;
       /**
        * The \[sudoer\] just switched identity; the old key is supplied.
        **/
@@ -76,9 +81,12 @@ declare module '@polkadot/api/types/events' {
        * A sudo just took place. \[result\]
        **/
       SudoAsDone: AugmentedEvent<ApiType, [DispatchResult]>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
     };
     system: {
-      [key: string]: AugmentedEvent<ApiType>;
       /**
        * `:code` was updated.
        **/
@@ -99,6 +107,10 @@ declare module '@polkadot/api/types/events' {
        * A new \[account\] was created.
        **/
       NewAccount: AugmentedEvent<ApiType, [AccountId]>;
+      /**
+       * Generic event
+       **/
+      [key: string]: AugmentedEvent<ApiType>;
     };
   }
 
