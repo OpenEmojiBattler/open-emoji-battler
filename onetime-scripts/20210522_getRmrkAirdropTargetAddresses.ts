@@ -4,7 +4,23 @@ import { get } from "https"
 import { encodeAddress } from "@polkadot/util-crypto"
 import { hexToString } from "@polkadot/util"
 
-const endBlockNum = 7500000 // TODO
+// https://kusama.subscan.io/block/7620823
+const endBlockNum = 7620823
+
+// result log:
+// break block: 7620825
+// total addresses:  489
+// rmrk heads:  Set(9) {
+//   'rmrk::MINT:',
+//   'rmrk::MINTN',
+//   'rmrk::SEND:',
+//   'RMRK::MINT:',
+//   'RMRK::MINTN',
+//   'RMRK::CONSU',
+//   'RMRK::SEND:',
+//   'RMRK::LIST:',
+//   'RMRK::BUY::'
+// }
 
 const main = async () => {
   const rmrkDumpFilePath = "./20210522_getRmrkAirdropTargetAddresses.rmrkdump.json"
@@ -16,7 +32,7 @@ const main = async () => {
   const rmrkDump = JSON.parse(readFileSync(rmrkDumpFilePath, "utf8"))
 
   for (const block of rmrkDump) {
-    if (block.block >= endBlockNum) {
+    if (block.block > endBlockNum) {
       console.log(`break block: ${block.block}`)
       break
     }
@@ -58,7 +74,7 @@ const downloadFile = (url: string, dest: string) => {
   return new Promise((resolve) => {
     get(url, function (response) {
       response.pipe(file)
-      console.log("download end")
+      console.log("download end") // bug, logged immediately
       file.on("finish", resolve)
     })
   })
