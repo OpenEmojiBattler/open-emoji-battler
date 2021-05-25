@@ -112,11 +112,14 @@ function Claim(props: { address: string }) {
   }
 
   return (
-    <div style={{ marginTop: "16px" }}>
-      <button className={"button is-strong"} onClick={onClick}>
-        Claim
-      </button>
-    </div>
+    <>
+      <p>Kusama address format: {encodeAddress(props.address, 2)}</p>
+      <div style={{ marginTop: "16px" }}>
+        <button className={"button is-strong"} onClick={onClick}>
+          Claim
+        </button>
+      </div>
+    </>
   )
 }
 
