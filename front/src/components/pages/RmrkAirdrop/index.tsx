@@ -167,27 +167,31 @@ const tx = async (address: string, setErrorMessage: (s: string) => void) => {
   })
 
   // https://polkadot.js.org/docs/api/cookbook/tx#how-do-i-get-the-decoded-enum-for-an-extrinsicfailed-event
-  await new Promise<void>((resolve, reject) => {
-    apiPromise.tx.system
-      .remark(stringToHex("OEB::RMRKAIRDROP"))
-      .signAndSend(address, { signer }, ({ status, dispatchError }) => {
-        if (dispatchError) {
-          if (dispatchError.isModule) {
-            const decoded = apiPromise.registry.findMetaError(dispatchError.asModule)
-            const { documentation, name, section } = decoded
+  await new Promise<void>(async (resolve, reject) => {
+    try {
+      await apiPromise.tx.system
+        .remark(stringToHex("OEB::RMRKAIRDROP"))
+        .signAndSend(address, { signer }, ({ status, dispatchError }) => {
+          if (dispatchError) {
+            if (dispatchError.isModule) {
+              const decoded = apiPromise.registry.findMetaError(dispatchError.asModule)
+              const { documentation, name, section } = decoded
 
-            reject(`${section}.${name}: ${documentation.join(" ")}`)
-          } else {
-            reject(dispatchError.toString())
+              reject(`${section}.${name}: ${documentation.join(" ")}`)
+            } else {
+              reject(dispatchError.toString())
+            }
           }
-        }
-        if (status.isInBlock || status.isFinalized) {
-          resolve()
-        }
-      })
+          if (status.isInBlock || status.isFinalized) {
+            resolve()
+          }
+        })
+    } catch (e) {
+      reject(e)
+    }
   })
     .catch((reason) => {
       setErrorMessage(`Error: ${reason}`)
     })
-    .finally(apiPromise.disconnect)
+    .finally(() => apiPromise.disconnect())
 }
