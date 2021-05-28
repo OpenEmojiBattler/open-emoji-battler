@@ -1,6 +1,6 @@
 import * as React from "react"
 import BN from "bn.js"
-import { checkAddress, encodeAddress } from "@polkadot/util-crypto"
+import { decodeAddress, encodeAddress } from "@polkadot/util-crypto"
 import { web3FromAddress } from "@polkadot/extension-dapp"
 import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
@@ -182,11 +182,7 @@ function Claim(props: { account: Account }) {
   const onInputKusamaAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value
     setKusamaAddress(v)
-    const [isValid, reason] = checkAddress(v, 2)
-    if (reason) {
-      console.log(reason)
-    }
-    setIsValidKusamaAddress(isValid)
+    setIsValidKusamaAddress(isValidAddress(v))
   }
 
   const onClick = async (solution: BN) =>
@@ -217,7 +213,7 @@ function Claim(props: { account: Account }) {
       />
       <br />
       {kusamaAddress !== "" && !isValidKusamaAddress ? (
-        <span>Invalid Kusama address format</span>
+        <span>Invalid address format</span>
       ) : (
         <div style={{ marginTop: "16px" }}>
           <PowButton
@@ -231,4 +227,14 @@ function Claim(props: { account: Account }) {
       )}
     </>
   )
+}
+
+const isValidAddress = (address: string) => {
+  try {
+    encodeAddress(decodeAddress(address))
+    return true
+  } catch (e) {
+    console.log(e)
+    return false
+  }
 }

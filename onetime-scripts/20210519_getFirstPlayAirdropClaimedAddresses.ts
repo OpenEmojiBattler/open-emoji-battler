@@ -8,7 +8,9 @@ connected(getEnv("local").endpoint, async () =>
     const data = {} as any
     entries.forEach(([key, value]) => {
       const chainAddress = key.args[0].toString()
-      const kusamaAddress = encodeAddress(value.unwrap(), 2)
+      const substrateAddress = value.unwrap().toString()
+      const kusamaAddress = encodeAddress(substrateAddress, 2)
+      // console.log(substrateAddress, kusamaAddress)
       data[chainAddress] = kusamaAddress
     })
 
