@@ -1,6 +1,10 @@
 import { readFileSync } from "fs"
 import { encodeAddress } from "@polkadot/util-crypto"
 
+// result:
+//   https://gist.github.com/tash-2s/0cb08b68906451f9d7788d4ce303d94a
+//   https://gist.github.com/tash-2s/1b029cb2658a10a73a0acb8fc124aec3
+
 const mdLines: string[] = []
 
 // RMRK
