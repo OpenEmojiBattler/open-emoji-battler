@@ -21,7 +21,7 @@ import { AccountsDropdown } from "~/components/common/AccountsDropdown"
 import { PowButton } from "~/components/common/PowButton"
 
 const airdropMaxCount = 500
-const endUnixtime = Date.UTC(2021, 4, 31)
+const endUnixtime = Date.UTC(2021, 5, 12)
 const endDate = new Date(endUnixtime)
 
 export function PlayAirdrop() {
@@ -34,7 +34,7 @@ export function PlayAirdrop() {
   return (
     <section className="section">
       <div className="container">
-        <h1 className="title">Play Airdrop</h1>
+        <h1 className="title">Gameplay Airdrop</h1>
         <Connected />
       </div>
     </section>
@@ -61,16 +61,27 @@ function Connected() {
   return (
     <>
       <div className="block">
-        TODO: descrinption here, finish at {buildDateString(endDate)}
-        <p>
-          remaining:{" "}
-          {airdroppedCount === null ? (
-            "Loading"
-          ) : (
-            <strong>{airdropMaxCount - airdroppedCount}</strong>
-          )}{" "}
-          / {airdropMaxCount}
-        </p>
+        You can claim a preEMO after playing the game and getting 3rd place or higher in a 4 player
+        match.
+        <br />
+        The claim transaction will be submitted on the Open Emoji Battler chain, so the fee is not
+        required.
+        <br />
+        Players who already played the game before also need to complete this to be qualified.
+        <br />
+        You need to input your Kusama address, and the preEMO will go to the address.
+        <br />
+        <br />
+        This airdrop will ends on {buildDateString(endDate)}.
+        <br />
+        You can find the detail of the entire airdrop event here. TODO: subsocial link
+        <br />
+        <br />
+        <strong>
+          {airdroppedCount === null
+            ? "Loading"
+            : `${airdropMaxCount - airdroppedCount} of ${airdropMaxCount} Remaining`}
+        </strong>
       </div>
       {airdroppedCount === null ? <></> : <Accounts airdroppedCount={airdroppedCount} />}
     </>
@@ -151,7 +162,7 @@ function AccountComp(props: { account: Account; airdroppedCount: number }) {
   }
 
   if (claimedKusamaAddress) {
-    return <span>You've already claimed. {claimedKusamaAddress}</span>
+    return <span>You've already claimed.</span>
   }
   if (props.airdroppedCount >= airdropMaxCount || Date.now() >= endUnixtime) {
     return <span>This airdrop is finished.</span>
@@ -159,7 +170,7 @@ function AccountComp(props: { account: Account; airdroppedCount: number }) {
   if (isEligible) {
     return <Claim account={props.account} />
   }
-  return <span>You need to play a match and get 3rd or above.</span>
+  return <span>This account is not qualified.</span>
 }
 
 function Claim(props: { account: Account }) {
@@ -195,7 +206,7 @@ function Claim(props: { account: Account }) {
 
   return (
     <>
-      You can claim!
+      You can claim a preEMO.
       <br />
       <input
         type="text"
