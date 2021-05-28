@@ -34,9 +34,10 @@ export function RmrkAirdrop() {
           The snapshot was taken on May 25th, 06:00 am UTC (Kusama block #7620823).
           <br />
           <br />
-          To claim, you'll submit a remark (OEB::RMRKAIRDROP) transaction to Kusama.
+          To claim, you'll submit a remark (OEB::RMRKAIRDROP) transaction to Kusama using the same
+          account as RMRK.
           <br />
-          After the claim and reload of this page, the UI shows the claim button again, but you
+          If you reload this page after the claim, the UI shows the claim button again, but you
           don't need to re-claim.
           <br />
           Multiple claims by one address are no effects. Sorry for the inconvenience!
