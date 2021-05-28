@@ -13,7 +13,7 @@ import {
   useWaitingSetter,
 } from "~/components/App/Frame/tasks"
 import { setupAccounts } from "~/misc/accountUtils"
-import { buildDateString, withToggleAsync } from "~/misc/utils"
+import { withToggleAsync } from "~/misc/utils"
 import type { Account } from "~/misc/types"
 
 import { Loading } from "~/components/common/Loading"
@@ -22,7 +22,6 @@ import { PowButton } from "~/components/common/PowButton"
 
 const airdropMaxCount = 500
 const endUnixtime = Date.UTC(2021, 5, 12)
-const endDate = new Date(endUnixtime)
 
 export function PlayAirdrop() {
   const globalAsync = React.useContext(GlobalAsyncContext)
@@ -72,7 +71,7 @@ function Connected() {
         You need to input your Kusama address, and the preEMO will go to the address.
         <br />
         <br />
-        This airdrop will ends on {buildDateString(endDate)}.
+        This airdrop will end on June 12th, 00:00 am UTC.
         <br />
         You can find the detail of the entire airdrop event here. TODO: subsocial link
         <br />
