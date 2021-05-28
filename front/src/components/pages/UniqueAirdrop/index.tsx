@@ -12,30 +12,32 @@ import { setupExtension } from "~/misc/accountUtils"
 import { Loading } from "~/components/common/Loading"
 import { Dropdown } from "~/components/common/Dropdown"
 
-import AllClaimableKusamaAddresses from "./targetAddresses.json"
+import AllClaimableSubstrateAddresses from "./targetAddresses.json"
 
 const kusamaEndpoint =
   "wss://kusama.api.onfinality.io/ws?apikey=7d5a9e1e-713d-46b7-82e8-b01a4de661a2"
 const endUnixtime = Date.UTC(2021, 5, 12)
 
 interface InjectedAccountWithMetaExt extends InjectedAccountWithMeta {
-  kusamaAddress: string
+  substrateAddress: string
 }
 
-export function RmrkAirdrop() {
+export function UniqueAirdrop() {
   return (
     <section className="section">
       <div className="container">
-        <h1 className="title">RMRK Airdrop</h1>
+        <h1 className="title">Unique Airdrop</h1>
         <div className="block">
-          If you had used RMRK at the snapshot time, you can claim a preEMO. The addresses that were
-          only used for EMOTE are not qualified.
+          If you had an NFT on Unique Network at the snapshot time, you might be able to claim a
+          preEMO.
           <br />
-          The snapshot was taken on May 25th, 06:00 am UTC (Kusama block #7620823).
+          The snapshot was taken on May 25th, 06:00 am UTC (Unique TestNet 2.0 block #897185).
           <br />
           <br />
-          To claim, you'll submit a remark (OEB::RMRKAIRDROP) transaction to Kusama using the same
-          account as RMRK.
+          To claim, you'll submit a remark (OEB::UNIQUEAIRDROP) transaction to Kusama using the same
+          account as Unique.
+          <br />
+          The account needs a bit of KSM for the fee.
           <br />
           If you reload this page after the claim, the UI shows the claim button again, but you
           don't need to re-claim.
@@ -57,19 +59,21 @@ function Accounts() {
   const [injectedAccounts, setInjectedAccounts] = React.useState<InjectedAccountWithMetaExt[]>([])
   const [message, setMessage] = React.useState("")
   const [selectedAccountIndex, setSelectedAccountIndex] = React.useState(0)
-  const [claimableKusamaAddresses, setClaimableKusamaAddresses] = React.useState<string[]>([])
+  const [claimableSubstrateAddresses, setClaimableSubstrateAddresses] = React.useState<string[]>([])
 
   React.useEffect(() => {
     setupExtension().then((ext) => {
       if (ext.kind === "ok") {
-        const accountsExt = ext.injectedAccounts.map((account) => ({
-          ...account,
-          kusamaAddress: encodeAddress(account.address, 2),
-        }))
-        setClaimableKusamaAddresses(
+        const accountsExt = ext.injectedAccounts.map(
+          (account): InjectedAccountWithMetaExt => ({
+            ...account,
+            substrateAddress: encodeAddress(account.address),
+          })
+        )
+        setClaimableSubstrateAddresses(
           accountsExt
-            .map((account) => account.kusamaAddress)
-            .filter((address) => AllClaimableKusamaAddresses.includes(address))
+            .map((account) => account.substrateAddress)
+            .filter((address) => AllClaimableSubstrateAddresses.includes(address))
         )
         setInjectedAccounts(accountsExt)
       } else {
@@ -98,13 +102,13 @@ function Accounts() {
       <div className="block">
         <AccountsDropdown
           accounts={injectedAccounts}
-          claimableKusamaAddresses={claimableKusamaAddresses}
+          claimableSubstrateAddresses={claimableSubstrateAddresses}
           selectedAccountIndex={selectedAccountIndex}
           setSelectedAccountIndex={setSelectedAccountIndex}
         />
       </div>
       <div className="block">
-        {claimableKusamaAddresses.includes(selectedAccount.kusamaAddress) ? (
+        {claimableSubstrateAddresses.includes(selectedAccount.substrateAddress) ? (
           <Claim address={selectedAccount.address} />
         ) : (
           <span>This account is not qualified.</span>
@@ -149,7 +153,7 @@ function Claim(props: { address: string }) {
 
 function AccountsDropdown(props: {
   accounts: InjectedAccountWithMetaExt[]
-  claimableKusamaAddresses: string[]
+  claimableSubstrateAddresses: string[]
   selectedAccountIndex: number
   setSelectedAccountIndex: (i: number) => void
 }) {
@@ -158,7 +162,7 @@ function AccountsDropdown(props: {
       i,
       <span>
         {account.meta.name || ""} {account.address}{" "}
-        {props.claimableKusamaAddresses.includes(account.kusamaAddress)
+        {props.claimableSubstrateAddresses.includes(account.substrateAddress)
           ? "[QUALIFIED]"
           : "[not qualified]"}
       </span>,
@@ -194,7 +198,7 @@ const tx = async (address: string, setErrorMessage: (s: string) => void) => {
   await new Promise<void>(async (resolve, reject) => {
     try {
       await apiPromise.tx.system
-        .remark(stringToHex("OEB::RMRKAIRDROP"))
+        .remark(stringToHex("OEB::UNIQUEAIRDROP"))
         .signAndSend(address, { signer }, ({ status, dispatchError }) => {
           if (dispatchError) {
             if (dispatchError.isModule) {
