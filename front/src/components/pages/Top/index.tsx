@@ -48,12 +48,16 @@ export function Top() {
                   Forum
                 </a>
                 <br />
+                <a href="https://discord.gg/fvXzW8hFQ7" target="_blank" rel="noopener noreferrer">
+                  Discord
+                </a>
+                <span className={"mx-3"}>•</span>
                 <a
                   href="https://github.com/OpenEmojiBattler/open-emoji-battler"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Source Code
+                  GitHub
                 </a>
                 <span className={"mx-3"}>•</span>
                 <a
