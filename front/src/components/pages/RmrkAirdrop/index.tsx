@@ -119,6 +119,10 @@ function Claim(props: { address: string }) {
   const setBlockMessage = useBlockMessageSetter()
   const [isClaimed, setIsClaimed] = React.useState(false)
 
+  React.useEffect(() => {
+    setIsClaimed(false)
+  }, [props.address])
+
   const onClick = async () =>
     withToggleAsync(setWaiting, async () => {
       await tx(props.address, setBlockMessage)
