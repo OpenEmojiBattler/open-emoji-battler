@@ -4,7 +4,7 @@ use common::{
     codec_types::*,
     mtc::{
         battle::organizer::{battle_all, select_battle_ghost_index},
-        ep::{calculate_new_ep, get_ep_band, EP_BANDWIDTH, EP_UNFINISH_PENALTY, INITIAL_EP},
+        ep::{calculate_new_ep, get_ep_band, EP_UNFINISH_PENALTY, INITIAL_EP},
         result::build_ghost_from_history,
         setup::{build_initial_ghost_states, build_pool},
         shop::{
@@ -284,11 +284,11 @@ impl<T: Config> Pallet<T> {
                     .cloned()
                     .collect::<Vec<_>>(),
             );
-            if selected.len() >= GHOST_COUNT || ep_band < EP_BANDWIDTH {
+            if selected.len() >= GHOST_COUNT || ep_band < 1 {
                 break;
             }
             n = GHOST_COUNT - selected.len();
-            ep_band -= EP_BANDWIDTH;
+            ep_band -= 1;
 
             circuitbreaker += 1;
             if circuitbreaker > 100 {

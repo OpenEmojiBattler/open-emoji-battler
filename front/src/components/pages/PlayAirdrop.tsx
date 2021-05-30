@@ -131,6 +131,9 @@ function AccountComp(props: { account: Account; airdroppedCount: number }) {
   const [isEligible, setIsEligible] = React.useState<boolean | null>(null)
 
   React.useEffect(() => {
+    setClaimedKusamaAddress(null)
+    setIsEligible(null)
+
     let isMounted = true
 
     Promise.all([
