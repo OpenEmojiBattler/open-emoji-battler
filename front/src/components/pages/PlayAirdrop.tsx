@@ -73,7 +73,15 @@ function Connected() {
         <br />
         This airdrop will end on June 12th, 00:00 am UTC.
         <br />
-        You can find the detail of the entire airdrop event here. TODO: subsocial link
+        You can find the detail of the entire airdrop event{" "}
+        <a
+          href="https://app.subsocial.network/@OpenEmojiBattler/open-emoji-battler-launch-airdrop-and-giveaway-17844"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          here
+        </a>
+        .
         <br />
         <br />
         <strong>
