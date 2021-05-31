@@ -6,6 +6,6 @@
     "endpoint": "wss://node-6769173380176625664.jm.onfinality.io/ws"
   },
   "production": {
-    "endpoint": "wss://node-6790167843814453248.jm.onfinality.io/ws"
+    "endpoint": "wss://node-6804557172318130176.jm.onfinality.io/ws"
   }
 }
