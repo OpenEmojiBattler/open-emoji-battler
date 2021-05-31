@@ -55,10 +55,7 @@ export function RmrkAirdrop() {
           </a>
           .
         </div>
-        <div className="block">
-          This feature is temporarily disabled due to the issue. We're working on it, and please
-          wait for the claim until we solve it. I'm sorry for the inconvenience.
-        </div>
+        <Accounts />
       </div>
     </section>
   )

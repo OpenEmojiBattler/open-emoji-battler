@@ -15,7 +15,8 @@ import { Dropdown } from "~/components/common/Dropdown"
 import AllClaimableSubstrateAddresses from "./targetAddresses.json"
 
 const kusamaEndpoint =
-  "wss://kusama.api.onfinality.io/ws?apikey=7d5a9e1e-713d-46b7-82e8-b01a4de661a2"
+  // "wss://kusama.api.onfinality.io/ws?apikey=7d5a9e1e-713d-46b7-82e8-b01a4de661a2"
+  "wss://kusama-rpc.polkadot.io"
 const endUnixtime = Date.UTC(2021, 5, 12)
 
 interface InjectedAccountWithMetaExt extends InjectedAccountWithMeta {
@@ -57,10 +58,7 @@ export function UniqueAirdrop() {
           </a>
           .
         </div>
-        <div className="block">
-          This feature is temporarily disabled due to the issue. We're working on it, and please
-          wait for the claim until we solve it. I'm sorry for the inconvenience.
-        </div>
+        <Accounts />
       </div>
     </section>
   )
