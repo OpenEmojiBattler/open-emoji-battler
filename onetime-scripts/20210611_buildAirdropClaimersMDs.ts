@@ -9,9 +9,8 @@ const buildMD = (ksmAddrs: string[]) => {
   for (const ksmAddr of ksmAddrs) {
     mdLines.push(`| ${encodeAddress(ksmAddr)} (${ksmAddr}) |`)
   }
-  mdLines.push("\n")
 
-  return mdLines.join("\n")
+  return `${mdLines.join("\n")}\n`
 }
 
 ;(() => {
