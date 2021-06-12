@@ -23,15 +23,39 @@ const buildMD = (ksmAddrs: string[]) => {
 ;(() => {
   console.log("Gameplay")
 
-  const addrs: string[][] = Object.values(
+  const data: [string, [string, string]][] = Object.entries(
     JSON.parse(readFileSync("./20210519_getFirstPlayAirdropClaimedAddresses.json", "utf8"))
   )
-  const ksmAddrs = addrs.map(([_sub, ksm]) => ksm)
-  ksmAddrs.sort()
+  const addrs: [string, string][] = data.map(([g, [s, _k]]) => [g, s])
+  addrs.sort((a, b) => {
+    if (a[0] < b[0]) {
+      return -1
+    }
+    if (a[0] > b[0]) {
+      return 1
+    }
 
-  console.log(`len: ${ksmAddrs.length}, uniq len: ${new Set(ksmAddrs).size}`)
+    throw new Error(`sort error: ${a} ${b}`)
+  })
 
-  writeFileSync("./20210611_playAirdropClaimers.md", buildMD(ksmAddrs))
+  const mdLines: string[] = []
+
+  mdLines.push(
+    "| n | game address (and its kusama format) | preEMO destination address (and its kusama format) |"
+  )
+  mdLines.push("| --- | --- | --- |")
+  let n = 1
+  for (const [gameAddr, destAddr] of addrs) {
+    mdLines.push(
+      `| ${n} | ${gameAddr}<br />(${encodeAddress(
+        gameAddr,
+        2
+      )}) | ${destAddr}<br />(${encodeAddress(destAddr, 2)}) |`
+    )
+    n++
+  }
+
+  writeFileSync("./20210611_playAirdropClaimers.md", `${mdLines.join("\n")}\n`)
 })()
 ;(() => {
   console.log("RMRK")
