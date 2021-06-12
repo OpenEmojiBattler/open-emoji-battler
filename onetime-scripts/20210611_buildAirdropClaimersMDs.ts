@@ -1,13 +1,20 @@
 import { writeFileSync, readFileSync } from "fs"
 import { encodeAddress } from "@polkadot/util-crypto"
 
+// result:
+//   https://gist.github.com/tash-2s/1c411217e9c58df2b082e46296e667e4
+//   https://gist.github.com/tash-2s/2c379c014825756d50a450000c9d59f5
+//   https://gist.github.com/tash-2s/030dc8f9169a96b410d65921b5a8e34e
+
 const buildMD = (ksmAddrs: string[]) => {
   const mdLines: string[] = []
 
-  mdLines.push("| substrate format address (kusama format address) |")
-  mdLines.push("| --- |")
+  mdLines.push("| n | substrate format address | kusama format address |")
+  mdLines.push("| --- | --- | --- |")
+  let n = 1
   for (const ksmAddr of ksmAddrs) {
-    mdLines.push(`| ${encodeAddress(ksmAddr)} (${ksmAddr}) |`)
+    mdLines.push(`| ${n} | ${encodeAddress(ksmAddr)} | ${ksmAddr} |`)
+    n++
   }
 
   return `${mdLines.join("\n")}\n`
