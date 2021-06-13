@@ -1,6 +1,8 @@
 import { writeFileSync, readFileSync } from "fs"
 import { encodeAddress } from "@polkadot/util-crypto"
 
+// result: https://gist.github.com/tash-2s/64b782fa474f7051367bf3890a02800c
+
 const addresses = JSON.parse(readFileSync("./20210613_twitterGiveawayWinners.json", "utf8"))
 
 const mdLines: string[] = []
