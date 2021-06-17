@@ -125,7 +125,7 @@ export function Top() {
                 </ul>
               </li>
               <li>fully open-sourced</li>
-              <li>no VC funding, independent project</li>
+              <li>self-funded independent project</li>
             </ul>
           </div>
           <h1 className={"title"}>Future</h1>
