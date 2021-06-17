@@ -21,11 +21,19 @@ export function Top() {
               </div>
               <div className={"block"}>
                 <a
+                  href="https://app.subsocial.network/@OpenEmojiBattler/what-is-open-emoji-battler-18370"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <strong>About</strong>
+                </a>
+                <span className={"mx-3"}>•</span>
+                <a
                   href="https://forum.open-emoji-battler.community/t/topic/17"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <strong>Intro & How to Play</strong>
+                  How to Play
                 </a>
                 <span className={"mx-3"}>•</span>
                 <a href="https://youtu.be/ah3-sWMATSM" target="_blank" rel="noopener noreferrer">
@@ -40,16 +48,16 @@ export function Top() {
                   Twitter
                 </a>
                 <span className={"mx-3"}>•</span>
+                <a href="https://discord.gg/fvXzW8hFQ7" target="_blank" rel="noopener noreferrer">
+                  Discord
+                </a>
+                <br />
                 <a
                   href="https://forum.open-emoji-battler.community/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Forum
-                </a>
-                <br />
-                <a href="https://discord.gg/fvXzW8hFQ7" target="_blank" rel="noopener noreferrer">
-                  Discord
                 </a>
                 <span className={"mx-3"}>•</span>
                 <a
@@ -65,7 +73,7 @@ export function Top() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Japanese プレイ方法
+                  Japanese 遊び方
                 </a>
               </div>
             </div>
@@ -117,7 +125,7 @@ export function Top() {
                 </ul>
               </li>
               <li>fully open-sourced</li>
-              <li>no VC funding, independent project</li>
+              <li>self-funded independent project</li>
             </ul>
           </div>
           <h1 className={"title"}>Future</h1>
