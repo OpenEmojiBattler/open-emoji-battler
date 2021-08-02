@@ -79,7 +79,7 @@ export const useIsConnected = () => {
   return !!globalAsync
 }
 
-const endpointStorageKey = "endpointV3"
+const endpointStorageKey = "endpointV4"
 
 export const getEndpoint = () => {
   const endpoint = localStorage.getItem(endpointStorageKey)
