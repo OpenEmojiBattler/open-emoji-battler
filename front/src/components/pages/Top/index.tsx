@@ -13,10 +13,7 @@ export function Top() {
               <div className={"block"}>
                 <h1 className={"is-size-3"}>
                   <strong>Open Emoji Battler</strong>
-                  <span>
-                    {" "}
-                    is an open-source indie blockchain game, led by the community, running on-chain.
-                  </span>
+                  <span> is a decentralized competitive game led by the community.</span>
                 </h1>
               </div>
               <div className={"block"}>
@@ -25,7 +22,7 @@ export function Top() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <strong>About</strong>
+                  About
                 </a>
                 <span className={"mx-3"}>•</span>
                 <a
@@ -103,45 +100,53 @@ export function Top() {
           <div className={"content"}>
             <ul>
               <li>
-                async PvP auto battler
-                <ul>
-                  <li>strategic intense battles</li>
-                  <li>inspired by Hearthstone Battlegrounds</li>
-                </ul>
-              </li>
-              <li>with your favorite emojis (EMOs) 😁</li>
-              <li>forum-driven development</li>
-              <li>
-                on-chain game building on Substrate
-                <ul>
-                  <li>Substrate is a blockchain framework used in Polkadot and Kusama.</li>
-                </ul>
+                <strong>Blockchain</strong>: This is an on-chain, open-source game built in the
+                Polkadot ecosystem.
               </li>
               <li>
-                smooth UX
-                <ul>
-                  <li>feeless transactions, using per-tx PoW (experimental)</li>
-                  <li>You only sign one transaction manually at the beginning of the game.</li>
-                </ul>
+                <strong>Decentralized</strong>: The DAO operates this project, although most
+                blockchain games are centralized.
               </li>
-              <li>fully open-sourced</li>
-              <li>self-funded independent project</li>
+              <li>
+                <strong>Community</strong>: Open Emoji Battler is not a company. Instead,{" "}
+                <a
+                  href="https://forum.open-emoji-battler.community/t/topic/38"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  it's an independent community project
+                </a>{" "}
+                made by contributors.
+              </li>
+              <li>
+                <strong>Fun</strong>: We have skilled gameplay! It's a browser auto-battler game
+                inspired by Hearthstone Battlegrounds. Players can battle and earn in strategic PvP
+                matches with emojis. 😁
+              </li>
             </ul>
           </div>
-          <h1 className={"title"}>Future</h1>
+          <h1 className={"title"}>Plan</h1>
           <div className={"content"}>
+            <p>We already have a minimum playable prototype. So what's coming next?</p>
             <ul>
-              <li>introduce more fun game, new features</li>
-              <li>distribute NFTs</li>
-              <li>use DOT or KSM</li>
-              <li>become a decentralized sustainable project</li>
-              <li>
-                and more...
-                <ul>
-                  <li>What do you want? Join us!</li>
-                </ul>
-              </li>
+              <li>Gameplay upgrade</li>
+              <li>EMO NFT</li>
+              <li>DAO</li>
+              <li>Play-to-earn</li>
+              <li>Tutorial</li>
+              <li>and more...</li>
             </ul>
+            <p>
+              The detail can be found{" "}
+              <a
+                href="https://forum.open-emoji-battler.community/t/topic/37"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                here
+              </a>
+              .
+            </p>
           </div>
         </div>
       </section>
