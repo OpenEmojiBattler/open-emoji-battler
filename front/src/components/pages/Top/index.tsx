@@ -148,6 +148,17 @@ export function Top() {
               .
             </p>
           </div>
+          <h1 className={"title"}>Partnerships</h1>
+          <div className={"content"}>
+            <ul>
+              <li>
+                Media partner (Japan):{" "}
+                <a href="https://blockchaingame.jp/" target="_blank" rel="noopener noreferrer">
+                  BlockchainGame Info
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
     </>
