@@ -100,12 +100,12 @@ export function Top() {
           <div className={"content"}>
             <ul>
               <li>
-                <strong>Blockchain</strong>: This is an on-chain, open-source game built in the
+                <strong>Blockchain</strong>: This is a fully on-chain, open-source game built in the
                 Polkadot ecosystem.
               </li>
               <li>
-                <strong>Decentralized</strong>: The DAO operates this project, although most
-                blockchain games are centralized.
+                <strong>Decentralized</strong>: The DAO governs this project. In contrast, most
+                other blockchain games are centralized.
               </li>
               <li>
                 <strong>Community</strong>: Open Emoji Battler is not a company. Instead,{" "}
@@ -132,7 +132,7 @@ export function Top() {
               <li>Gameplay upgrade</li>
               <li>EMO NFT</li>
               <li>DAO</li>
-              <li>Play-to-earn</li>
+              <li>Play-to-Earn</li>
               <li>Tutorial</li>
               <li>and more...</li>
             </ul>
