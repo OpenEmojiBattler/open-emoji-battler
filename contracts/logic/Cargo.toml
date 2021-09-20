@@ -20,6 +20,7 @@ name = "logic"
 path = "lib.rs"
 crate-type = [
     "cdylib",
+    "rlib",
 ]
 
 [features]
