@@ -5,11 +5,11 @@ use ink_lang as ink;
 #[ink::contract]
 mod contract {
     #[ink(storage)]
-    pub struct Forwarder {
+    pub struct Logic {
         value: bool,
     }
 
-    impl Forwarder {
+    impl Logic {
         #[ink(constructor)]
         pub fn new(init_value: bool) -> Self {
             Self { value: init_value }
@@ -34,10 +34,10 @@ mod contract {
 
         #[ink::test]
         fn it_works() {
-            let mut forwarder = Forwarder::new(false);
-            assert_eq!(forwarder.get(), false);
-            forwarder.flip();
-            assert_eq!(forwarder.get(), true);
+            let mut logic = Logic::new(false);
+            assert_eq!(logic.get(), false);
+            logic.flip();
+            assert_eq!(logic.get(), true);
         }
     }
 }
