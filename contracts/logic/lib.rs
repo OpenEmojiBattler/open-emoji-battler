@@ -3,41 +3,30 @@
 use ink_lang as ink;
 
 #[ink::contract]
-mod contract {
+pub mod contract {
+    use ink_env::call::FromAccountId;
+    use storage::contract::Storage;
+
     #[ink(storage)]
     pub struct Logic {
-        value: bool,
+        storage_account_id: AccountId,
     }
 
     impl Logic {
         #[ink(constructor)]
-        pub fn new(init_value: bool) -> Self {
-            Self { value: init_value }
+        pub fn new(storage_account_id: AccountId) -> Self {
+            Self { storage_account_id }
         }
 
         #[ink(message)]
-        pub fn flip(&mut self) {
-            self.value = !self.value;
+        pub fn get_storage_account_id(&self) -> AccountId {
+            self.storage_account_id
         }
 
         #[ink(message)]
-        pub fn get(&self) -> bool {
-            self.value
-        }
-    }
-
-    #[cfg(test)]
-    mod tests {
-        use super::*;
-
-        use ink_lang as ink;
-
-        #[ink::test]
-        fn it_works() {
-            let mut logic = Logic::new(false);
-            assert_eq!(logic.get(), false);
-            logic.flip();
-            assert_eq!(logic.get(), true);
+        pub fn do_something(&self) {
+            let mut storage = Storage::from_account_id(self.storage_account_id);
+            storage.set(true);
         }
     }
 }
