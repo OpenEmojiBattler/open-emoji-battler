@@ -1,4 +1,12 @@
 {
   "private": true,
-  "workspaces": ["common/js", "front", "data", "tools", "chain/scripts", "onetime-scripts"]
+  "workspaces": [
+    "common/js",
+    "front",
+    "data",
+    "tools",
+    "chain/scripts",
+    "onetime-scripts",
+    "contracts/deploy"
+  ]
 }
