@@ -11,9 +11,12 @@ export const instantiateContract = async (
   contractFileName: string,
   constructorArgs: any[]
 ) => {
-  const contractJson = readFileSync(contractFileName, "utf8")
+  const abi = readFileSync(`${contractFileName}.json`, "utf8")
+  const wasm = readFileSync(`${contractFileName}.wasm`)
 
-  const code = new CodePromise(api, contractJson, null)
+  const contractName = JSON.parse(abi).contract.name
+
+  const code = new CodePromise(api, abi, wasm)
 
   const endowment = 1000000000n * 1000000n
   const gasLimit = 200000n * 1000000n
@@ -26,11 +29,11 @@ export const instantiateContract = async (
           unsub()
           if (result.findRecord("system", "ExtrinsicSuccess")) {
             const c: ContractPromise = (result as any).contract
-            console.log(`contract instantiated: ${contractFileName} ${c.address.toString()}`)
+            console.log(`contract instantiated: ${contractName} ${c.address.toString()}`)
             resolve(c)
             return
           } else {
-            reject(`contract instantiation error: ${contractFileName}`)
+            reject(`contract instantiation error: ${contractName}`)
             return
           }
         }
@@ -40,9 +43,9 @@ export const instantiateContract = async (
   return contract
 }
 
-export const getContract = (api: ApiPromise, metadataFileName: string, address: string) => {
-  const metadataJson = readFileSync(metadataFileName, "utf8")
-  return new ContractPromise(api, metadataJson, address)
+export const getContract = (api: ApiPromise, contractFileName: string, address: string) => {
+  const abi = readFileSync(`${contractFileName}.json`, "utf8")
+  return new ContractPromise(api, abi, address)
 }
 
 export const query = async (
