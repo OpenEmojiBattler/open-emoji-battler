@@ -422,6 +422,17 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
+"@polkadot/api-contract@6.0.5":
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@polkadot/api-contract/-/api-contract-6.0.5.tgz#5edc6c9069bdcb55950d7f4580876a71203643d1"
+  integrity sha512-3+LtmDcDXEwqnqnKHnnmTX3o4j75zSH4XVW2tMCigtE9rgHt1mXMpFNYgZGeCjT38+OexXk3BZ5Lb6hnTddopQ==
+  dependencies:
+    "@babel/runtime" "^7.15.4"
+    "@polkadot/api" "6.0.5"
+    "@polkadot/types" "6.0.5"
+    "@polkadot/util" "^7.4.1"
+    rxjs "^7.3.0"
+
 "@polkadot/api-derive@6.0.5":
   version "6.0.5"
   resolved "https://registry.yarnpkg.com/@polkadot/api-derive/-/api-derive-6.0.5.tgz#f75038822517602ad7cb6421a32e282f7570f16a"
