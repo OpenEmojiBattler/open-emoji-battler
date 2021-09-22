@@ -19,7 +19,7 @@
   "dependencies": {
     "@polkadot/typegen": "6.0.5",
     "prettier": "2.2.1",
-    "ts-node": "9.1.1",
-    "typescript": "4.1.3"
+    "ts-node": "10.2.1",
+    "typescript": "4.4.3"
   }
 }
