@@ -4,7 +4,7 @@ import { TypeRegistry } from "@polkadot/types"
 
 import type { SubmittableExtrinsic } from "@polkadot/api/types"
 import type { SubmittableResult } from "@polkadot/api/submittable"
-import type { IKeyringPair, InterfaceTypes } from "@polkadot/types/types"
+import type { IKeyringPair, Codec, DetectCodec } from "@polkadot/types/types"
 import type { DispatchErrorModule } from "@polkadot/types/interfaces"
 import type { Hash } from "@polkadot/types/interfaces/runtime"
 
@@ -140,16 +140,16 @@ export const sudo = (
 }
 
 const buildErrorText = (api: ApiPromise, mod: DispatchErrorModule) => {
-  const { documentation, index, name, section } = api.registry.findMetaError(mod)
-  return `tx: ${section}.${name}: (${index}) ${documentation.join(" ")}`
+  const { docs, index, name, section } = api.registry.findMetaError(mod)
+  return `tx: ${section}.${name}: (${index}) ${docs.join(" ")}`
 }
 
 export const getRuntimeVersion = () => getApi().runtimeVersion
 
-export const createType = <K extends keyof InterfaceTypes>(
+export const createType = <T extends Codec = Codec, K extends string = string>(
   type: K,
   ...params: unknown[]
-): InterfaceTypes[K] => registry.createType(type, ...params)
+): DetectCodec<T, K> => registry.createType(type, ...params)
 
 // slow, be careful
 export const buildKeyringPair = (mnemonic: string) =>
