@@ -4,7 +4,7 @@ import { cryptoWaitReady } from "@polkadot/util-crypto"
 import { getEnv } from "./utils"
 
 export const getEndpointAndKeyringPair = async (envName: string, mnemonic: string) => {
-  const endpoint = getEnv(envName).endpoint
+  const endpoint = getEnv(envName).chainEndpoint
 
   if (!mnemonic) {
     console.log("Use Alice")

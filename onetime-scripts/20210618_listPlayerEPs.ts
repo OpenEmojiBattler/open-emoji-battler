@@ -4,7 +4,7 @@ import { connected, getEnv, query } from "common"
 
 // result: https://gist.github.com/tash-2s/1c5e548c0722eef3ed548ec13927c3d1
 
-connected(getEnv("production").endpoint, async () =>
+connected(getEnv("production").chainEndpoint, async () =>
   query((q) => q.game.playerEp.entries()).then((entries) => {
     const data: [string, number][] = []
 

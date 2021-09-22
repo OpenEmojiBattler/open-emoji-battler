@@ -1,11 +1,14 @@
 {
   "local": {
-    "endpoint": "ws://127.0.0.1:9944"
+    "chainEndpoint": "ws://127.0.0.1:9944",
+    "contractsEndpoint": "ws://127.0.0.1:9988"
   },
   "staging": {
-    "endpoint": "wss://node-6769173380176625664.jm.onfinality.io/ws"
+    "chainEndpoint": "wss://node-6769173380176625664.jm.onfinality.io/ws",
+    "contractsEndpoint": "ws://127.0.0.1:9988"
   },
   "production": {
-    "endpoint": "wss://proto0.open-emoji-battler.community/"
+    "chainEndpoint": "wss://proto0.open-emoji-battler.community/",
+    "contractsEndpoint": "ws://127.0.0.1:9988"
   }
 }

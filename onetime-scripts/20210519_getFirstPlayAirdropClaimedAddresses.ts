@@ -3,7 +3,7 @@ import { encodeAddress } from "@polkadot/util-crypto"
 
 import { connected, getEnv, query } from "common"
 
-connected(getEnv("production").endpoint, async () =>
+connected(getEnv("production").chainEndpoint, async () =>
   query((q) => q.firstAirdrop.playerAirdropDestinationKusamaAccountId.entries()).then((entries) => {
     const data = {} as any
     entries.forEach(([key, value]) => {

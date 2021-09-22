@@ -40,7 +40,7 @@ export function Navbar() {
 function NetName() {
   const endpoint = getEndpoint()
 
-  if (endpoint === getEnv("production").endpoint) {
+  if (endpoint === getEnv("production").chainEndpoint) {
     return <span className={"tag"}>PrototypeNet</span>
   } else {
     return (
