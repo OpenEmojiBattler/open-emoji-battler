@@ -55,14 +55,14 @@ export const query = async (
   fnArgs: any[],
   caller: string
 ) => {
-  const { gasConsumed, result, output } = await contract.query[fnName](
+  const { gasRequired, result, output } = await contract.query[fnName](
     caller,
     { value: 0, gasLimit: -1 },
     ...fnArgs
   )
   if (result.isOk) {
     console.log(
-      `query success: ${fnName} (gasConsumed: ${gasConsumed.toBigInt()}), returned: ${
+      `query success: ${fnName} (gasRequired: ${gasRequired.toBigInt()}), returned: ${
         output ? output.toHuman() : ""
       }`
     )
