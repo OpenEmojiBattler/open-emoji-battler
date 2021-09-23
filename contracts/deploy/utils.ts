@@ -1,4 +1,5 @@
-import { readFileSync } from "fs"
+import { readFileSync, writeFileSync } from "fs"
+import path from "path"
 
 import { WsProvider, ApiPromise } from "@polkadot/api"
 import { CodePromise, ContractPromise } from "@polkadot/api-contract"
@@ -9,13 +10,13 @@ import { getContractsEndpointAndKeyringPair } from "common/src/scriptUtils"
 export const instantiateContract = async (
   api: ApiPromise,
   pair: IKeyringPair,
-  contractFileName: string,
-  constructorArgs: any[]
+  contractName: string,
+  constructorArgs: any[],
+  dirname: string,
+  envName: string
 ) => {
-  const abi = readFileSync(`${contractFileName}.json`, "utf8")
-  const wasm = readFileSync(`${contractFileName}.wasm`)
-
-  const contractName = JSON.parse(abi).contract.name
+  const abi = readFileSync(path.resolve(dirname, `./${contractName}.json`), "utf8")
+  const wasm = readFileSync(path.resolve(dirname, `./${contractName}.wasm`))
 
   const code = new CodePromise(api, abi, wasm)
 
@@ -30,7 +31,6 @@ export const instantiateContract = async (
           unsub()
           if (result.findRecord("system", "ExtrinsicSuccess")) {
             const c: ContractPromise = (result as any).contract
-            console.log(`contract instantiated: ${contractName} ${c.address.toString()}`)
             resolve(c)
             return
           } else {
@@ -40,6 +40,13 @@ export const instantiateContract = async (
         }
       })
   })
+
+  writeFileSync(
+    path.resolve(dirname, `./instantiatedAddress.${contractName}.${envName}.json`),
+    `${JSON.stringify(contract.address.toString())}\n`
+  )
+
+  console.log(`contract instantiated: ${contractName} ${contract.address.toString()}`)
 
   return contract
 }
@@ -97,8 +104,9 @@ export const tx = (pair: IKeyringPair, contract: ContractPromise, fnName: string
   })
 
 export const getApiAndPair = async () => {
+  const envName = process.argv[2]
   const { endpoint, keyringPair } = await getContractsEndpointAndKeyringPair(
-    process.argv[2],
+    envName,
     process.argv[3]
   )
 
@@ -107,5 +115,5 @@ export const getApiAndPair = async () => {
     provider: wsProvider,
   })
 
-  return { api, pair: keyringPair }
+  return { envName, api, keyringPair }
 }

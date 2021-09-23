@@ -1,20 +1,36 @@
-import path from "path"
 import { instantiateContract, tx, getApiAndPair } from "../utils"
 
 const main = async () => {
-  const { api, pair } = await getApiAndPair()
+  const { envName, api, keyringPair } = await getApiAndPair()
 
-  const storageContract = await instantiateContract(api, pair, buildPath("./storage"), [false])
+  const storageContract = await instantiateContract(
+    api,
+    keyringPair,
+    "storage",
+    [false],
+    __dirname,
+    envName
+  )
 
-  const logicContract = await instantiateContract(api, pair, buildPath("./logic"), [
-    storageContract.address.toString(),
-  ])
+  const logicContract = await instantiateContract(
+    api,
+    keyringPair,
+    "logic",
+    [storageContract.address.toString()],
+    __dirname,
+    envName
+  )
 
-  await instantiateContract(api, pair, buildPath("./forwarder"), [logicContract.address.toString()])
+  await instantiateContract(
+    api,
+    keyringPair,
+    "forwarder",
+    [logicContract.address.toString()],
+    __dirname,
+    envName
+  )
 
-  await tx(pair, storageContract, "allowAccount", [logicContract.address.toString()])
+  await tx(keyringPair, storageContract, "allowAccount", [logicContract.address.toString()])
 }
-
-const buildPath = (relativePath: string) => path.resolve(__dirname, relativePath)
 
 main().catch(console.error).finally(process.exit)
