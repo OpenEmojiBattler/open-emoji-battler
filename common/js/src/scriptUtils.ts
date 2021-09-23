@@ -3,9 +3,21 @@ import { cryptoWaitReady } from "@polkadot/util-crypto"
 
 import { getEnv } from "./utils"
 
-export const getEndpointAndKeyringPair = async (envName: string, mnemonic: string) => {
+export const getChainEndpointAndKeyringPair = async (envName: string, mnemonic: string) => {
   const endpoint = getEnv(envName).chainEndpoint
+  const keyringPair = await getKeyringPair(mnemonic)
 
+  return { endpoint, keyringPair }
+}
+
+export const getContractsEndpointAndKeyringPair = async (envName: string, mnemonic: string) => {
+  const endpoint = getEnv(envName).contractsEndpoint
+  const keyringPair = await getKeyringPair(mnemonic)
+
+  return { endpoint, keyringPair }
+}
+
+const getKeyringPair = async (mnemonic: string) => {
   if (!mnemonic) {
     console.log("Use Alice")
   }
@@ -13,7 +25,5 @@ export const getEndpointAndKeyringPair = async (envName: string, mnemonic: strin
   await cryptoWaitReady()
   const keyring = new Keyring({ ss58Format: 42, type: "sr25519" })
 
-  const keyringPair = mnemonic ? keyring.addFromMnemonic(mnemonic) : keyring.addFromUri("//Alice")
-
-  return { endpoint, keyringPair }
+  return mnemonic ? keyring.addFromMnemonic(mnemonic) : keyring.addFromUri("//Alice")
 }

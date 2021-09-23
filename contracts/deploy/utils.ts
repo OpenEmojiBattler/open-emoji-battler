@@ -1,9 +1,10 @@
 import { readFileSync } from "fs"
+
 import { WsProvider, ApiPromise } from "@polkadot/api"
 import { CodePromise, ContractPromise } from "@polkadot/api-contract"
-import { Keyring } from "@polkadot/keyring"
-import { cryptoWaitReady } from "@polkadot/util-crypto"
 import type { IKeyringPair } from "@polkadot/types/types"
+
+import { getContractsEndpointAndKeyringPair } from "common/src/scriptUtils"
 
 export const instantiateContract = async (
   api: ApiPromise,
@@ -96,14 +97,15 @@ export const tx = (pair: IKeyringPair, contract: ContractPromise, fnName: string
   })
 
 export const getApiAndPair = async () => {
-  const wsProvider = new WsProvider("ws://127.0.0.1:9944")
+  const { endpoint, keyringPair } = await getContractsEndpointAndKeyringPair(
+    process.argv[2],
+    process.argv[3]
+  )
+
+  const wsProvider = new WsProvider(endpoint)
   const api = await ApiPromise.create({
     provider: wsProvider,
   })
 
-  await cryptoWaitReady()
-  const keyring = new Keyring({ ss58Format: 42, type: "sr25519" })
-  const pair = keyring.addFromUri("//Alice")
-
-  return { api, pair }
+  return { api, pair: keyringPair }
 }
