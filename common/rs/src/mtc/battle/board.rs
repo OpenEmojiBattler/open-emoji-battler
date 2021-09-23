@@ -8,7 +8,7 @@ use crate::{
     },
 };
 use anyhow::{anyhow, bail, ensure, Result};
-use rand::{seq::{IteratorRandom, SliceRandom}, Rng};
+use rand::{seq::SliceRandom, Rng};
 use rand_pcg::Pcg64Mcg;
 use sp_std::{cmp, prelude::*};
 
@@ -715,7 +715,10 @@ fn get_matched_emo_indexs_from_board_by_target_or_random(
             })
             .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, &e))
             .map(|(_, i)| i)
+            .collect::<Vec<_>>()
             .choose_multiple(rng, count.into())
+            .copied()
+            .collect::<Vec<u8>>(),
     };
     Ok(indexes)
 }
@@ -1253,7 +1256,7 @@ fn add_battle_ability_random(
         None
     };
 
-    for index in boards
+    for &index in boards
         .get_board(player_index)?
         .iter()
         .zip(0u8..)
@@ -1273,7 +1276,9 @@ fn add_battle_ability_random(
         })
         .filter(|(e, _)| is_matched_typ_and_triple_for_emo(typ_and_triple, &e))
         .map(|(_, i)| i)
+        .collect::<Vec<_>>()
         .choose_multiple(rng, count as usize * if is_triple_action { 2 } else { 1 })
+        .collect::<Vec<_>>()
     {
         add_ability_to_emo(
             boards.get_emo_mut(player_index, index)?,
