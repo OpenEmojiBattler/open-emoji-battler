@@ -10,9 +10,6 @@ import { Dev } from "../pages/Dev"
 import { MtcDebug } from "../pages/MtcDebug"
 import { EmoAbilityBuilder } from "../pages/EmoAbilityBuilder"
 import { Style } from "../pages/Style"
-import { PlayAirdrop } from "../pages/PlayAirdrop"
-import { RmrkAirdrop } from "../pages/RmrkAirdrop"
-import { UniqueAirdrop } from "../pages/UniqueAirdrop"
 
 export function Router(props: { route: Route }) {
   switch (props.route.id) {
@@ -32,12 +29,6 @@ export function Router(props: { route: Route }) {
       return <EmoAbilityBuilder />
     case "/style":
       return <Style />
-    case "/play_airdrop":
-      return <PlayAirdrop />
-    case "/rmrk_airdrop":
-      return <RmrkAirdrop />
-    case "/unique_airdrop":
-      return <UniqueAirdrop />
     case "/not_found":
     default:
       return <h1>page not found</h1>
