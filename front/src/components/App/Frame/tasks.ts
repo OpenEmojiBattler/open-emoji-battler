@@ -86,7 +86,7 @@ export const getEndpoint = () => {
   if (endpoint) {
     return endpoint
   }
-  return getEnv(process.env.OEB_ENV).endpoint
+  return getEnv(process.env.OEB_ENV).chainEndpoint
 }
 
 export const setEndpoint = (endpoint: string) => {

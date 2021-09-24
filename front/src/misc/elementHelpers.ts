@@ -51,13 +51,9 @@ export const getChildDivByIndex = (element: HTMLDivElement, index: number) => {
   throw new Error(`not found div: ${index}`)
 }
 
-// not accurate, see https://github.com/microsoft/TypeScript/issues/26073
-type Keyframes = {
-  [P in keyof CSSStyleDeclaration]?: string | string[]
-}
 export const animateIndefinitely = (
   element: HTMLElement,
-  keyframes: Keyframes,
+  keyframes: PropertyIndexedKeyframes,
   options: KeyframeAnimationOptions
 ) =>
   element.animate(keyframes, options).finished.then(() => {

@@ -2,10 +2,10 @@
 import fs from "fs"
 
 import { tx, query, connected } from "common"
-import { getEndpointAndKeyringPair } from "common/src/scriptUtils"
+import { getChainEndpointAndKeyringPair } from "common/src/scriptUtils"
 
 const main = async () => {
-  const { endpoint, keyringPair } = await getEndpointAndKeyringPair(
+  const { endpoint, keyringPair } = await getChainEndpointAndKeyringPair(
     process.argv[2],
     process.argv[3]
   )

@@ -57,7 +57,7 @@ function Endpoint() {
   }
 
   const changeTo = (envName: string) => {
-    setEndpoint(getEnv(envName).endpoint)
+    setEndpoint(getEnv(envName).chainEndpoint)
     window.location.reload()
   }
 

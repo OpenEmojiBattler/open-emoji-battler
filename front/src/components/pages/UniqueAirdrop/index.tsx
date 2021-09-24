@@ -216,9 +216,9 @@ const tx = async (address: string, setErrorMessage: (s: string) => void) => {
           if (dispatchError) {
             if (dispatchError.isModule) {
               const decoded = apiPromise.registry.findMetaError(dispatchError.asModule)
-              const { documentation, name, section } = decoded
+              const { docs, name, section } = decoded
 
-              reject(`${section}.${name}: ${documentation.join(" ")}`)
+              reject(`${section}.${name}: ${docs.join(" ")}`)
             } else {
               reject(dispatchError.toString())
             }

@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@polkadot/api/augment": ["../../common/js/src/interfaces/augment-api.ts"],
+      "@polkadot/types/augment": ["../../common/js/src/interfaces/augment-types.ts"]
+    }
+  }
+}
