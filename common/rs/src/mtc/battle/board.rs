@@ -8,7 +8,10 @@ use crate::{
     },
 };
 use anyhow::{anyhow, bail, ensure, Result};
-use rand::{seq::{IteratorRandom, SliceRandom}, Rng};
+use rand::{
+    seq::{IteratorRandom, SliceRandom},
+    Rng,
+};
 use rand_pcg::Pcg64Mcg;
 use sp_std::{cmp, prelude::*};
 
@@ -715,7 +718,7 @@ fn get_matched_emo_indexs_from_board_by_target_or_random(
             })
             .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, &e))
             .map(|(_, i)| i)
-            .choose_multiple(rng, count.into())
+            .choose_multiple(rng, count.into()),
     };
     Ok(indexes)
 }
