@@ -316,9 +316,7 @@ fn get_defense_emo_index(
         if let Some(attractive_emo_index) = get_attractive_emo_index(emos, rng) {
             attractive_emo_index
         } else {
-            // be carefull, `rng.gen_range(0usize, 3usize)` produces different results on
-            // targets, like wasm (32) and mac (64)
-            rng.gen_range(0u8, emos.len() as u8)
+            rng.gen_range(0u8..(emos.len() as u8))
         },
     )
 }

@@ -19,6 +19,8 @@ scale-info = { version = "0.6.0", default-features = false, features = ["derive"
 
 storage = { version = "0.1.0", path = "../storage", default-features = false, features = ["ink-as-dependency"] }
 
+common = { path = '../../common/rs', version = '0.1.0', default-features = false }
+
 [lib]
 name = "logic"
 path = "lib.rs"
@@ -40,5 +42,7 @@ std = [
     "scale-info/std",
 
     "storage/std",
+
+    'common/std',
 ]
 ink-as-dependency = []
