@@ -5,27 +5,28 @@ edition = "2018"
 license = "Apache-2.0"
 
 [dependencies]
-rand = { version = "0.8.4", default-features = false, features=['alloc'] }
+rand = { version = "0.8.4", default-features = false, features=["alloc"] }
 rand_pcg = { version = "0.3.1", default-features = false }
-parity-scale-codec = { version = '2.0.0', default-features = false, features = ['derive'] }
-scale-info = { version = "0.6", default-features = false, features = ["derive"], optional = true }
-ink_storage = { version = "3.0.0-rc5", default-features = false, optional = true }
-sp-std = { version = '3.0.0', default-features = false }
+parity-scale-codec = { version = "2.0.0", default-features = false, features = ["derive"] }
+sp-std = { version = "3.0.0", default-features = false }
 anyhow = { version = "1.0.37", default-features = false }
 blake2-rfc = { version = "0.2.18", default-features = false }
 libm = { version = "0.2.1", default-features = false }
+
+scale-info = { version = "0.6", default-features = false, features = ["derive"], optional = true }
+ink_storage = { version = "3.0.0-rc5", default-features = false, optional = true }
 
 [dev-dependencies]
 hex = { version = "0.4.2" }
 criterion = "0.3.3"
 
 [features]
-default = ['std', 'view-logs']
+default = ["std", "view-logs"]
 std = [
-    'rand/std',
-    'parity-scale-codec/std',
-    'sp-std/std',
-    'anyhow/std',
+    "rand/std",
+    "parity-scale-codec/std",
+    "sp-std/std",
+    "anyhow/std",
 ]
 view-logs = []
 ink = ["scale-info", "ink_storage"]
