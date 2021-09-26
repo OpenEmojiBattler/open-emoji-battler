@@ -12,6 +12,7 @@ const writeRsFile = () => {
   const lines = ["// Auto-generated via `yarn generate-codec-types`"]
   lines.push("use parity_scale_codec::{Decode, Encode};")
   lines.push("use sp_std::{collections::btree_map::BTreeMap, prelude::*};")
+  lines.push('#[cfg(feature = "std")]\nuse scale_info::TypeInfo;')
 
   genRsLines(defs, lines)
 
@@ -20,9 +21,9 @@ const writeRsFile = () => {
 }
 
 const rsDeriveStatement =
-  "#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]"
+  '#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "std", derive(TypeInfo))]'
 const rsDeriveDefaultStatement =
-  "#[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]"
+  '#[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "std", derive(TypeInfo))]'
 
 const genRsLines = (defs: AnyDef[], lines: string[]) => {
   for (const def of defs) {

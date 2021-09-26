@@ -1,26 +1,32 @@
 // Auto-generated via `yarn generate-codec-types`
 use parity_scale_codec::{Decode, Encode};
+#[cfg(feature = "std")]
+use scale_info::TypeInfo;
 use sp_std::{collections::btree_map::BTreeMap, prelude::*};
 
 pub mod mtc {
     use super::*;
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct Emo {
         pub id: u16,
         pub base_id: u16,
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct GradeAndBoard {
         pub grade: u8,
         pub board: mtc::Board,
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct Board(pub Vec<mtc::BoardEmo>);
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct BoardEmo {
         pub mtc_emo_ids: Vec<u16>,
         pub base_id: u16,
@@ -28,26 +34,31 @@ pub mod mtc {
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct Ghost {
         pub history: Vec<mtc::GradeAndGhostBoard>,
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct GradeAndGhostBoard {
         pub grade: u8,
         pub board: mtc::GhostBoard,
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct GhostBoard(pub Vec<mtc::GhostBoardEmo>);
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct GhostBoardEmo {
         pub base_id: u16,
         pub attributes: emo::Attributes,
     }
 
     #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub enum GhostState {
         Active { health: u8 },
         Retired { final_turn: u8 },
@@ -64,12 +75,15 @@ pub mod mtc {
         use super::*;
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub struct Catalog(pub Vec<mtc::shop::CatalogLine>);
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub struct CatalogLine(pub Vec<mtc::Emo>);
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub enum PlayerOperation {
             Buy { mtc_emo_id: u16, index: u8 },
             Sell { index: u8 },
@@ -87,9 +101,11 @@ pub mod mtc {
         }
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub struct BoardLogs(pub Vec<mtc::shop::BoardLog>);
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub enum BoardLog {
             Add {
                 index: u8,
@@ -132,9 +148,11 @@ pub mod mtc {
         use super::*;
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub struct Logs(pub Vec<mtc::battle::Log>);
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub enum Log {
             Attack {
                 attack_player_index: u8,
@@ -202,9 +220,11 @@ pub mod emo {
     use super::*;
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct Bases(pub BTreeMap<u16, emo::Base>);
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct Base {
         pub id: u16,
         pub typ: emo::Typ,
@@ -216,6 +236,7 @@ pub mod emo {
     }
 
     #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub enum Typ {
         Human,
         Nature,
@@ -229,6 +250,7 @@ pub mod emo {
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+    #[cfg_attr(feature = "std", derive(TypeInfo))]
     pub struct Attributes {
         pub attack: u16,
         pub health: u16,
@@ -240,6 +262,7 @@ pub mod emo {
         use super::*;
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub enum Ability {
             Shop(emo::ability::shop::Shop),
             Battle(emo::ability::battle::Battle),
@@ -254,6 +277,7 @@ pub mod emo {
             use super::*;
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum Shop {
                 Pre(emo::ability::shop::Pre),
                 Peri(emo::ability::shop::Peri),
@@ -266,6 +290,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum Pre {
                 Normal(emo::ability::shop::NormalAction),
                 Random(emo::ability::shop::RandomAction),
@@ -277,6 +302,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum Peri {
                 AsOneself {
                     trigger: emo::ability::shop::PeriAsOneselfTrigger,
@@ -297,6 +323,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum Special {
                 Placeholder,
             }
@@ -307,6 +334,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum PeriAsOneselfTrigger {
                 Set,
                 Sell,
@@ -321,6 +349,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum PeriAsAllyTrigger {
                 AllySet {
                     typ_and_triple: emo::ability::TypOptAndIsTripleOpt,
@@ -335,6 +364,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum PeriAsAllyAction {
                 OneselfTripleNormal(emo::ability::shop::NormalAction),
                 Custom(emo::ability::shop::AsAllyAction),
@@ -346,6 +376,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum NormalAction {
                 SetEmo {
                     base_id: u16,
@@ -391,6 +422,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum RandomAction {
                 IncreaseStatsOfMenagerie {
                     typ_count: u8,
@@ -409,6 +441,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum AsAllyAction {
                 TriggerSetActions,
             }
@@ -423,6 +456,7 @@ pub mod emo {
             use super::*;
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum Battle {
                 General(emo::ability::battle::General),
                 Special(emo::ability::battle::Special),
@@ -434,6 +468,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum General {
                 AsOneself {
                     trigger: emo::ability::battle::GeneralAsOneselfTrigger,
@@ -454,6 +489,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum Special {
                 Shield,
                 Attractive,
@@ -466,6 +502,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum GeneralAsOneselfTrigger {
                 Pre,
                 Retire,
@@ -488,6 +525,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum GeneralAsAllyTrigger {
                 AllySet {
                     typ_and_triple: emo::ability::TypOptAndIsTripleOpt,
@@ -505,6 +543,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum GeneralAsAllyAction {
                 OneselfTripleNormal(emo::ability::battle::NormalAction),
                 Custom(emo::ability::battle::AsAllyAction),
@@ -516,6 +555,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum NormalAction {
                 SetEmo {
                     side: emo::ability::Side,
@@ -562,6 +602,7 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+            #[cfg_attr(feature = "std", derive(TypeInfo))]
             pub enum AsAllyAction {
                 TriggerRetireActions,
             }
@@ -573,6 +614,7 @@ pub mod emo {
         }
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub enum TargetOrRandom {
             Target(emo::ability::Target),
             Random {
@@ -587,6 +629,7 @@ pub mod emo {
         }
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub enum Target {
             Oneself,
             Others {
@@ -601,6 +644,7 @@ pub mod emo {
         }
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub enum Destination {
             Left,
             Right,
@@ -613,12 +657,14 @@ pub mod emo {
         }
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub struct TypOptAndIsTripleOpt {
             pub typ_opt: Option<emo::Typ>,
             pub is_triple_opt: Option<bool>,
         }
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "std", derive(TypeInfo))]
         pub enum Side {
             Ally,
             Rival,

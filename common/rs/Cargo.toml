@@ -8,6 +8,7 @@ license = "Apache-2.0"
 rand = { version = "0.7.3", default-features = false, features=['alloc'] }
 rand_pcg = "0.2.1"
 parity-scale-codec = { version = '2.0.0', default-features = false, features = ['derive'] }
+scale-info = { version = "0.6", default-features = false, features = ["derive"], optional = true }
 sp-std = { version = '3.0.0', default-features = false }
 anyhow = { version = "1.0.37", default-features = false }
 blake2-rfc = { version = "0.2.18", default-features = false }
@@ -22,6 +23,8 @@ default = ['std', 'view-logs']
 std = [
     'rand/std',
     'parity-scale-codec/std',
+    "scale-info",
+    "scale-info/std",
     'sp-std/std',
     'anyhow/std',
 ]
