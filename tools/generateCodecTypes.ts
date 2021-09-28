@@ -12,8 +12,9 @@ const writeRsFile = () => {
   const lines = ["// Auto-generated via `yarn generate-codec-types`"]
   lines.push("use parity_scale_codec::{Decode, Encode};")
   lines.push("use sp_std::{collections::btree_map::BTreeMap, prelude::*};")
-  lines.push('#[cfg(feature = "ink")]\nuse scale_info::TypeInfo;')
   lines.push('#[cfg(feature = "ink")]\nuse ink_storage::traits::{PackedLayout, SpreadLayout};')
+  lines.push('#[cfg(feature = "ink-std")]\nuse ink_storage::traits::StorageLayout;')
+  lines.push('#[cfg(feature = "ink-std")]\nuse scale_info::TypeInfo;')
 
   genRsLines(defs, lines)
 
@@ -22,9 +23,9 @@ const writeRsFile = () => {
 }
 
 const rsDeriveStatement =
-  '#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "ink", derive(TypeInfo, PackedLayout, SpreadLayout))]'
+  '#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "ink", derive(PackedLayout, SpreadLayout))]\n#[cfg_attr(feature = "ink-std", derive(TypeInfo, StorageLayout))]'
 const rsDeriveDefaultStatement =
-  '#[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "ink", derive(TypeInfo, PackedLayout, SpreadLayout))]'
+  '#[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "ink", derive(PackedLayout, SpreadLayout))]\n#[cfg_attr(feature = "ink-std", derive(TypeInfo, StorageLayout))]'
 
 const genRsLines = (defs: AnyDef[], lines: string[]) => {
   for (const def of defs) {

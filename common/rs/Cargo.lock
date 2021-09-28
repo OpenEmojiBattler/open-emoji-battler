@@ -171,6 +171,7 @@ dependencies = [
  "blake2-rfc",
  "criterion",
  "hex",
+ "ink_primitives",
  "ink_storage",
  "libm",
  "parity-scale-codec",
@@ -405,8 +406,7 @@ dependencies = [
 [[package]]
 name = "ink_allocator"
 version = "3.0.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f39954de96dca7cb5ffc6d6fcf7cd97cd45312be03b3f3028fa0fe9bfb0f4e3"
+source = "git+https://github.com/paritytech/ink?rev=fd94d38#fd94d383ff81bd1f8729679a031bf2f4514cf670"
 dependencies = [
  "cfg-if",
 ]
@@ -414,8 +414,7 @@ dependencies = [
 [[package]]
 name = "ink_env"
 version = "3.0.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dda6dd01c7745fd1311169cb925f20f1947dec7697e2e1fe0eea72e396e36688"
+source = "git+https://github.com/paritytech/ink?rev=fd94d38#fd94d383ff81bd1f8729679a031bf2f4514cf670"
 dependencies = [
  "arrayref",
  "blake2",
@@ -439,8 +438,7 @@ dependencies = [
 [[package]]
 name = "ink_metadata"
 version = "3.0.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58bb6d6a71033f242b8d49c95b9c84026cff394f63e57be8b7f10c2fff9167bf"
+source = "git+https://github.com/paritytech/ink?rev=fd94d38#fd94d383ff81bd1f8729679a031bf2f4514cf670"
 dependencies = [
  "derive_more",
  "impl-serde",
@@ -453,8 +451,7 @@ dependencies = [
 [[package]]
 name = "ink_prelude"
 version = "3.0.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c803d9d385fcf61b81f8b403fa32eda22ff2070fc45bf433ec5864266423708b"
+source = "git+https://github.com/paritytech/ink?rev=fd94d38#fd94d383ff81bd1f8729679a031bf2f4514cf670"
 dependencies = [
  "cfg-if",
 ]
@@ -462,8 +459,7 @@ dependencies = [
 [[package]]
 name = "ink_primitives"
 version = "3.0.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "584844b21d3e2c2850c3caa81178ebe7e6ff35b201df4b332a098bd37d82d3fa"
+source = "git+https://github.com/paritytech/ink?rev=fd94d38#fd94d383ff81bd1f8729679a031bf2f4514cf670"
 dependencies = [
  "ink_prelude",
  "parity-scale-codec",
@@ -473,8 +469,7 @@ dependencies = [
 [[package]]
 name = "ink_storage"
 version = "3.0.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4cf281936009b6d35db12e0d09bd6e7ce927fd8740fd020dfd9d9903377bbe2f"
+source = "git+https://github.com/paritytech/ink?rev=fd94d38#fd94d383ff81bd1f8729679a031bf2f4514cf670"
 dependencies = [
  "array-init",
  "cfg-if",
@@ -492,8 +487,7 @@ dependencies = [
 [[package]]
 name = "ink_storage_derive"
 version = "3.0.0-rc5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c52717c7a724be3482bb2b5039672e5673ef28da206f7051e84fa1db2fa3fa8c"
+source = "git+https://github.com/paritytech/ink?rev=fd94d38#fd94d383ff81bd1f8729679a031bf2f4514cf670"
 dependencies = [
  "proc-macro2",
  "quote",
