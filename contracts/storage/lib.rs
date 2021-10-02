@@ -10,25 +10,26 @@ pub mod contract {
     use ink_prelude::vec::Vec as StdVec;
     #[cfg(not(feature = "ink-as-dependency"))]
     use ink_storage::collections::HashMap as StorageMap;
+    use ink_storage::Lazy;
 
     #[ink(storage)]
     pub struct Storage {
-        emo_bases: emo::Bases,
-        deck_fixed_emo_base_ids: StdVec<u16>,
-        deck_built_emo_base_ids: StdVec<u16>,
-        matchmaking_ghosts: StdVec<(AccountId, mtc::Ghost)>,
-        player_seed: StorageMap<AccountId, u64>,
+        emo_bases: Lazy<emo::Bases>,
+        deck_fixed_emo_base_ids: Lazy<StdVec<u16>>,
+        deck_built_emo_base_ids: Lazy<StdVec<u16>>,
+        matchmaking_ghosts: Lazy<StdVec<(AccountId, mtc::Ghost)>>,
+        player_seed: Lazy<StorageMap<AccountId, u64>>,
 
-        player_pool: StorageMap<AccountId, StdVec<mtc::Emo>>,
-        player_health: StorageMap<AccountId, u8>,
-        player_grade_and_board_history: StorageMap<AccountId, StdVec<mtc::GradeAndBoard>>,
-        player_upgrade_coin: StorageMap<AccountId, u8>,
-        player_ghosts: StorageMap<AccountId, StdVec<(AccountId, mtc::Ghost)>>,
-        player_ghost_states: StorageMap<AccountId, StdVec<mtc::GhostState>>,
-        player_battle_ghost_index: StorageMap<AccountId, u8>,
+        player_pool: Lazy<StorageMap<AccountId, StdVec<mtc::Emo>>>,
+        player_health: Lazy<StorageMap<AccountId, u8>>,
+        player_grade_and_board_history: Lazy<StorageMap<AccountId, StdVec<mtc::GradeAndBoard>>>,
+        player_upgrade_coin: Lazy<StorageMap<AccountId, u8>>,
+        player_ghosts: Lazy<StorageMap<AccountId, StdVec<(AccountId, mtc::Ghost)>>>,
+        player_ghost_states: Lazy<StorageMap<AccountId, StdVec<mtc::GhostState>>>,
+        player_battle_ghost_index: Lazy<StorageMap<AccountId, u8>>,
 
         // allowed accounts
-        allowed_accounts: StdVec<AccountId>,
+        allowed_accounts: Lazy<StdVec<AccountId>>,
     }
 
     impl Storage {
@@ -48,7 +49,7 @@ pub mod contract {
                 player_ghost_states: Default::default(),
                 player_battle_ghost_index: Default::default(),
 
-                allowed_accounts: std_vec![Self::env().caller()],
+                allowed_accounts: Lazy::new(std_vec![Self::env().caller()]),
             }
         }
 
@@ -60,7 +61,7 @@ pub mod contract {
         #[ink(message)]
         pub fn set_emo_bases(&mut self, value: emo::Bases) {
             self.only_allowed_caller();
-            self.emo_bases = value;
+            *self.emo_bases = value;
         }
 
         #[ink(message)]
@@ -71,7 +72,7 @@ pub mod contract {
         #[ink(message)]
         pub fn set_deck_fixed_emo_base_ids(&mut self, value: StdVec<u16>) {
             self.only_allowed_caller();
-            self.deck_fixed_emo_base_ids = value;
+            *self.deck_fixed_emo_base_ids = value;
         }
 
         #[ink(message)]
@@ -82,7 +83,7 @@ pub mod contract {
         #[ink(message)]
         pub fn set_deck_built_emo_base_ids(&mut self, value: StdVec<u16>) {
             self.only_allowed_caller();
-            self.deck_built_emo_base_ids = value;
+            *self.deck_built_emo_base_ids = value;
         }
 
         #[ink(message)]
@@ -93,7 +94,7 @@ pub mod contract {
         #[ink(message)]
         pub fn set_matchmaking_ghosts(&mut self, value: StdVec<(AccountId, mtc::Ghost)>) {
             self.only_allowed_caller();
-            self.matchmaking_ghosts = value;
+            *self.matchmaking_ghosts = value;
         }
 
         #[ink(message)]
