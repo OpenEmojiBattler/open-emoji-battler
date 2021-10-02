@@ -56,16 +56,14 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn start_mtc(&self, deck_emo_base_ids: [u16; 6]) {
-            let caller = self.env().caller();
+        pub fn start_mtc(&self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
             let mut storage = Storage::from_account_id(self.storage_account_id);
 
             if storage.get_player_pool(caller).is_some() {
                 self.cleanup_finished(&mut storage, caller);
             }
             // FIXME
-
-            let seed = get_random_seed();
+            // let seed = get_random_seed();
         }
 
         #[ink(message)]

@@ -158,11 +158,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "codec_types_derive"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "common"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "blake2-rfc",
+ "codec_types_derive",
+ "ink_metadata",
  "ink_primitives",
  "ink_storage",
  "libm",
@@ -330,6 +340,7 @@ checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 name = "forwarder"
 version = "0.1.0"
 dependencies = [
+ "common",
  "ink_env",
  "ink_lang",
  "ink_metadata",
