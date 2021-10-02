@@ -16,6 +16,8 @@ libm = { version = "0.2.1", default-features = false }
 scale-info = { version = "0.6", default-features = false, features = ["derive"], optional = true }
 ink_storage = { git = "https://github.com/paritytech/ink", rev = "fd94d38", default-features = false, optional = true }
 ink_primitives = { git = "https://github.com/paritytech/ink", rev = "fd94d38", default-features = false, optional = true }
+ink_metadata = { git = "https://github.com/paritytech/ink", rev = "fd94d38", default-features = false, optional = true }
+codec_types_derive = { path = "./codec_types_derive", optional = true }
 
 [dev-dependencies]
 hex = { version = "0.4.2" }
@@ -30,8 +32,8 @@ std = [
     "anyhow/std",
 ]
 view-logs = []
-ink = ["scale-info", "ink_storage", "ink_primitives"]
-ink-std = ["std", "ink", "scale-info/std", "ink_storage/std", "ink_primitives/std"]
+ink = ["ink_storage", "ink_primitives", "codec_types_derive"]
+ink-std = ["std", "ink", "scale-info/std", "ink_storage/std", "ink_primitives/std", "ink_metadata/std"]
 
 [[bench]]
 name = "my_benchmark"

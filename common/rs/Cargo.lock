@@ -164,13 +164,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "codec_types_derive"
+version = "0.1.0"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "common"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "blake2-rfc",
+ "codec_types_derive",
  "criterion",
  "hex",
+ "ink_metadata",
  "ink_primitives",
  "ink_storage",
  "libm",
