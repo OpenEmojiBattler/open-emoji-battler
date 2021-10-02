@@ -13,18 +13,18 @@ pub mod contract {
 
     #[ink(storage)]
     pub struct Storage {
-        // emo_bases: emo::Bases,
+        emo_bases: emo::Bases,
         deck_fixed_emo_base_ids: StdVec<u16>,
         deck_built_emo_base_ids: StdVec<u16>,
-        // matchmaking_ghosts: StdVec<(AccountId, mtc::Ghost)>,
+        matchmaking_ghosts: StdVec<(AccountId, mtc::Ghost)>,
         player_seed: StorageMap<AccountId, u64>,
 
-        // player_pool: StorageMap<AccountId, StdVec<mtc::Emo>>,
+        player_pool: StorageMap<AccountId, StdVec<mtc::Emo>>,
         player_health: StorageMap<AccountId, u8>,
-        // player_grade_and_board_history: StorageMap<AccountId, StdVec<mtc::GradeAndBoard>>,
+        player_grade_and_board_history: StorageMap<AccountId, StdVec<mtc::GradeAndBoard>>,
         player_upgrade_coin: StorageMap<AccountId, u8>,
-        // player_ghosts: StorageMap<AccountId, StdVec<(AccountId, mtc::Ghost)>>,
-        // player_ghost_states: StorageMap<AccountId, StdVec<mtc::GhostState>>,
+        player_ghosts: StorageMap<AccountId, StdVec<(AccountId, mtc::Ghost)>>,
+        player_ghost_states: StorageMap<AccountId, StdVec<mtc::GhostState>>,
         player_battle_ghost_index: StorageMap<AccountId, u8>,
 
         // allowed accounts
@@ -35,17 +35,17 @@ pub mod contract {
         #[ink(constructor)]
         pub fn new() -> Self {
             Self {
-                // emo_bases: Default::default(),
+                emo_bases: Default::default(),
                 deck_fixed_emo_base_ids: Default::default(),
                 deck_built_emo_base_ids: Default::default(),
-                // matchmaking_ghosts: Default::default(),
+                matchmaking_ghosts: Default::default(),
                 player_seed: Default::default(),
-                // player_pool: Default::default(),
+                player_pool: Default::default(),
                 player_health: Default::default(),
-                // player_grade_and_board_history: Default::default(),
+                player_grade_and_board_history: Default::default(),
                 player_upgrade_coin: Default::default(),
-                // player_ghosts: Default::default(),
-                // player_ghost_states: Default::default(),
+                player_ghosts: Default::default(),
+                player_ghost_states: Default::default(),
                 player_battle_ghost_index: Default::default(),
 
                 allowed_accounts: std_vec![Self::env().caller()],
@@ -54,14 +54,13 @@ pub mod contract {
 
         #[ink(message)]
         pub fn get_emo_bases(&self) -> emo::Bases {
-            // TODO: self.emo_bases.clone()
-            Default::default()
+            self.emo_bases.clone()
         }
 
         #[ink(message)]
         pub fn set_emo_bases(&mut self, value: emo::Bases) {
             self.only_allowed_caller();
-            // TODO: self.emo_bases = value;
+            self.emo_bases = value;
         }
 
         #[ink(message)]
@@ -88,14 +87,13 @@ pub mod contract {
 
         #[ink(message)]
         pub fn get_matchmaking_ghosts(&self) -> StdVec<(AccountId, mtc::Ghost)> {
-            // TODO: self.matchmaking_ghosts.clone()
-            Default::default()
+            self.matchmaking_ghosts.clone()
         }
 
         #[ink(message)]
         pub fn set_matchmaking_ghosts(&mut self, value: StdVec<(AccountId, mtc::Ghost)>) {
             self.only_allowed_caller();
-            // TODO: self.matchmaking_ghosts = value;
+            self.matchmaking_ghosts = value;
         }
 
         #[ink(message)]
@@ -111,21 +109,19 @@ pub mod contract {
 
         #[ink(message)]
         pub fn get_player_pool(&self, account: AccountId) -> Option<StdVec<mtc::Emo>> {
-            // TODO: self.player_pool.get(&account).cloned()
-            Default::default()
+            self.player_pool.get(&account).cloned()
         }
 
         #[ink(message)]
         pub fn set_player_pool(&mut self, account: AccountId, value: StdVec<mtc::Emo>) {
             self.only_allowed_caller();
-            // TODO: self.player_pool.insert(account, value);
+            self.player_pool.insert(account, value);
         }
 
         #[ink(message)]
         pub fn take_player_pool(&mut self, account: AccountId) -> Option<StdVec<mtc::Emo>> {
             self.only_allowed_caller();
-            // TODO: self.player_pool.take(&account)
-            Default::default()
+            self.player_pool.take(&account)
         }
 
         #[ink(message)]
@@ -150,8 +146,7 @@ pub mod contract {
             &self,
             account: AccountId,
         ) -> Option<StdVec<mtc::GradeAndBoard>> {
-            // TODO: self.player_grade_and_board_history.get(&account).cloned()
-            Default::default()
+            self.player_grade_and_board_history.get(&account).cloned()
         }
 
         #[ink(message)]
@@ -161,7 +156,7 @@ pub mod contract {
             value: StdVec<mtc::GradeAndBoard>,
         ) {
             self.only_allowed_caller();
-            // TODO: self.player_grade_and_board_history.insert(account, value);
+            self.player_grade_and_board_history.insert(account, value);
         }
 
         #[ink(message)]
@@ -170,8 +165,7 @@ pub mod contract {
             account: AccountId,
         ) -> Option<StdVec<mtc::GradeAndBoard>> {
             self.only_allowed_caller();
-            // TODO: self.player_grade_and_board_history.take(&account)
-            Default::default()
+            self.player_grade_and_board_history.take(&account)
         }
 
         #[ink(message)]
@@ -196,8 +190,7 @@ pub mod contract {
             &self,
             account: AccountId,
         ) -> Option<StdVec<(AccountId, mtc::Ghost)>> {
-            // TODO: self.player_ghosts.get(&account).cloned()
-            Default::default()
+            self.player_ghosts.get(&account).cloned()
         }
 
         #[ink(message)]
@@ -207,7 +200,7 @@ pub mod contract {
             value: StdVec<(AccountId, mtc::Ghost)>,
         ) {
             self.only_allowed_caller();
-            // TODO: self.player_ghosts.insert(account, value);
+            self.player_ghosts.insert(account, value);
         }
 
         #[ink(message)]
@@ -216,8 +209,7 @@ pub mod contract {
             account: AccountId,
         ) -> Option<StdVec<(AccountId, mtc::Ghost)>> {
             self.only_allowed_caller();
-            // TODO: self.player_ghosts.take(&account)
-            Default::default()
+            self.player_ghosts.take(&account)
         }
 
         #[ink(message)]
@@ -225,8 +217,7 @@ pub mod contract {
             &self,
             account: AccountId,
         ) -> Option<StdVec<mtc::GhostState>> {
-            // TODO: self.player_ghost_states.get(&account).cloned()
-            Default::default()
+            self.player_ghost_states.get(&account).cloned()
         }
 
         #[ink(message)]
@@ -236,7 +227,7 @@ pub mod contract {
             value: StdVec<mtc::GhostState>,
         ) {
             self.only_allowed_caller();
-            // TODO: self.player_ghost_states.insert(account, value);
+            self.player_ghost_states.insert(account, value);
         }
 
         #[ink(message)]
@@ -245,8 +236,7 @@ pub mod contract {
             account: AccountId,
         ) -> Option<StdVec<mtc::GhostState>> {
             self.only_allowed_caller();
-            // TODO: self.player_ghost_states.take(&account)
-            Default::default()
+            self.player_ghost_states.take(&account)
         }
 
         #[ink(message)]
