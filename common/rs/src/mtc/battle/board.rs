@@ -704,19 +704,24 @@ fn get_matched_emo_indexs_from_board_by_target_or_random(
         emo::ability::TargetOrRandom::Random {
             typ_and_triple,
             count,
-        } => board
-            .iter()
-            .zip(0u8..)
-            .filter(|(_, i)| {
-                if is_action_emo_retired {
-                    true
-                } else {
-                    *i != emo_index
-                }
-            })
-            .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, &e))
-            .map(|(_, i)| i)
-            .choose_multiple(rng, count.into()),
+        } => {
+            let mut v = board
+                .iter()
+                .zip(0u8..)
+                .filter(|(_, i)| {
+                    if is_action_emo_retired {
+                        true
+                    } else {
+                        *i != emo_index
+                    }
+                })
+                .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, &e))
+                .map(|(_, i)| i)
+                .choose_multiple(rng, count.into());
+            v.shuffle(rng);
+
+            v
+        }
     };
     Ok(indexes)
 }
@@ -1254,7 +1259,7 @@ fn add_battle_ability_random(
         None
     };
 
-    for index in boards
+    let mut v = boards
         .get_board(player_index)?
         .iter()
         .zip(0u8..)
@@ -1274,8 +1279,10 @@ fn add_battle_ability_random(
         })
         .filter(|(e, _)| is_matched_typ_and_triple_for_emo(typ_and_triple, &e))
         .map(|(_, i)| i)
-        .choose_multiple(rng, count as usize * if is_triple_action { 2 } else { 1 })
-    {
+        .choose_multiple(rng, count as usize * if is_triple_action { 2 } else { 1 });
+    v.shuffle(rng);
+
+    for index in v {
         add_ability_to_emo(
             boards.get_emo_mut(player_index, index)?,
             ability.clone(),
