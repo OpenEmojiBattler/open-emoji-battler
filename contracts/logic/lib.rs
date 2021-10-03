@@ -83,7 +83,7 @@ pub mod contract {
 
         #[ink(message)]
         pub fn get_admin_account_id(&self) -> AccountId {
-            self.admin_account_id.clone()
+            self.admin_account_id
         }
 
         fn only_admin_caller(&self) {

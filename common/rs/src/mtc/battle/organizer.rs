@@ -49,7 +49,7 @@ pub fn battle_all(
         battle_pvg(
             grade,
             health,
-            &board,
+            board,
             ghost_state,
             &ghosts[ghost_index].history,
             turn,
@@ -252,7 +252,7 @@ fn battle_pvg_and_gvg(
     battle_pvg(
         grade,
         health,
-        &board,
+        board,
         ghost_set0.state,
         &ghost_set0.ghost.history,
         turn,

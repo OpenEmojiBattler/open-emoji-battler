@@ -90,8 +90,8 @@ fn get_remaining_grades_if_finished(
 ) -> Result<Option<(u8, u8)>> {
     Ok(if boards.is_empty_board(0)? || boards.is_empty_board(1)? {
         Some((
-            sum_grades(&boards.get_board(0)?, emo_bases)?,
-            sum_grades(&boards.get_board(1)?, emo_bases)?,
+            sum_grades(boards.get_board(0)?, emo_bases)?,
+            sum_grades(boards.get_board(1)?, emo_bases)?,
         ))
     } else {
         None
