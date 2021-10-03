@@ -10,6 +10,7 @@ pub mod contract {
     use ink_prelude::vec::Vec as StdVec;
     #[cfg(not(feature = "ink-as-dependency"))]
     use ink_storage::collections::HashMap as StorageMap;
+    #[cfg(not(feature = "ink-as-dependency"))]
     use ink_storage::Lazy;
 
     #[ink(storage)]
