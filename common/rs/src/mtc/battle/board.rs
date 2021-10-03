@@ -715,7 +715,7 @@ fn get_matched_emo_indexs_from_board_by_target_or_random(
                         *i != emo_index
                     }
                 })
-                .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, &e))
+                .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, e))
                 .map(|(_, i)| i)
                 .choose_multiple(rng, count.into());
             v.shuffle(rng);
@@ -786,7 +786,7 @@ fn get_matched_emo_indexs_from_board(
             };
             emos_with_index
                 .into_iter()
-                .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, &e))
+                .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, e))
                 .map(|(_, i)| i)
                 .collect()
         }
@@ -934,7 +934,7 @@ fn call_emo_retire_player_abilities(
                 emo_bases,
                 action,
                 retired_emo_index,
-                Some(&retired_emo),
+                Some(retired_emo),
                 boards,
                 logs,
                 rng,
@@ -950,13 +950,13 @@ fn call_emo_retire_player_abilities(
             action,
         }) = ability
         {
-            if is_matched_typ_and_triple_for_emo(typ_and_triple, &retired_emo) {
+            if is_matched_typ_and_triple_for_emo(typ_and_triple, retired_emo) {
                 call_ability_general_as_ally_action(
                     player_index,
                     emo_bases,
                     action.clone(),
                     retired_emo_index,
-                    Some(&retired_emo),
+                    Some(retired_emo),
                     *ability_emo_index,
                     boards,
                     logs,
@@ -972,7 +972,7 @@ fn call_emo_retire_player_abilities(
             action,
         }) = ability
         {
-            if is_matched_typ_and_triple_for_emo(typ_and_triple, &retired_emo) {
+            if is_matched_typ_and_triple_for_emo(typ_and_triple, retired_emo) {
                 call_ability_normal_action_as_oneself(
                     player_index,
                     emo_bases,
@@ -1005,7 +1005,7 @@ fn call_emo_retire_rival_abilities(
             action,
         }) = ability
         {
-            if is_matched_typ_and_triple_for_emo(&typ_and_triple, &retired_emo) {
+            if is_matched_typ_and_triple_for_emo(&typ_and_triple, retired_emo) {
                 call_ability_normal_action_as_oneself(
                     rival_index,
                     emo_bases,
@@ -1168,13 +1168,13 @@ fn increase_stats_by_emo_count(
             .zip(0u8..)
             .filter(|&(emo, emo_index)| {
                 emo_index != action_emo_index
-                    && is_matched_typ_and_triple_for_emo(&count_condition, &emo)
+                    && is_matched_typ_and_triple_for_emo(&count_condition, emo)
             })
             .count(),
         emo::ability::Side::Rival => boards
             .get_board(switch_player_index(player_index))?
             .iter()
-            .filter(|emo| is_matched_typ_and_triple_for_emo(&count_condition, &emo))
+            .filter(|emo| is_matched_typ_and_triple_for_emo(&count_condition, emo))
             .count(),
     };
 
@@ -1277,7 +1277,7 @@ fn add_battle_ability_random(
                 true
             }
         })
-        .filter(|(e, _)| is_matched_typ_and_triple_for_emo(typ_and_triple, &e))
+        .filter(|(e, _)| is_matched_typ_and_triple_for_emo(typ_and_triple, e))
         .map(|(_, i)| i)
         .choose_multiple(rng, count as usize * if is_triple_action { 2 } else { 1 });
     v.shuffle(rng);

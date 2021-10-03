@@ -478,7 +478,7 @@ impl<T: Config> Pallet<T> {
         ghost_eps: &[u16],
         grade_and_board_history: &[mtc::GradeAndBoard],
     ) -> Result<(), Error<T>> {
-        let ep = Self::_update_ep(account_id, place, &ghost_states, ghost_eps)?;
+        let ep = Self::_update_ep(account_id, place, ghost_states, ghost_eps)?;
 
         if place < 4 {
             Self::_register_ghost(account_id, ep, grade_and_board_history);

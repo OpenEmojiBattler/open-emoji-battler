@@ -608,7 +608,7 @@ fn increase_stats_by_emo_count(
 ) -> Result<()> {
     let (mut attack, mut health) = double_attack_and_health_if(is_triple_action, attack, health);
     let count: u16 = count_emos_by_typ_and_triple(
-        &board,
+        board,
         action_emo_index,
         is_action_emo_removed,
         &count_condition,
@@ -682,7 +682,7 @@ fn get_coin_by_emo_count_div(
     divisor: u8,
 ) -> Result<()> {
     let count = count_emos_by_typ_and_triple(
-        &board,
+        board,
         action_emo_index,
         is_action_emo_removed,
         &count_condition,
@@ -1027,7 +1027,7 @@ fn build_triple_emo(
 ) -> Result<ShopBoardEmo> {
     let base = emo_bases.find(target_base_id)?;
 
-    let (attack, health) = build_triple_emo_nums(&base, &source_board_emos);
+    let (attack, health) = build_triple_emo_nums(base, &source_board_emos);
     let abilities = build_triple_abilities(&base.abilities, &source_board_emos);
     let mtc_emo_ids = source_board_emos
         .into_iter()

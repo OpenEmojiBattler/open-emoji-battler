@@ -32,7 +32,7 @@ pub fn verify_player_operations_and_update(
     let mut next_catalog_line_counter = 0u8;
     let mut sold_mtc_emo_ids = Vec::<u16>::new();
     let logs = &mut mtc::shop::BoardLogs::new();
-    let catalog = get_catalog(&pool, &board, seed)?;
+    let catalog = get_catalog(pool, &board, seed)?;
 
     let mut shop_board = ShopBoard::from_board(board);
 
