@@ -7,6 +7,9 @@ import type { IKeyringPair } from "@polkadot/types/types"
 
 import { getContractsEndpointAndKeyringPair } from "common/src/scriptUtils"
 
+const SDN = 1_000_000_000_000_000_000n
+const MILLISDN = SDN / 1_000n
+
 export const instantiateContract = async (
   api: ApiPromise,
   pair: IKeyringPair,
@@ -20,7 +23,7 @@ export const instantiateContract = async (
 
   const code = new CodePromise(api, abi, wasm)
 
-  const endowment = 1000000000n * 1000000n
+  const endowment = 100n * MILLISDN
   const gasLimit = 200000n * 1000000n
 
   const contract: ContractPromise = await new Promise(async (resolve, reject) => {

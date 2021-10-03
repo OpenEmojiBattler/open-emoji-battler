@@ -4,6 +4,7 @@ use common::{
     codec_types::*,
     mtc::{
         battle::organizer::{battle_all, select_battle_ghost_index},
+        emo_bases::check_and_build_emo_bases,
         ep::{calculate_new_ep, get_ep_band, EP_UNFINISH_PENALTY, INITIAL_EP},
         result::build_ghost_from_history,
         setup::{build_initial_ghost_states, build_pool},
@@ -16,7 +17,7 @@ use common::{
     utils::partial_bytes_to_u64,
 };
 use frame_support::{
-    debug::native::debug, dispatch::DispatchResultWithPostInfo, ensure, traits::Randomness,
+    debug::native::debug, dispatch::DispatchResultWithPostInfo, traits::Randomness,
 };
 use parity_scale_codec::Encode;
 use rand::seq::SliceRandom;
@@ -141,12 +142,20 @@ pub mod pallet {
         ) -> DispatchResultWithPostInfo {
             ensure_root(origin)?;
 
-            Self::_update_emo_bases(
+            let bases = check_and_build_emo_bases(
+                <EmoBases<T>>::get().unwrap_or_else(emo::Bases::new),
                 new_bases,
-                fixed_base_ids,
-                built_base_ids,
+                &fixed_base_ids,
+                &built_base_ids,
                 force_bases_update,
             )
+            .map_err(|_e| Error::<T>::InvalidEmoBases)?;
+
+            <EmoBases<T>>::put(bases);
+            <DeckFixedEmoBaseIds<T>>::put(fixed_base_ids);
+            <DeckBuiltEmoBaseIds<T>>::put(built_base_ids);
+
+            Ok(().into())
         }
 
         #[pallet::weight(1)]
@@ -190,41 +199,6 @@ pub mod pallet {
 }
 
 impl<T: Config> Pallet<T> {
-    fn _update_emo_bases(
-        new_bases: emo_Bases,
-        fixed_base_ids: Vec<u16>,
-        built_base_ids: Vec<u16>,
-        force_bases_update: bool,
-    ) -> DispatchResultWithPostInfo {
-        let mut bases = <EmoBases<T>>::get().unwrap_or_else(emo::Bases::new);
-
-        if force_bases_update {
-            bases = new_bases;
-        } else {
-            for (id, value) in new_bases.0.into_iter() {
-                if bases.0.contains_key(&id) {
-                    continue;
-                }
-                bases.0.insert(id, value);
-            }
-        }
-
-        let base_keys = bases.0.keys().cloned().collect::<Vec<_>>();
-
-        for id in fixed_base_ids.iter() {
-            ensure!(base_keys.contains(id), Error::<T>::InvalidEmoBases);
-        }
-        for id in built_base_ids.iter() {
-            ensure!(base_keys.contains(id), Error::<T>::InvalidEmoBases);
-        }
-
-        <EmoBases<T>>::put(bases);
-        <DeckFixedEmoBaseIds<T>>::put(fixed_base_ids);
-        <DeckBuiltEmoBaseIds<T>>::put(built_base_ids);
-
-        Ok(().into())
-    }
-
     fn _start_mtc(
         main: T::AccountId,
         session: T::AccountId,

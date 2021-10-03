@@ -4,7 +4,10 @@ use ink_lang as ink;
 
 #[ink::contract]
 mod contract {
+    use common::codec_types::*;
     use ink_env::call::FromAccountId;
+    #[cfg(not(feature = "ink-as-dependency"))]
+    use ink_prelude::vec as std_vec;
     use ink_prelude::vec::Vec as StdVec;
     use logic::contract::Logic;
 
@@ -17,19 +20,17 @@ mod contract {
     impl Forwarder {
         #[ink(constructor)]
         pub fn new(logic_account_id: AccountId) -> Self {
-            let mut allowed_accounts = StdVec::with_capacity(1);
-            allowed_accounts.push(Self::env().caller());
-
             Self {
                 logic_account_id,
-                allowed_accounts,
+                allowed_accounts: std_vec![Self::env().caller()],
             }
         }
 
         #[ink(message)]
-        pub fn do_something(&self) {
+        pub fn start_mtc(&self, deck_emo_base_ids: [u16; 6]) {
+            let caller = self.env().caller();
             let logic = Logic::from_account_id(self.logic_account_id);
-            logic.do_something();
+            logic.start_mtc(caller, deck_emo_base_ids);
         }
 
         #[ink(message)]

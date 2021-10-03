@@ -8,7 +8,10 @@ use crate::{
     },
 };
 use anyhow::{anyhow, bail, ensure, Result};
-use rand::{seq::SliceRandom, Rng};
+use rand::{
+    seq::{IteratorRandom, SliceRandom},
+    Rng,
+};
 use rand_pcg::Pcg64Mcg;
 use sp_std::{cmp, prelude::*};
 
@@ -313,9 +316,7 @@ fn get_defense_emo_index(
         if let Some(attractive_emo_index) = get_attractive_emo_index(emos, rng) {
             attractive_emo_index
         } else {
-            // be carefull, `rng.gen_range(0usize, 3usize)` produces different results on
-            // targets, like wasm (32) and mac (64)
-            rng.gen_range(0u8, emos.len() as u8)
+            rng.gen_range(0u8..(emos.len() as u8))
         },
     )
 }
@@ -703,22 +704,24 @@ fn get_matched_emo_indexs_from_board_by_target_or_random(
         emo::ability::TargetOrRandom::Random {
             typ_and_triple,
             count,
-        } => board
-            .iter()
-            .zip(0u8..)
-            .filter(|(_, i)| {
-                if is_action_emo_retired {
-                    true
-                } else {
-                    *i != emo_index
-                }
-            })
-            .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, &e))
-            .map(|(_, i)| i)
-            .collect::<Vec<_>>()
-            .choose_multiple(rng, count.into())
-            .copied()
-            .collect::<Vec<u8>>(),
+        } => {
+            let mut v = board
+                .iter()
+                .zip(0u8..)
+                .filter(|(_, i)| {
+                    if is_action_emo_retired {
+                        true
+                    } else {
+                        *i != emo_index
+                    }
+                })
+                .filter(|(e, _)| is_matched_typ_and_triple_for_emo(&typ_and_triple, &e))
+                .map(|(_, i)| i)
+                .choose_multiple(rng, count.into());
+            v.shuffle(rng);
+
+            v
+        }
     };
     Ok(indexes)
 }
@@ -1256,7 +1259,7 @@ fn add_battle_ability_random(
         None
     };
 
-    for &index in boards
+    let mut v = boards
         .get_board(player_index)?
         .iter()
         .zip(0u8..)
@@ -1276,10 +1279,10 @@ fn add_battle_ability_random(
         })
         .filter(|(e, _)| is_matched_typ_and_triple_for_emo(typ_and_triple, &e))
         .map(|(_, i)| i)
-        .collect::<Vec<_>>()
-        .choose_multiple(rng, count as usize * if is_triple_action { 2 } else { 1 })
-        .collect::<Vec<_>>()
-    {
+        .choose_multiple(rng, count as usize * if is_triple_action { 2 } else { 1 });
+    v.shuffle(rng);
+
+    for index in v {
         add_ability_to_emo(
             boards.get_emo_mut(player_index, index)?,
             ability.clone(),
