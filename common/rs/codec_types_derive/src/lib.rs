@@ -2,7 +2,6 @@ extern crate proc_macro;
 
 use proc_macro::TokenStream;
 use quote::quote;
-use syn;
 
 // We want to use this type for only PackedLayout.
 // PackedLayout requires SpreadLayout, so leave it empty.
