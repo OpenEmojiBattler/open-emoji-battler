@@ -293,7 +293,13 @@ impl<T: Config> Pallet<T> {
             .ok_or(<Error<T>>::PlayerGradeAndBoardHistoryNone)?;
         let mut upgrade_coin = PlayerUpgradeCoin::<T>::get(&account_id);
 
-        let (turn, mut grade, mut board) = get_turn_and_grade_and_board(&grade_and_board_history);
+        let (
+            turn,
+            mtc::GradeAndBoard {
+                mut grade,
+                mut board,
+            },
+        ) = get_turn_and_previous_grade_and_board(&grade_and_board_history);
 
         board = Self::_verify_player_operations_and_update(
             &account_id,
@@ -621,11 +627,4 @@ impl<T: Config> Pallet<T> {
 
         Ok((ghosts, ghost_eps))
     }
-}
-
-fn get_turn_and_grade_and_board(history: &[mtc::GradeAndBoard]) -> (u8, u8, mtc::Board) {
-    let (turn, previous_grade_and_board) = get_turn_and_previous_grade_and_board(history);
-    let grade = previous_grade_and_board.grade;
-    let board = previous_grade_and_board.board;
-    (turn, grade, board)
 }
