@@ -333,19 +333,4 @@ pub mod contract {
             );
         }
     }
-
-    #[cfg(test)]
-    mod tests {
-        use super::*;
-
-        use ink_lang as ink;
-
-        #[ink::test]
-        fn it_works() {
-            let mut storage = Storage::new(false);
-            assert_eq!(storage.get(), false);
-            storage.set(true);
-            assert_eq!(storage.get(), true);
-        }
-    }
 }
