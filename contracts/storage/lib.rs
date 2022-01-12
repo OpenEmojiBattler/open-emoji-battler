@@ -5,12 +5,9 @@ use ink_lang as ink;
 #[ink::contract]
 pub mod contract {
     use common::codec_types::*;
-    #[cfg(not(feature = "ink-as-dependency"))]
     use ink_prelude::vec as std_vec;
     use ink_prelude::vec::Vec as StdVec;
-    #[cfg(not(feature = "ink-as-dependency"))]
     use ink_storage::collections::HashMap as StorageMap;
-    #[cfg(not(feature = "ink-as-dependency"))]
     use ink_storage::Lazy;
 
     #[ink(storage)]

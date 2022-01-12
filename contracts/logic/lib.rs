@@ -22,7 +22,7 @@ pub mod contract {
     #[cfg(not(feature = "ink-as-dependency"))]
     use scale::{Decode, Encode};
     #[cfg(not(feature = "ink-as-dependency"))]
-    use storage::contract::Storage;
+    use storage::contract::StorageRef;
 
     #[ink(storage)]
     pub struct Logic {
@@ -54,7 +54,7 @@ pub mod contract {
         ) {
             self.only_admin_caller();
 
-            let mut storage = Storage::from_account_id(self.storage_account_id);
+            let mut storage: StorageRef = FromAccountId::from_account_id(self.storage_account_id);
 
             let bases = check_and_build_emo_bases(
                 storage.get_emo_bases(),
@@ -72,7 +72,7 @@ pub mod contract {
 
         #[ink(message)]
         pub fn start_mtc(&self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
-            let mut storage = Storage::from_account_id(self.storage_account_id);
+            let mut storage: StorageRef = FromAccountId::from_account_id(self.storage_account_id);
 
             if storage.contains_player_pool(caller) {
                 self.cleanup_finished(&mut storage, caller);
@@ -106,7 +106,7 @@ pub mod contract {
             caller: AccountId,
             player_operations: StdVec<mtc::shop::PlayerOperation>,
         ) {
-            let mut storage = Storage::from_account_id(self.storage_account_id);
+            let mut storage: StorageRef = FromAccountId::from_account_id(self.storage_account_id);
 
             let emo_bases = storage.get_emo_bases();
             let grade_and_board_history = storage
@@ -182,7 +182,7 @@ pub mod contract {
             );
         }
 
-        fn cleanup_finished(&self, storage: &mut Storage, account: AccountId) {
+        fn cleanup_finished(&self, storage: &mut StorageRef, account: AccountId) {
             storage.take_player_pool(account);
             storage.take_player_health(account);
             storage.take_player_grade_and_board_history(account);
@@ -199,7 +199,7 @@ pub mod contract {
 
         fn update_upgrade_coin(
             &self,
-            storage: &mut Storage,
+            storage: &mut StorageRef,
             account_id: AccountId,
             upgrade_coin: Option<u8>,
         ) {
@@ -210,13 +210,13 @@ pub mod contract {
             }
         }
 
-        fn matchmake(&self, account_id: AccountId, storage: &mut Storage, seed: u64) {
+        fn matchmake(&self, account_id: AccountId, storage: &mut StorageRef, seed: u64) {
             // TODO
         }
 
         fn finish(
             &self,
-            storage: &mut Storage,
+            storage: &mut StorageRef,
             account_id: AccountId,
             grade: u8,
             board: mtc::Board,
@@ -258,7 +258,7 @@ pub mod contract {
 
         fn finish_mtc(
             &self,
-            storage: &mut Storage,
+            storage: &mut StorageRef,
             account_id: AccountId,
             place: u8,
             ghost_states: &[mtc::GhostState],
@@ -276,7 +276,7 @@ pub mod contract {
 
         fn finish_battle(
             &self,
-            storage: &mut Storage,
+            storage: &mut StorageRef,
             account_id: AccountId,
             upgrade_coin: Option<u8>,
             ghost_states: StdVec<mtc::GhostState>,
