@@ -9,7 +9,7 @@ mod contract {
     #[cfg(not(feature = "ink-as-dependency"))]
     use ink_prelude::vec as std_vec;
     use ink_prelude::vec::Vec as StdVec;
-    use logic::contract::Logic;
+    use logic::contract::LogicRef;
 
     #[ink(storage)]
     pub struct Forwarder {
@@ -29,7 +29,7 @@ mod contract {
         #[ink(message)]
         pub fn start_mtc(&self, deck_emo_base_ids: [u16; 6]) {
             let caller = self.env().caller();
-            let logic = Logic::from_account_id(self.logic_account_id);
+            let logic = LogicRef::from_account_id(self.logic_account_id);
             logic.start_mtc(caller, deck_emo_base_ids);
         }
 

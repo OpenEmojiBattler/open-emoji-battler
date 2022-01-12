@@ -5,7 +5,6 @@ use ink_lang as ink;
 #[ink::contract]
 pub mod contract {
     use common::codec_types::*;
-    #[cfg(not(feature = "ink-as-dependency"))]
     use common::mtc::{
         battle::organizer::{battle_all, select_battle_ghost_index},
         emo_bases::check_and_build_emo_bases,
@@ -16,12 +15,9 @@ pub mod contract {
         },
         utils::{get_turn_and_previous_grade_and_board, PLAYER_INITIAL_HEALTH},
     };
-    #[cfg(not(feature = "ink-as-dependency"))]
     use ink_env::call::FromAccountId;
     use ink_prelude::vec::Vec as StdVec;
-    #[cfg(not(feature = "ink-as-dependency"))]
     use scale::{Decode, Encode};
-    #[cfg(not(feature = "ink-as-dependency"))]
     use storage::contract::StorageRef;
 
     #[ink(storage)]
