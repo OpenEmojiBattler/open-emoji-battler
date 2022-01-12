@@ -1,22 +1,22 @@
 [package]
 name = "common"
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
 license = "Apache-2.0"
 
 [dependencies]
 rand = { version = "0.8.4", default-features = false, features=["alloc"] }
 rand_pcg = { version = "0.3.1", default-features = false }
-parity-scale-codec = { version = "2.0.0", default-features = false, features = ["derive"] }
+parity-scale-codec = { version = "2", default-features = false, features = ["derive"] }
 sp-std = { version = "3.0.0", default-features = false }
 anyhow = { version = "1.0.37", default-features = false }
 blake2-rfc = { version = "0.2.18", default-features = false }
 libm = { version = "0.2.1", default-features = false }
 
-scale-info = { version = "0.6", default-features = false, features = ["derive"], optional = true }
-ink_storage = { git = "https://github.com/paritytech/ink", rev = "fd94d38", default-features = false, optional = true }
-ink_primitives = { git = "https://github.com/paritytech/ink", rev = "fd94d38", default-features = false, optional = true }
-ink_metadata = { git = "https://github.com/paritytech/ink", rev = "fd94d38", default-features = false, optional = true }
+scale-info = { version = "1", default-features = false, features = ["derive"], optional = true }
+ink_storage = { version = "3.0.0-rc7", default-features = false, optional = true }
+ink_primitives = { version = "3.0.0-rc7", default-features = false, optional = true }
+ink_metadata = { version = "3.0.0-rc7", default-features = false, optional = true }
 codec_types_derive = { path = "./codec_types_derive", optional = true }
 
 [dev-dependencies]
