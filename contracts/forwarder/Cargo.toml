@@ -27,10 +27,6 @@ crate-type = [
     "cdylib",
 ]
 
-# Needed until rc7
-[profile.release]
-overflow-checks = false
-
 [features]
 default = ["std"]
 std = [
