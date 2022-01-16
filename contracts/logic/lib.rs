@@ -16,6 +16,7 @@ pub mod contract {
         utils::{get_turn_and_previous_grade_and_board, PLAYER_INITIAL_HEALTH},
     };
     use ink_env::call::FromAccountId;
+    use ink_prelude::vec as std_vec;
     use ink_prelude::vec::Vec as StdVec;
     use scale::{Decode, Encode};
     use storage::contract::StorageRef;
@@ -23,7 +24,7 @@ pub mod contract {
     #[ink(storage)]
     pub struct Logic {
         storage_account_id: AccountId,
-        admin_account_id: AccountId,
+        allowed_accounts: StdVec<AccountId>,
     }
 
     impl Logic {
@@ -31,7 +32,7 @@ pub mod contract {
         pub fn new(storage_account_id: AccountId) -> Self {
             Self {
                 storage_account_id,
-                admin_account_id: Self::env().caller(),
+                allowed_accounts: std_vec![Self::env().caller()],
             }
         }
 
@@ -48,7 +49,7 @@ pub mod contract {
             built_base_ids: StdVec<u16>,
             force_bases_update: bool,
         ) {
-            self.only_admin_caller();
+            self.only_allowed_caller();
 
             let mut storage: StorageRef = FromAccountId::from_account_id(self.storage_account_id);
 
@@ -68,6 +69,8 @@ pub mod contract {
 
         #[ink(message)]
         pub fn start_mtc(&self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
+            self.only_allowed_caller();
+
             let mut storage: StorageRef = FromAccountId::from_account_id(self.storage_account_id);
 
             if storage.get_player_pool(caller).is_some() {
@@ -298,15 +301,29 @@ pub mod contract {
             self.update_upgrade_coin(storage, account_id, upgrade_coin);
         }
 
+        // allowed accounts
+
         #[ink(message)]
-        pub fn get_admin_account_id(&self) -> AccountId {
-            self.admin_account_id
+        pub fn get_allowed_accounts(&self) -> StdVec<AccountId> {
+            self.allowed_accounts.clone()
         }
 
-        fn only_admin_caller(&self) {
+        #[ink(message)]
+        pub fn allow_account(&mut self, account_id: AccountId) {
+            self.only_allowed_caller();
+            self.allowed_accounts.push(account_id);
+        }
+
+        #[ink(message)]
+        pub fn disallow_account(&mut self, account_id: AccountId) {
+            self.only_allowed_caller();
+            self.allowed_accounts.retain(|a| a != &account_id);
+        }
+
+        fn only_allowed_caller(&self) {
             assert!(
-                self.admin_account_id == self.env().caller(),
-                "only_admin_caller: caller is not admin ({:?})",
+                self.allowed_accounts.contains(&self.env().caller()),
+                "allowed accounts: this caller is not allowed: {:?}",
                 &self.env().caller()
             );
         }

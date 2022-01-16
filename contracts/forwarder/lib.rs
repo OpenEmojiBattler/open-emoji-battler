@@ -4,9 +4,8 @@ use ink_lang as ink;
 
 #[ink::contract]
 mod contract {
-    use common::codec_types::*;
+    // use common::codec_types::*;
     use ink_env::call::FromAccountId;
-    #[cfg(not(feature = "ink-as-dependency"))]
     use ink_prelude::vec as std_vec;
     use ink_prelude::vec::Vec as StdVec;
     use logic::contract::LogicRef;
