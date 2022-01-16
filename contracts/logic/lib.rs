@@ -70,7 +70,7 @@ pub mod contract {
         pub fn start_mtc(&self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
             let mut storage: StorageRef = FromAccountId::from_account_id(self.storage_account_id);
 
-            if storage.contains_player_pool(caller) {
+            if storage.get_player_pool(caller).is_some() {
                 self.cleanup_finished(&mut storage, caller);
                 // FIXME: EP
             }
@@ -179,13 +179,13 @@ pub mod contract {
         }
 
         fn cleanup_finished(&self, storage: &mut StorageRef, account: AccountId) {
-            storage.take_player_pool(account);
-            storage.take_player_health(account);
-            storage.take_player_grade_and_board_history(account);
-            storage.take_player_upgrade_coin(account);
-            storage.take_player_ghosts(account);
-            storage.take_player_ghost_states(account);
-            storage.take_player_battle_ghost_index(account);
+            storage.remove_player_pool(account);
+            storage.remove_player_health(account);
+            storage.remove_player_grade_and_board_history(account);
+            storage.remove_player_upgrade_coin(account);
+            storage.remove_player_ghosts(account);
+            storage.remove_player_ghost_states(account);
+            storage.remove_player_battle_ghost_index(account);
         }
 
         fn get_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
@@ -202,7 +202,7 @@ pub mod contract {
             if let Some(c) = upgrade_coin {
                 storage.set_player_upgrade_coin(account_id, c);
             } else {
-                storage.take_player_upgrade_coin(account_id);
+                storage.remove_player_upgrade_coin(account_id);
             }
         }
 
