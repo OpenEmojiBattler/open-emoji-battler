@@ -7,9 +7,10 @@ pub mod contract {
     use common::codec_types::*;
     use ink_prelude::vec as std_vec;
     use ink_prelude::vec::Vec as StdVec;
-    use ink_storage::{lazy::Mapping, Lazy};
+    use ink_storage::{lazy::Mapping, traits::SpreadAllocate, Lazy};
 
     #[ink(storage)]
+    #[derive(SpreadAllocate)]
     pub struct Storage {
         emo_bases: Lazy<emo::Bases>,
         deck_fixed_emo_base_ids: Lazy<StdVec<u16>>,
@@ -34,22 +35,9 @@ pub mod contract {
     impl Storage {
         #[ink(constructor)]
         pub fn new() -> Self {
-            Self {
-                emo_bases: Default::default(),
-                deck_fixed_emo_base_ids: Default::default(),
-                deck_built_emo_base_ids: Default::default(),
-                matchmaking_ghosts: Default::default(),
-                player_seed: Default::default(),
-                player_pool: Default::default(),
-                player_health: Default::default(),
-                player_grade_and_board_history: Default::default(),
-                player_upgrade_coin: Default::default(),
-                player_ghosts: Default::default(),
-                player_ghost_states: Default::default(),
-                player_battle_ghost_index: Default::default(),
-
-                allowed_accounts: Lazy::new(std_vec![Self::env().caller()]),
-            }
+            ink_lang::codegen::initialize_contract(|contract: &mut Self| {
+                contract.allowed_accounts = Lazy::new(std_vec![Self::env().caller()]);
+            })
         }
 
         #[ink(message)]
