@@ -6,13 +6,14 @@ use common::{
         battle::organizer::{battle_all, select_battle_ghost_index},
         emo_bases::check_and_build_emo_bases,
         ep::{calculate_new_ep, get_ep_band, EP_UNFINISH_PENALTY, INITIAL_EP},
+        ghost::choose_ghosts,
         result::build_ghost_from_history,
         setup::{build_initial_ghost_states, build_pool},
         shop::{
             coin::{decrease_upgrade_coin, get_upgrade_coin},
             player_operation::verify_player_operations_and_update,
         },
-        utils::{get_turn_and_previous_grade_and_board, GHOST_COUNT, PLAYER_INITIAL_HEALTH},
+        utils::{get_turn_and_previous_grade_and_board, PLAYER_INITIAL_HEALTH},
     },
     utils::partial_bytes_to_u64,
 };
@@ -20,9 +21,6 @@ use frame_support::{
     debug::native::debug, dispatch::DispatchResultWithPostInfo, traits::Randomness,
 };
 use parity_scale_codec::Encode;
-use rand::seq::SliceRandom;
-use rand::SeedableRng;
-use rand_pcg::Pcg64Mcg;
 use sp_std::prelude::*;
 
 pub use pallet::*;
@@ -237,48 +235,14 @@ impl<T: Config> Pallet<T> {
     }
 
     fn _matchmake(account_id: &T::AccountId, seed: u64) {
-        let mut rng = Pcg64Mcg::seed_from_u64(seed);
-
         let ep = if PlayerEp::<T>::contains_key(account_id) {
             PlayerEp::<T>::get(account_id).unwrap()
         } else {
             PlayerEp::<T>::insert(account_id, INITIAL_EP);
             INITIAL_EP
         };
-        let mut ep_band = get_ep_band(ep);
-        let mut selected = Vec::with_capacity(GHOST_COUNT);
-        let mut n = GHOST_COUNT;
-        let mut circuitbreaker = 0u8;
 
-        loop {
-            let ghosts = MatchmakingGhosts::<T>::get(ep_band).unwrap_or_else(Vec::new);
-            selected.extend(
-                ghosts
-                    .choose_multiple(&mut rng, n)
-                    .cloned()
-                    .collect::<Vec<_>>(),
-            );
-            if selected.len() >= GHOST_COUNT || ep_band < 1 {
-                break;
-            }
-            n = GHOST_COUNT - selected.len();
-            ep_band -= 1;
-
-            circuitbreaker += 1;
-            if circuitbreaker > 100 {
-                break;
-            }
-        }
-
-        if selected.len() < GHOST_COUNT {
-            for _ in 0..(GHOST_COUNT - selected.len()) {
-                selected.push((
-                    Default::default(),
-                    INITIAL_EP,
-                    mtc::Ghost { history: vec![] },
-                ));
-            }
-        }
+        let selected = choose_ghosts(ep, seed, &|ep_band| MatchmakingGhosts::<T>::get(ep_band));
 
         PlayerGhosts::<T>::insert(account_id, selected);
         PlayerGhostStates::<T>::insert(&account_id, build_initial_ghost_states());

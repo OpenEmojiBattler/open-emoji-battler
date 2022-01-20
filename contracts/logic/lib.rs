@@ -4,16 +4,20 @@ use ink_lang as ink;
 
 #[ink::contract]
 pub mod contract {
-    use common::codec_types::*;
-    use common::mtc::{
-        battle::organizer::{battle_all, select_battle_ghost_index},
-        emo_bases::check_and_build_emo_bases,
-        setup::build_pool,
-        shop::{
-            coin::{decrease_upgrade_coin, get_upgrade_coin},
-            player_operation::verify_player_operations_and_update,
+    use common::{
+        codec_types::*,
+        mtc::{
+            battle::organizer::{battle_all, select_battle_ghost_index},
+            emo_bases::check_and_build_emo_bases,
+            ep::{EP_UNFINISH_PENALTY, INITIAL_EP},
+            ghost::choose_ghosts,
+            setup::{build_initial_ghost_states, build_pool},
+            shop::{
+                coin::{decrease_upgrade_coin, get_upgrade_coin},
+                player_operation::verify_player_operations_and_update,
+            },
+            utils::{get_turn_and_previous_grade_and_board, PLAYER_INITIAL_HEALTH},
         },
-        utils::{get_turn_and_previous_grade_and_board, PLAYER_INITIAL_HEALTH},
     };
     use ink_env::call::FromAccountId;
     use ink_prelude::vec as std_vec;
@@ -25,6 +29,7 @@ pub mod contract {
     pub struct Logic {
         storage_account_id: AccountId,
         allowed_accounts: StdVec<AccountId>,
+        root_account_id: AccountId,
     }
 
     impl Logic {
@@ -32,13 +37,37 @@ pub mod contract {
         pub fn new(storage_account_id: AccountId) -> Self {
             Self {
                 storage_account_id,
-                allowed_accounts: std_vec![Self::env().caller()],
+                allowed_accounts: std_vec![],
+                root_account_id: Self::env().caller(),
             }
         }
 
         #[ink(message)]
         pub fn get_storage_account_id(&self) -> AccountId {
             self.storage_account_id
+        }
+
+        fn get_storage(&self) -> StorageRef {
+            FromAccountId::from_account_id(self.storage_account_id)
+        }
+
+        #[ink(message)]
+        pub fn get_root_account_id(&self) -> AccountId {
+            self.root_account_id
+        }
+
+        #[ink(message)]
+        pub fn set_root_account_id(&mut self, new_root_account_id: AccountId) {
+            self.only_root_caller();
+            self.root_account_id = new_root_account_id;
+        }
+
+        fn only_root_caller(&self) {
+            assert_eq!(
+                self.root_account_id,
+                self.env().caller(),
+                "set_root_account_id: not allowed"
+            );
         }
 
         #[ink(message)]
@@ -49,9 +78,9 @@ pub mod contract {
             built_base_ids: StdVec<u16>,
             force_bases_update: bool,
         ) {
-            self.only_allowed_caller();
+            self.only_root_caller();
 
-            let mut storage: StorageRef = FromAccountId::from_account_id(self.storage_account_id);
+            let mut storage = self.get_storage();
 
             let bases = check_and_build_emo_bases(
                 storage.get_emo_bases(),
@@ -60,7 +89,7 @@ pub mod contract {
                 &built_base_ids,
                 force_bases_update,
             )
-            .expect("invalig arg");
+            .expect("update_emo_bases: invalig arg");
 
             storage.set_emo_bases(bases);
             storage.set_deck_fixed_emo_base_ids(fixed_base_ids);
@@ -71,11 +100,12 @@ pub mod contract {
         pub fn start_mtc(&self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
             self.only_allowed_caller();
 
-            let mut storage: StorageRef = FromAccountId::from_account_id(self.storage_account_id);
+            let mut storage = self.get_storage();
 
             if storage.get_player_pool(caller).is_some() {
                 self.cleanup_finished(&mut storage, caller);
-                // FIXME: EP
+                let ep = storage.get_player_ep(caller).expect("player ep none");
+                storage.set_player_ep(caller, ep.saturating_sub(EP_UNFINISH_PENALTY));
             }
 
             let seed = self.get_random_seed(caller, b"start_mtc");
@@ -105,7 +135,9 @@ pub mod contract {
             caller: AccountId,
             player_operations: StdVec<mtc::shop::PlayerOperation>,
         ) {
-            let mut storage: StorageRef = FromAccountId::from_account_id(self.storage_account_id);
+            self.only_allowed_caller();
+
+            let mut storage = self.get_storage();
 
             let emo_bases = storage.get_emo_bases();
             let grade_and_board_history = storage
@@ -149,7 +181,7 @@ pub mod contract {
                 .get_player_ghosts(caller)
                 .expect("player_ghosts none")
                 .into_iter()
-                .map(|(_, ghost)| ghost)
+                .map(|(_, _, ghost)| ghost)
                 .collect::<StdVec<_>>(); // FIXME: EP
 
             let final_place = battle_all(
@@ -175,7 +207,7 @@ pub mod contract {
                 battle_ghost_index,
                 health,
                 ghost_states,
-                // &ghost_eps,
+                // &ghost_eps, // TODO: EP
                 grade_and_board_history,
                 final_place,
             );
@@ -210,7 +242,16 @@ pub mod contract {
         }
 
         fn matchmake(&self, account_id: AccountId, storage: &mut StorageRef, seed: u64) {
-            // TODO
+            let ep = storage.get_player_ep(account_id).unwrap_or_else(|| {
+                storage.set_player_ep(account_id, INITIAL_EP);
+                INITIAL_EP
+            });
+
+            let selected =
+                choose_ghosts(ep, seed, &|ep_band| storage.get_matchmaking_ghosts(ep_band));
+
+            storage.set_player_ghosts(account_id, selected);
+            storage.set_player_ghost_states(account_id, build_initial_ghost_states());
         }
 
         fn finish(
@@ -255,14 +296,15 @@ pub mod contract {
             storage.set_player_seed(account_id, new_seed);
         }
 
+        // TODO
         fn finish_mtc(
             &self,
             storage: &mut StorageRef,
             account_id: AccountId,
             place: u8,
-            ghost_states: &[mtc::GhostState],
+            _ghost_states: &[mtc::GhostState],
             // ghost_eps: &[u16],
-            grade_and_board_history: &[mtc::GradeAndBoard],
+            _grade_and_board_history: &[mtc::GradeAndBoard],
         ) {
             // let ep = Self::_update_ep(account_id, place, ghost_states, ghost_eps)?;
 

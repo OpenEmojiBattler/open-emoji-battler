@@ -15,7 +15,10 @@ pub mod contract {
         emo_bases: Lazy<emo::Bases>,
         deck_fixed_emo_base_ids: Lazy<StdVec<u16>>,
         deck_built_emo_base_ids: Lazy<StdVec<u16>>,
-        matchmaking_ghosts: Lazy<StdVec<(AccountId, mtc::Ghost)>>,
+
+        matchmaking_ghosts: Mapping<u16, StdVec<(AccountId, u16, mtc::Ghost)>>,
+
+        player_ep: Mapping<AccountId, u16>,
 
         player_seed: Mapping<AccountId, u64>,
 
@@ -24,7 +27,7 @@ pub mod contract {
         player_health: Mapping<AccountId, u8>,
         player_grade_and_board_history: Mapping<AccountId, StdVec<mtc::GradeAndBoard>>,
         player_upgrade_coin: Mapping<AccountId, u8>,
-        player_ghosts: Mapping<AccountId, StdVec<(AccountId, mtc::Ghost)>>,
+        player_ghosts: Mapping<AccountId, StdVec<(AccountId, u16, mtc::Ghost)>>,
         player_ghost_states: Mapping<AccountId, StdVec<mtc::GhostState>>,
         player_battle_ghost_index: Mapping<AccountId, u8>,
 
@@ -74,14 +77,44 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_matchmaking_ghosts(&self) -> StdVec<(AccountId, mtc::Ghost)> {
-            self.matchmaking_ghosts.clone()
+        pub fn get_matchmaking_ghosts(
+            &self,
+            ep_band: u16,
+        ) -> Option<StdVec<(AccountId, u16, mtc::Ghost)>> {
+            self.matchmaking_ghosts.get(ep_band)
         }
 
         #[ink(message)]
-        pub fn set_matchmaking_ghosts(&mut self, value: StdVec<(AccountId, mtc::Ghost)>) {
+        pub fn set_matchmaking_ghosts(
+            &mut self,
+            ep_band: u16,
+            value: StdVec<(AccountId, u16, mtc::Ghost)>,
+        ) {
             self.only_allowed_caller();
-            *self.matchmaking_ghosts = value;
+            self.matchmaking_ghosts.insert(ep_band, &value);
+        }
+
+        #[ink(message)]
+        pub fn remove_matchmaking_ghosts(&mut self, ep_band: u16) {
+            self.only_allowed_caller();
+            self.matchmaking_ghosts.remove(ep_band);
+        }
+
+        #[ink(message)]
+        pub fn get_player_ep(&self, account: AccountId) -> Option<u16> {
+            self.player_ep.get(account)
+        }
+
+        #[ink(message)]
+        pub fn set_player_ep(&mut self, account: AccountId, value: u16) {
+            self.only_allowed_caller();
+            self.player_ep.insert(account, &value);
+        }
+
+        #[ink(message)]
+        pub fn remove_player_ep(&mut self, account: AccountId) {
+            self.only_allowed_caller();
+            self.player_ep.remove(account)
         }
 
         #[ink(message)]
@@ -180,7 +213,7 @@ pub mod contract {
         pub fn get_player_ghosts(
             &self,
             account: AccountId,
-        ) -> Option<StdVec<(AccountId, mtc::Ghost)>> {
+        ) -> Option<StdVec<(AccountId, u16, mtc::Ghost)>> {
             self.player_ghosts.get(&account)
         }
 
@@ -188,7 +221,7 @@ pub mod contract {
         pub fn set_player_ghosts(
             &mut self,
             account: AccountId,
-            value: StdVec<(AccountId, mtc::Ghost)>,
+            value: StdVec<(AccountId, u16, mtc::Ghost)>,
         ) {
             self.only_allowed_caller();
             self.player_ghosts.insert(account, &value);

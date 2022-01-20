@@ -3,7 +3,6 @@ use anyhow::{anyhow, bail, Result};
 use sp_std::prelude::*;
 
 pub const BOARD_EMO_MAX_COUNT: u8 = 7;
-pub const GHOST_COUNT: usize = 3;
 pub const PLAYER_INITIAL_HEALTH: u8 = 30;
 
 pub fn build_emo_attributes(base: &emo::Base, is_triple: bool) -> emo::Attributes {
