@@ -21,10 +21,9 @@ pub mod contract {
             },
         },
     };
-    use ink_env::call::FromAccountId;
-    use ink_prelude::vec as std_vec;
-    use ink_prelude::vec::Vec as StdVec;
-    use scale::{Decode, Encode};
+    use ink_env::{call::FromAccountId, hash::Blake2x128};
+    use ink_prelude::{vec as std_vec, vec::Vec as StdVec};
+    use scale::Decode;
     use storage::contract::StorageRef;
 
     #[ink(storage)]
@@ -224,7 +223,9 @@ pub mod contract {
         }
 
         fn get_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
-            let (seed, _) = self.env().random(&(subject, caller).encode());
+            let (seed, _) = self
+                .env()
+                .random(&self.env().hash_encoded::<Blake2x128, _>(&(subject, caller)));
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
 
