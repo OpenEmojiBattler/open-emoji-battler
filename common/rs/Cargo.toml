@@ -14,9 +14,9 @@ blake2-rfc = { version = "0.2.18", default-features = false }
 libm = { version = "0.2.1", default-features = false }
 
 scale-info = { version = "1", default-features = false, features = ["derive"], optional = true }
-ink_storage = { git = "https://github.com/paritytech/ink", rev = "d9c17b6", default-features = false, optional = true }
-ink_primitives = { git = "https://github.com/paritytech/ink", rev = "d9c17b6", default-features = false, optional = true }
-ink_metadata = { git = "https://github.com/paritytech/ink", rev = "d9c17b6", default-features = false, optional = true }
+ink_storage = { version = "3.0.0-rc8", default-features = false, optional = true }
+ink_primitives = { version = "3.0.0-rc8", default-features = false, optional = true }
+ink_metadata = { version = "3.0.0-rc8", default-features = false, optional = true }
 codec_types_derive = { path = "./codec_types_derive", optional = true }
 
 [dev-dependencies]
