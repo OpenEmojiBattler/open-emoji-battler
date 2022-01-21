@@ -22,12 +22,12 @@ pub fn check_and_build_emo_bases(
     let base_keys = bases.0.keys().cloned().collect::<Vec<_>>();
 
     for id in fixed_base_ids.iter() {
-        if base_keys.contains(id) {
+        if !base_keys.contains(id) {
             return Err("invalid emo bases: fixed_base_ids");
         }
     }
     for id in built_base_ids.iter() {
-        if base_keys.contains(id) {
+        if !base_keys.contains(id) {
             return Err("invalid emo bases: built_base_ids");
         }
     }
