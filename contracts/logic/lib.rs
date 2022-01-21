@@ -37,10 +37,11 @@ pub mod contract {
     impl Logic {
         #[ink(constructor)]
         pub fn new(storage_account_id: AccountId) -> Self {
+            let caller = Self::env().caller();
             Self {
                 storage_account_id,
-                allowed_accounts: std_vec![],
-                root_account_id: Self::env().caller(),
+                allowed_accounts: std_vec![caller],
+                root_account_id: caller,
             }
         }
 
@@ -74,7 +75,7 @@ pub mod contract {
 
         #[ink(message)]
         pub fn update_emo_bases(
-            &self,
+            &mut self,
             new_bases: emo::Bases,
             fixed_base_ids: StdVec<u16>,
             built_base_ids: StdVec<u16>,
@@ -99,7 +100,7 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn start_mtc(&self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
+        pub fn start_mtc(&mut self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
             self.only_allowed_caller();
 
             let mut storage = self.get_storage();
@@ -133,7 +134,7 @@ pub mod contract {
 
         #[ink(message)]
         pub fn finish_mtc_shop(
-            &self,
+            &mut self,
             caller: AccountId,
             player_operations: StdVec<mtc::shop::PlayerOperation>,
         ) {

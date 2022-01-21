@@ -39,6 +39,11 @@ pub mod contract {
         #[ink(constructor)]
         pub fn new() -> Self {
             ink_lang::codegen::initialize_contract(|contract: &mut Self| {
+                // avoid 'encountered empty storage cell' panic on read
+                contract.emo_bases = Lazy::new(Default::default());
+                contract.deck_fixed_emo_base_ids = Lazy::new(Default::default());
+                contract.deck_built_emo_base_ids = Lazy::new(Default::default());
+
                 contract.allowed_accounts = Lazy::new(std_vec![Self::env().caller()]);
             })
         }
