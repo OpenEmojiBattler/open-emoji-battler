@@ -9,14 +9,16 @@ pub mod contract {
         mtc::{
             battle::organizer::{battle_all, select_battle_ghost_index},
             emo_bases::check_and_build_emo_bases,
-            ep::{EP_UNFINISH_PENALTY, INITIAL_EP},
-            ghost::choose_ghosts,
-            setup::{build_initial_ghost_states, build_pool},
+            ep::{EP_UNFINISH_PENALTY, INITIAL_EP, MIN_EP},
+            finish::{
+                exceeds_grade_and_board_history_limit, get_turn_and_previous_grade_and_board,
+            },
+            ghost::{build_matchmaking_ghosts, choose_ghosts, separate_player_ghosts},
+            setup::{build_initial_ghost_states, build_pool, PLAYER_INITIAL_HEALTH},
             shop::{
                 coin::{decrease_upgrade_coin, get_upgrade_coin},
                 player_operation::verify_player_operations_and_update,
             },
-            utils::{get_turn_and_previous_grade_and_board, PLAYER_INITIAL_HEALTH},
         },
     };
     use ink_env::call::FromAccountId;
@@ -176,13 +178,11 @@ pub mod contract {
                 .expect("ghost_states none");
 
             let new_seed = self.get_random_seed(caller, b"finish_mtc_shop");
-
-            let ghosts = storage
-                .get_player_ghosts(caller)
-                .expect("player_ghosts none")
-                .into_iter()
-                .map(|(_, _, ghost)| ghost)
-                .collect::<StdVec<_>>(); // FIXME: EP
+            let (ghosts, _ghost_eps) = separate_player_ghosts(
+                storage
+                    .get_player_ghosts(caller)
+                    .expect("player_ghosts none"),
+            );
 
             let final_place = battle_all(
                 &board,
@@ -207,7 +207,6 @@ pub mod contract {
                 battle_ghost_index,
                 health,
                 ghost_states,
-                // &ghost_eps, // TODO: EP
                 grade_and_board_history,
                 final_place,
             );
@@ -265,21 +264,13 @@ pub mod contract {
             battle_ghost_index: u8,
             health: u8,
             ghost_states: StdVec<mtc::GhostState>,
-            // ghost_eps: &[u16],
             mut grade_and_board_history: StdVec<mtc::GradeAndBoard>,
             final_place: Option<u8>,
         ) {
             grade_and_board_history.push(mtc::GradeAndBoard { grade, board });
 
             if let Some(place) = final_place {
-                self.finish_mtc(
-                    storage,
-                    account_id,
-                    place,
-                    &ghost_states,
-                    // ghost_eps,
-                    &grade_and_board_history,
-                );
+                self.finish_mtc(storage, account_id, place, &grade_and_board_history);
             } else {
                 self.finish_battle(
                     storage,
@@ -296,23 +287,57 @@ pub mod contract {
             storage.set_player_seed(account_id, new_seed);
         }
 
-        // TODO
         fn finish_mtc(
             &self,
             storage: &mut StorageRef,
             account_id: AccountId,
             place: u8,
-            _ghost_states: &[mtc::GhostState],
-            // ghost_eps: &[u16],
-            _grade_and_board_history: &[mtc::GradeAndBoard],
+            grade_and_board_history: &[mtc::GradeAndBoard],
         ) {
-            // let ep = Self::_update_ep(account_id, place, ghost_states, ghost_eps)?;
+            let ep = self.update_ep(storage, account_id, place);
 
             if place < 4 {
-                // Self::_register_ghost(account_id, ep, grade_and_board_history);
+                self.register_ghost(storage, account_id, ep, grade_and_board_history);
             }
 
             self.cleanup_finished(storage, account_id);
+        }
+
+        fn update_ep(&self, storage: &mut StorageRef, account_id: AccountId, place: u8) -> u16 {
+            let old_ep = storage.get_player_ep(account_id).expect("player ep none");
+
+            let new_ep = match place {
+                1 => old_ep.saturating_add(80),
+                2 => old_ep.saturating_add(40),
+                3 => old_ep,
+                4 => {
+                    let e = old_ep.saturating_sub(40);
+                    if e > MIN_EP {
+                        e
+                    } else {
+                        MIN_EP
+                    }
+                }
+                _ => panic!("unsupported place: {:?}", place),
+            };
+
+            storage.set_player_ep(account_id, new_ep);
+            new_ep
+        }
+
+        fn register_ghost(
+            &self,
+            storage: &mut StorageRef,
+            account_id: AccountId,
+            ep: u16,
+            grade_and_board_history: &[mtc::GradeAndBoard],
+        ) {
+            let (ep_band, ghosts_with_data) =
+                build_matchmaking_ghosts(&account_id, ep, grade_and_board_history, &|ep_band| {
+                    storage.get_matchmaking_ghosts(ep_band)
+                });
+
+            storage.set_matchmaking_ghosts(ep_band, ghosts_with_data);
         }
 
         fn finish_battle(
@@ -326,7 +351,7 @@ pub mod contract {
             health: u8,
             grade_and_board_history: StdVec<mtc::GradeAndBoard>,
         ) {
-            if grade_and_board_history.len() > 30 {
+            if exceeds_grade_and_board_history_limit(&grade_and_board_history) {
                 panic!("max turn exceeded");
             }
 

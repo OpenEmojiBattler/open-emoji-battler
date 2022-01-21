@@ -5,15 +5,14 @@ use common::{
     mtc::{
         battle::organizer::{battle_all, select_battle_ghost_index},
         emo_bases::check_and_build_emo_bases,
-        ep::{calculate_new_ep, get_ep_band, EP_UNFINISH_PENALTY, INITIAL_EP},
-        ghost::choose_ghosts,
-        result::build_ghost_from_history,
-        setup::{build_initial_ghost_states, build_pool},
+        ep::{calculate_new_ep, EP_UNFINISH_PENALTY, INITIAL_EP},
+        finish::{exceeds_grade_and_board_history_limit, get_turn_and_previous_grade_and_board},
+        ghost::{build_matchmaking_ghosts, choose_ghosts, separate_player_ghosts},
+        setup::{build_initial_ghost_states, build_pool, PLAYER_INITIAL_HEALTH},
         shop::{
             coin::{decrease_upgrade_coin, get_upgrade_coin},
             player_operation::verify_player_operations_and_update,
         },
-        utils::{get_turn_and_previous_grade_and_board, PLAYER_INITIAL_HEALTH},
     },
     utils::partial_bytes_to_u64,
 };
@@ -282,7 +281,9 @@ impl<T: Config> Pallet<T> {
             PlayerGhostStates::<T>::get(&account_id).ok_or(<Error<T>>::PlayerGhostStatesNone)?;
 
         let new_seed = Self::_get_random_seed(&b"finish_mtc_shop"[..]);
-        let (ghosts, ghost_eps) = Self::_get_ghosts_and_ghost_eps(&account_id)?;
+        let (ghosts, ghost_eps) = separate_player_ghosts(
+            PlayerGhosts::<T>::get(&account_id).ok_or(<Error<T>>::PlayerGhostsNone)?,
+        );
 
         let final_place = Self::_battle(
             &account_id,
@@ -468,7 +469,7 @@ impl<T: Config> Pallet<T> {
         health: u8,
         grade_and_board_history: Vec<mtc::GradeAndBoard>,
     ) -> Result<(), Error<T>> {
-        if grade_and_board_history.len() > 30 {
+        if exceeds_grade_and_board_history_limit(&grade_and_board_history) {
             return Err(Error::<T>::MaxTurnExceeded);
         }
 
@@ -496,23 +497,10 @@ impl<T: Config> Pallet<T> {
         ep: u16,
         grade_and_board_history: &[mtc::GradeAndBoard],
     ) {
-        let ep_band = get_ep_band(ep);
-        let ghost = build_ghost_from_history(grade_and_board_history);
-
-        let mut ghosts_with_data = MatchmakingGhosts::<T>::get(ep_band).unwrap_or_else(Vec::new);
-
-        if let Some(ghost_with_data) = ghosts_with_data
-            .iter_mut()
-            .find(|(aid, _, _)| aid == account_id)
-        {
-            ghost_with_data.1 = ep;
-            ghost_with_data.2 = ghost;
-        } else if ghosts_with_data.len() < 20 {
-            ghosts_with_data.push((account_id.clone(), ep, ghost));
-        } else {
-            ghosts_with_data.remove(0);
-            ghosts_with_data.push((account_id.clone(), ep, ghost));
-        }
+        let (ep_band, ghosts_with_data) =
+            build_matchmaking_ghosts(account_id, ep, grade_and_board_history, &|ep_band| {
+                MatchmakingGhosts::<T>::get(ep_band)
+            });
 
         MatchmakingGhosts::<T>::insert(ep_band, ghosts_with_data);
     }
@@ -572,23 +560,5 @@ impl<T: Config> Pallet<T> {
         partial_bytes_to_u64(
             <pallet_randomness_collective_flip::Module<T>>::random(subject).as_ref(),
         )
-    }
-
-    fn _get_ghosts_and_ghost_eps(
-        account_id: &T::AccountId,
-    ) -> Result<(Vec<mtc::Ghost>, Vec<u16>), Error<T>> {
-        let player_ghosts =
-            PlayerGhosts::<T>::get(account_id).ok_or(<Error<T>>::PlayerGhostsNone)?;
-        let len = player_ghosts.len();
-
-        let mut ghosts = Vec::with_capacity(len);
-        let mut ghost_eps = Vec::with_capacity(len);
-
-        for (_, ep, ghost) in player_ghosts.into_iter() {
-            ghosts.push(ghost);
-            ghost_eps.push(ep);
-        }
-
-        Ok((ghosts, ghost_eps))
     }
 }

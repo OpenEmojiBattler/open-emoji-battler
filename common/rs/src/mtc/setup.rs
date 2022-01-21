@@ -2,6 +2,8 @@ use crate::{codec_types::*, mtc::utils};
 use anyhow::{bail, ensure, Result};
 use sp_std::prelude::*;
 
+pub const PLAYER_INITIAL_HEALTH: u8 = 30;
+
 pub fn build_pool(
     selected_built_base_ids: &[u16],
     bases: &emo::Bases,
@@ -62,22 +64,13 @@ fn build_built_base_ids(
 pub fn build_initial_ghost_states() -> Vec<mtc::GhostState> {
     vec![
         mtc::GhostState::Active {
-            health: utils::PLAYER_INITIAL_HEALTH,
+            health: PLAYER_INITIAL_HEALTH,
         },
         mtc::GhostState::Active {
-            health: utils::PLAYER_INITIAL_HEALTH,
+            health: PLAYER_INITIAL_HEALTH,
         },
         mtc::GhostState::Active {
-            health: utils::PLAYER_INITIAL_HEALTH,
+            health: PLAYER_INITIAL_HEALTH,
         },
     ]
-}
-
-#[cfg(test)]
-mod tests {
-    // use super::*;
-
-    // #[test]
-    // fn test_build_deck() {
-    // }
 }
