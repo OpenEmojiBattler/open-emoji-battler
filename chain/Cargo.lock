@@ -3813,8 +3813,6 @@ dependencies = [
  "hex",
  "pallet-randomness-collective-flip",
  "parity-scale-codec",
- "rand 0.7.3",
- "rand_pcg 0.2.1",
  "sp-core",
  "sp-io",
  "sp-runtime",
