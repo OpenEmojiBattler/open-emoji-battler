@@ -241,7 +241,7 @@ impl<T: Config> Pallet<T> {
             INITIAL_EP
         };
 
-        let selected = choose_ghosts(ep, seed, &|ep_band| MatchmakingGhosts::<T>::get(ep_band));
+        let selected = choose_ghosts(ep, seed, &MatchmakingGhosts::<T>::get);
 
         PlayerGhosts::<T>::insert(account_id, selected);
         PlayerGhostStates::<T>::insert(&account_id, build_initial_ghost_states());
