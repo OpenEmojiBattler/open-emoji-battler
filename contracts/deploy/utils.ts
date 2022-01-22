@@ -7,8 +7,8 @@ import type { IKeyringPair } from "@polkadot/types/types"
 
 import { getContractsEndpointAndKeyringPair } from "common/src/scriptUtils"
 
-const SDN = 1_000_000_000_000_000_000n
-const MILLISDN = SDN / 1_000n
+// const SDN = 1_000_000_000_000_000_000n
+// const MILLISDN = SDN / 1_000n
 
 export const instantiateContract = async (
   api: ApiPromise,
@@ -23,12 +23,9 @@ export const instantiateContract = async (
 
   const code = new CodePromise(api, abi, wasm)
 
-  const endowment = 100n * MILLISDN
-  const gasLimit = 200000n * 1000000n
-
   const contract: ContractPromise = await new Promise(async (resolve, reject) => {
     const unsub = await code.tx
-      .new(endowment, gasLimit, ...constructorArgs)
+      .new(0, 200_000n * 1_000_000n, ...constructorArgs)
       .signAndSend(pair, (result) => {
         if (result.status.isInBlock) {
           unsub()
@@ -54,8 +51,13 @@ export const instantiateContract = async (
   return contract
 }
 
-export const getContract = (api: ApiPromise, contractFileName: string, address: string) => {
-  const abi = readFileSync(`${contractFileName}.json`, "utf8")
+export const getContract = (
+  api: ApiPromise,
+  contractName: string,
+  address: string,
+  dirname: string
+) => {
+  const abi = readFileSync(path.resolve(dirname, `./${contractName}.json`), "utf8")
   return new ContractPromise(api, abi, address)
 }
 
@@ -65,14 +67,14 @@ export const query = async (
   fnArgs: any[],
   caller: string
 ) => {
-  const { gasRequired, result, output } = await contract.query[fnName](
+  const { gasRequired, result, output, storageDeposit } = await contract.query[fnName](
     caller,
-    { value: 0, gasLimit: -1 },
+    { value: 0 },
     ...fnArgs
   )
   if (result.isOk) {
     console.log(
-      `query success: ${fnName} (gasRequired: ${gasRequired.toBigInt()}), returned: ${
+      `query success: ${fnName} (gasRequired: ${gasRequired.toBigInt()}, storageDeposit: ${storageDeposit.toHuman()}), returned: ${
         output ? output.toHuman() : ""
       }`
     )
@@ -88,10 +90,8 @@ export const tx = (pair: IKeyringPair, contract: ContractPromise, fnName: string
       reject(`tx fn not found: ${fnName}`)
       return
     }
-    const unsub = await contract.tx[fnName](
-      { value: 0, gasLimit: 100000n * 1000000n },
-      ...fnArgs
-    ).signAndSend(pair, (result) => {
+    // should have gasLimit?
+    const unsub = await contract.tx[fnName]({ value: 0 }, ...fnArgs).signAndSend(pair, (result) => {
       if (result.status.isInBlock) {
         unsub()
         if (result.findRecord("system", "ExtrinsicSuccess")) {

@@ -7,7 +7,7 @@ const main = async () => {
     api,
     keyringPair,
     "storage",
-    [false],
+    [],
     __dirname,
     envName
   )
@@ -21,7 +21,7 @@ const main = async () => {
     envName
   )
 
-  await instantiateContract(
+  const forwarderContract = await instantiateContract(
     api,
     keyringPair,
     "forwarder",
@@ -31,6 +31,7 @@ const main = async () => {
   )
 
   await tx(keyringPair, storageContract, "allowAccount", [logicContract.address.toString()])
+  await tx(keyringPair, logicContract, "allowAccount", [forwarderContract.address.toString()])
 }
 
 main().catch(console.error).finally(process.exit)
