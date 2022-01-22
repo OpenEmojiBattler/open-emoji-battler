@@ -13,7 +13,7 @@ const writeRsFile = () => {
   lines.push("use parity_scale_codec::{Decode, Encode};")
   lines.push("use sp_std::{collections::btree_map::BTreeMap, prelude::*};\n")
 
-  lines.push('#[cfg(feature = "ink")]\nuse codec_types_derive::EmptySpreadLayout;')
+  lines.push('#[cfg(feature = "ink")]\nuse codec_types_derive::SpreadLayoutOneStorageCell;')
   lines.push('#[cfg(feature = "ink")]\nuse ink_storage::traits::PackedLayout;\n')
 
   lines.push('#[cfg(feature = "ink-std")]\nuse ink_storage::traits::StorageLayout;')
@@ -26,9 +26,9 @@ const writeRsFile = () => {
 }
 
 const rsDeriveStatement =
-  '#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "ink", derive(PackedLayout, EmptySpreadLayout))]\n#[cfg_attr(feature = "ink-std", derive(TypeInfo, StorageLayout))]'
+  '#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "ink", derive(PackedLayout, SpreadLayoutOneStorageCell))]\n#[cfg_attr(feature = "ink-std", derive(TypeInfo, StorageLayout))]'
 const rsDeriveDefaultStatement =
-  '#[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "ink", derive(PackedLayout, EmptySpreadLayout))]\n#[cfg_attr(feature = "ink-std", derive(TypeInfo, StorageLayout))]'
+  '#[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "ink", derive(PackedLayout, SpreadLayoutOneStorageCell))]\n#[cfg_attr(feature = "ink-std", derive(TypeInfo, StorageLayout))]'
 
 const genRsLines = (defs: AnyDef[], lines: string[]) => {
   for (const def of defs) {

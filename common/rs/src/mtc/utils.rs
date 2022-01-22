@@ -3,8 +3,6 @@ use anyhow::{anyhow, bail, Result};
 use sp_std::prelude::*;
 
 pub const BOARD_EMO_MAX_COUNT: u8 = 7;
-pub const GHOST_COUNT: usize = 3;
-pub const PLAYER_INITIAL_HEALTH: u8 = 30;
 
 pub fn build_emo_attributes(base: &emo::Base, is_triple: bool) -> emo::Attributes {
     emo::Attributes {
@@ -81,23 +79,6 @@ pub fn get_pool_emo_count_by_grade(grade: u8) -> Result<u8> {
         6 => 4,
         _ => bail!("invalid grade: {}", grade),
     })
-}
-
-pub fn get_turn_and_previous_grade_and_board(
-    history: &[mtc::GradeAndBoard],
-) -> (u8, mtc::GradeAndBoard) {
-    let history_len = history.len();
-    let grade_and_board = if history_len > 0 {
-        history[history_len - 1].clone()
-    } else {
-        mtc::GradeAndBoard {
-            grade: 1,
-            board: mtc::Board(vec![]),
-        }
-    };
-    let turn = history_len as u8 + 1;
-
-    (turn, grade_and_board)
 }
 
 #[cfg(test)]

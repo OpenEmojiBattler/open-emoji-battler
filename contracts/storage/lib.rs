@@ -5,28 +5,31 @@ use ink_lang as ink;
 #[ink::contract]
 pub mod contract {
     use common::codec_types::*;
-    #[cfg(not(feature = "ink-as-dependency"))]
     use ink_prelude::vec as std_vec;
     use ink_prelude::vec::Vec as StdVec;
-    #[cfg(not(feature = "ink-as-dependency"))]
-    use ink_storage::collections::HashMap as StorageMap;
-    use ink_storage::Lazy;
+    use ink_storage::{lazy::Mapping, traits::SpreadAllocate, Lazy};
 
     #[ink(storage)]
+    #[derive(SpreadAllocate)]
     pub struct Storage {
         emo_bases: Lazy<emo::Bases>,
         deck_fixed_emo_base_ids: Lazy<StdVec<u16>>,
         deck_built_emo_base_ids: Lazy<StdVec<u16>>,
-        matchmaking_ghosts: Lazy<StdVec<(AccountId, mtc::Ghost)>>,
-        player_seed: Lazy<StorageMap<AccountId, u64>>,
 
-        player_pool: Lazy<StorageMap<AccountId, StdVec<mtc::Emo>>>,
-        player_health: Lazy<StorageMap<AccountId, u8>>,
-        player_grade_and_board_history: Lazy<StorageMap<AccountId, StdVec<mtc::GradeAndBoard>>>,
-        player_upgrade_coin: Lazy<StorageMap<AccountId, u8>>,
-        player_ghosts: Lazy<StorageMap<AccountId, StdVec<(AccountId, mtc::Ghost)>>>,
-        player_ghost_states: Lazy<StorageMap<AccountId, StdVec<mtc::GhostState>>>,
-        player_battle_ghost_index: Lazy<StorageMap<AccountId, u8>>,
+        matchmaking_ghosts: Mapping<u16, StdVec<(AccountId, u16, mtc::Ghost)>>,
+
+        player_ep: Mapping<AccountId, u16>,
+
+        player_seed: Mapping<AccountId, u64>,
+
+        // remove for each mtc
+        player_pool: Mapping<AccountId, StdVec<mtc::Emo>>,
+        player_health: Mapping<AccountId, u8>,
+        player_grade_and_board_history: Mapping<AccountId, StdVec<mtc::GradeAndBoard>>,
+        player_upgrade_coin: Mapping<AccountId, u8>,
+        player_ghosts: Mapping<AccountId, StdVec<(AccountId, u16, mtc::Ghost)>>,
+        player_ghost_states: Mapping<AccountId, StdVec<mtc::GhostState>>,
+        player_battle_ghost_index: Mapping<AccountId, u8>,
 
         // allowed accounts
         allowed_accounts: Lazy<StdVec<AccountId>>,
@@ -35,22 +38,14 @@ pub mod contract {
     impl Storage {
         #[ink(constructor)]
         pub fn new() -> Self {
-            Self {
-                emo_bases: Default::default(),
-                deck_fixed_emo_base_ids: Default::default(),
-                deck_built_emo_base_ids: Default::default(),
-                matchmaking_ghosts: Default::default(),
-                player_seed: Default::default(),
-                player_pool: Default::default(),
-                player_health: Default::default(),
-                player_grade_and_board_history: Default::default(),
-                player_upgrade_coin: Default::default(),
-                player_ghosts: Default::default(),
-                player_ghost_states: Default::default(),
-                player_battle_ghost_index: Default::default(),
+            ink_lang::codegen::initialize_contract(|contract: &mut Self| {
+                // avoid 'encountered empty storage cell' panic on read
+                contract.emo_bases = Lazy::new(Default::default());
+                contract.deck_fixed_emo_base_ids = Lazy::new(Default::default());
+                contract.deck_built_emo_base_ids = Lazy::new(Default::default());
 
-                allowed_accounts: Lazy::new(std_vec![Self::env().caller()]),
-            }
+                contract.allowed_accounts = Lazy::new(std_vec![Self::env().caller()]);
+            })
         }
 
         #[ink(message)]
@@ -87,59 +82,95 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_matchmaking_ghosts(&self) -> StdVec<(AccountId, mtc::Ghost)> {
-            self.matchmaking_ghosts.clone()
+        pub fn get_matchmaking_ghosts(
+            &self,
+            ep_band: u16,
+        ) -> Option<StdVec<(AccountId, u16, mtc::Ghost)>> {
+            self.matchmaking_ghosts.get(ep_band)
         }
 
         #[ink(message)]
-        pub fn set_matchmaking_ghosts(&mut self, value: StdVec<(AccountId, mtc::Ghost)>) {
+        pub fn set_matchmaking_ghosts(
+            &mut self,
+            ep_band: u16,
+            value: StdVec<(AccountId, u16, mtc::Ghost)>,
+        ) {
             self.only_allowed_caller();
-            *self.matchmaking_ghosts = value;
+            self.matchmaking_ghosts.insert(ep_band, &value);
+        }
+
+        #[ink(message)]
+        pub fn remove_matchmaking_ghosts(&mut self, ep_band: u16) {
+            self.only_allowed_caller();
+            self.matchmaking_ghosts.remove(ep_band);
+        }
+
+        #[ink(message)]
+        pub fn get_player_ep(&self, account: AccountId) -> Option<u16> {
+            self.player_ep.get(account)
+        }
+
+        #[ink(message)]
+        pub fn set_player_ep(&mut self, account: AccountId, value: u16) {
+            self.only_allowed_caller();
+            self.player_ep.insert(account, &value);
+        }
+
+        #[ink(message)]
+        pub fn remove_player_ep(&mut self, account: AccountId) {
+            self.only_allowed_caller();
+            self.player_ep.remove(account)
         }
 
         #[ink(message)]
         pub fn get_player_seed(&self, account: AccountId) -> Option<u64> {
-            self.player_seed.get(&account).copied()
+            self.player_seed.get(account)
         }
 
         #[ink(message)]
         pub fn set_player_seed(&mut self, account: AccountId, value: u64) {
             self.only_allowed_caller();
-            self.player_seed.insert(account, value);
+            self.player_seed.insert(account, &value);
+        }
+
+        #[ink(message)]
+        pub fn remove_player_seed(&mut self, account: AccountId) {
+            self.only_allowed_caller();
+            self.player_seed.remove(account)
         }
 
         #[ink(message)]
         pub fn get_player_pool(&self, account: AccountId) -> Option<StdVec<mtc::Emo>> {
-            self.player_pool.get(&account).cloned()
+            self.player_pool.get(&account)
         }
 
         #[ink(message)]
         pub fn set_player_pool(&mut self, account: AccountId, value: StdVec<mtc::Emo>) {
             self.only_allowed_caller();
-            self.player_pool.insert(account, value);
+            self.player_pool.insert(account, &value);
         }
 
         #[ink(message)]
-        pub fn take_player_pool(&mut self, account: AccountId) -> Option<StdVec<mtc::Emo>> {
+        pub fn remove_player_pool(&mut self, account: AccountId) {
             self.only_allowed_caller();
-            self.player_pool.take(&account)
+            self.player_pool.remove(&account)
         }
 
         #[ink(message)]
         pub fn get_player_health(&self, account: AccountId) -> Option<u8> {
-            self.player_health.get(&account).copied()
+            self.player_health.get(&account)
         }
 
         #[ink(message)]
         pub fn set_player_health(&mut self, account: AccountId, value: u8) {
             self.only_allowed_caller();
-            self.player_health.insert(account, value);
+            self.player_health.insert(account, &value);
         }
 
         #[ink(message)]
-        pub fn take_player_health(&mut self, account: AccountId) -> Option<u8> {
+        pub fn remove_player_health(&mut self, account: AccountId) {
             self.only_allowed_caller();
-            self.player_health.take(&account)
+            self.player_health.remove(&account)
         }
 
         #[ink(message)]
@@ -147,7 +178,7 @@ pub mod contract {
             &self,
             account: AccountId,
         ) -> Option<StdVec<mtc::GradeAndBoard>> {
-            self.player_grade_and_board_history.get(&account).cloned()
+            self.player_grade_and_board_history.get(&account)
         }
 
         #[ink(message)]
@@ -157,60 +188,54 @@ pub mod contract {
             value: StdVec<mtc::GradeAndBoard>,
         ) {
             self.only_allowed_caller();
-            self.player_grade_and_board_history.insert(account, value);
+            self.player_grade_and_board_history.insert(account, &value);
         }
 
         #[ink(message)]
-        pub fn take_player_grade_and_board_history(
-            &mut self,
-            account: AccountId,
-        ) -> Option<StdVec<mtc::GradeAndBoard>> {
+        pub fn remove_player_grade_and_board_history(&mut self, account: AccountId) {
             self.only_allowed_caller();
-            self.player_grade_and_board_history.take(&account)
+            self.player_grade_and_board_history.remove(&account)
         }
 
         #[ink(message)]
         pub fn get_player_upgrade_coin(&self, account: AccountId) -> Option<u8> {
-            self.player_upgrade_coin.get(&account).copied()
+            self.player_upgrade_coin.get(&account)
         }
 
         #[ink(message)]
         pub fn set_player_upgrade_coin(&mut self, account: AccountId, value: u8) {
             self.only_allowed_caller();
-            self.player_upgrade_coin.insert(account, value);
+            self.player_upgrade_coin.insert(account, &value);
         }
 
         #[ink(message)]
-        pub fn take_player_upgrade_coin(&mut self, account: AccountId) -> Option<u8> {
+        pub fn remove_player_upgrade_coin(&mut self, account: AccountId) {
             self.only_allowed_caller();
-            self.player_upgrade_coin.take(&account)
+            self.player_upgrade_coin.remove(&account)
         }
 
         #[ink(message)]
         pub fn get_player_ghosts(
             &self,
             account: AccountId,
-        ) -> Option<StdVec<(AccountId, mtc::Ghost)>> {
-            self.player_ghosts.get(&account).cloned()
+        ) -> Option<StdVec<(AccountId, u16, mtc::Ghost)>> {
+            self.player_ghosts.get(&account)
         }
 
         #[ink(message)]
         pub fn set_player_ghosts(
             &mut self,
             account: AccountId,
-            value: StdVec<(AccountId, mtc::Ghost)>,
+            value: StdVec<(AccountId, u16, mtc::Ghost)>,
         ) {
             self.only_allowed_caller();
-            self.player_ghosts.insert(account, value);
+            self.player_ghosts.insert(account, &value);
         }
 
         #[ink(message)]
-        pub fn take_player_ghosts(
-            &mut self,
-            account: AccountId,
-        ) -> Option<StdVec<(AccountId, mtc::Ghost)>> {
+        pub fn remove_player_ghosts(&mut self, account: AccountId) {
             self.only_allowed_caller();
-            self.player_ghosts.take(&account)
+            self.player_ghosts.remove(&account)
         }
 
         #[ink(message)]
@@ -218,7 +243,7 @@ pub mod contract {
             &self,
             account: AccountId,
         ) -> Option<StdVec<mtc::GhostState>> {
-            self.player_ghost_states.get(&account).cloned()
+            self.player_ghost_states.get(&account)
         }
 
         #[ink(message)]
@@ -228,33 +253,30 @@ pub mod contract {
             value: StdVec<mtc::GhostState>,
         ) {
             self.only_allowed_caller();
-            self.player_ghost_states.insert(account, value);
+            self.player_ghost_states.insert(account, &value);
         }
 
         #[ink(message)]
-        pub fn take_player_ghost_states(
-            &mut self,
-            account: AccountId,
-        ) -> Option<StdVec<mtc::GhostState>> {
+        pub fn remove_player_ghost_states(&mut self, account: AccountId) {
             self.only_allowed_caller();
-            self.player_ghost_states.take(&account)
+            self.player_ghost_states.remove(&account)
         }
 
         #[ink(message)]
         pub fn get_player_battle_ghost_index(&self, account: AccountId) -> Option<u8> {
-            self.player_battle_ghost_index.get(&account).copied()
+            self.player_battle_ghost_index.get(&account)
         }
 
         #[ink(message)]
         pub fn set_player_battle_ghost_index(&mut self, account: AccountId, value: u8) {
             self.only_allowed_caller();
-            self.player_battle_ghost_index.insert(account, value);
+            self.player_battle_ghost_index.insert(account, &value);
         }
 
         #[ink(message)]
-        pub fn take_player_battle_ghost_index(&mut self, account: AccountId) -> Option<u8> {
+        pub fn remove_player_battle_ghost_index(&mut self, account: AccountId) {
             self.only_allowed_caller();
-            self.player_battle_ghost_index.take(&account)
+            self.player_battle_ghost_index.remove(&account)
         }
 
         // allowed accounts
@@ -282,21 +304,6 @@ pub mod contract {
                 "allowed accounts: this caller is not allowed: {:?}",
                 &self.env().caller()
             );
-        }
-    }
-
-    #[cfg(test)]
-    mod tests {
-        use super::*;
-
-        use ink_lang as ink;
-
-        #[ink::test]
-        fn it_works() {
-            let mut storage = Storage::new(false);
-            assert_eq!(storage.get(), false);
-            storage.set(true);
-            assert_eq!(storage.get(), true);
         }
     }
 }

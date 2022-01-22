@@ -6,10 +6,8 @@ use ink_lang as ink;
 mod contract {
     use common::codec_types::*;
     use ink_env::call::FromAccountId;
-    #[cfg(not(feature = "ink-as-dependency"))]
-    use ink_prelude::vec as std_vec;
-    use ink_prelude::vec::Vec as StdVec;
-    use logic::contract::Logic;
+    use ink_prelude::{vec as std_vec, vec::Vec as StdVec};
+    use logic::contract::LogicRef;
 
     #[ink(storage)]
     pub struct Forwarder {
@@ -27,15 +25,27 @@ mod contract {
         }
 
         #[ink(message)]
-        pub fn start_mtc(&self, deck_emo_base_ids: [u16; 6]) {
+        pub fn start_mtc(&mut self, deck_emo_base_ids: [u16; 6]) {
             let caller = self.env().caller();
-            let logic = Logic::from_account_id(self.logic_account_id);
+            let mut logic = self.get_logic();
             logic.start_mtc(caller, deck_emo_base_ids);
+        }
+
+        #[ink(message)]
+        pub fn finish_mtc_shop(&mut self, player_operations: StdVec<mtc::shop::PlayerOperation>) {
+            let caller = self.env().caller();
+            let mut logic = self.get_logic();
+            logic.finish_mtc_shop(caller, player_operations);
         }
 
         #[ink(message)]
         pub fn get_logic_account_id(&self) -> AccountId {
             self.logic_account_id
+        }
+
+        #[ink(message)]
+        pub fn get_logic(&self) -> LogicRef {
+            FromAccountId::from_account_id(self.logic_account_id)
         }
 
         #[ink(message)]
