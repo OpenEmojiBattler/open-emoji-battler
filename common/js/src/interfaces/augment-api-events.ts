@@ -1,14 +1,14 @@
 // Auto-generated via `yarn polkadot-types-from-chain`, do not edit
 /* eslint-disable */
 
-import type { ApiTypes } from '@polkadot/api/types';
+import type { ApiTypes } from '@polkadot/api-base/types';
 import type { BalanceStatus } from '@polkadot/types/interfaces/balances';
 import type { AuthorityList } from '@polkadot/types/interfaces/grandpa';
 import type { AccountId, Balance } from '@polkadot/types/interfaces/runtime';
 import type { DispatchError, DispatchInfo, DispatchResult } from '@polkadot/types/interfaces/system';
 
-declare module '@polkadot/api/types/events' {
-  export interface AugmentedEvents<ApiType> {
+declare module '@polkadot/api-base/types/events' {
+  export interface AugmentedEvents<ApiType extends ApiTypes> {
     balances: {
       /**
        * A balance was set by root. \[who, free, reserved\]
@@ -112,9 +112,5 @@ declare module '@polkadot/api/types/events' {
        **/
       [key: string]: AugmentedEvent<ApiType>;
     };
-  }
-
-  export interface DecoratedEvents<ApiType extends ApiTypes> extends AugmentedEvents<ApiType> {
-    [key: string]: ModuleEvents<ApiType>;
-  }
-}
+  } // AugmentedEvents
+} // declare module

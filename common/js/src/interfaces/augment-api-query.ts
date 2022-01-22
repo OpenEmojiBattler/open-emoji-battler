@@ -2,18 +2,19 @@
 /* eslint-disable */
 
 import type { emo_Bases, mtc_Emo, mtc_Ghost, mtc_GhostState, mtc_GradeAndBoard } from './all';
-import type { ApiTypes } from '@polkadot/api/types';
-import type { Bytes, Option, Vec, bool, u16, u32, u64, u8 } from '@polkadot/types';
+import type { ApiTypes } from '@polkadot/api-base/types';
+import type { Bytes, Option, Vec, bool, u16, u32, u64, u8 } from '@polkadot/types-codec';
+import type { AnyNumber, ITuple } from '@polkadot/types-codec/types';
 import type { AccountData, BalanceLock } from '@polkadot/types/interfaces/balances';
 import type { SetId, StoredPendingChange, StoredState } from '@polkadot/types/interfaces/grandpa';
 import type { AccountId, Balance, BlockNumber, Hash, Index, Moment, Releases } from '@polkadot/types/interfaces/runtime';
 import type { SessionIndex } from '@polkadot/types/interfaces/session';
 import type { AccountInfo, ConsumedWeight, DigestOf, EventIndex, EventRecord, LastRuntimeUpgradeInfo, Phase } from '@polkadot/types/interfaces/system';
 import type { Multiplier } from '@polkadot/types/interfaces/txpayment';
-import type { AnyNumber, ITuple, Observable } from '@polkadot/types/types';
+import type { Observable } from '@polkadot/types/types';
 
-declare module '@polkadot/api/types/storage' {
-  export interface AugmentedQueries<ApiType> {
+declare module '@polkadot/api-base/types/storage' {
+  export interface AugmentedQueries<ApiType extends ApiTypes> {
     balances: {
       /**
        * The balance of an account.
@@ -236,9 +237,5 @@ declare module '@polkadot/api/types/storage' {
        **/
       [key: string]: QueryableStorageEntry<ApiType>;
     };
-  }
-
-  export interface QueryableStorage<ApiType extends ApiTypes> extends AugmentedQueries<ApiType> {
-    [key: string]: QueryableModuleStorage<ApiType>;
-  }
-}
+  } // AugmentedQueries
+} // declare module
