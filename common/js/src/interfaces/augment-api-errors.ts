@@ -1,10 +1,10 @@
 // Auto-generated via `yarn polkadot-types-from-chain`, do not edit
 /* eslint-disable */
 
-import type { ApiTypes } from '@polkadot/api/types';
+import type { ApiTypes } from '@polkadot/api-base/types';
 
-declare module '@polkadot/api/types/errors' {
-  export interface AugmentedErrors<ApiType> {
+declare module '@polkadot/api-base/types/errors' {
+  export interface AugmentedErrors<ApiType extends ApiTypes> {
     balances: {
       /**
        * Beneficiary account must pre-exist
@@ -155,9 +155,5 @@ declare module '@polkadot/api/types/errors' {
        **/
       [key: string]: AugmentedError<ApiType>;
     };
-  }
-
-  export interface DecoratedErrors<ApiType extends ApiTypes> extends AugmentedErrors<ApiType> {
-    [key: string]: ModuleErrors<ApiType>;
-  }
-}
+  } // AugmentedErrors
+} // declare module

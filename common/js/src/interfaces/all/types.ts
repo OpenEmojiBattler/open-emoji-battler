@@ -1,8 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { BTreeMap, Bytes, Enum, Option, Struct, Vec, bool, u16, u32, u8 } from '@polkadot/types';
-import type { ITuple } from '@polkadot/types/types';
+import type { BTreeMap, Bytes, Enum, Option, Struct, Vec, bool, u16, u32, u8 } from '@polkadot/types-codec';
+import type { ITuple } from '@polkadot/types-codec/types';
 
 /** @name emo_ability_Ability */
 export interface emo_ability_Ability extends Enum {
@@ -10,11 +10,13 @@ export interface emo_ability_Ability extends Enum {
   readonly asShop: emo_ability_shop_Shop;
   readonly isBattle: boolean;
   readonly asBattle: emo_ability_battle_Battle;
+  readonly type: 'Shop' | 'Battle';
 }
 
 /** @name emo_ability_battle_AsAllyAction */
 export interface emo_ability_battle_AsAllyAction extends Enum {
   readonly isTriggerRetireActions: boolean;
+  readonly type: 'TriggerRetireActions';
 }
 
 /** @name emo_ability_battle_Battle */
@@ -23,6 +25,7 @@ export interface emo_ability_battle_Battle extends Enum {
   readonly asGeneral: emo_ability_battle_General;
   readonly isSpecial: boolean;
   readonly asSpecial: emo_ability_battle_Special;
+  readonly type: 'General' | 'Special';
 }
 
 /** @name emo_ability_battle_General */
@@ -31,6 +34,7 @@ export interface emo_ability_battle_General extends Enum {
   readonly asAsOneself: emo_ability_battle_General_AsOneself;
   readonly isAsAlly: boolean;
   readonly asAsAlly: emo_ability_battle_General_AsAlly;
+  readonly type: 'AsOneself' | 'AsAlly';
 }
 
 /** @name emo_ability_battle_General_AsAlly */
@@ -51,6 +55,7 @@ export interface emo_ability_battle_GeneralAsAllyAction extends Enum {
   readonly asOneselfTripleNormal: emo_ability_battle_NormalAction;
   readonly isCustom: boolean;
   readonly asCustom: emo_ability_battle_AsAllyAction;
+  readonly type: 'OneselfTripleNormal' | 'Custom';
 }
 
 /** @name emo_ability_battle_GeneralAsAllyTrigger */
@@ -59,6 +64,7 @@ export interface emo_ability_battle_GeneralAsAllyTrigger extends Enum {
   readonly asAllySet: emo_ability_battle_GeneralAsAllyTrigger_AllySet;
   readonly isAllyRetire: boolean;
   readonly asAllyRetire: emo_ability_battle_GeneralAsAllyTrigger_AllyRetire;
+  readonly type: 'AllySet' | 'AllyRetire';
 }
 
 /** @name emo_ability_battle_GeneralAsAllyTrigger_AllyRetire */
@@ -81,6 +87,7 @@ export interface emo_ability_battle_GeneralAsOneselfTrigger extends Enum {
   readonly asRivalRetire: emo_ability_battle_GeneralAsOneselfTrigger_RivalRetire;
   readonly isAllyBattleAbilityRemoved: boolean;
   readonly asAllyBattleAbilityRemoved: emo_ability_battle_GeneralAsOneselfTrigger_AllyBattleAbilityRemoved;
+  readonly type: 'Pre' | 'Retire' | 'AllyRetire' | 'RivalRetire' | 'AllyBattleAbilityRemoved';
 }
 
 /** @name emo_ability_battle_GeneralAsOneselfTrigger_AllyBattleAbilityRemoved */
@@ -116,6 +123,7 @@ export interface emo_ability_battle_NormalAction extends Enum {
   readonly asAddBattleAbility: emo_ability_battle_NormalAction_AddBattleAbility;
   readonly isDamageAll: boolean;
   readonly asDamageAll: emo_ability_battle_NormalAction_DamageAll;
+  readonly type: 'SetEmo' | 'SetEmosByAttackDiv' | 'IncreaseStats' | 'DecreaseStats' | 'IncreaseStatsByEmoCount' | 'AddBattleAbility' | 'DamageAll';
 }
 
 /** @name emo_ability_battle_NormalAction_AddBattleAbility */
@@ -171,6 +179,7 @@ export interface emo_ability_battle_Special extends Enum {
   readonly isShield: boolean;
   readonly isAttractive: boolean;
   readonly isAttackLowestAttack: boolean;
+  readonly type: 'Shield' | 'Attractive' | 'AttackLowestAttack';
 }
 
 /** @name emo_ability_Destination */
@@ -178,11 +187,13 @@ export interface emo_ability_Destination extends Enum {
   readonly isLeft: boolean;
   readonly isRight: boolean;
   readonly isAll: boolean;
+  readonly type: 'Left' | 'Right' | 'All';
 }
 
 /** @name emo_ability_shop_AsAllyAction */
 export interface emo_ability_shop_AsAllyAction extends Enum {
   readonly isTriggerSetActions: boolean;
+  readonly type: 'TriggerSetActions';
 }
 
 /** @name emo_ability_shop_NormalAction */
@@ -203,6 +214,7 @@ export interface emo_ability_shop_NormalAction extends Enum {
   readonly asGetCoin: emo_ability_shop_NormalAction_GetCoin;
   readonly isGetCoinByEmoCountDiv: boolean;
   readonly asGetCoinByEmoCountDiv: emo_ability_shop_NormalAction_GetCoinByEmoCountDiv;
+  readonly type: 'SetEmo' | 'IncreaseStats' | 'IncreaseStatsByEmoCount' | 'IncreaseStatsByGrade' | 'IncreaseStatsOfAdjacentMenagerie' | 'AddAbility' | 'GetCoin' | 'GetCoinByEmoCountDiv';
 }
 
 /** @name emo_ability_shop_NormalAction_AddAbility */
@@ -261,6 +273,7 @@ export interface emo_ability_shop_Peri extends Enum {
   readonly asAsOneself: emo_ability_shop_Peri_AsOneself;
   readonly isAsAlly: boolean;
   readonly asAsAlly: emo_ability_shop_Peri_AsAlly;
+  readonly type: 'AsOneself' | 'AsAlly';
 }
 
 /** @name emo_ability_shop_Peri_AsAlly */
@@ -281,12 +294,14 @@ export interface emo_ability_shop_PeriAsAllyAction extends Enum {
   readonly asOneselfTripleNormal: emo_ability_shop_NormalAction;
   readonly isCustom: boolean;
   readonly asCustom: emo_ability_shop_AsAllyAction;
+  readonly type: 'OneselfTripleNormal' | 'Custom';
 }
 
 /** @name emo_ability_shop_PeriAsAllyTrigger */
 export interface emo_ability_shop_PeriAsAllyTrigger extends Enum {
   readonly isAllySet: boolean;
   readonly asAllySet: emo_ability_shop_PeriAsAllyTrigger_AllySet;
+  readonly type: 'AllySet';
 }
 
 /** @name emo_ability_shop_PeriAsAllyTrigger_AllySet */
@@ -300,6 +315,7 @@ export interface emo_ability_shop_PeriAsOneselfTrigger extends Enum {
   readonly isSell: boolean;
   readonly isAllySet: boolean;
   readonly asAllySet: emo_ability_shop_PeriAsOneselfTrigger_AllySet;
+  readonly type: 'Set' | 'Sell' | 'AllySet';
 }
 
 /** @name emo_ability_shop_PeriAsOneselfTrigger_AllySet */
@@ -313,12 +329,14 @@ export interface emo_ability_shop_Pre extends Enum {
   readonly asNormal: emo_ability_shop_NormalAction;
   readonly isRandom: boolean;
   readonly asRandom: emo_ability_shop_RandomAction;
+  readonly type: 'Normal' | 'Random';
 }
 
 /** @name emo_ability_shop_RandomAction */
 export interface emo_ability_shop_RandomAction extends Enum {
   readonly isIncreaseStatsOfMenagerie: boolean;
   readonly asIncreaseStatsOfMenagerie: emo_ability_shop_RandomAction_IncreaseStatsOfMenagerie;
+  readonly type: 'IncreaseStatsOfMenagerie';
 }
 
 /** @name emo_ability_shop_RandomAction_IncreaseStatsOfMenagerie */
@@ -336,17 +354,20 @@ export interface emo_ability_shop_Shop extends Enum {
   readonly asPeri: emo_ability_shop_Peri;
   readonly isSpecial: boolean;
   readonly asSpecial: emo_ability_shop_Special;
+  readonly type: 'Pre' | 'Peri' | 'Special';
 }
 
 /** @name emo_ability_shop_Special */
 export interface emo_ability_shop_Special extends Enum {
   readonly isPlaceholder: boolean;
+  readonly type: 'Placeholder';
 }
 
 /** @name emo_ability_Side */
 export interface emo_ability_Side extends Enum {
   readonly isAlly: boolean;
   readonly isRival: boolean;
+  readonly type: 'Ally' | 'Rival';
 }
 
 /** @name emo_ability_Target */
@@ -354,6 +375,7 @@ export interface emo_ability_Target extends Enum {
   readonly isOneself: boolean;
   readonly isOthers: boolean;
   readonly asOthers: emo_ability_Target_Others;
+  readonly type: 'Oneself' | 'Others';
 }
 
 /** @name emo_ability_Target_Others */
@@ -368,6 +390,7 @@ export interface emo_ability_TargetOrRandom extends Enum {
   readonly asTarget: emo_ability_Target;
   readonly isRandom: boolean;
   readonly asRandom: emo_ability_TargetOrRandom_Random;
+  readonly type: 'Target' | 'Random';
 }
 
 /** @name emo_ability_TargetOrRandom_Random */
@@ -410,6 +433,7 @@ export interface emo_Typ extends Enum {
   readonly isNature: boolean;
   readonly isFood: boolean;
   readonly isObject: boolean;
+  readonly type: 'Human' | 'Nature' | 'Food' | 'Object';
 }
 
 /** @name mtc_battle_Log */
@@ -430,6 +454,7 @@ export interface mtc_battle_Log extends Enum {
   readonly asAddBattleAbility: mtc_battle_Log_AddBattleAbility;
   readonly isRemoveBattleAbility: boolean;
   readonly asRemoveBattleAbility: mtc_battle_Log_RemoveBattleAbility;
+  readonly type: 'Attack' | 'Damage' | 'Remove' | 'Add' | 'IncreaseStats' | 'DecreaseStats' | 'AddBattleAbility' | 'RemoveBattleAbility';
 }
 
 /** @name mtc_battle_Log_Add */
@@ -536,6 +561,7 @@ export interface mtc_GhostState extends Enum {
   readonly asActive: mtc_GhostState_Active;
   readonly isRetired: boolean;
   readonly asRetired: mtc_GhostState_Retired;
+  readonly type: 'Active' | 'Retired';
 }
 
 /** @name mtc_GhostState_Active */
@@ -574,6 +600,7 @@ export interface mtc_shop_BoardLog extends Enum {
   readonly asAddAbility: mtc_shop_BoardLog_AddAbility;
   readonly isTriple: boolean;
   readonly asTriple: mtc_shop_BoardLog_Triple;
+  readonly type: 'Add' | 'Remove' | 'Move' | 'IncreaseStats' | 'AddAbility' | 'Triple';
 }
 
 /** @name mtc_shop_BoardLog_Add */
@@ -633,6 +660,7 @@ export interface mtc_shop_PlayerOperation extends Enum {
   readonly asMove: mtc_shop_PlayerOperation_Move;
   readonly isNextCatalogLine: boolean;
   readonly isUpgrade: boolean;
+  readonly type: 'Buy' | 'Sell' | 'Move' | 'NextCatalogLine' | 'Upgrade';
 }
 
 /** @name mtc_shop_PlayerOperation_Buy */

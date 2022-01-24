@@ -2,16 +2,15 @@
 /* eslint-disable */
 
 import type { emo_Bases, mtc_shop_PlayerOperation } from './all';
-import type { ApiTypes, SubmittableExtrinsic } from '@polkadot/api/types';
-import type { Bytes, Compact, Option, Vec, bool, u16, u32, u64 } from '@polkadot/types';
-import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
+import type { ApiTypes } from '@polkadot/api-base/types';
+import type { Bytes, Compact, Option, Vec, bool, u16, u32, u64 } from '@polkadot/types-codec';
+import type { AnyNumber } from '@polkadot/types-codec/types';
 import type { GrandpaEquivocationProof, KeyOwnerProof } from '@polkadot/types/interfaces/grandpa';
 import type { AccountId, Balance, BlockNumber, Call, ChangesTrieConfiguration, KeyValue, LookupSource, Moment, Perbill, Weight } from '@polkadot/types/interfaces/runtime';
 import type { Key } from '@polkadot/types/interfaces/system';
-import type { AnyNumber } from '@polkadot/types/types';
 
-declare module '@polkadot/api/types/submittable' {
-  export interface AugmentedSubmittables<ApiType> {
+declare module '@polkadot/api-base/types/submittable' {
+  export interface AugmentedSubmittables<ApiType extends ApiTypes> {
     balances: {
       /**
        * Exactly as `transfer`, except the origin must be root and the source account may be
@@ -342,10 +341,5 @@ declare module '@polkadot/api/types/submittable' {
        **/
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
     };
-  }
-
-  export interface SubmittableExtrinsics<ApiType extends ApiTypes> extends AugmentedSubmittables<ApiType> {
-    (extrinsic: Call | Extrinsic | Uint8Array | string): SubmittableExtrinsic<ApiType>;
-    [key: string]: SubmittableModuleExtrinsics<ApiType>;
-  }
-}
+  } // AugmentedSubmittables
+} // declare module
