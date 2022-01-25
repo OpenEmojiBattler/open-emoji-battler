@@ -135,12 +135,14 @@ function EnumComp(props: { enum: Enum; build: BuildFn; name?: string }) {
 function StructComp(props: { struct: Struct; build: BuildFn; name?: string }) {
   const typeDef = getTypeDefFromCodec(props.struct)
 
-  const buildWrapper = (key: string): BuildFn => (codec) => {
-    const newValue = new Map(props.struct)
-    newValue.set(key, codec)
-    const t = createAnyType(typeDef.type, newValue)
-    props.build(t)
-  }
+  const buildWrapper =
+    (key: string): BuildFn =>
+    (codec) => {
+      const newValue = new Map(props.struct)
+      newValue.set(key, codec)
+      const t = createAnyType(typeDef.type, newValue)
+      props.build(t)
+    }
 
   return (
     <>
@@ -199,11 +201,13 @@ function VecComp<T extends Codec>(props: { vec: Vec<T>; build: BuildFn; name?: s
     props.build(newValue)
   }
 
-  const buildWrapper = (i: number): BuildFn => (c) => {
-    const arr = props.vec.toArray()
-    arr[i] = c as T
-    update(arr)
-  }
+  const buildWrapper =
+    (i: number): BuildFn =>
+    (c) => {
+      const arr = props.vec.toArray()
+      arr[i] = c as T
+      update(arr)
+    }
 
   return (
     <>
