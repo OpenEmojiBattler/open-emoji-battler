@@ -16,7 +16,7 @@
     "check-ts": "tsc -p . --noEmit"
   },
   "dependencies": {
-    "@polkadot/typegen": "7.4.2-15",
+    "@polkadot/typegen": "7.5.1",
     "prettier": "2.5.1",
     "ts-node": "10.4.0",
     "typescript": "4.5.5"

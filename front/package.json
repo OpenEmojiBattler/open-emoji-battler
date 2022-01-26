@@ -13,8 +13,8 @@
   "dependencies": {
     "@babel/core": "7.16.12",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.4",
-    "@polkadot/extension-dapp": "0.42.6",
-    "@polkadot/ui-shared": "0.89.2",
+    "@polkadot/extension-dapp": "0.42.7",
+    "@polkadot/ui-shared": "0.89.3",
     "@types/react-dom": "17.0.11",
     "babel-loader": "8.2.3",
     "buffer": "6.0.3",
