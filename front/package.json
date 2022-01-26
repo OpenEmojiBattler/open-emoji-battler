@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "OEB_ENV=local webpack serve --mode development --hot",
+    "dev": "OEB_ENV=local webpack serve --mode development --stats minimal --hot",
     "build": "rm -rf ./dist && ./scripts/put-redirects.sh && OEB_ENV=production webpack --mode production",
     "lint": "prettier --write '{src,scripts}/**/*'",
     "update-wasm": "wasm-pack build --target bundler --release --out-dir pkgbundler wasm && wasm-pack build --target nodejs --release --out-dir pkgnodejs wasm && ts-node scripts/generateSrcWasm.ts",

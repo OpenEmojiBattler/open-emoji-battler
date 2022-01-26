@@ -75,9 +75,6 @@ module.exports = (_env, argv) => {
       hints: false,
     },
     devtool: isDevelopment ? "inline-source-map" : false,
-    devServer: {
-      stats: "minimal",
-    },
   }
 }
 
