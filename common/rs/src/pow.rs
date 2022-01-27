@@ -1,7 +1,7 @@
-use blake2_rfc::blake2b::blake2b;
-
+#[cfg(feature = "chain")]
 const THRESHOLD: u32 = 2655;
 
+#[cfg(feature = "chain")]
 pub fn check_solution(account: &[u8; 32], count: u32, solution: u64) -> bool {
     let mut input = [0u8; 128];
 
@@ -10,7 +10,7 @@ pub fn check_solution(account: &[u8; 32], count: u32, solution: u64) -> bool {
     input[36] = 123;
     input[120..].copy_from_slice(&solution.to_le_bytes()[..]);
 
-    let result = blake2b(32, &[], &input);
+    let result = blake2_rfc::blake2b::blake2b(32, &[], &input);
     let full_hash = result.as_bytes();
 
     let n = u32::from_le_bytes([full_hash[0], full_hash[1], full_hash[2], full_hash[3]]);
@@ -19,6 +19,7 @@ pub fn check_solution(account: &[u8; 32], count: u32, solution: u64) -> bool {
 }
 
 // works, but poor performance
+#[cfg(feature = "chain")]
 pub fn solve(account: &[u8; 32], count: u32) -> u64 {
     let mut input = [0u8; 128];
 
@@ -31,7 +32,7 @@ pub fn solve(account: &[u8; 32], count: u32) -> u64 {
     loop {
         input[120..].copy_from_slice(&solution.to_le_bytes()[..]);
 
-        let result = blake2b(32, &[], &input);
+        let result = blake2_rfc::blake2b::blake2b(32, &[], &input);
         let full_hash = result.as_bytes();
 
         let n = u32::from_le_bytes([full_hash[0], full_hash[1], full_hash[2], full_hash[3]]);
@@ -50,6 +51,7 @@ pub fn solve(account: &[u8; 32], count: u32) -> u64 {
 //     2.0f64.powf((255.999-d)/8.0).floor() as u32
 // }
 
+#[cfg(feature = "chain")]
 #[cfg(test)]
 mod tests {
     use super::*;
