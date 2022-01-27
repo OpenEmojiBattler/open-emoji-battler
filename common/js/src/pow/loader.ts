@@ -81,10 +81,12 @@ function demangle(exports: any, extendedExports: any = {}) {
     const name = internalName.split(".")[0]
 
     if (typeof elem === "function" && elem !== setArgumentsLength) {
-      ;((extendedExports[name] = (...args: any[]) => {
-        setArgumentsLength(args.length)
-        return elem(...args)
-      }) as any).original = elem
+      ;(
+        (extendedExports[name] = (...args: any[]) => {
+          setArgumentsLength(args.length)
+          return elem(...args)
+        }) as any
+      ).original = elem
     } else {
       extendedExports[name] = elem
     }
