@@ -1,7 +1,7 @@
 import { createType, mtc_Board, mtc_GhostBoard } from "common"
 import * as React from "react"
 
-import { GlobalAsync, GlobalAsyncContext } from "~/components/App/ChainProvider/tasks"
+import { GlobalAsync, GlobalAsyncContext } from "~/components/App/connectionProviders/Chain/tasks"
 import { MtcBattleBoards } from "~/components/common/MtcBattleBoards"
 import { buildEmoAttributesWithBase, findEmoBase } from "~/misc/mtcUtils"
 import { shuffleArray } from "~/misc/utils"

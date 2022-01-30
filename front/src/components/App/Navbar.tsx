@@ -3,7 +3,7 @@ import * as React from "react"
 import { getEnv } from "common"
 
 import { InternalLink } from "../common/InternalLink"
-import { getEndpoint } from "./ChainProvider/tasks"
+import { getEndpoint } from "./connectionProviders/Chain/tasks"
 
 import SymbolSVG from "~/svg/symbol.svg"
 import TypeSVG from "~/svg/type.svg"

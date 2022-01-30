@@ -1,7 +1,7 @@
 import * as React from "react"
 import BN from "bn.js"
 
-import { useAccountUpdater } from "~/components/App/ChainProvider/tasks"
+import { useAccountUpdater } from "~/components/App/connectionProviders/Chain/tasks"
 import { solvePow } from "~/misc/pow"
 import type { PlayerAccount, SessionAccount } from "~/misc/types"
 

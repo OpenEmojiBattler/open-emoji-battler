@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { GlobalAsyncContext } from "~/components/App/ChainProvider/tasks"
+import { GlobalAsyncContext } from "~/components/App/connectionProviders/Chain/tasks"
 
 import { Loading } from "~/components/common/Loading"
 import { AllEmos } from "./AllEmos"

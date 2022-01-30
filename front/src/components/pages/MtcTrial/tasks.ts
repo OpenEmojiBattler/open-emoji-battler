@@ -4,7 +4,7 @@ import type { EmoBases } from "~/misc/types"
 import { buildInitialMtcState, getDefaultDeck } from "~/misc/mtcUtils"
 import { buildPool } from "~/wasm"
 import { sampleArray } from "~/misc/utils"
-import { GlobalAsync } from "~/components/App/ChainProvider/tasks"
+import { GlobalAsync } from "~/components/App/connectionProviders/Chain/tasks"
 
 export const buildMtcState = (globalAsync: GlobalAsync) =>
   Promise.all([

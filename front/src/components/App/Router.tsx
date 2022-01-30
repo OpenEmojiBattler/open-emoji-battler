@@ -2,7 +2,7 @@ import * as React from "react"
 
 import type { Route, RouteId } from "~/misc/constants"
 
-import { ChainProvider } from "./ChainProvider"
+import { Chain } from "./connectionProviders/Chain"
 import { Top } from "../pages/Top"
 import { Mtc } from "../pages/Mtc"
 import { EmoBases } from "../pages/EmoBases"
@@ -16,7 +16,7 @@ export function Router(props: { route: Route }) {
 
   switch (kind) {
     case "chain":
-      return <ChainProvider>{e}</ChainProvider>
+      return <Chain>{e}</Chain>
     case "contract":
       return e
     case "none":

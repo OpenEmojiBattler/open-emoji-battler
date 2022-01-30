@@ -10,7 +10,7 @@ import {
   AccountContext,
   useAccountUpdater,
   GlobalAsyncContext,
-} from "~/components/App/ChainProvider/tasks"
+} from "~/components/App/connectionProviders/Chain/tasks"
 import { withToggleAsync } from "~/misc/utils"
 import { Loading } from "../../common/Loading"
 import { getSeed, start, finishBattleAndBuildState } from "./tasks"

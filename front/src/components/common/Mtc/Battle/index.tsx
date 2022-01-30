@@ -4,7 +4,7 @@ import { MtcState, getGradeText, getHealthFromState, getShortAddress } from "~/m
 import { getGradeAndGhostBoard } from "~/wasm"
 import { isDevelopment } from "~/misc/utils"
 import { zeroAddress } from "~/misc/constants"
-import { AccountContext } from "~/components/App/ChainProvider/tasks"
+import { AccountContext } from "~/components/App/connectionProviders/Chain/tasks"
 import { animateFinish } from "./tasks"
 
 import { MtcBattleBoards } from "~/components/common/MtcBattleBoards"

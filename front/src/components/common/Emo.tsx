@@ -3,7 +3,7 @@ import * as React from "react"
 import { createEmo } from "~/misc/emo/element"
 import { createType, emo_Attributes, emo_Base, emo_Typ } from "common"
 import { removeAllChildren } from "~/misc/elementHelpers"
-import { useGlobalAsync } from "~/components/App/ChainProvider/tasks"
+import { useGlobalAsync } from "~/components/App/connectionProviders/Chain/tasks"
 import { getEmoBaseEmoji } from "~/misc/mtcUtils"
 
 export function EmoBase(props: {

@@ -7,7 +7,7 @@ import { initialEp } from "~/misc/constants"
 import { Setup } from "../Setup"
 import { setup } from "./tasks"
 import { useBlockMessageSetter, useWaitingSetter } from "~/components/App/Frame/tasks"
-import { AccountContext, useAccountSetter } from "~/components/App/ChainProvider/tasks"
+import { AccountContext, useAccountSetter } from "~/components/App/connectionProviders/Chain/tasks"
 import { Loading } from "../../../common/Loading"
 
 export function SetupWrapper(props: {

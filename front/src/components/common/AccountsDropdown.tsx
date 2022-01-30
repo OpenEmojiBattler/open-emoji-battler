@@ -5,7 +5,7 @@ import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 import { withToggleAsync } from "~/misc/utils"
 import { Dropdown } from "~/components/common/Dropdown"
 import { useWaitingSetter } from "~/components/App/Frame/tasks"
-import { useAccountSetter, useGlobalAsync } from "~/components/App/ChainProvider/tasks"
+import { useAccountSetter, useGlobalAsync } from "~/components/App/connectionProviders/Chain/tasks"
 import { buildAndGeneratePlayerAndSessionAccounts } from "~/misc/accountUtils"
 
 export function AccountsDropdown(props: {

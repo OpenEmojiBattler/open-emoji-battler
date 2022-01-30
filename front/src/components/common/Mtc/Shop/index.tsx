@@ -22,7 +22,7 @@ import {
 } from "~/misc/mtcUtils"
 import { get_initial_coin_by_turn, get_upgrade_coin } from "~/wasm/raw"
 import { getCatalog, getGradeAndGhostBoard } from "~/wasm"
-import { useGlobalAsync } from "~/components/App/ChainProvider/tasks"
+import { useGlobalAsync } from "~/components/App/connectionProviders/Chain/tasks"
 import {
   State,
   finishShopBoardOperation,

@@ -13,7 +13,7 @@ import {
 import { useIsWasmReady } from "~/components/App/Frame/tasks"
 import type { EmoBases, Account } from "~/misc/types"
 
-export function ChainProvider(props: { children: React.ReactNode }) {
+export function Chain(props: { children: React.ReactNode }) {
   const [globalAsync, setGlobalAsync] = React.useState<GlobalAsync | null>(null)
   const [account, setAccount] = React.useState<Account | null>(null)
 

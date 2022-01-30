@@ -2,7 +2,11 @@ import * as React from "react"
 
 import { getEnv, getRuntimeVersion } from "common"
 
-import { getEndpoint, GlobalAsyncContext, setEndpoint } from "../App/ChainProvider/tasks"
+import {
+  getEndpoint,
+  GlobalAsyncContext,
+  setEndpoint,
+} from "../App/connectionProviders/Chain/tasks"
 import { InternalLink } from "../common/InternalLink"
 
 export function Dev() {

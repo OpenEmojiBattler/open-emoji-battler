@@ -8,7 +8,7 @@ import {
   getGradeText,
   findEmoBaseByStringId,
 } from "~/misc/mtcUtils"
-import { useAccount, useGlobalAsync } from "~/components/App/ChainProvider/tasks"
+import { useAccount, useGlobalAsync } from "~/components/App/connectionProviders/Chain/tasks"
 import { EmoBase } from "~/components/common/Emo"
 import { Dropdown } from "~/components/common/Dropdown"
 import { addDeck, deleteDeck, getDecks, selectDeckIndex } from "./tasks"

@@ -11,7 +11,7 @@ import {
   useAccountSetter,
   GlobalAsyncContext,
   GlobalAsync,
-} from "~/components/App/ChainProvider/tasks"
+} from "~/components/App/connectionProviders/Chain/tasks"
 import { Loading } from "~/components/common/Loading"
 
 export function MtcTrial() {
