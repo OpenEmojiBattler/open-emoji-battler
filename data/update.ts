@@ -12,14 +12,15 @@ const main = async () => {
   )
   const emoBases = loadEmoBases()
 
-  await connected(endpoint, async () => {
+  await connected(endpoint, async (api) => {
     const {
       baseIds: oldBaseIds,
       fixedIds: oldFixedIds,
       builtIds: oldBuiltIds,
-    } = await getCurrentIds()
+    } = await getCurrentIds(api)
 
     const h = await sudo(
+      api,
       (t) =>
         t.game.updateEmoBases(
           emoBases,
@@ -35,7 +36,7 @@ const main = async () => {
       baseIds: newBaseIds,
       fixedIds: newFixedIds,
       builtIds: newBuiltIds,
-    } = await getCurrentIds()
+    } = await getCurrentIds(api)
 
     console.log("bases")
     showDiff(oldBaseIds, newBaseIds)

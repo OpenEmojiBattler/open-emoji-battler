@@ -1,6 +1,7 @@
 import * as React from "react"
+import type { ApiPromise } from "@polkadot/api"
 
-import { query, emo_Base } from "common"
+import { emo_Base } from "common"
 
 import { getEmoTypString } from "~/misc/mtcUtils"
 import { EmoTypWithAll, emoTyps } from "~/misc/constants"
@@ -12,7 +13,7 @@ import { EmoTypSelector } from "~/components/common/EmoTypSelector"
 
 type AvailableEmoBaseIds = { fixed: string[]; built: string[] }
 
-export function AvailableEmosByGrades(props: { bases: emo_Base[] }) {
+export function AvailableEmosByGrades(props: { api: ApiPromise; bases: emo_Base[] }) {
   const [availables, setAvailables] = React.useState<AvailableEmoBaseIds>({
     fixed: [],
     built: [],
@@ -20,8 +21,8 @@ export function AvailableEmosByGrades(props: { bases: emo_Base[] }) {
 
   React.useEffect(() => {
     Promise.all([
-      query((q) => q.game.deckFixedEmoBaseIds()),
-      query((q) => q.game.deckBuiltEmoBaseIds()),
+      props.api.query.game.deckFixedEmoBaseIds(),
+      props.api.query.game.deckBuiltEmoBaseIds(),
     ]).then(([fixed, built]) => {
       setAvailables({
         fixed: fixed.unwrap().map((id) => id.toString()),

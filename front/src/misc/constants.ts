@@ -3,6 +3,7 @@ export const routeIds = [
   "/match",
   "/emo_bases",
   "/match_trial",
+  "/match_contract",
   "/dev",
   "/match_debug",
   "/emo_ability_builder",

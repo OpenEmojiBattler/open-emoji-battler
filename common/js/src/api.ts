@@ -10,17 +10,15 @@ import type { Hash } from "@polkadot/types/interfaces/runtime"
 
 import { buildTypes, KeyringPairOrAddressAndSigner, extractTxArgs } from "./utils"
 
-let endpoint = ""
-let apiPromise: ApiPromise | null = null
 const registry = new TypeRegistry()
 const types = buildTypes()
 registry.register(types)
 
-export const connected = async (endpoint: string, f: () => Promise<any>) => {
+export const connected = async <T>(endpoint: string, f: (api: ApiPromise) => Promise<T>) => {
   let api: ApiPromise | null = null
   try {
     api = await connect(endpoint)
-    await f()
+    await f(api)
   } catch (e) {
     console.error(e)
   } finally {
@@ -30,59 +28,22 @@ export const connected = async (endpoint: string, f: () => Promise<any>) => {
   }
 }
 
-export const connect = async (newEndpoint: string) => {
-  if (apiPromise) {
-    if (endpoint === newEndpoint) {
-      return apiPromise
-    }
-    await apiPromise.disconnect()
-  }
-
-  endpoint = newEndpoint
+export const connect = (endpoint: string) => {
   // if we don't pass `types` here,
   // it seems the types data will be cleared when the runtime upgrade occurs
-  apiPromise = await ApiPromise.create({
-    provider: new WsProvider(newEndpoint),
+  return ApiPromise.create({
+    provider: new WsProvider(endpoint),
     registry,
     types,
   })
-  return apiPromise
-}
-
-export const disconnect = async () => {
-  const api = getApi()
-  api.disconnect()
-}
-
-const getApi = () => {
-  if (apiPromise) {
-    return apiPromise
-  }
-  throw new Error("not connected")
-}
-
-export const query = <T>(f: (query: ApiPromise["query"]) => Promise<T>): Promise<T> => {
-  const api = getApi()
-  return f(api.query)
-}
-
-export const rpc = <T>(f: (rpc: ApiPromise["rpc"]) => Promise<T>): Promise<T> => {
-  const api = getApi()
-  return f(api.rpc)
-}
-
-export const derive = <T>(f: (derive: ApiPromise["derive"]) => Promise<T>): Promise<T> => {
-  const api = getApi()
-  return f(api.derive)
 }
 
 export const tx = (
+  api: ApiPromise,
   f: (tx: ApiPromise["tx"]) => SubmittableExtrinsic<"promise">,
   account: KeyringPairOrAddressAndSigner,
   powSolution?: BN
 ) => {
-  const api = getApi()
-
   const [pairOrAddress, options] = extractTxArgs(account, powSolution)
 
   return new Promise<Hash>(async (resolve, reject) => {
@@ -132,19 +93,17 @@ export const tx = (
 }
 
 export const sudo = (
+  api: ApiPromise,
   f: (tx: ApiPromise["tx"]) => SubmittableExtrinsic<"promise">,
   account: IKeyringPair
-) => {
-  const api = getApi()
-  return tx((tx) => api.tx.sudo.sudo(f(tx)), account)
-}
+) => tx(api, (tx) => api.tx.sudo.sudo(f(tx)), account)
 
 const buildErrorText = (api: ApiPromise, mod: DispatchErrorModule) => {
   const { docs, index, name, section } = api.registry.findMetaError(mod)
   return `tx: ${section}.${name}: (${index}) ${docs.join(" ")}`
 }
 
-export const getRuntimeVersion = () => getApi().runtimeVersion
+export const getRuntimeVersion = (api: ApiPromise) => api.runtimeVersion
 
 export const createType = <T extends Codec = Codec, K extends string = string>(
   type: K,

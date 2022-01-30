@@ -1,7 +1,7 @@
 // run `cargo build --release -p open-emoji-battler-runtime` to build wasm
 import fs from "fs"
 
-import { tx, query, connected } from "common"
+import { tx, connected } from "common"
 import { getChainEndpointAndKeyringPair } from "common/src/scriptUtils"
 
 const main = async () => {
@@ -17,19 +17,16 @@ const main = async () => {
     .toString("hex")
   console.log(`Code: ${code.length / 2} bytes`)
 
-  await connected(endpoint, async () => {
-    await showSpecVersion()
+  await connected(endpoint, async (api) => {
+    console.log((await api.query.system.lastRuntimeUpgrade()).unwrap().specVersion.toString())
 
     const h = await tx(
+      api,
       (t) => t.sudo.sudoUncheckedWeight(t.system.setCode(`0x${code}`), 0),
       keyringPair
     )
     console.log(h.toString())
   })
-}
-
-const showSpecVersion = async () => {
-  console.log((await query((q) => q.system.lastRuntimeUpgrade())).unwrap().specVersion.toString())
 }
 
 main().catch(console.error)

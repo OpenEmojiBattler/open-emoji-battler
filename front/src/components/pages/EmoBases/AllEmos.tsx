@@ -5,7 +5,7 @@ import { emo_ability_Ability, emo_Base } from "common"
 import { getEmoBaseEmoji, getEmoBaseName } from "~/misc/mtcUtils"
 import { EmoTypWithAll } from "~/misc/constants"
 import { buildEmoAbilitiesText } from "~/misc/emo/abilityText"
-import { useGlobalAsync } from "~/components/App/Frame/tasks"
+import { useGlobalAsync } from "~/components/App/ChainProvider/tasks"
 
 import { EmoTypSelector } from "~/components/common/EmoTypSelector"
 

@@ -4,7 +4,7 @@ import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { Decks } from "./Decks"
 import { PowButton } from "~/components/common/PowButton"
-import { useAccount } from "~/components/App/Frame/tasks"
+import { useAccount } from "~/components/App/ChainProvider/tasks"
 import { Accounts } from "./Accounts"
 
 export function Setup(props: {

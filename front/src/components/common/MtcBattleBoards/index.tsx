@@ -3,7 +3,7 @@ import * as React from "react"
 import { mtc_Board, mtc_GhostBoard } from "common"
 
 import { marchPvg } from "~/wasm"
-import { useGlobalAsync } from "~/components/App/Frame/tasks"
+import { useGlobalAsync } from "~/components/App/ChainProvider/tasks"
 import { animate } from "./tasks"
 
 export function MtcBattleBoards(props: {

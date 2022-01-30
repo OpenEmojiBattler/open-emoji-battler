@@ -5,14 +5,13 @@ import { Shop } from "../../common/Mtc/Shop"
 import { Battle } from "../../common/Mtc/Battle"
 import { Result } from "../../common/Mtc/Result"
 import { tx, createType, buildKeyringPair, mtc_shop_PlayerOperation } from "common"
+import { useNavSetter, useWaitingSetter } from "~/components/App/Frame/tasks"
 import {
   AccountContext,
   useAccountUpdater,
-  useNavSetter,
-  useWaitingSetter,
-} from "~/components/App/Frame/tasks"
+  GlobalAsyncContext,
+} from "~/components/App/ChainProvider/tasks"
 import { withToggleAsync } from "~/misc/utils"
-import { GlobalAsyncContext } from "~/components/App/Frame/tasks"
 import { Loading } from "../../common/Loading"
 import { getSeed, start, finishBattleAndBuildState } from "./tasks"
 import { SetupWrapper } from "./SetupWrapper"
@@ -45,6 +44,7 @@ export function Mtc() {
         }
         setMtcState(
           await start(
+            globalAsync.api,
             account.player,
             account.session,
             account.session.isActive,
@@ -61,7 +61,7 @@ export function Mtc() {
         setNav(false)
         setPhase("shop")
       }
-      return <SetupWrapper startMtc={startMtc} />
+      return <SetupWrapper api={globalAsync.api} startMtc={startMtc} />
     case "shop":
       if (!mtcState) {
         throw new Error("invalid state mtc")
@@ -72,12 +72,13 @@ export function Mtc() {
         }
         withToggleAsync(setWaiting, async () => {
           await tx(
+            globalAsync.api,
             (t) => t.game.finishMtcShop(createType("Vec<mtc_shop_PlayerOperation>", ops)),
             buildKeyringPair(account.session.mnemonic),
             solution
           )
 
-          const seed = await getSeed(account.player)
+          const seed = await getSeed(globalAsync.api, account.player)
           setMtcState({ ...mtcState, seed })
           setPhase("battle")
         })
@@ -98,7 +99,12 @@ export function Mtc() {
           throw new Error("invalid state: playerAccount null")
         }
 
-        const r = finishBattleAndBuildState(account.player, mtcState, globalAsync.emoBases)
+        const r = finishBattleAndBuildState(
+          globalAsync.api,
+          account.player,
+          mtcState,
+          globalAsync.emoBases
+        )
         setMtcState(r.mtcState)
 
         const _resultState = r.resultState

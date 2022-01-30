@@ -1,7 +1,8 @@
 import { web3Accounts, web3Enable } from "@polkadot/extension-dapp"
 import { mnemonicGenerate } from "@polkadot/util-crypto"
+import type { ApiPromise } from "@polkadot/api"
 
-import { query, buildKeyringPair } from "common"
+import { buildKeyringPair } from "common"
 
 import type { Account, PlayerAccount, SessionAccount } from "~/misc/types"
 
@@ -28,7 +29,7 @@ export const setupExtension = async () => {
   }
 }
 
-export const setupAccounts = async (account: Account | null) => {
+export const setupAccounts = async (api: ApiPromise, account: Account | null) => {
   const ext = await setupExtension()
   if (ext.kind === "ng") {
     return ext
@@ -41,7 +42,10 @@ export const setupAccounts = async (account: Account | null) => {
     playerAccount = account.player
     sessionAccount = account.session
   } else {
-    const accounts = await buildAndGeneratePlayerAndSessionAccounts(injectedAccounts[0].address)
+    const accounts = await buildAndGeneratePlayerAndSessionAccounts(
+      api,
+      injectedAccounts[0].address
+    )
     playerAccount = accounts.player
     sessionAccount = accounts.session
   }
@@ -56,8 +60,11 @@ export const setupAccounts = async (account: Account | null) => {
   }
 }
 
-export const buildAndGeneratePlayerAndSessionAccounts = async (playerAddress: string) => {
-  const accountData = await query((q) => q.transactionPaymentPow.accountData(playerAddress))
+export const buildAndGeneratePlayerAndSessionAccounts = async (
+  api: ApiPromise,
+  playerAddress: string
+) => {
+  const accountData = await api.query.transactionPaymentPow.accountData(playerAddress)
   const playerPowCount = accountData.isSome ? accountData.unwrap()[1].toNumber() : 0
   const playerAccount: PlayerAccount = { address: playerAddress, powCount: playerPowCount }
 

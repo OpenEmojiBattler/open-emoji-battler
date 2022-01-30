@@ -2,7 +2,12 @@ import * as React from "react"
 
 import { getEnv, getRuntimeVersion } from "common"
 
-import { getEndpoint, setEndpoint, useIsConnected } from "../App/Frame/tasks"
+import {
+  getEndpoint,
+  GlobalAsyncContext,
+  setEndpoint,
+  useIsConnected,
+} from "../App/ChainProvider/tasks"
 import { InternalLink } from "../common/InternalLink"
 
 export function Dev() {
@@ -30,14 +35,14 @@ export function Dev() {
 }
 
 function Versions() {
-  const isConnected = useIsConnected()
+  const globalAsync = React.useContext(GlobalAsyncContext)
   const [specVersion, setSpecVersion] = React.useState("")
 
   React.useEffect(() => {
-    if (isConnected) {
-      setSpecVersion(getRuntimeVersion().specVersion.toString())
+    if (globalAsync) {
+      setSpecVersion(getRuntimeVersion(globalAsync.api).specVersion.toString())
     }
-  }, [isConnected])
+  }, [globalAsync])
 
   return (
     <div className={"content"}>

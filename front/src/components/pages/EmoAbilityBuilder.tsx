@@ -8,14 +8,13 @@ import { TypeDef, TypeDefInfo } from "@polkadot/types/create/types"
 import { createType } from "common"
 
 import { Dropdown } from "../common/Dropdown"
-import { GlobalAsyncContext } from "~/components/App/Frame/tasks"
 
 export function EmoAbilityBuilder() {
-  const isReady = React.useContext(GlobalAsyncContext)
-
   return (
     <section className="section">
-      <div className={"container"}>{isReady ? <Ability /> : <></>}</div>
+      <div className={"container"}>
+        <Ability />
+      </div>
     </section>
   )
 }

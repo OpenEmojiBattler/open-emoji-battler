@@ -7,7 +7,7 @@ import { boardSize } from "~/misc/constants"
 import { EmoBase } from "~/components/common/Emo"
 import { MtcShopBoard } from "~/components/common/MtcShopBoard"
 import { MtcBattleBoards } from "~/components/common/MtcBattleBoards"
-import { GlobalAsyncContext, useGlobalAsync } from "~/components/App/Frame/tasks"
+import { GlobalAsyncContext, useGlobalAsync } from "~/components/App/ChainProvider/tasks"
 import { Loading } from "~/components/common/Loading"
 
 export function MtcDebug() {

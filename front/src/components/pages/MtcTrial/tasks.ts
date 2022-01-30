@@ -1,15 +1,16 @@
-import { createType, query } from "common"
+import { createType } from "common"
 
 import type { EmoBases } from "~/misc/types"
 import { buildInitialMtcState, getDefaultDeck } from "~/misc/mtcUtils"
 import { buildPool } from "~/wasm"
 import { sampleArray } from "~/misc/utils"
+import { GlobalAsync } from "~/components/App/ChainProvider/tasks"
 
-export const buildMtcState = (bases: EmoBases) =>
+export const buildMtcState = (globalAsync: GlobalAsync) =>
   Promise.all([
-    query((q) => q.game.deckBuiltEmoBaseIds()),
-    query((q) => q.game.deckFixedEmoBaseIds()),
-    query((q) => q.game.matchmakingGhosts(1000 / 100)),
+    globalAsync.api.query.game.deckBuiltEmoBaseIds(),
+    globalAsync.api.query.game.deckFixedEmoBaseIds(),
+    globalAsync.api.query.game.matchmakingGhosts(1000 / 100),
   ]).then(([_builtIds, _fixedIds, matchmakingGhosts]) => {
     const builtEmoBaseIds = _builtIds.unwrap().map((id) => id.toString())
     const fixedEmoBaseIds = _fixedIds.unwrap().map((id) => id.toString())
@@ -27,9 +28,9 @@ export const buildMtcState = (bases: EmoBases) =>
       ep: e.toNumber(),
     }))
 
-    const deckEmoBaseIds = getDefaultDeck(bases, builtEmoBaseIds)
+    const deckEmoBaseIds = getDefaultDeck(globalAsync.emoBases, builtEmoBaseIds)
 
-    const pool = buildPool(deckEmoBaseIds, bases, fixedEmoBaseIds, builtEmoBaseIds)
+    const pool = buildPool(deckEmoBaseIds, globalAsync.emoBases, fixedEmoBaseIds, builtEmoBaseIds)
     const seed = getSeed()
 
     return buildInitialMtcState(1000, seed, pool, ghosts, addressesAndEps)

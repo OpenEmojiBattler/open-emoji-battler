@@ -1,7 +1,8 @@
 import * as React from "react"
 
-import type { Route } from "~/misc/constants"
+import type { Route, RouteId } from "~/misc/constants"
 
+import { ChainProvider } from "./ChainProvider"
 import { Top } from "../pages/Top"
 import { Mtc } from "../pages/Mtc"
 import { EmoBases } from "../pages/EmoBases"
@@ -12,25 +13,40 @@ import { EmoAbilityBuilder } from "../pages/EmoAbilityBuilder"
 import { Style } from "../pages/Style"
 
 export function Router(props: { route: Route }) {
-  switch (props.route.id) {
+  const [kind, e] = getElement(props.route.id)
+
+  switch (kind) {
+    case "chain":
+      return <ChainProvider>{e}</ChainProvider>
+    case "contract":
+      return e
+    case "none":
+      return e
+  }
+}
+
+const getElement = (routeId: RouteId): ["chain" | "contract" | "none", JSX.Element] => {
+  switch (routeId) {
     case "/":
-      return <Top />
+      return ["chain", <Top />]
     case "/match":
-      return <Mtc />
+      return ["chain", <Mtc />]
     case "/emo_bases":
-      return <EmoBases />
+      return ["chain", <EmoBases />]
     case "/match_trial":
-      return <MtcTrial />
+      return ["chain", <MtcTrial />]
     case "/dev":
-      return <Dev />
+      return ["chain", <Dev />]
     case "/match_debug":
-      return <MtcDebug />
+      return ["chain", <MtcDebug />]
     case "/emo_ability_builder":
-      return <EmoAbilityBuilder />
+      return ["chain", <EmoAbilityBuilder />]
     case "/style":
-      return <Style />
+      return ["none", <Style />]
+    case "/match_contract":
+      return ["contract", <Style />] // TODO: change
     case "/not_found":
     default:
-      return <h1>page not found</h1>
+      return ["none", <h1>page not found</h1>]
   }
 }

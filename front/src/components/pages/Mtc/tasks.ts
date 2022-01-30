@@ -1,13 +1,15 @@
 import BN from "bn.js"
 import { web3FromAddress } from "@polkadot/extension-dapp"
+import type { ApiPromise } from "@polkadot/api"
 
-import { createType, query, tx, buildKeyringPair, mtc_Board } from "common"
+import { createType, tx, buildKeyringPair, mtc_Board } from "common"
 
 import type { EmoBases, PlayerAccount, SessionAccount } from "~/misc/types"
 import { isDevelopment, withToggleAsync, checkArraysEquality } from "~/misc/utils"
 import { finishBattle, MtcState, buildInitialMtcState, ResultState } from "~/misc/mtcUtils"
 
 export const start = (
+  api: ApiPromise,
   playerAccount: PlayerAccount,
   sessionAccount: SessionAccount,
   isStartBySession: boolean,
@@ -21,6 +23,7 @@ export const start = (
 
     if (isStartBySession) {
       await tx(
+        api,
         (t) => t.game.startMtcBySession(_deckEmoBaseIds),
         buildKeyringPair(sessionAccount.mnemonic),
         solution
@@ -29,6 +32,7 @@ export const start = (
       const signer = (await web3FromAddress(playerAccount.address)).signer
 
       await tx(
+        api,
         (t) => t.game.startMtc(sessionAccount.address, _deckEmoBaseIds),
         { address: playerAccount.address, signer },
         solution
@@ -36,9 +40,9 @@ export const start = (
     }
 
     const [seed, _pool, _ghosts] = await Promise.all([
-      getSeed(playerAccount),
-      query((q) => q.game.playerPool(playerAccount.address)),
-      query((q) => q.game.playerGhosts(playerAccount.address)),
+      getSeed(api, playerAccount),
+      api.query.game.playerPool(playerAccount.address),
+      api.query.game.playerGhosts(playerAccount.address),
     ])
 
     const pool = _pool.unwrap()
@@ -55,8 +59,8 @@ export const start = (
     return buildInitialMtcState(previousEp, seed, pool, ghosts, ghostAddressesAndEps)
   })
 
-export const getSeed = (playerAccount: PlayerAccount) =>
-  query((q) => q.game.playerSeed(playerAccount.address)).then((s) => {
+export const getSeed = (api: ApiPromise, playerAccount: PlayerAccount) =>
+  api.query.game.playerSeed(playerAccount.address).then((s) => {
     if (s.isNone) {
       throw new Error("no seed")
     }
@@ -64,6 +68,7 @@ export const getSeed = (playerAccount: PlayerAccount) =>
   })
 
 export const finishBattleAndBuildState = (
+  api: ApiPromise,
   playerAccount: PlayerAccount,
   mtcState: MtcState,
   emoBases: EmoBases
@@ -72,45 +77,45 @@ export const finishBattleAndBuildState = (
 
   const place = s.finalPlace
   if (place) {
-    ensureFinished(playerAccount.address)
+    ensureFinished(api, playerAccount.address)
     return {
       mtcState: s.mtcState,
-      resultState: query((q) => q.game.playerEp(playerAccount.address)).then((ep) => ({
+      resultState: api.query.game.playerEp(playerAccount.address).then((ep) => ({
         place,
         ep: ep.unwrap().toNumber(),
       })),
     }
   }
 
-  ensureNoStateDiff(playerAccount.address, s.mtcState.health, mtcState.board)
+  ensureNoStateDiff(api, playerAccount.address, s.mtcState.health, mtcState.board)
 
   return { mtcState: s.mtcState, resultState: null }
 }
 
-const ensureFinished = (address: string) => {
+const ensureFinished = (api: ApiPromise, address: string) => {
   if (!isDevelopment) {
     return
   }
 
-  query((q) => q.game.playerPool(address)).then((p) => {
+  api.query.game.playerPool(address).then((p) => {
     if (p.isSome) {
       throw new Error("looks like not finished")
     }
   })
 }
 
-const ensureNoStateDiff = (address: string, health: number, board: mtc_Board) => {
+const ensureNoStateDiff = (api: ApiPromise, address: string, health: number, board: mtc_Board) => {
   if (!isDevelopment) {
     return
   }
 
-  query((q) => q.game.playerHealth(address)).then((h) => {
+  api.query.game.playerHealth(address).then((h) => {
     const subHealth = h.unwrap().toNumber()
     if (health !== subHealth) {
       throw new Error(`state diff found for health (front: ${health}, sub: ${subHealth})`)
     }
   })
-  query((q) => q.game.playerGradeAndBoardHistory(address)).then((_subBoards) => {
+  api.query.game.playerGradeAndBoardHistory(address).then((_subBoards) => {
     const subBoards = _subBoards.unwrap()
     const localIds = board.map((e) => e.mtc_emo_ids.map((i) => i.toString())).flat()
     const subIds = subBoards[subBoards.length - 1].board

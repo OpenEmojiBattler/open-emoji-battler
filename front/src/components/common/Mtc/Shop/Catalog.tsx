@@ -3,7 +3,7 @@ import * as React from "react"
 import { mtc_Emo } from "common"
 
 import { emoBuyCoin } from "~/misc/constants"
-import { useGlobalAsync } from "~/components/App/Frame/tasks"
+import { useGlobalAsync } from "~/components/App/ChainProvider/tasks"
 import { findEmoBase, getCoinText } from "~/misc/mtcUtils"
 import { EmoBase } from "~/components/common/Emo"
 

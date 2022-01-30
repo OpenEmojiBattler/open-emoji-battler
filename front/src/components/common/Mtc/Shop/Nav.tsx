@@ -7,7 +7,7 @@ import { zeroAddress } from "~/misc/constants"
 
 import { PowButton } from "~/components/common/PowButton"
 import { Identicon } from "~/components/common/Identicon"
-import { AccountContext, useAccount } from "~/components/App/Frame/tasks"
+import { AccountContext, useAccount } from "~/components/App/ChainProvider/tasks"
 
 export type FinishFn = { kind: "pow"; fn: (s: BN) => void } | { kind: "no-pow"; fn: () => void }
 

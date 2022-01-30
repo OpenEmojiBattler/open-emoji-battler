@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { ResultState, MtcState, findEmoBase, getEmoBaseEmoji } from "~/misc/mtcUtils"
 import { Emo } from "~/components/common/Emo"
-import { useGlobalAsync } from "~/components/App/Frame/tasks"
+import { useGlobalAsync } from "~/components/App/ChainProvider/tasks"
 
 export function Result(props: {
   mtcState: MtcState

@@ -3,7 +3,7 @@ import * as React from "react"
 import { mtc_Board, mtc_Emo } from "common"
 
 import { operate, Operation } from "./tasks"
-import { useGlobalAsync } from "~/components/App/Frame/tasks"
+import { useGlobalAsync } from "~/components/App/ChainProvider/tasks"
 import { EmoLineButtons } from "./EmoLineButtons"
 
 export function MtcShopBoard(props: {

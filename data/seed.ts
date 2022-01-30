@@ -12,8 +12,9 @@ const main = async () => {
   )
   const bases = loadEmoBases()
 
-  await connected(endpoint, async () => {
+  await connected(endpoint, async (api) => {
     const h = await sudo(
+      api,
       (t) =>
         t.game.updateEmoBases(bases, availableEmoBaseIds.fixed, availableEmoBaseIds.built, true),
       keyringPair
@@ -21,7 +22,7 @@ const main = async () => {
 
     console.log(h.toString())
 
-    const { baseIds, fixedIds, builtIds } = await getCurrentIds()
+    const { baseIds, fixedIds, builtIds } = await getCurrentIds(api)
     console.log(baseIds, fixedIds, builtIds)
   })
 }

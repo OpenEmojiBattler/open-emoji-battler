@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { GlobalAsyncContext } from "~/components/App/Frame/tasks"
+import { GlobalAsyncContext } from "~/components/App/ChainProvider/tasks"
 
 import { Loading } from "~/components/common/Loading"
 import { AllEmos } from "./AllEmos"
@@ -34,7 +34,11 @@ export function EmoBases() {
             })}
           </ul>
         </div>
-        {tab === "All EMOs" ? <AllEmos bases={bases} /> : <AvailableEmosByGrades bases={bases} />}
+        {tab === "All EMOs" ? (
+          <AllEmos bases={bases} />
+        ) : (
+          <AvailableEmosByGrades api={globalAsync.api} bases={bases} />
+        )}
       </div>
     </section>
   )
