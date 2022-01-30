@@ -2,12 +2,7 @@ import * as React from "react"
 
 import { getEnv, getRuntimeVersion } from "common"
 
-import {
-  getEndpoint,
-  GlobalAsyncContext,
-  setEndpoint,
-  useIsConnected,
-} from "../App/ChainProvider/tasks"
+import { getEndpoint, GlobalAsyncContext, setEndpoint } from "../App/ChainProvider/tasks"
 import { InternalLink } from "../common/InternalLink"
 
 export function Dev() {
@@ -23,9 +18,6 @@ export function Dev() {
             </li>
             <li>
               <InternalLink to={"/emo_ability_builder"}>ability builder</InternalLink>
-            </li>
-            <li>
-              <InternalLink to={"/style"}>style</InternalLink>
             </li>
           </ul>
         </div>

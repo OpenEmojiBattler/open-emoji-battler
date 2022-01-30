@@ -7,7 +7,6 @@ export const routeIds = [
   "/dev",
   "/match_debug",
   "/emo_ability_builder",
-  "/style",
   "/not_found",
 ] as const
 export type RouteId = typeof routeIds[number]

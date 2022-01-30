@@ -10,7 +10,6 @@ import { MtcTrial } from "../pages/MtcTrial"
 import { Dev } from "../pages/Dev"
 import { MtcDebug } from "../pages/MtcDebug"
 import { EmoAbilityBuilder } from "../pages/EmoAbilityBuilder"
-import { Style } from "../pages/Style"
 
 export function Router(props: { route: Route }) {
   const [kind, e] = getElement(props.route.id)
@@ -40,11 +39,9 @@ const getElement = (routeId: RouteId): ["chain" | "contract" | "none", JSX.Eleme
     case "/match_debug":
       return ["chain", <MtcDebug />]
     case "/emo_ability_builder":
-      return ["chain", <EmoAbilityBuilder />]
-    case "/style":
-      return ["none", <Style />]
+      return ["none", <EmoAbilityBuilder />]
     case "/match_contract":
-      return ["contract", <Style />] // TODO: change
+      return ["contract", <EmoAbilityBuilder />] // TODO: change
     case "/not_found":
     default:
       return ["none", <h1>page not found</h1>]
