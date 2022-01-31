@@ -6,7 +6,6 @@ import type { SubmittableExtrinsic } from "@polkadot/api/types"
 import type { SubmittableResult } from "@polkadot/api/submittable"
 import type { IKeyringPair, Codec, DetectCodec } from "@polkadot/types/types"
 import type { DispatchErrorModule } from "@polkadot/types/interfaces"
-import type { Hash } from "@polkadot/types/interfaces/runtime"
 
 import { buildTypes, KeyringPairOrAddressAndSigner, extractTxArgs } from "./utils"
 
@@ -14,10 +13,14 @@ const registry = new TypeRegistry()
 const types = buildTypes()
 registry.register(types)
 
-export const connected = async <T>(endpoint: string, f: (api: ApiPromise) => Promise<T>) => {
+export const connected = async <T>(
+  endpoint: string,
+  f: (api: ApiPromise) => Promise<T>,
+  withTypes = true
+) => {
   let api: ApiPromise | null = null
   try {
-    api = await connect(endpoint)
+    api = await connect(endpoint, withTypes)
     await f(api)
   } catch (e) {
     console.error(e)
@@ -28,14 +31,21 @@ export const connected = async <T>(endpoint: string, f: (api: ApiPromise) => Pro
   }
 }
 
-export const connect = (endpoint: string) => {
-  // if we don't pass `types` here,
-  // it seems the types data will be cleared when the runtime upgrade occurs
-  return ApiPromise.create({
-    provider: new WsProvider(endpoint),
-    registry,
-    types,
-  })
+export const connect = (endpoint: string, withTypes = true) => {
+  const provider = new WsProvider(endpoint)
+  if (withTypes) {
+    // if we don't pass `types` here,
+    // it seems the types data will be cleared when the runtime upgrade occurs
+    return ApiPromise.create({
+      provider,
+      registry,
+      types,
+    })
+  } else {
+    return ApiPromise.create({
+      provider,
+    })
+  }
 }
 
 export const tx = (
@@ -46,7 +56,7 @@ export const tx = (
 ) => {
   const [pairOrAddress, options] = extractTxArgs(account, powSolution)
 
-  return new Promise<Hash>(async (resolve, reject) => {
+  return new Promise<SubmittableResult>(async (resolve, reject) => {
     const unsub = await f(api.tx)
       .signAndSend(pairOrAddress, options, (result: SubmittableResult) => {
         if (!result.isCompleted) {
@@ -68,9 +78,7 @@ export const tx = (
               return
             }
           }
-          const status = result.status
-          const hash = status.isInBlock ? status.asInBlock : status.asFinalized
-          resolve(hash)
+          resolve(result)
           return
         }
         if (result.dispatchError) {

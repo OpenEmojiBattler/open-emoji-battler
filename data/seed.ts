@@ -1,7 +1,8 @@
+import { readFileSync } from "fs"
 import { connected, sudo } from "common"
-import { getChainEndpointAndKeyringPair } from "common/src/scriptUtils"
+import { loadEmoBases, getChainEndpointAndKeyringPair } from "common/src/scriptUtils"
 
-import { loadEmoBases, getCurrentIds } from "./utils"
+import { getCurrentIds } from "./utils"
 
 import availableEmoBaseIds from "./availableEmoBaseIds.json"
 
@@ -10,7 +11,7 @@ const main = async () => {
     process.argv[2],
     process.argv[3]
   )
-  const bases = loadEmoBases()
+  const bases = loadEmoBases(readFileSync("./emoBases.json", "utf8"))
 
   await connected(endpoint, async (api) => {
     const h = await sudo(

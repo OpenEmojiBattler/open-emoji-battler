@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "license": "Apache-2.0",
   "sideEffects": [
-    "./src/api.ts",
     "./src/pow.ts"
   ],
   "main": "./src/index.ts",
@@ -16,6 +15,7 @@
     "check-ts": "tsc -p . --noEmit"
   },
   "dependencies": {
+    "@polkadot/api-contract": "7.5.1",
     "@polkadot/typegen": "7.5.1",
     "prettier": "2.5.1",
     "ts-node": "10.4.0",

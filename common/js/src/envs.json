@@ -1,14 +1,26 @@
 {
   "local": {
     "chainEndpoint": "ws://127.0.0.1:9944",
-    "contractsEndpoint": "ws://127.0.0.1:9988"
+    "contract": {
+      "endpoint": "ws://127.0.0.1:9988",
+      "storageAddress": "5GSgjWHFDhk8qoSfNRZtnEkYBPghrHnxfAQKRXjvbkTySPdS",
+      "forwarderAddress": "5CyqT9HEYUX3sYq6JykjaqGdrjMxArH4e2FvwVr5aqxCciBz"
+    }
   },
   "staging": {
     "chainEndpoint": "wss://node-6769173380176625664.jm.onfinality.io/ws",
-    "contractsEndpoint": "ws://127.0.0.1:9988"
+    "contract": {
+      "endpoint": "",
+      "storageAddress": "",
+      "forwarderAddress": ""
+    }
   },
   "production": {
     "chainEndpoint": "wss://proto0.open-emoji-battler.community/",
-    "contractsEndpoint": "ws://127.0.0.1:9988"
+    "contract": {
+      "endpoint": "",
+      "storageAddress": "",
+      "forwarderAddress": ""
+    }
   }
 }
