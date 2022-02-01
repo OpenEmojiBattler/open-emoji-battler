@@ -6,6 +6,7 @@ import {
   mtc_Board,
   emo_Typ,
   emo_Base,
+  emo_Bases,
   mtc_GhostState,
   createType,
 } from "common"
@@ -17,6 +18,11 @@ import { battleAll, selectBattleGhostIndex } from "~/wasm"
 import { get_upgrade_coin } from "~/wasm/raw"
 
 import emoNames from "~/misc/emo/names.json"
+
+export const buildEmoBases = (codec: emo_Bases): EmoBases => ({
+  codec,
+  stringKey: new Map(Array.from(codec[0].entries()).map(([k, v]) => [k.toString(), v])),
+})
 
 export const findEmoBase = (id: u16, bases: EmoBases) => findEmoBaseByStringId(id.toString(), bases)
 

@@ -4,13 +4,13 @@ import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { Decks } from "./Decks"
 import { PowButton } from "~/components/common/PowButton"
-import { useAccount } from "~/components/App/connectionProviders/Chain/tasks"
+import { useAccount } from "~/components/App/ConnectionProvider/tasks"
 import { Accounts } from "./Accounts"
 
 export function Setup(props: {
   injectedAccounts: InjectedAccountWithMeta[]
   builtEmoBaseIds: string[]
-  startMtc: (solution: BN, deckEmoBaseIds: string[]) => void
+  startMtc: (deckEmoBaseIds: string[], solution?: BN) => void
   ep: number
   message: string
 }) {
@@ -18,9 +18,9 @@ export function Setup(props: {
   const [hasPowButton, setHasPowButton] = React.useState(true)
   const [deck, setDeck] = React.useState<string[]>([])
 
-  const startMtc = async (solution: BN) => {
+  const startMtc = async (solution?: BN) => {
     setHasPowButton(false)
-    props.startMtc(solution, deck)
+    props.startMtc(deck, solution)
   }
 
   return (
@@ -38,12 +38,18 @@ export function Setup(props: {
               </div>
               <div>
                 {hasPowButton ? (
-                  <PowButton
-                    account={account.session.isActive ? account.session : account.player}
-                    onClick={startMtc}
-                  >
-                    Start
-                  </PowButton>
+                  account.kind === "chain" ? (
+                    <PowButton
+                      account={account.session.isActive ? account.session : account.player}
+                      onClick={startMtc}
+                    >
+                      Start
+                    </PowButton>
+                  ) : (
+                    <button onClick={() => startMtc()} className={"button is-strong"}>
+                      Start
+                    </button>
+                  )
                 ) : (
                   <></>
                 )}

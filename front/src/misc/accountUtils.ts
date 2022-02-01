@@ -1,10 +1,14 @@
 import { web3Accounts, web3Enable } from "@polkadot/extension-dapp"
 import { mnemonicGenerate } from "@polkadot/util-crypto"
-import type { ApiPromise } from "@polkadot/api"
 
 import { buildKeyringPair } from "common"
 
-import type { Account, PlayerAccount, SessionAccount } from "~/misc/types"
+import type {
+  Account,
+  Connection,
+  AccountChainPlayer,
+  AccountChainSession,
+} from "~/components/App/ConnectionProvider/tasks"
 
 export const setupExtension = async () => {
   const extensions = await web3Enable("Open Emoji Battler")
@@ -29,52 +33,73 @@ export const setupExtension = async () => {
   }
 }
 
-export const setupAccounts = async (api: ApiPromise, account: Account | null) => {
+export const setupAccounts = async (connection: Connection, account: Account | null) => {
   const ext = await setupExtension()
   if (ext.kind === "ng") {
     return ext
   }
   const injectedAccounts = ext.injectedAccounts
 
-  let playerAccount: PlayerAccount
-  let sessionAccount: SessionAccount
-  if (account && injectedAccounts.map((a) => a.address).includes(account.player.address)) {
-    playerAccount = account.player
-    sessionAccount = account.session
+  if (account) {
+    if (connection.kind !== account.kind) {
+      throw new Error("")
+    }
+  }
+
+  let acc: Account
+
+  if (connection.kind === "contract") {
+    if (account) {
+      acc = { kind: "contract", address: account.address }
+    } else {
+      acc = { kind: "contract", address: injectedAccounts[0].address }
+    }
   } else {
-    const accounts = await buildAndGeneratePlayerAndSessionAccounts(
-      api,
-      injectedAccounts[0].address
-    )
-    playerAccount = accounts.player
-    sessionAccount = accounts.session
+    if (
+      account &&
+      account.kind === "chain" &&
+      injectedAccounts.map((a) => a.address).includes(account.player.address)
+    ) {
+      acc = {
+        kind: "chain",
+        address: account.player.address,
+        player: account.player,
+        session: account.session,
+      }
+    } else {
+      acc = await buildAndGeneratePlayerAndSessionAccounts(connection, injectedAccounts[0].address)
+    }
   }
 
   return {
     kind: "ok" as const,
-    account: {
-      player: playerAccount,
-      session: sessionAccount,
-    },
+    account: acc,
     injectedAccounts,
   }
 }
 
 export const buildAndGeneratePlayerAndSessionAccounts = async (
-  api: ApiPromise,
+  connection: Connection,
   playerAddress: string
-) => {
-  const accountData = await api.query.transactionPaymentPow.accountData(playerAddress)
-  const playerPowCount = accountData.isSome ? accountData.unwrap()[1].toNumber() : 0
-  const playerAccount: PlayerAccount = { address: playerAddress, powCount: playerPowCount }
+): Promise<Account> => {
+  if (connection.kind === "chain") {
+    const accountData = await connection
+      .api()
+      .query.transactionPaymentPow.accountData(playerAddress)
+    const playerPowCount = accountData.isSome ? accountData.unwrap()[1].toNumber() : 0
 
-  const sessionMnemonic = mnemonicGenerate()
-  const sessionAccount: SessionAccount = {
-    address: buildKeyringPair(sessionMnemonic).address,
-    mnemonic: sessionMnemonic,
-    powCount: 0,
-    isActive: false,
+    const playerAccount: AccountChainPlayer = { address: playerAddress, powCount: playerPowCount }
+
+    const sessionMnemonic = mnemonicGenerate()
+    const sessionAccount: AccountChainSession = {
+      address: buildKeyringPair(sessionMnemonic).address,
+      mnemonic: sessionMnemonic,
+      powCount: 0,
+      isActive: false,
+    }
+
+    return { kind: "chain", address: playerAddress, player: playerAccount, session: sessionAccount }
+  } else {
+    return { kind: "contract", address: playerAddress }
   }
-
-  return { player: playerAccount, session: sessionAccount }
 }

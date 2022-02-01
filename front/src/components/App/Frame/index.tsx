@@ -14,6 +14,7 @@ import { Router } from "~/components/App/Router"
 import { Footer } from "../Footer"
 import { ModalWithoutClose } from "~/components/common/ModalWithoutClose"
 import { ModalWithReload } from "~/components/common/ModalWithReload"
+import { ConnectionProvider } from "../ConnectionProvider"
 
 export function Frame(props: { route: Route }) {
   const [hasNav, setHasNav] = React.useState(true)
@@ -37,7 +38,9 @@ export function Frame(props: { route: Route }) {
           <BlockMessageSetterContext.Provider value={setBlockMessage}>
             <WaitingSetterContext.Provider value={setIsWaiting}>
               <IsWasmReadyContext.Provider value={isWasmReady}>
-                <Router route={props.route} />
+                <ConnectionProvider>
+                  <Router route={props.route} />
+                </ConnectionProvider>
               </IsWasmReadyContext.Provider>
             </WaitingSetterContext.Provider>
           </BlockMessageSetterContext.Provider>

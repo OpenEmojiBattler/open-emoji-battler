@@ -16,7 +16,7 @@ export const getForwarderContract = (api: ApiPromise, address: string) =>
 export const queryContract = async (
   contract: ContractPromise,
   fnName: string,
-  fnArgs: any[],
+  fnArgs: any[] = [],
   caller = "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM" // zero address
 ) => {
   if (!contract.query[fnName]) {

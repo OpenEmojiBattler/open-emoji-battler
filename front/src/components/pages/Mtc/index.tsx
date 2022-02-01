@@ -1,16 +1,17 @@
 import * as React from "react"
 import BN from "bn.js"
 
+import { useIsWasmReady } from "~/components/App/Frame/tasks"
 import { Shop } from "../../common/Mtc/Shop"
 import { Battle } from "../../common/Mtc/Battle"
 import { Result } from "../../common/Mtc/Result"
-import { tx, createType, buildKeyringPair, mtc_shop_PlayerOperation } from "common"
+import type { mtc_shop_PlayerOperation } from "common"
 import { useNavSetter, useWaitingSetter } from "~/components/App/Frame/tasks"
 import {
   AccountContext,
   useAccountUpdater,
-  GlobalAsyncContext,
-} from "~/components/App/connectionProviders/Chain/tasks"
+  ConnectionContext,
+} from "~/components/App/ConnectionProvider/tasks"
 import { withToggleAsync } from "~/misc/utils"
 import { Loading } from "../../common/Loading"
 import { getSeed, start, finishBattleAndBuildState } from "./tasks"
@@ -24,7 +25,8 @@ export function Mtc() {
   const setWaiting = useWaitingSetter()
   const account = React.useContext(AccountContext)
   const updateAccount = useAccountUpdater()
-  const globalAsync = React.useContext(GlobalAsyncContext)
+  const connection = React.useContext(ConnectionContext)
+  const isWasmReady = useIsWasmReady()
 
   const [phase, setPhase] = React.useState<Phase>("setup")
   const [mtcState, setMtcState] = React.useState<MtcState | null>(null)
@@ -32,53 +34,46 @@ export function Mtc() {
 
   React.useEffect(() => () => setNav(true), [])
 
-  if (!globalAsync) {
+  if (!isWasmReady || !connection) {
     return <Loading />
   }
 
   switch (phase) {
     case "setup":
-      const startMtc = async (solution: BN, deckEmoBaseIds: string[], previousEp: number) => {
+      const startMtc = async (deckEmoBaseIds: string[], previousEp: number, solution?: BN) => {
         if (!account) {
           throw new Error("account null")
         }
         setMtcState(
-          await start(
-            globalAsync.api,
-            account.player,
-            account.session,
-            account.session.isActive,
-            solution,
-            deckEmoBaseIds,
-            setWaiting,
-            previousEp
-          )
+          await start(connection, account, deckEmoBaseIds, setWaiting, previousEp, solution)
         )
-        updateAccount((a) => ({
-          ...a,
-          session: { ...a.session, isActive: true },
-        }))
+        if (account.kind === "chain") {
+          updateAccount((a) => {
+            if (a.kind !== "chain") {
+              throw new Error("invalid state")
+            }
+            return {
+              ...a,
+              session: { ...a.session, isActive: true },
+            }
+          })
+        }
         setNav(false)
         setPhase("shop")
       }
-      return <SetupWrapper api={globalAsync.api} startMtc={startMtc} />
+      return <SetupWrapper startMtc={startMtc} />
     case "shop":
       if (!mtcState) {
         throw new Error("invalid state mtc")
       }
-      const startBattle = (ops: mtc_shop_PlayerOperation[], solution: BN) => {
-        if (!account) {
-          throw new Error("accounts null")
-        }
+      if (!account) {
+        throw new Error("account null")
+      }
+      const startBattle = (ops: mtc_shop_PlayerOperation[], solution?: BN) => {
         withToggleAsync(setWaiting, async () => {
-          await tx(
-            globalAsync.api,
-            (t) => t.game.finishMtcShop(createType("Vec<mtc_shop_PlayerOperation>", ops)),
-            buildKeyringPair(account.session.mnemonic),
-            solution
-          )
+          await connection.tx.finishMtcShop(ops, account, solution)
 
-          const seed = await getSeed(globalAsync.api, account.player)
+          const seed = await getSeed(connection, account.address)
           setMtcState({ ...mtcState, seed })
           setPhase("battle")
         })
@@ -87,7 +82,7 @@ export function Mtc() {
         <Shop
           mtcState={mtcState}
           setMtcState={setMtcState as any}
-          startBattle={{ kind: "pow", fn: startBattle }}
+          startBattle={{ kind: account.kind === "chain" ? "pow" : "no-pow", fn: startBattle }}
         />
       )
     case "battle":
@@ -99,12 +94,7 @@ export function Mtc() {
           throw new Error("invalid state: playerAccount null")
         }
 
-        const r = finishBattleAndBuildState(
-          globalAsync.api,
-          account.player,
-          mtcState,
-          globalAsync.emoBases
-        )
+        const r = finishBattleAndBuildState(connection, account, mtcState, connection.emoBases)
         setMtcState(r.mtcState)
 
         const _resultState = r.resultState

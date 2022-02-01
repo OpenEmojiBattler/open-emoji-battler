@@ -22,7 +22,7 @@ import {
 } from "~/misc/mtcUtils"
 import { get_initial_coin_by_turn, get_upgrade_coin } from "~/wasm/raw"
 import { getCatalog, getGradeAndGhostBoard } from "~/wasm"
-import { useGlobalAsync } from "~/components/App/connectionProviders/Chain/tasks"
+import { useConnection } from "~/components/App/ConnectionProvider/tasks"
 import {
   State,
   finishShopBoardOperation,
@@ -36,9 +36,7 @@ import { Emo } from "~/components/common/Emo"
 import { MtcShopBoard } from "~/components/common/MtcShopBoard"
 import { Identicon } from "~/components/common/Identicon"
 
-type StartBattle =
-  | { kind: "pow"; fn: (ops: mtc_shop_PlayerOperation[], s: BN) => void }
-  | { kind: "no-pow"; fn: () => void }
+type StartBattle = { kind: "pow" | "no-pow"; fn: (ops: mtc_shop_PlayerOperation[], s?: BN) => void }
 
 export function Shop(props: {
   mtcState: MtcState
@@ -97,7 +95,7 @@ export function Shop(props: {
           kind: "pow",
           fn: (solution: BN) => props.startBattle.fn(shopState.playerOperations, solution),
         }
-      : { kind: "no-pow", fn: props.startBattle.fn }
+      : { kind: "no-pow", fn: () => props.startBattle.fn(shopState.playerOperations) }
 
   const _ids = [
     ...Array.from(
@@ -290,7 +288,7 @@ let counterForKey = 1 // not good for performance...
 const RivalBoardMemo = React.memo(RivalBoard)
 
 function RivalBoard(props: { ghostBoardEmos: mtc_GhostBoard }) {
-  const bases = useGlobalAsync().emoBases
+  const bases = useConnection().emoBases
 
   const emos = props.ghostBoardEmos.map((emo) => {
     const base = findEmoBase(emo.base_id, bases)

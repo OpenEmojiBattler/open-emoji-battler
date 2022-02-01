@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { GlobalAsyncContext } from "~/components/App/connectionProviders/Chain/tasks"
+import { ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
 
 import { Loading } from "~/components/common/Loading"
 import { AllEmos } from "./AllEmos"
@@ -10,15 +10,15 @@ const tabs = ["All EMOs", "Available EMOs By Grades"] as const
 type Tab = typeof tabs[number]
 
 export function EmoBases() {
-  const globalAsync = React.useContext(GlobalAsyncContext)
+  const connection = React.useContext(ConnectionContext)
 
   const [tab, setTab] = React.useState<Tab>("All EMOs")
 
-  if (!globalAsync) {
+  if (!connection) {
     return <Loading />
   }
 
-  const bases = Array.from(globalAsync.emoBases.codec[0].values())
+  const bases = Array.from(connection.emoBases.codec[0].values())
 
   return (
     <section className="section">
@@ -37,7 +37,7 @@ export function EmoBases() {
         {tab === "All EMOs" ? (
           <AllEmos bases={bases} />
         ) : (
-          <AvailableEmosByGrades api={globalAsync.api} bases={bases} />
+          <AvailableEmosByGrades api={connection.api()} bases={bases} />
         )}
       </div>
     </section>

@@ -3,30 +3,32 @@ import * as React from "react"
 import { finishBattle, MtcState, ResultState } from "~/misc/mtcUtils"
 import { buildMtcState, getSeed } from "./tasks"
 
+import { useIsWasmReady } from "~/components/App/Frame/tasks"
 import { Shop } from "../../common/Mtc/Shop"
 import { Battle } from "../../common/Mtc/Battle"
 import { Result } from "../../common/Mtc/Result"
 import { useNavSetter } from "~/components/App/Frame/tasks"
 import {
   useAccountSetter,
-  GlobalAsyncContext,
-  GlobalAsync,
-} from "~/components/App/connectionProviders/Chain/tasks"
+  ConnectionContext,
+  Connection,
+} from "~/components/App/ConnectionProvider/tasks"
 import { Loading } from "~/components/common/Loading"
 
 export function MtcTrial() {
-  const globalAsync = React.useContext(GlobalAsyncContext)
+  const isWasmReady = useIsWasmReady()
+  const connection = React.useContext(ConnectionContext)
 
-  if (!globalAsync) {
+  if (!isWasmReady || !connection) {
     return <Loading />
   }
 
-  return <Inner globalAsync={globalAsync} />
+  return <Inner connection={connection} />
 }
 
 type Phase = "shop" | "battle" | "result"
 
-function Inner(props: { globalAsync: GlobalAsync }) {
+function Inner(props: { connection: Connection }) {
   const setAcccount = useAccountSetter()
   const setNav = useNavSetter()
 
@@ -40,7 +42,7 @@ function Inner(props: { globalAsync: GlobalAsync }) {
   }, [])
 
   const setup = () => {
-    buildMtcState(props.globalAsync).then((s) => {
+    buildMtcState(props.connection).then((s) => {
       setMtcState(s)
       setAcccount(null)
       setNav(false)
@@ -67,7 +69,7 @@ function Inner(props: { globalAsync: GlobalAsync }) {
       )
     case "battle":
       const finish = () => {
-        const r = finishBattle(mtcState, props.globalAsync.emoBases)
+        const r = finishBattle(mtcState, props.connection.emoBases)
         setMtcState(r.mtcState)
         if (r.finalPlace) {
           setResultState({ place: r.finalPlace, ep: 1100 })

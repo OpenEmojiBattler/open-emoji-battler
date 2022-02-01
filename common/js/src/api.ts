@@ -111,8 +111,6 @@ const buildErrorText = (api: ApiPromise, mod: DispatchErrorModule) => {
   return `tx: ${section}.${name}: (${index}) ${docs.join(" ")}`
 }
 
-export const getRuntimeVersion = (api: ApiPromise) => api.runtimeVersion
-
 export const createType = <T extends Codec = Codec, K extends string = string>(
   type: K,
   ...params: unknown[]

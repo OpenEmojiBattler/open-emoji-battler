@@ -2,14 +2,14 @@ import * as React from "react"
 
 import { ResultState, MtcState, findEmoBase, getEmoBaseEmoji } from "~/misc/mtcUtils"
 import { Emo } from "~/components/common/Emo"
-import { useGlobalAsync } from "~/components/App/connectionProviders/Chain/tasks"
+import { useConnection } from "~/components/App/ConnectionProvider/tasks"
 
 export function Result(props: {
   mtcState: MtcState
   resultState: ResultState
   startAgain: () => void
 }) {
-  const emoBases = useGlobalAsync().emoBases
+  const emoBases = useConnection().emoBases
 
   return (
     <section className={"section"}>

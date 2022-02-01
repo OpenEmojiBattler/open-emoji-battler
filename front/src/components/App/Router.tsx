@@ -2,7 +2,9 @@ import * as React from "react"
 
 import type { Route, RouteId } from "~/misc/constants"
 
-import { Chain } from "./connectionProviders/Chain"
+import { Chain } from "./ConnectionProvider/Chain"
+import { Contract } from "./ConnectionProvider/Contract"
+
 import { Top } from "../pages/Top"
 import { Mtc } from "../pages/Mtc"
 import { EmoBases } from "../pages/EmoBases"
@@ -10,7 +12,6 @@ import { MtcTrial } from "../pages/MtcTrial"
 import { Dev } from "../pages/Dev"
 import { MtcDebug } from "../pages/MtcDebug"
 import { EmoAbilityBuilder } from "../pages/EmoAbilityBuilder"
-import { MtcContract } from "../pages/MtcContract"
 
 export function Router(props: { route: Route }) {
   const [kind, e] = getElement(props.route.id)
@@ -19,7 +20,7 @@ export function Router(props: { route: Route }) {
     case "chain":
       return <Chain>{e}</Chain>
     case "contract":
-      return e
+      return <Contract>{e}</Contract>
     case "none":
       return e
   }
@@ -42,7 +43,7 @@ const getElement = (routeId: RouteId): ["chain" | "contract" | "none", JSX.Eleme
     case "/emo_ability_builder":
       return ["none", <EmoAbilityBuilder />]
     case "/match_contract":
-      return ["contract", <MtcContract />]
+      return ["contract", <Mtc />]
     case "/not_found":
     default:
       return ["none", <h1>page not found</h1>]

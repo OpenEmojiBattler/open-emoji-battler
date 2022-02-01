@@ -1,12 +1,15 @@
 import * as React from "react"
 import BN from "bn.js"
 
-import { useAccountUpdater } from "~/components/App/connectionProviders/Chain/tasks"
+import {
+  useAccountUpdater,
+  AccountChainPlayer,
+  AccountChainSession,
+} from "~/components/App/ConnectionProvider/tasks"
 import { solvePow } from "~/misc/pow"
-import type { PlayerAccount, SessionAccount } from "~/misc/types"
 
 export function PowButton(props: {
-  account: PlayerAccount | SessionAccount
+  account: AccountChainPlayer | AccountChainSession
   onClick: (solution: BN) => void
   disabled?: boolean
   children: React.ReactNode

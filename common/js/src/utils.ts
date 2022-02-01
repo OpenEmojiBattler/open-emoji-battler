@@ -12,6 +12,7 @@ import * as definitions from "./interfaces/definitions"
 
 import envs from "./envs.json"
 type EnvNames = keyof typeof envs
+export type EnvContract = (typeof envs)[EnvNames]["contract"]
 export const getEnv = (envName: any) => {
   if (!envName) {
     throw new Error(`no envName: ${envName}`)

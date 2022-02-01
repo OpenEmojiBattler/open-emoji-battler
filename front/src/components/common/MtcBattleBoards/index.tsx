@@ -3,7 +3,7 @@ import * as React from "react"
 import { mtc_Board, mtc_GhostBoard } from "common"
 
 import { marchPvg } from "~/wasm"
-import { useGlobalAsync } from "~/components/App/connectionProviders/Chain/tasks"
+import { useConnection } from "~/components/App/ConnectionProvider/tasks"
 import { animate } from "./tasks"
 
 export function MtcBattleBoards(props: {
@@ -13,7 +13,7 @@ export function MtcBattleBoards(props: {
   hasReplayButton: boolean
   onFinish?: (boardGrade: number, ghostBoardGrade: number) => void
 }) {
-  const bases = useGlobalAsync().emoBases
+  const bases = useConnection().emoBases
   const playerBoardRef = React.useRef<HTMLDivElement>(null)
   const rivalBoardRef = React.useRef<HTMLDivElement>(null)
 
