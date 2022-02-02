@@ -3,27 +3,35 @@ import { ApiPromise } from "@polkadot/api"
 
 import { connect } from "common"
 
-import { useConnectionSetter } from "~/components/App/ConnectionProvider/tasks"
+import { useConnectionSetter, ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
 import { getEndpoint, buildConnection } from "./tasks"
 
 export function Chain(props: { children: React.ReactNode }) {
+  const connection = React.useContext(ConnectionContext)
   const setConnection = useConnectionSetter()
 
   React.useEffect(() => {
     let api: ApiPromise | undefined
-    ;(async () => {
-      api = await connect(getEndpoint())
-      const connection = await buildConnection(api)
-      setConnection(connection)
-    })()
+
+    connect(getEndpoint())
+      .then((a) => {
+        api = a
+        return buildConnection(api)
+      })
+      .then(setConnection)
 
     return () => {
+      setConnection(null)
       if (api) {
         api.disconnect()
       }
-      setConnection(null)
     }
   }, [])
+
+  // wait for cleanup
+  if (connection && connection.kind !== "chain") {
+    return <></>
+  }
 
   return <>{props.children}</>
 }
