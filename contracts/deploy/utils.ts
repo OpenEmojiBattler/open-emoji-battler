@@ -26,7 +26,11 @@ export const instantiateContract = async (
   const code = new CodePromise(api, abi, wasm)
 
   const contract = (
-    (await tx(api, () => code.tx.new(0, 200_000n * 1_000_000n, ...constructorArgs), pair)) as any
+    (await tx(
+      api,
+      () => code.tx.new({ gasLimit: 200_000n * 1_000_000n }, ...constructorArgs),
+      pair
+    )) as any
   ).contract as ContractPromise
 
   writeFileSync(
