@@ -31,7 +31,7 @@ const main = async () => {
         ),
       keyringPair
     )
-    console.log(h.toString())
+    console.log(h.status.asInBlock.toString())
 
     const {
       baseIds: newBaseIds,

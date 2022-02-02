@@ -25,7 +25,7 @@ const main = async () => {
       (t) => t.sudo.sudoUncheckedWeight(t.system.setCode(`0x${code}`), 0),
       keyringPair
     )
-    console.log(h.toString())
+    console.log(h.status.asInBlock.toString())
   })
 }
 

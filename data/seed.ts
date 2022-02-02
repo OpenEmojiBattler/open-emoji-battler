@@ -21,7 +21,7 @@ const main = async () => {
       keyringPair
     )
 
-    console.log(h.toString())
+    console.log(h.status.asInBlock.toString())
 
     const { baseIds, fixedIds, builtIds } = await getCurrentIds(api)
     console.log(baseIds, fixedIds, builtIds)
