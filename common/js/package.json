@@ -3,9 +3,7 @@
   "name": "common",
   "version": "0.1.0",
   "license": "Apache-2.0",
-  "sideEffects": [
-    "./src/pow.ts"
-  ],
+  "sideEffects": false,
   "main": "./src/index.ts",
   "scripts": {
     "build": "yarn generate:defs && yarn generate:meta",

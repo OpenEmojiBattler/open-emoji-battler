@@ -3,6 +3,7 @@
   "name": "front",
   "version": "0.1.0",
   "license": "Apache-2.0",
+  "sideEffects": ["**/*.sass"],
   "scripts": {
     "dev": "OEB_ENV=local webpack serve --mode development --stats minimal --hot",
     "build": "rm -rf ./dist && ./scripts/put-redirects.sh && OEB_ENV=production webpack --mode production",
