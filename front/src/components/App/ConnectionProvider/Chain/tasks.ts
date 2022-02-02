@@ -1,4 +1,3 @@
-import { web3FromAddress } from "@polkadot/extension-dapp"
 import type { ApiPromise } from "@polkadot/api"
 
 import { getEnv, tx, createType, buildKeyringPair } from "common"
@@ -59,12 +58,10 @@ const buildConnectionTx = (api: ApiPromise): Connection["tx"] => ({
         powSolution
       )
     } else {
-      const signer = (await web3FromAddress(account.player.address)).signer
-
       await tx(
         api,
         (t) => t.game.startMtc(account.session.address, _deckEmoBaseIds),
-        { address: account.player.address, signer },
+        { address: account.player.address, signer: account.player.signer },
         powSolution
       )
     }

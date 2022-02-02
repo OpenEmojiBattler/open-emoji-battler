@@ -1,5 +1,7 @@
 import { web3Accounts, web3Enable } from "@polkadot/extension-dapp"
 import { mnemonicGenerate } from "@polkadot/util-crypto"
+import { web3FromAddress } from "@polkadot/extension-dapp"
+import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { buildKeyringPair } from "common"
 
@@ -10,70 +12,68 @@ import type {
   AccountChainSession,
 } from "~/components/App/ConnectionProvider/tasks"
 
-export const setupExtension = async () => {
+export const setupExtension = async (): Promise<
+  { kind: "ok"; injectedAccounts: InjectedAccountWithMeta[] } | { kind: "ng"; message: string }
+> => {
   const extensions = await web3Enable("Open Emoji Battler")
 
   if (extensions.length === 0) {
     return {
-      kind: "ng" as const,
+      kind: "ng",
       message: "Please install Polkadot{.js} extension and try again.",
     }
   }
   const injectedAccounts = await web3Accounts()
   if (injectedAccounts.length === 0) {
     return {
-      kind: "ng" as const,
+      kind: "ng",
       message: "Please add at least one account on the Polkadot{.js} extension and try again.",
     }
   }
 
   return {
-    kind: "ok" as const,
+    kind: "ok",
     injectedAccounts,
   }
 }
 
 export const setupAccounts = async (connection: Connection, account: Account | null) => {
+  if (account && connection.kind !== account.kind) {
+    throw new Error("invalid state: kinds of connection and account are different")
+  }
+
   const ext = await setupExtension()
   if (ext.kind === "ng") {
     return ext
   }
   const injectedAccounts = ext.injectedAccounts
 
-  if (account) {
-    if (connection.kind !== account.kind) {
-      throw new Error("")
-    }
-  }
+  let newAccount: Account
 
-  let acc: Account
-
-  if (connection.kind === "contract") {
-    if (account) {
-      acc = { kind: "contract", address: account.address }
-    } else {
-      acc = { kind: "contract", address: injectedAccounts[0].address }
-    }
-  } else {
+  if (connection.kind === "chain") {
     if (
       account &&
       account.kind === "chain" &&
-      injectedAccounts.map((a) => a.address).includes(account.player.address)
+      injectedAccounts.map((a) => a.address).includes(account.address)
     ) {
-      acc = {
-        kind: "chain",
-        address: account.player.address,
-        player: account.player,
-        session: account.session,
-      }
+      newAccount = { ...account }
     } else {
-      acc = await buildAndGeneratePlayerAndSessionAccounts(connection, injectedAccounts[0].address)
+      newAccount = await buildAndGeneratePlayerAndSessionAccounts(
+        connection,
+        injectedAccounts[0].address
+      )
+    }
+  } else {
+    if (account) {
+      newAccount = { ...account }
+    } else {
+      newAccount = await getAddressContract(injectedAccounts[0].address)
     }
   }
 
   return {
     kind: "ok" as const,
-    account: acc,
+    account: newAccount,
     injectedAccounts,
   }
 }
@@ -88,7 +88,11 @@ export const buildAndGeneratePlayerAndSessionAccounts = async (
       .query.transactionPaymentPow.accountData(playerAddress)
     const playerPowCount = accountData.isSome ? accountData.unwrap()[1].toNumber() : 0
 
-    const playerAccount: AccountChainPlayer = { address: playerAddress, powCount: playerPowCount }
+    const playerAccount: AccountChainPlayer = {
+      address: playerAddress,
+      powCount: playerPowCount,
+      signer: (await web3FromAddress(playerAddress)).signer,
+    }
 
     const sessionMnemonic = mnemonicGenerate()
     const sessionAccount: AccountChainSession = {
@@ -100,6 +104,12 @@ export const buildAndGeneratePlayerAndSessionAccounts = async (
 
     return { kind: "chain", address: playerAddress, player: playerAccount, session: sessionAccount }
   } else {
-    return { kind: "contract", address: playerAddress }
+    return getAddressContract(playerAddress)
   }
 }
+
+const getAddressContract = async (addr: string): Promise<Account> => ({
+  kind: "contract",
+  address: addr,
+  signer: (await web3FromAddress(addr)).signer,
+})

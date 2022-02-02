@@ -1,4 +1,3 @@
-import { web3FromAddress } from "@polkadot/extension-dapp"
 import type { ApiPromise } from "@polkadot/api"
 import type { ContractPromise } from "@polkadot/api-contract"
 
@@ -92,11 +91,9 @@ const buildConnectionTx = (forwarderContract: ContractPromise): Connection["tx"]
       throw new Error("invalid connection kind")
     }
 
-    const signer = (await web3FromAddress(account.address)).signer
-
     await txContract(forwarderContract, "startMtc", [deckEmoBaseIds], {
       address: account.address,
-      signer,
+      signer: account.signer,
     })
   },
   finishMtcShop: async (ops, account) => {
@@ -104,15 +101,13 @@ const buildConnectionTx = (forwarderContract: ContractPromise): Connection["tx"]
       throw new Error("invalid connection kind")
     }
 
-    const signer = (await web3FromAddress(account.address)).signer
-
     await txContract(
       forwarderContract,
       "finishMtcShop",
       [createType("Vec<mtc_shop_PlayerOperation>", ops).toU8a()],
       {
         address: account.address,
-        signer,
+        signer: account.signer,
       }
     )
   },

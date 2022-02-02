@@ -4,6 +4,7 @@ import type { Vec, Option, u8, u16, u64 } from "@polkadot/types-codec"
 import type { ITuple } from "@polkadot/types-codec/types"
 import type { AccountId } from "@polkadot/types/interfaces/runtime"
 import type { ApiPromise } from "@polkadot/api"
+import type { Signer } from "@polkadot/api/types"
 
 import type { mtc_Emo, mtc_Ghost, mtc_GradeAndBoard, mtc_shop_PlayerOperation } from "common"
 import type { EmoBases } from "~/misc/types"
@@ -35,11 +36,12 @@ export interface Connection {
 
 export type Account =
   | { kind: "chain"; address: string; player: AccountChainPlayer; session: AccountChainSession }
-  | { kind: "contract"; address: string }
+  | { kind: "contract"; address: string; signer: Signer }
 
 export interface AccountChainPlayer {
   address: string
   powCount: number
+  signer: Signer
 }
 
 export interface AccountChainSession {
