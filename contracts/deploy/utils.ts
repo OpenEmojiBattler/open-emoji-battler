@@ -76,14 +76,9 @@ export const query = async (
   }
 }
 
-export const getApiAndPair = async () => {
+export const getEndpointAndPair = async () => {
   const envName = process.argv[2]
   const { contract, keyringPair } = await getContractEnvAndKeyringPair(envName, process.argv[3])
 
-  const wsProvider = new WsProvider(contract.endpoint)
-  const api = await ApiPromise.create({
-    provider: wsProvider,
-  })
-
-  return { envName, api, keyringPair }
+  return { envName, endpoint: contract.endpoint, keyringPair }
 }
