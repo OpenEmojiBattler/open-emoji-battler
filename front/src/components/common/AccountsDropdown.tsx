@@ -12,7 +12,7 @@ export function AccountsDropdown(props: {
   accounts: InjectedAccountWithMeta[]
   playerAddress: string
 }) {
-  const globalAsync = useConnection()
+  const connection = useConnection()
   const setWaiting = useWaitingSetter()
   const setAccount = useAccountSetter()
 
@@ -30,7 +30,7 @@ export function AccountsDropdown(props: {
       return
     }
     withToggleAsync(setWaiting, async () => {
-      const r = await buildAndGeneratePlayerAndSessionAccounts(globalAsync, address)
+      const r = await buildAndGeneratePlayerAndSessionAccounts(connection, address)
       setAccount(r)
     })
   }
