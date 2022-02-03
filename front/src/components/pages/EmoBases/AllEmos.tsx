@@ -89,15 +89,13 @@ function AbilitiesTable(props: { abilities: emo_ability_Ability[]; isTriple: boo
         </tr>
       </thead>
       <tbody>
-        {buildEmoAbilitiesText(props.abilities, props.isTriple, connection.emoBases).map((a, i) => {
-          return (
-            <tr key={i}>
-              <td>{a.phase}</td>
-              <td>{a.trigger}</td>
-              <td>{a.action}</td>
-            </tr>
-          )
-        })}
+        {buildEmoAbilitiesText(props.abilities, props.isTriple, connection.emoBases).map((a, i) => (
+          <tr key={i}>
+            <td>{a.phase}</td>
+            <td>{a.trigger}</td>
+            <td>{a.action}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   )

@@ -34,11 +34,7 @@ export function EmoBases() {
             })}
           </ul>
         </div>
-        {tab === "All EMOs" ? (
-          <AllEmos bases={bases} />
-        ) : (
-          <AvailableEmosByGrades api={connection.api()} bases={bases} />
-        )}
+        {tab === "All EMOs" ? <AllEmos bases={bases} /> : <AvailableEmosByGrades bases={bases} />}
       </div>
     </section>
   )

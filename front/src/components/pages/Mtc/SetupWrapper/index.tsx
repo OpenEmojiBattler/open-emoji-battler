@@ -6,9 +6,12 @@ import { initialEp } from "~/misc/constants"
 import { Setup } from "../Setup"
 import { setup } from "./tasks"
 import { useBlockMessageSetter, useWaitingSetter } from "~/components/App/Frame/tasks"
-import { AccountContext, useAccountSetter } from "~/components/App/ConnectionProvider/tasks"
+import {
+  useConnection,
+  AccountContext,
+  useAccountSetter,
+} from "~/components/App/ConnectionProvider/tasks"
 import { Loading } from "../../../common/Loading"
-import { useConnection } from "~/components/App/ConnectionProvider/tasks"
 
 export function SetupWrapper(props: {
   startMtc: (deckEmoBaseIds: string[], previousEp: number, solution?: BN) => void

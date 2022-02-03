@@ -63,11 +63,8 @@ export function Mtc() {
       }
       return <SetupWrapper startMtc={startMtc} />
     case "shop":
-      if (!mtcState) {
-        throw new Error("invalid state mtc")
-      }
-      if (!account) {
-        throw new Error("account null")
+      if (!mtcState || !account) {
+        throw new Error("invalid shop state")
       }
       const startBattle = (ops: mtc_shop_PlayerOperation[], solution?: BN) => {
         withToggleAsync(setWaiting, async () => {
@@ -86,14 +83,10 @@ export function Mtc() {
         />
       )
     case "battle":
-      if (!mtcState) {
-        throw new Error("invalid state mtc")
+      if (!mtcState || !account) {
+        throw new Error("invalid battle state")
       }
       const finish = async () => {
-        if (!account) {
-          throw new Error("invalid state: playerAccount null")
-        }
-
         const r = finishBattleAndBuildState(connection, account, mtcState, connection.emoBases)
         setMtcState(r.mtcState)
 
@@ -109,8 +102,8 @@ export function Mtc() {
       }
       return <Battle mtcState={mtcState} finish={finish} />
     case "result":
-      if (!(mtcState && resultState)) {
-        throw new Error("invalid state: resut state null")
+      if (!mtcState || !resultState || !account) {
+        throw new Error("invalid result state")
       }
       const startAgain = () => {
         setPhase("setup")
