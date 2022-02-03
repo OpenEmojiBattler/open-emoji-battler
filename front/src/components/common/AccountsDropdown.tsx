@@ -6,7 +6,7 @@ import { withToggleAsync } from "~/misc/utils"
 import { Dropdown } from "~/components/common/Dropdown"
 import { useWaitingSetter } from "~/components/App/Frame/tasks"
 import { useAccountSetter, useConnection } from "~/components/App/ConnectionProvider/tasks"
-import { buildAndGeneratePlayerAndSessionAccounts } from "~/misc/accountUtils"
+import { generateAccount } from "~/misc/accountUtils"
 
 export function AccountsDropdown(props: {
   accounts: InjectedAccountWithMeta[]
@@ -30,7 +30,7 @@ export function AccountsDropdown(props: {
       return
     }
     withToggleAsync(setWaiting, async () => {
-      const r = await buildAndGeneratePlayerAndSessionAccounts(connection, address)
+      const r = await generateAccount(connection, address)
       setAccount(r)
     })
   }

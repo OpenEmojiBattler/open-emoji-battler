@@ -50,25 +50,10 @@ export const setupAccounts = async (connection: Connection, account: Account | n
 
   let newAccount: Account
 
-  if (connection.kind === "chain") {
-    if (
-      account &&
-      account.kind === "chain" &&
-      injectedAccounts.map((a) => a.address).includes(account.address)
-    ) {
-      newAccount = { ...account }
-    } else {
-      newAccount = await buildAndGeneratePlayerAndSessionAccounts(
-        connection,
-        injectedAccounts[0].address
-      )
-    }
+  if (account && injectedAccounts.map((a) => a.address).includes(account.address)) {
+    newAccount = { ...account }
   } else {
-    if (account) {
-      newAccount = { ...account }
-    } else {
-      newAccount = await getAddressContract(injectedAccounts[0].address)
-    }
+    newAccount = await generateAccount(connection, injectedAccounts[0].address)
   }
 
   return {
@@ -78,10 +63,12 @@ export const setupAccounts = async (connection: Connection, account: Account | n
   }
 }
 
-export const buildAndGeneratePlayerAndSessionAccounts = async (
+export const generateAccount = async (
   connection: Connection,
   playerAddress: string
 ): Promise<Account> => {
+  const signer = (await web3FromAddress(playerAddress)).signer
+
   if (connection.kind === "chain") {
     const accountData = await connection
       .api()
@@ -91,7 +78,7 @@ export const buildAndGeneratePlayerAndSessionAccounts = async (
     const playerAccount: AccountChainPlayer = {
       address: playerAddress,
       powCount: playerPowCount,
-      signer: (await web3FromAddress(playerAddress)).signer,
+      signer,
     }
 
     const sessionMnemonic = mnemonicGenerate()
@@ -104,12 +91,10 @@ export const buildAndGeneratePlayerAndSessionAccounts = async (
 
     return { kind: "chain", address: playerAddress, player: playerAccount, session: sessionAccount }
   } else {
-    return getAddressContract(playerAddress)
+    return {
+      kind: "contract",
+      address: playerAddress,
+      signer,
+    }
   }
 }
-
-const getAddressContract = async (addr: string): Promise<Account> => ({
-  kind: "contract",
-  address: addr,
-  signer: (await web3FromAddress(addr)).signer,
-})
