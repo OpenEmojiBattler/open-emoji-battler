@@ -35,7 +35,7 @@ function Versions() {
     if (connection) {
       setSpecVersion(connection.api().runtimeVersion.specVersion.toString())
     }
-  }, [connection])
+  }, [!connection])
 
   return (
     <div className={"content"}>
