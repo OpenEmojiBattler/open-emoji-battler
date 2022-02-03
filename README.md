@@ -51,7 +51,6 @@ You need Rust and Yarn.
 
 ```
 cd chain
-make init
 make build
 make dev
 ```
