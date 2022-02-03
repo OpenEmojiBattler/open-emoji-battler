@@ -14,8 +14,15 @@ export const start = (
   setWaiting: (b: boolean) => void,
   previousEp: number,
   solution?: BN
-) =>
-  withToggleAsync(setWaiting, async () => {
+) => {
+  if (connection.kind !== account.kind) {
+    throw new Error("different kinds")
+  }
+  if (account.kind === "chain" ? !solution : !!solution) {
+    throw new Error("invalid solution")
+  }
+
+  return withToggleAsync(setWaiting, async () => {
     await connection.tx.startMtc(deckEmoBaseIds, account, solution)
 
     const [seed, _pool, _ghosts] = await Promise.all([
@@ -37,6 +44,7 @@ export const start = (
 
     return buildInitialMtcState(previousEp, seed, pool, ghosts, ghostAddressesAndEps)
   })
+}
 
 export const getSeed = (connection: Connection, address: string) =>
   connection.query.playerSeed(address).then((s) => {
