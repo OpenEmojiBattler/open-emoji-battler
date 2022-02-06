@@ -5,7 +5,7 @@ import { emo_ability_Ability, emo_Base } from "common"
 import { getEmoBaseEmoji, getEmoBaseName } from "~/misc/mtcUtils"
 import { EmoTypWithAll } from "~/misc/constants"
 import { buildEmoAbilitiesText } from "~/misc/emo/abilityText"
-import { useGlobalAsync } from "~/components/App/Frame/tasks"
+import { useConnection } from "~/components/App/ConnectionProvider/tasks"
 
 import { EmoTypSelector } from "~/components/common/EmoTypSelector"
 
@@ -74,7 +74,7 @@ export function AllEmos(props: { bases: emo_Base[] }) {
 }
 
 function AbilitiesTable(props: { abilities: emo_ability_Ability[]; isTriple: boolean }) {
-  const globalAsync = useGlobalAsync()
+  const connection = useConnection()
   if (props.abilities.length < 1) {
     return <></>
   }
@@ -89,17 +89,13 @@ function AbilitiesTable(props: { abilities: emo_ability_Ability[]; isTriple: boo
         </tr>
       </thead>
       <tbody>
-        {buildEmoAbilitiesText(props.abilities, props.isTriple, globalAsync.emoBases).map(
-          (a, i) => {
-            return (
-              <tr key={i}>
-                <td>{a.phase}</td>
-                <td>{a.trigger}</td>
-                <td>{a.action}</td>
-              </tr>
-            )
-          }
-        )}
+        {buildEmoAbilitiesText(props.abilities, props.isTriple, connection.emoBases).map((a, i) => (
+          <tr key={i}>
+            <td>{a.phase}</td>
+            <td>{a.trigger}</td>
+            <td>{a.action}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   )

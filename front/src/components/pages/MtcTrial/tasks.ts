@@ -1,18 +1,18 @@
-import { createType, query } from "common"
+import { createType } from "common"
 
-import type { EmoBases } from "~/misc/types"
 import { buildInitialMtcState, getDefaultDeck } from "~/misc/mtcUtils"
 import { buildPool } from "~/wasm"
 import { sampleArray } from "~/misc/utils"
+import { Connection } from "~/components/App/ConnectionProvider/tasks"
 
-export const buildMtcState = (bases: EmoBases) =>
+export const buildMtcState = (connection: Connection) =>
   Promise.all([
-    query((q) => q.game.deckBuiltEmoBaseIds()),
-    query((q) => q.game.deckFixedEmoBaseIds()),
-    query((q) => q.game.matchmakingGhosts(1000 / 100)),
+    connection.query.deckBuiltEmoBaseIds(),
+    connection.query.deckFixedEmoBaseIds(),
+    connection.query.matchmakingGhosts(1000 / 100),
   ]).then(([_builtIds, _fixedIds, matchmakingGhosts]) => {
-    const builtEmoBaseIds = _builtIds.unwrap().map((id) => id.toString())
-    const fixedEmoBaseIds = _fixedIds.unwrap().map((id) => id.toString())
+    const builtEmoBaseIds = _builtIds.map((id) => id.toString())
+    const fixedEmoBaseIds = _fixedIds.map((id) => id.toString())
 
     if (matchmakingGhosts.isNone || matchmakingGhosts.unwrap().length < 3) {
       throw new Error("not enough ghosts")
@@ -27,9 +27,9 @@ export const buildMtcState = (bases: EmoBases) =>
       ep: e.toNumber(),
     }))
 
-    const deckEmoBaseIds = getDefaultDeck(bases, builtEmoBaseIds)
+    const deckEmoBaseIds = getDefaultDeck(connection.emoBases, builtEmoBaseIds)
 
-    const pool = buildPool(deckEmoBaseIds, bases, fixedEmoBaseIds, builtEmoBaseIds)
+    const pool = buildPool(deckEmoBaseIds, connection.emoBases, fixedEmoBaseIds, builtEmoBaseIds)
     const seed = getSeed()
 
     return buildInitialMtcState(1000, seed, pool, ghosts, addressesAndEps)

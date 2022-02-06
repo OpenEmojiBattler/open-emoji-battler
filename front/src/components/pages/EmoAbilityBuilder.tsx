@@ -8,14 +8,13 @@ import { TypeDef, TypeDefInfo } from "@polkadot/types/create/types"
 import { createType } from "common"
 
 import { Dropdown } from "../common/Dropdown"
-import { GlobalAsyncContext } from "~/components/App/Frame/tasks"
 
 export function EmoAbilityBuilder() {
-  const isReady = React.useContext(GlobalAsyncContext)
-
   return (
     <section className="section">
-      <div className={"container"}>{isReady ? <Ability /> : <></>}</div>
+      <div className={"container"}>
+        <Ability />
+      </div>
     </section>
   )
 }
@@ -108,7 +107,7 @@ function EnumComp(props: { enum: Enum; build: BuildFn; name?: string }) {
   })
 
   const build: BuildFn = (c) => {
-    props.build(createAnyType(typeDef.type, { [`${props.enum.type}`]: c }))
+    props.build(createType(typeDef.type, { [`${props.enum.type}`]: c }))
   }
 
   return (
@@ -122,7 +121,7 @@ function EnumComp(props: { enum: Enum; build: BuildFn; name?: string }) {
           if (!s) {
             throw new Error("invalid state, s is undefined")
           }
-          props.build(createAnyType(typeDef.type, s.name))
+          props.build(createType(typeDef.type, s.name))
         }}
         isUp={false}
         height={null}
@@ -140,7 +139,7 @@ function StructComp(props: { struct: Struct; build: BuildFn; name?: string }) {
     (codec) => {
       const newValue = new Map(props.struct)
       newValue.set(key, codec)
-      const t = createAnyType(typeDef.type, newValue)
+      const t = createType(typeDef.type, newValue)
       props.build(t)
     }
 
@@ -168,7 +167,7 @@ function OptionComp<T extends Codec>(props: { option: Option<T>; build: BuildFn;
   const subType = (typeDef.sub as TypeDef).type
 
   const build: BuildFn = (c) => {
-    const newValue = createAnyType(typeDef.type, c)
+    const newValue = createType(typeDef.type, c)
     props.build(newValue)
   }
 
@@ -179,10 +178,7 @@ function OptionComp<T extends Codec>(props: { option: Option<T>; build: BuildFn;
         type={"checkbox"}
         checked={props.option.isSome}
         onChange={(e) => {
-          const newValue = createAnyType(
-            typeDef.type,
-            e.target.checked ? createAnyType(subType) : null
-          )
+          const newValue = createType(typeDef.type, e.target.checked ? createType(subType) : null)
           props.build(newValue)
         }}
       />
@@ -197,7 +193,7 @@ function VecComp<T extends Codec>(props: { vec: Vec<T>; build: BuildFn; name?: s
   const subType = (typeDef.sub as TypeDef).type
 
   const update = (arr: Codec[]) => {
-    const newValue = createAnyType(typeDef.type, arr)
+    const newValue = createType(typeDef.type, arr)
     props.build(newValue)
   }
 
@@ -230,7 +226,7 @@ function VecComp<T extends Codec>(props: { vec: Vec<T>; build: BuildFn; name?: s
       <button
         className={"button"}
         onClick={() => {
-          update([...props.vec.toArray(), createAnyType(subType)])
+          update([...props.vec.toArray(), createType(subType)])
         }}
       >
         Add
@@ -247,7 +243,7 @@ function UIntComp(props: { uint: UInt; build: BuildFn; name?: string }) {
       <input
         type={"number"}
         value={props.uint.toString()}
-        onChange={(e) => props.build(createAnyType(typeDef.type, e.target.value))}
+        onChange={(e) => props.build(createType(typeDef.type, e.target.value))}
       />
     </span>
   )
@@ -261,17 +257,10 @@ function BoolComp(props: { bool: bool; build: BuildFn; name?: string }) {
       <input
         type={"checkbox"}
         checked={props.bool.isTrue}
-        onChange={(e) => props.build(createAnyType(typeDef.type, e.target.checked))}
+        onChange={(e) => props.build(createType(typeDef.type, e.target.checked))}
       />
     </span>
   )
 }
 
 const getTypeDefFromCodec = (c: Codec) => getTypeDef(c.toRawType())
-
-const createAnyType = (type: string, params?: any) => {
-  if (params) {
-    return createType(type as any, params)
-  }
-  return createType(type as any)
-}

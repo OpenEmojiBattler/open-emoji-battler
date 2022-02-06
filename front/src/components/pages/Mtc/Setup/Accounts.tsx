@@ -4,10 +4,10 @@ import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { Identicon } from "~/components/common/Identicon"
 import { AccountsDropdown } from "~/components/common/AccountsDropdown"
-import { useAccount } from "~/components/App/Frame/tasks"
+import { useAccount } from "~/components/App/ConnectionProvider/tasks"
 
 export function Accounts(props: { ep: number; injectedAccounts: InjectedAccountWithMeta[] }) {
-  const playerAddress = useAccount().player.address
+  const playerAddress = useAccount().address
   return (
     <>
       <div className={"block"}>

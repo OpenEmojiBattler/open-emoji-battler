@@ -7,7 +7,7 @@ import { zeroAddress } from "~/misc/constants"
 
 import { PowButton } from "~/components/common/PowButton"
 import { Identicon } from "~/components/common/Identicon"
-import { AccountContext, useAccount } from "~/components/App/Frame/tasks"
+import { AccountContext, useAccount } from "~/components/App/ConnectionProvider/tasks"
 
 export type FinishFn = { kind: "pow"; fn: (s: BN) => void } | { kind: "no-pow"; fn: () => void }
 
@@ -24,7 +24,7 @@ export function Nav(props: {
   disabled: boolean
 }) {
   const account = React.useContext(AccountContext)
-  const playerAddress = account ? account.player.address : zeroAddress
+  const playerAddress = account ? account.address : zeroAddress
 
   return (
     <nav className={"level"}>
@@ -95,7 +95,11 @@ export function Nav(props: {
 }
 
 function PowButtonWrapper(props: { onClick: (solution: BN) => void; disabled: boolean }) {
-  const sessionAccount = useAccount().session
+  const account = useAccount()
+  if (account.kind !== "chain") {
+    throw new Error("not chain")
+  }
+  const sessionAccount = account.session
   return (
     <PowButton account={sessionAccount} onClick={props.onClick} disabled={props.disabled}>
       Battle!

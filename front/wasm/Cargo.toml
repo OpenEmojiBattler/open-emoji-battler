@@ -1,7 +1,7 @@
 [package]
 name = "wasm"
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
 license = "Apache-2.0"
 
 [lib]
@@ -9,12 +9,12 @@ crate-type = ["cdylib"]
 
 [dependencies]
 common = { version = "0.1.0", path = '../../common/rs', default-features = false, features = ['view-logs'] }
-wasm-bindgen = "0.2.62"
-parity-scale-codec = { version = "2.0.0", features = ["derive"] }
+wasm-bindgen = "0.2.79"
+parity-scale-codec = { version = "2", default-features = false, features = ["derive"] }
 wee_alloc = "0.4.5"
-console_error_panic_hook = "0.1.6"
-hex = "0.4.2"
-anyhow = { version = "1.0.37", default-features = false }
+console_error_panic_hook = "0.1.7"
+hex = "0.4.3"
+anyhow = { version = "1.0.53", default-features = false }
 
 [profile.release]
 opt-level = "z"

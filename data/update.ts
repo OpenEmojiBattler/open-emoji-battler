@@ -1,7 +1,8 @@
+import { readFileSync } from "fs"
 import { connected, sudo } from "common"
-import { getChainEndpointAndKeyringPair } from "common/src/scriptUtils"
+import { loadEmoBases, getChainEndpointAndKeyringPair } from "common/src/scriptUtils"
 
-import { loadEmoBases, getCurrentIds } from "./utils"
+import { getCurrentIds } from "./utils"
 
 import availableEmoBaseIds from "./availableEmoBaseIds.json"
 
@@ -10,16 +11,17 @@ const main = async () => {
     process.argv[2],
     process.argv[3]
   )
-  const emoBases = loadEmoBases()
+  const emoBases = loadEmoBases(readFileSync("./emoBases.json", "utf8"))
 
-  await connected(endpoint, async () => {
+  await connected(endpoint, async (api) => {
     const {
       baseIds: oldBaseIds,
       fixedIds: oldFixedIds,
       builtIds: oldBuiltIds,
-    } = await getCurrentIds()
+    } = await getCurrentIds(api)
 
     const h = await sudo(
+      api,
       (t) =>
         t.game.updateEmoBases(
           emoBases,
@@ -29,13 +31,13 @@ const main = async () => {
         ),
       keyringPair
     )
-    console.log(h.toString())
+    console.log(h.status.asInBlock.toString())
 
     const {
       baseIds: newBaseIds,
       fixedIds: newFixedIds,
       builtIds: newBuiltIds,
-    } = await getCurrentIds()
+    } = await getCurrentIds(api)
 
     console.log("bases")
     showDiff(oldBaseIds, newBaseIds)

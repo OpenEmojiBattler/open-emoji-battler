@@ -1,8 +1,9 @@
 import * as React from "react"
 
-import { getEnv, getRuntimeVersion } from "common"
+import { getEnv } from "common"
 
-import { getEndpoint, setEndpoint, useIsConnected } from "../App/Frame/tasks"
+import { getEndpoint, setEndpoint } from "../App/ConnectionProvider/Chain/tasks"
+import { ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
 import { InternalLink } from "../common/InternalLink"
 
 export function Dev() {
@@ -19,9 +20,6 @@ export function Dev() {
             <li>
               <InternalLink to={"/emo_ability_builder"}>ability builder</InternalLink>
             </li>
-            <li>
-              <InternalLink to={"/style"}>style</InternalLink>
-            </li>
           </ul>
         </div>
       </div>
@@ -30,14 +28,14 @@ export function Dev() {
 }
 
 function Versions() {
-  const isConnected = useIsConnected()
+  const connection = React.useContext(ConnectionContext)
   const [specVersion, setSpecVersion] = React.useState("")
 
   React.useEffect(() => {
-    if (isConnected) {
-      setSpecVersion(getRuntimeVersion().specVersion.toString())
+    if (connection) {
+      setSpecVersion(connection.api().runtimeVersion.specVersion.toString())
     }
-  }, [isConnected])
+  }, [!connection])
 
   return (
     <div className={"content"}>

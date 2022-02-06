@@ -1,29 +1,34 @@
 import * as React from "react"
 
-import type { EmoBases } from "~/misc/types"
 import { finishBattle, MtcState, ResultState } from "~/misc/mtcUtils"
 import { buildMtcState, getSeed } from "./tasks"
 
+import { useIsWasmReady } from "~/components/App/Frame/tasks"
 import { Shop } from "../../common/Mtc/Shop"
 import { Battle } from "../../common/Mtc/Battle"
 import { Result } from "../../common/Mtc/Result"
-import { useAccountSetter, useNavSetter } from "~/components/App/Frame/tasks"
-import { GlobalAsyncContext } from "~/components/App/Frame/tasks"
+import { useNavSetter } from "~/components/App/Frame/tasks"
+import {
+  useAccountSetter,
+  ConnectionContext,
+  Connection,
+} from "~/components/App/ConnectionProvider/tasks"
 import { Loading } from "~/components/common/Loading"
 
 export function MtcTrial() {
-  const globalAsync = React.useContext(GlobalAsyncContext)
+  const isWasmReady = useIsWasmReady()
+  const connection = React.useContext(ConnectionContext)
 
-  if (!globalAsync) {
+  if (!isWasmReady || !connection) {
     return <Loading />
   }
 
-  return <Inner bases={globalAsync.emoBases} />
+  return <Inner connection={connection} />
 }
 
 type Phase = "shop" | "battle" | "result"
 
-function Inner(props: { bases: EmoBases }) {
+function Inner(props: { connection: Connection }) {
   const setAcccount = useAccountSetter()
   const setNav = useNavSetter()
 
@@ -37,7 +42,7 @@ function Inner(props: { bases: EmoBases }) {
   }, [])
 
   const setup = () => {
-    buildMtcState(props.bases).then((s) => {
+    buildMtcState(props.connection).then((s) => {
       setMtcState(s)
       setAcccount(null)
       setNav(false)
@@ -64,7 +69,7 @@ function Inner(props: { bases: EmoBases }) {
       )
     case "battle":
       const finish = () => {
-        const r = finishBattle(mtcState, props.bases)
+        const r = finishBattle(mtcState, props.connection.emoBases)
         setMtcState(r.mtcState)
         if (r.finalPlace) {
           setResultState({ place: r.finalPlace, ep: 1100 })

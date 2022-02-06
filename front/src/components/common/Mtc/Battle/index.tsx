@@ -4,7 +4,7 @@ import { MtcState, getGradeText, getHealthFromState, getShortAddress } from "~/m
 import { getGradeAndGhostBoard } from "~/wasm"
 import { isDevelopment } from "~/misc/utils"
 import { zeroAddress } from "~/misc/constants"
-import { AccountContext } from "~/components/App/Frame/tasks"
+import { AccountContext } from "~/components/App/ConnectionProvider/tasks"
 import { animateFinish } from "./tasks"
 
 import { MtcBattleBoards } from "~/components/common/MtcBattleBoards"
@@ -13,7 +13,7 @@ import { Identicon } from "~/components/common/Identicon"
 export function Battle(props: { mtcState: MtcState; finish: () => void }) {
   const account = React.useContext(AccountContext)
 
-  const playerAddress = account ? account.player.address : zeroAddress
+  const playerAddress = account ? account.address : zeroAddress
   const gradeAndBoardGhost = getGradeAndGhostBoard(
     props.mtcState.ghosts[props.mtcState.battleGhostIndex].history,
     props.mtcState.ghostStates[props.mtcState.battleGhostIndex],

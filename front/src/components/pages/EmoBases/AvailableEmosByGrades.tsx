@@ -1,11 +1,12 @@
 import * as React from "react"
 
-import { query, emo_Base } from "common"
+import { emo_Base } from "common"
 
 import { getEmoTypString } from "~/misc/mtcUtils"
 import { EmoTypWithAll, emoTyps } from "~/misc/constants"
 import { groupBy } from "~/misc/utils"
 import { get_pool_emo_count_by_grade } from "~/wasm/raw"
+import { useConnection } from "~/components/App/ConnectionProvider/tasks"
 
 import { EmoBase } from "~/components/common/Emo"
 import { EmoTypSelector } from "~/components/common/EmoTypSelector"
@@ -13,6 +14,7 @@ import { EmoTypSelector } from "~/components/common/EmoTypSelector"
 type AvailableEmoBaseIds = { fixed: string[]; built: string[] }
 
 export function AvailableEmosByGrades(props: { bases: emo_Base[] }) {
+  const connection = useConnection()
   const [availables, setAvailables] = React.useState<AvailableEmoBaseIds>({
     fixed: [],
     built: [],
@@ -20,12 +22,12 @@ export function AvailableEmosByGrades(props: { bases: emo_Base[] }) {
 
   React.useEffect(() => {
     Promise.all([
-      query((q) => q.game.deckFixedEmoBaseIds()),
-      query((q) => q.game.deckBuiltEmoBaseIds()),
+      connection.query.deckFixedEmoBaseIds(),
+      connection.query.deckBuiltEmoBaseIds(),
     ]).then(([fixed, built]) => {
       setAvailables({
-        fixed: fixed.unwrap().map((id) => id.toString()),
-        built: built.unwrap().map((id) => id.toString()),
+        fixed: fixed.map((id) => id.toString()),
+        built: built.map((id) => id.toString()),
       })
     })
   }, [])

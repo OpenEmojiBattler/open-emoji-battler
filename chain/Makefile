@@ -1,7 +1,3 @@
-.PHONY: init
-init:
-	./scripts/init.sh
-
 .PHONY: check
 check:
 	SKIP_WASM_BUILD=1 cargo check

@@ -4,21 +4,23 @@ import { createType, emo_Base, mtc_Board, mtc_GhostBoard } from "common"
 
 import { boardSize } from "~/misc/constants"
 
+import { useIsWasmReady } from "~/components/App/Frame/tasks"
 import { EmoBase } from "~/components/common/Emo"
 import { MtcShopBoard } from "~/components/common/MtcShopBoard"
 import { MtcBattleBoards } from "~/components/common/MtcBattleBoards"
-import { GlobalAsyncContext, useGlobalAsync } from "~/components/App/Frame/tasks"
+import { ConnectionContext, useConnection } from "~/components/App/ConnectionProvider/tasks"
 import { Loading } from "~/components/common/Loading"
 
 export function MtcDebug() {
-  const globalAsync = React.useContext(GlobalAsyncContext)
+  const isWasmReady = useIsWasmReady()
+  const connection = React.useContext(ConnectionContext)
   const [phase, setPhase] = React.useState<"shop" | "battle">("shop")
   const [board, setBoard] = React.useState<mtc_Board>(() => createType("mtc_Board", []))
   const [ghostBoard, setGhostBoard] = React.useState<mtc_GhostBoard>(() =>
     createType("mtc_GhostBoard", [])
   )
 
-  if (!globalAsync) {
+  if (!isWasmReady || !connection) {
     return <Loading />
   }
 
@@ -54,7 +56,7 @@ function Shop(props: {
   ghostBoard: mtc_GhostBoard
   setGhostBoard: (board: mtc_GhostBoard) => void
 }) {
-  const emoBases = useGlobalAsync().emoBases.codec[0]
+  const emoBases = useConnection().emoBases.codec[0]
   const [selectedBase, setSelectedBase] = React.useState<emo_Base | null>(null)
   const [isBoardOperating, setIsBoardOperating] = React.useState(false)
 
@@ -134,7 +136,7 @@ function Shop(props: {
 }
 
 function Bases(props: { selectBase: (m: emo_Base) => void; disabled: boolean }) {
-  const bases = Array.from(useGlobalAsync().emoBases.codec[0].values())
+  const bases = Array.from(useConnection().emoBases.codec[0].values())
 
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>

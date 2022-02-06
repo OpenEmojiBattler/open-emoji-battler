@@ -3,7 +3,7 @@ import * as React from "react"
 import { mtc_Emo } from "common"
 
 import { emoBuyCoin } from "~/misc/constants"
-import { useGlobalAsync } from "~/components/App/Frame/tasks"
+import { useConnection } from "~/components/App/ConnectionProvider/tasks"
 import { findEmoBase, getCoinText } from "~/misc/mtcUtils"
 import { EmoBase } from "~/components/common/Emo"
 
@@ -77,7 +77,7 @@ function CurrentLine(props: {
   unavailableToBuyMtcEmoIds: string[]
   disabled: boolean
 }) {
-  const bases = useGlobalAsync().emoBases
+  const bases = useConnection().emoBases
 
   const controls = []
   const emos = []
@@ -128,7 +128,7 @@ function Line(props: {
   grade: number
   unavailableToBuyMtcEmoIds: string[]
 }) {
-  const bases = useGlobalAsync().emoBases
+  const bases = useConnection().emoBases
 
   const emos = props.catalogLine
     .map((mtcEmo) => {

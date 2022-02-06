@@ -1,11 +1,13 @@
 import { readFileSync, writeFileSync } from "fs"
 import path from "path"
 
+import { tx } from "common"
+
 import { WsProvider, ApiPromise } from "@polkadot/api"
 import { CodePromise, ContractPromise } from "@polkadot/api-contract"
 import type { IKeyringPair } from "@polkadot/types/types"
 
-import { getContractsEndpointAndKeyringPair } from "common/src/scriptUtils"
+import { getContractEnvAndKeyringPair } from "common/src/scriptUtils"
 
 // const SDN = 1_000_000_000_000_000_000n
 // const MILLISDN = SDN / 1_000n
@@ -23,23 +25,13 @@ export const instantiateContract = async (
 
   const code = new CodePromise(api, abi, wasm)
 
-  const contract: ContractPromise = await new Promise(async (resolve, reject) => {
-    const unsub = await code.tx
-      .new(0, 200_000n * 1_000_000n, ...constructorArgs)
-      .signAndSend(pair, (result) => {
-        if (result.status.isInBlock) {
-          unsub()
-          if (result.findRecord("system", "ExtrinsicSuccess")) {
-            const c: ContractPromise = (result as any).contract
-            resolve(c)
-            return
-          } else {
-            reject(`contract instantiation error: ${contractName}`)
-            return
-          }
-        }
-      })
-  })
+  const contract = (
+    (await tx(
+      api,
+      () => code.tx.new({ gasLimit: 200_000n * 1_000_000n }, ...constructorArgs),
+      pair
+    )) as any
+  ).contract as ContractPromise
 
   writeFileSync(
     path.resolve(dirname, `./instantiatedAddress.${contractName}.${envName}.json`),
@@ -84,39 +76,9 @@ export const query = async (
   }
 }
 
-export const tx = (pair: IKeyringPair, contract: ContractPromise, fnName: string, fnArgs: any[]) =>
-  new Promise(async (resolve, reject) => {
-    if (!contract.tx[fnName]) {
-      reject(`tx fn not found: ${fnName}`)
-      return
-    }
-    // should have gasLimit?
-    const unsub = await contract.tx[fnName]({ value: 0 }, ...fnArgs).signAndSend(pair, (result) => {
-      if (result.status.isInBlock) {
-        unsub()
-        if (result.findRecord("system", "ExtrinsicSuccess")) {
-          console.log(`tx success: ${fnName}`)
-          resolve(`tx success: ${fnName}`)
-          return
-        } else {
-          reject(`tx error: ${fnName}`)
-          return
-        }
-      }
-    })
-  })
-
-export const getApiAndPair = async () => {
+export const getEndpointAndPair = async () => {
   const envName = process.argv[2]
-  const { endpoint, keyringPair } = await getContractsEndpointAndKeyringPair(
-    envName,
-    process.argv[3]
-  )
+  const { contract, keyringPair } = await getContractEnvAndKeyringPair(envName, process.argv[3])
 
-  const wsProvider = new WsProvider(endpoint)
-  const api = await ApiPromise.create({
-    provider: wsProvider,
-  })
-
-  return { envName, api, keyringPair }
+  return { envName, endpoint: contract.endpoint, keyringPair }
 }

@@ -1,5 +1,5 @@
-import type { Vec, Option } from "@polkadot/types"
-import type { u8, u16 } from "@polkadot/types/primitive"
+import type { Vec } from "@polkadot/types"
+import type { u16 } from "@polkadot/types/primitive"
 
 import {
   createType,
@@ -8,9 +8,7 @@ import {
   mtc_Board,
   mtc_GhostBoard,
   mtc_GhostState,
-  mtc_shop_BoardLogs,
   mtc_GradeAndGhostBoard,
-  mtc_battle_Logs,
 } from "common"
 
 import {
@@ -77,8 +75,8 @@ export const marchPvg = (
   seed: string,
   emoBases: EmoBases
 ) => {
-  const [boardGrade, ghostBoardGrade, logs]: [u8, u8, mtc_battle_Logs] = createType(
-    "(u8, u8, mtc_battle_Logs)" as any,
+  const [boardGrade, ghostBoardGrade, logs] = createType(
+    "(u8, u8, mtc_battle_Logs)",
     march_pvg(board.toU8a(), ghostBoard.toU8a(), seed, emoBases.codec.toU8a())
   )
   return [boardGrade.toNumber(), ghostBoardGrade.toNumber(), logs] as const
@@ -114,8 +112,8 @@ export const battleAll = (
   seed: string,
   emoBases: EmoBases
 ) => {
-  const [_health, _ghostStates, _finalPlace]: [u8, Vec<mtc_GhostState>, Option<u8>] = createType(
-    "(u8, Vec<mtc_GhostState>, Option<u8>)" as any,
+  const [_health, _ghostStates, _finalPlace] = createType(
+    "(u8, Vec<mtc_GhostState>, Option<u8>)",
     battle_all(
       board.toU8a(),
       grade,
@@ -132,9 +130,6 @@ export const battleAll = (
 }
 
 const decodeForShop = (u: Uint8Array) => {
-  const [board, logs, coin]: [mtc_Board, mtc_shop_BoardLogs, u8] = createType(
-    "(mtc_Board, mtc_shop_BoardLogs, u8)" as any,
-    u
-  )
+  const [board, logs, coin] = createType("(mtc_Board, mtc_shop_BoardLogs, u8)", u)
   return [board, coin.toNumber(), logs] as const
 }

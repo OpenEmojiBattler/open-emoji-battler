@@ -16,7 +16,7 @@ const writeIndexFile = () => {
     ...fs
       .readFileSync("./wasm/pkgbundler/wasm_bg.js")
       .toString()
-      .matchAll(/export const (__wb\w+) =/g),
+      .matchAll(/export function (__wb\w+)\(/g),
   ]
     .map((m) => m[1])
     .join(", ")

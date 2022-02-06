@@ -94,7 +94,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     spec_name: create_runtime_str!("open-emoji-battler"),
     impl_name: create_runtime_str!("open-emoji-battler"),
     authoring_version: 1,
-    spec_version: 10,
+    spec_version: 11,
     impl_version: 1,
     apis: RUNTIME_API_VERSIONS,
     transaction_version: 1,

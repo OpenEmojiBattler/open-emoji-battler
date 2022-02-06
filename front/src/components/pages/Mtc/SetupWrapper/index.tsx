@@ -2,26 +2,25 @@ import * as React from "react"
 import BN from "bn.js"
 import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
-import { query } from "common"
-
 import { initialEp } from "~/misc/constants"
 import { Setup } from "../Setup"
 import { setup } from "./tasks"
+import { useBlockMessageSetter, useWaitingSetter } from "~/components/App/Frame/tasks"
 import {
+  useConnection,
   AccountContext,
   useAccountSetter,
-  useBlockMessageSetter,
-  useWaitingSetter,
-} from "~/components/App/Frame/tasks"
+} from "~/components/App/ConnectionProvider/tasks"
 import { Loading } from "../../../common/Loading"
 
 export function SetupWrapper(props: {
-  startMtc: (solution: BN, deckEmoBaseIds: string[], previousEp: number) => void
+  startMtc: (deckEmoBaseIds: string[], previousEp: number, solution?: BN) => void
 }) {
   const setWaiting = useWaitingSetter()
   const account = React.useContext(AccountContext)
   const setAccount = useAccountSetter()
   const setBlockMessage = useBlockMessageSetter()
+  const connection = useConnection()
 
   const [injectedAccounts, setInjectedAccounts] = React.useState<InjectedAccountWithMeta[]>([])
   const [builtEmoBaseIds, setBuiltEmoBaseIds] = React.useState<string[]>([])
@@ -29,7 +28,7 @@ export function SetupWrapper(props: {
   const [message, setMessage] = React.useState("")
 
   React.useEffect(() => {
-    setup(setWaiting, account).then((r) => {
+    setup(connection, setWaiting, account).then((r) => {
       if (r.kind === "ok") {
         setAccount(r.account)
         setInjectedAccounts(r.injectedAccounts)
@@ -45,14 +44,14 @@ export function SetupWrapper(props: {
       return
     }
     let isMounted = true
-    query((q) => q.game.playerEp(account.player.address)).then((e) => {
+    connection.query.playerEp(account.address).then((e) => {
       if (isMounted) {
         const ep = e.isSome ? e.unwrap().toNumber() : initialEp
         setEp(ep)
       }
     })
-    query((q) => q.game.playerPool.size(account.player.address)).then((p) => {
-      if (isMounted && !p.isZero()) {
+    connection.query.playerPool(account.address).then((p) => {
+      if (isMounted && p.isSome) {
         setMessage(
           "The previous match didn't finish normally, and the EP might decrease a little next time."
         )
@@ -63,13 +62,13 @@ export function SetupWrapper(props: {
     return () => {
       isMounted = false
     }
-  }, [account && account.player.address])
+  }, [account && account.address])
 
   return injectedAccounts.length > 0 && builtEmoBaseIds.length > 0 && account && ep ? (
     <Setup
       injectedAccounts={injectedAccounts}
       builtEmoBaseIds={builtEmoBaseIds}
-      startMtc={(s, ids) => props.startMtc(s, ids, ep)}
+      startMtc={(ids, s) => props.startMtc(ids, ep, s)}
       ep={ep}
       message={message}
     />

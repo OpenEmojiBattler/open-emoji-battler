@@ -8,14 +8,14 @@ import {
   getGradeText,
   findEmoBaseByStringId,
 } from "~/misc/mtcUtils"
-import { useAccount, useGlobalAsync } from "~/components/App/Frame/tasks"
+import { useAccount, useConnection } from "~/components/App/ConnectionProvider/tasks"
 import { EmoBase } from "~/components/common/Emo"
 import { Dropdown } from "~/components/common/Dropdown"
 import { addDeck, deleteDeck, getDecks, selectDeckIndex } from "./tasks"
 
 export function Decks(props: { builtEmoBaseIds: string[]; setDeck: (d: string[]) => void }) {
-  const address = useAccount().player.address
-  const bases = useGlobalAsync().emoBases
+  const address = useAccount().address
+  const bases = useConnection().emoBases
   const [decks, setDecks] = React.useState<string[][]>([])
   const [selectedDeckIndex, setSelectedDeckIndex] = React.useState<number | null>(null)
   const [isAddingNewDeck, setIsAddingNewDeck] = React.useState(false)
@@ -115,7 +115,7 @@ export function Decks(props: { builtEmoBaseIds: string[]; setDeck: (d: string[])
 }
 
 function DeckBuilder(props: { address: string; builtEmoBaseIds: string[]; onFinish: () => void }) {
-  const bases = useGlobalAsync().emoBases
+  const bases = useConnection().emoBases
   const basesByGrades = groupEmoBasesByGrades(bases, props.builtEmoBaseIds)
   const [selected, setSelected] = React.useState(() => getDefaultDeck(bases, props.builtEmoBaseIds))
 

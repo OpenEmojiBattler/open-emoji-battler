@@ -1,23 +1,24 @@
-import { createType, mtc_Board, mtc_GhostBoard, query } from "common"
+import { createType, mtc_Board, mtc_GhostBoard } from "common"
 import * as React from "react"
 
-import { GlobalAsyncContext } from "~/components/App/Frame/tasks"
+import { useIsWasmReady } from "~/components/App/Frame/tasks"
+import { Connection, ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
 import { MtcBattleBoards } from "~/components/common/MtcBattleBoards"
 import { buildEmoAttributesWithBase, findEmoBase } from "~/misc/mtcUtils"
-import { EmoBases } from "~/misc/types"
 import { shuffleArray } from "~/misc/utils"
 
 export function DemoMtcBattle() {
-  const globalAsync = React.useContext(GlobalAsyncContext)
+  const isWasmReady = useIsWasmReady()
+  const connection = React.useContext(ConnectionContext)
 
-  if (!globalAsync) {
+  if (!isWasmReady || !connection) {
     return <></>
   }
 
-  return <Inner bases={globalAsync.emoBases} />
+  return <Inner connection={connection} />
 }
 
-function Inner(props: { bases: EmoBases }) {
+function Inner(props: { connection: Connection }) {
   const [seed, setSeed] = React.useState<string | null>(null)
   const [board, setBoard] = React.useState<mtc_Board | null>(null)
   const [ghostBoard, setGhostBoard] = React.useState<mtc_GhostBoard | null>(null)
@@ -25,18 +26,15 @@ function Inner(props: { bases: EmoBases }) {
   React.useEffect(() => {
     let isMounted = true
 
-    query((q) => q.game.deckFixedEmoBaseIds()).then((idsOpt) => {
-      if (idsOpt.isNone) {
-        return
-      }
-      const ids = idsOpt.unwrap().toArray()
+    props.connection.query.deckFixedEmoBaseIds().then((_ids) => {
+      const ids = _ids.toArray()
       shuffleArray(ids)
 
       const _board = []
       const _ghostBoard = []
 
       for (const id of ids) {
-        const base = findEmoBase(id, props.bases)
+        const base = findEmoBase(id, props.connection.emoBases)
 
         if (base.grade.toNumber() > 2) {
           if (_board.length < 7) {
