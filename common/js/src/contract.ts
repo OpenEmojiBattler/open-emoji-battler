@@ -4,8 +4,8 @@ import { ContractPromise } from "@polkadot/api-contract"
 import { tx } from "./api"
 import type { KeyringPairOrAddressAndSigner } from "./utils"
 
-import storageAbi from "../../../contracts/deploy/202109210_init/storage.json"
-import forwarderAbi from "../../../contracts/deploy/202109210_init/forwarder.json"
+import storageAbi from "../../../contract/deploy/202109210_init/storage.json"
+import forwarderAbi from "../../../contract/deploy/202109210_init/forwarder.json"
 
 export const getStorageContract = (api: ApiPromise, address: string) =>
   new ContractPromise(api, storageAbi, address)

@@ -3,10 +3,9 @@
   "workspaces": [
     "common/js",
     "front",
-    "data",
     "tools",
     "chain/scripts",
-    "onetime-scripts",
-    "contracts/deploy"
+    "oneshots",
+    "contract/deploy"
   ]
 }
