@@ -1,6 +1,6 @@
 import type { ApiPromise } from "@polkadot/api"
 
-export const getCurrentIds = async (api: ApiPromise) => {
+export const getCurrentDataIds = async (api: ApiPromise) => {
   const baseIds = Array.from((await api.query.game.emoBases()).unwrap()[0].keys()).map((id) =>
     id.toString()
   )

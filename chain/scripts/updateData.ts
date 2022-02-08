@@ -2,7 +2,7 @@ import { readFileSync } from "fs"
 import { connected, sudo } from "common"
 import { loadEmoBases, getChainEndpointAndKeyringPair } from "common/src/scriptUtils"
 
-import { getCurrentIds } from "./utils"
+import { getCurrentDataIds } from "./utils"
 
 import availableEmoBaseIds from "../../data/availableEmoBaseIds.json"
 
@@ -18,7 +18,7 @@ const main = async () => {
       baseIds: oldBaseIds,
       fixedIds: oldFixedIds,
       builtIds: oldBuiltIds,
-    } = await getCurrentIds(api)
+    } = await getCurrentDataIds(api)
 
     const h = await sudo(
       api,
@@ -37,7 +37,7 @@ const main = async () => {
       baseIds: newBaseIds,
       fixedIds: newFixedIds,
       builtIds: newBuiltIds,
-    } = await getCurrentIds(api)
+    } = await getCurrentDataIds(api)
 
     console.log("bases")
     showDiff(oldBaseIds, newBaseIds)

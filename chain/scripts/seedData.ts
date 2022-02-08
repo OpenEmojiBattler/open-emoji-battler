@@ -2,7 +2,7 @@ import { readFileSync } from "fs"
 import { connected, sudo } from "common"
 import { loadEmoBases, getChainEndpointAndKeyringPair } from "common/src/scriptUtils"
 
-import { getCurrentIds } from "./utils"
+import { getCurrentDataIds } from "./utils"
 
 import availableEmoBaseIds from "../../data/availableEmoBaseIds.json"
 
@@ -23,7 +23,7 @@ const main = async () => {
 
     console.log(h.status.asInBlock.toString())
 
-    const { baseIds, fixedIds, builtIds } = await getCurrentIds(api)
+    const { baseIds, fixedIds, builtIds } = await getCurrentDataIds(api)
     console.log(baseIds, fixedIds, builtIds)
   })
 }
