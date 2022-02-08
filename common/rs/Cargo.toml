@@ -16,7 +16,7 @@ parity-scale-codec = { version = "2", default-features = false, features = ["der
 blake2-rfc = { version = "0.2.18", default-features = false, optional = true }
 libm = { version = "0.2.1", default-features = false, optional = true }
 
-# contracts
+# contract
 scale-info = { version = "1", default-features = false, features = ["derive"], optional = true }
 ink_storage = { version = "3.0.0-rc8", default-features = false, optional = true }
 ink_primitives = { version = "3.0.0-rc8", default-features = false, optional = true }

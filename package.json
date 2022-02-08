@@ -7,6 +7,6 @@
     "tools",
     "chain/scripts",
     "oneshots",
-    "contracts/deploy"
+    "contract/deploy"
   ]
 }
