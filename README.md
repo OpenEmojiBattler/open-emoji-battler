@@ -58,9 +58,9 @@ make dev
 ### Update chain game data
 
 ```
-cd data
+cd chain/scripts
 yarn install
-yarn seed:dev
+yarn seed-data:dev
 ```
 
 ### Serve web
