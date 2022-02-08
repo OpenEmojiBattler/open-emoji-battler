@@ -6,7 +6,7 @@
     "data",
     "tools",
     "chain/scripts",
-    "onetime-scripts",
+    "oneshots",
     "contracts/deploy"
   ]
 }
