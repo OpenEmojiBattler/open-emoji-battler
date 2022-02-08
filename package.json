@@ -3,7 +3,6 @@
   "workspaces": [
     "common/js",
     "front",
-    "data",
     "tools",
     "chain/scripts",
     "oneshots",

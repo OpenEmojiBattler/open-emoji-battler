@@ -4,7 +4,7 @@ import { loadEmoBases, getChainEndpointAndKeyringPair } from "common/src/scriptU
 
 import { getCurrentIds } from "./utils"
 
-import availableEmoBaseIds from "./availableEmoBaseIds.json"
+import availableEmoBaseIds from "../../data/availableEmoBaseIds.json"
 
 const main = async () => {
   const { endpoint, keyringPair } = await getChainEndpointAndKeyringPair(
