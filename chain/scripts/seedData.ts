@@ -11,7 +11,7 @@ const main = async () => {
     process.argv[2],
     process.argv[3]
   )
-  const bases = loadEmoBases(readFileSync("./emoBases.json", "utf8"))
+  const bases = loadEmoBases(readFileSync("../../data/emoBases.json", "utf8"))
 
   await connected(endpoint, async (api) => {
     const h = await sudo(
