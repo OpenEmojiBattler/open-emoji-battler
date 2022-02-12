@@ -5,16 +5,15 @@ use ink_lang as ink;
 #[ink::contract]
 pub mod contract {
     use common::codec_types::*;
-    use ink_prelude::vec as std_vec;
     use ink_prelude::vec::Vec as StdVec;
-    use ink_storage::{lazy::Mapping, traits::SpreadAllocate, Lazy};
+    use ink_storage::lazy::Mapping; // remove `lazy` on next release
 
     #[ink(storage)]
-    #[derive(SpreadAllocate)]
+    #[derive(Default)]
     pub struct Storage {
-        emo_bases: Lazy<emo::Bases>,
-        deck_fixed_emo_base_ids: Lazy<StdVec<u16>>,
-        deck_built_emo_base_ids: Lazy<StdVec<u16>>,
+        emo_bases: Option<emo::Bases>,
+        deck_fixed_emo_base_ids: Option<StdVec<u16>>,
+        deck_built_emo_base_ids: Option<StdVec<u16>>,
 
         matchmaking_ghosts: Mapping<u16, StdVec<(AccountId, u16, mtc::Ghost)>>,
 
@@ -32,53 +31,48 @@ pub mod contract {
         player_battle_ghost_index: Mapping<AccountId, u8>,
 
         // allowed accounts
-        allowed_accounts: Lazy<StdVec<AccountId>>,
+        allowed_accounts: StdVec<AccountId>,
     }
 
     impl Storage {
         #[ink(constructor)]
         pub fn new() -> Self {
-            ink_lang::codegen::initialize_contract(|contract: &mut Self| {
-                // avoid 'encountered empty storage cell' panic on read
-                contract.emo_bases = Lazy::new(Default::default());
-                contract.deck_fixed_emo_base_ids = Lazy::new(Default::default());
-                contract.deck_built_emo_base_ids = Lazy::new(Default::default());
-
-                contract.allowed_accounts = Lazy::new(std_vec![Self::env().caller()]);
-            })
+            let mut contract: Self = Default::default();
+            contract.allowed_accounts.push(Self::env().caller());
+            contract
         }
 
         #[ink(message)]
-        pub fn get_emo_bases(&self) -> emo::Bases {
+        pub fn get_emo_bases(&self) -> Option<emo::Bases> {
             self.emo_bases.clone()
         }
 
         #[ink(message)]
-        pub fn set_emo_bases(&mut self, value: emo::Bases) {
+        pub fn set_emo_bases(&mut self, value: Option<emo::Bases>) {
             self.only_allowed_caller();
-            *self.emo_bases = value;
+            self.emo_bases = value;
         }
 
         #[ink(message)]
-        pub fn get_deck_fixed_emo_base_ids(&self) -> StdVec<u16> {
+        pub fn get_deck_fixed_emo_base_ids(&self) -> Option<StdVec<u16>> {
             self.deck_fixed_emo_base_ids.clone()
         }
 
         #[ink(message)]
-        pub fn set_deck_fixed_emo_base_ids(&mut self, value: StdVec<u16>) {
+        pub fn set_deck_fixed_emo_base_ids(&mut self, value: Option<StdVec<u16>>) {
             self.only_allowed_caller();
-            *self.deck_fixed_emo_base_ids = value;
+            self.deck_fixed_emo_base_ids = value;
         }
 
         #[ink(message)]
-        pub fn get_deck_built_emo_base_ids(&self) -> StdVec<u16> {
+        pub fn get_deck_built_emo_base_ids(&self) -> Option<StdVec<u16>> {
             self.deck_built_emo_base_ids.clone()
         }
 
         #[ink(message)]
-        pub fn set_deck_built_emo_base_ids(&mut self, value: StdVec<u16>) {
+        pub fn set_deck_built_emo_base_ids(&mut self, value: Option<StdVec<u16>>) {
             self.only_allowed_caller();
-            *self.deck_built_emo_base_ids = value;
+            self.deck_built_emo_base_ids = value;
         }
 
         #[ink(message)]
