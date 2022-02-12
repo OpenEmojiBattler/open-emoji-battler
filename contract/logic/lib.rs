@@ -68,7 +68,7 @@ pub mod contract {
             assert_eq!(
                 self.root_account_id,
                 self.env().caller(),
-                "set_root_account_id: not allowed"
+                "only_root_caller: not allowed"
             );
         }
 
@@ -93,9 +93,9 @@ pub mod contract {
             )
             .expect("update_emo_bases: invalig arg");
 
-            storage.set_emo_bases(bases);
-            storage.set_deck_fixed_emo_base_ids(fixed_base_ids);
-            storage.set_deck_built_emo_base_ids(built_base_ids);
+            storage.set_emo_bases(Some(bases));
+            storage.set_deck_fixed_emo_base_ids(Some(fixed_base_ids));
+            storage.set_deck_built_emo_base_ids(Some(built_base_ids));
         }
 
         #[ink(message)]
@@ -118,9 +118,9 @@ pub mod contract {
                 caller,
                 build_pool(
                     &deck_emo_base_ids,
-                    &storage.get_emo_bases(),
-                    &storage.get_deck_fixed_emo_base_ids(),
-                    &storage.get_deck_built_emo_base_ids(),
+                    &storage.get_emo_bases().expect("emo_bases none"),
+                    &storage.get_deck_fixed_emo_base_ids().expect("deck_fixed_emo_base_ids none"),
+                    &storage.get_deck_built_emo_base_ids().expect("deck_built_emo_base_ids none"),
                 )
                 .expect("failed to build player pool"),
             );
@@ -141,7 +141,7 @@ pub mod contract {
 
             let mut storage = self.get_storage();
 
-            let emo_bases = storage.get_emo_bases();
+            let emo_bases = storage.get_emo_bases().expect("emo_bases none");
             let grade_and_board_history = storage
                 .get_player_grade_and_board_history(caller)
                 .expect("player_grade_and_board_history none");
