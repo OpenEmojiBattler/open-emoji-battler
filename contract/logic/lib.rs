@@ -22,14 +22,14 @@ pub mod contract {
         },
     };
     use ink_env::{call::FromAccountId, hash::Blake2x128};
-    use ink_prelude::{vec as std_vec, vec::Vec as StdVec};
+    use ink_prelude::{vec, vec::Vec};
     use scale::Decode;
     use storage::contract::StorageRef;
 
     #[ink(storage)]
     pub struct Logic {
         storage_account_id: AccountId,
-        allowed_accounts: StdVec<AccountId>,
+        allowed_accounts: Vec<AccountId>,
         root_account_id: AccountId,
     }
 
@@ -39,7 +39,7 @@ pub mod contract {
             let caller = Self::env().caller();
             Self {
                 storage_account_id,
-                allowed_accounts: std_vec![caller],
+                allowed_accounts: vec![caller],
                 root_account_id: caller,
             }
         }
@@ -76,8 +76,8 @@ pub mod contract {
         pub fn update_emo_bases(
             &mut self,
             new_bases: emo::Bases,
-            fixed_base_ids: StdVec<u16>,
-            built_base_ids: StdVec<u16>,
+            fixed_base_ids: Vec<u16>,
+            built_base_ids: Vec<u16>,
             force_bases_update: bool,
         ) {
             self.only_root_caller();
@@ -124,7 +124,7 @@ pub mod contract {
                 )
                 .expect("failed to build player pool"),
             );
-            storage.set_player_grade_and_board_history(caller, StdVec::new());
+            storage.set_player_grade_and_board_history(caller, Vec::new());
             storage.set_player_battle_ghost_index(caller, 0);
             self.update_upgrade_coin(&mut storage, caller, get_upgrade_coin(2));
 
@@ -135,7 +135,7 @@ pub mod contract {
         pub fn finish_mtc_shop(
             &mut self,
             caller: AccountId,
-            player_operations: StdVec<mtc::shop::PlayerOperation>,
+            player_operations: Vec<mtc::shop::PlayerOperation>,
         ) {
             self.only_allowed_caller();
 
@@ -265,8 +265,8 @@ pub mod contract {
             upgrade_coin: Option<u8>,
             battle_ghost_index: u8,
             health: u8,
-            ghost_states: StdVec<mtc::GhostState>,
-            mut grade_and_board_history: StdVec<mtc::GradeAndBoard>,
+            ghost_states: Vec<mtc::GhostState>,
+            mut grade_and_board_history: Vec<mtc::GradeAndBoard>,
             final_place: Option<u8>,
         ) {
             grade_and_board_history.push(mtc::GradeAndBoard { grade, board });
@@ -347,11 +347,11 @@ pub mod contract {
             storage: &mut StorageRef,
             account_id: AccountId,
             upgrade_coin: Option<u8>,
-            ghost_states: StdVec<mtc::GhostState>,
+            ghost_states: Vec<mtc::GhostState>,
             battle_ghost_index: u8,
             new_seed: u64,
             health: u8,
-            grade_and_board_history: StdVec<mtc::GradeAndBoard>,
+            grade_and_board_history: Vec<mtc::GradeAndBoard>,
         ) {
             if exceeds_grade_and_board_history_limit(&grade_and_board_history) {
                 panic!("max turn exceeded");
@@ -373,7 +373,7 @@ pub mod contract {
         // allowed accounts
 
         #[ink(message)]
-        pub fn get_allowed_accounts(&self) -> StdVec<AccountId> {
+        pub fn get_allowed_accounts(&self) -> Vec<AccountId> {
             self.allowed_accounts.clone()
         }
 

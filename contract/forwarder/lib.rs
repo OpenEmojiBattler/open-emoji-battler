@@ -6,13 +6,13 @@ use ink_lang as ink;
 mod contract {
     use common::codec_types::*;
     use ink_env::call::FromAccountId;
-    use ink_prelude::{vec as std_vec, vec::Vec as StdVec};
+    use ink_prelude::{vec, vec::Vec};
     use logic::contract::LogicRef;
 
     #[ink(storage)]
     pub struct Forwarder {
         logic_account_id: AccountId,
-        allowed_accounts: StdVec<AccountId>,
+        allowed_accounts: Vec<AccountId>,
     }
 
     impl Forwarder {
@@ -20,7 +20,7 @@ mod contract {
         pub fn new(logic_account_id: AccountId) -> Self {
             Self {
                 logic_account_id,
-                allowed_accounts: std_vec![Self::env().caller()],
+                allowed_accounts: vec![Self::env().caller()],
             }
         }
 
@@ -32,7 +32,7 @@ mod contract {
         }
 
         #[ink(message)]
-        pub fn finish_mtc_shop(&mut self, player_operations: StdVec<mtc::shop::PlayerOperation>) {
+        pub fn finish_mtc_shop(&mut self, player_operations: Vec<mtc::shop::PlayerOperation>) {
             let caller = self.env().caller();
             let mut logic = self.get_logic();
             logic.finish_mtc_shop(caller, player_operations);
@@ -57,7 +57,7 @@ mod contract {
         // allowed accounts
 
         #[ink(message)]
-        pub fn get_allowed_accounts(&self) -> StdVec<AccountId> {
+        pub fn get_allowed_accounts(&self) -> Vec<AccountId> {
             self.allowed_accounts.clone()
         }
 
