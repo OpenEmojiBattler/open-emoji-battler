@@ -140,7 +140,7 @@ pub mod pallet {
             ensure_root(origin)?;
 
             let bases = check_and_build_emo_bases(
-                <EmoBases<T>>::get().unwrap_or_else(emo::Bases::new),
+                <EmoBases<T>>::get(),
                 new_bases,
                 &fixed_base_ids,
                 &built_base_ids,

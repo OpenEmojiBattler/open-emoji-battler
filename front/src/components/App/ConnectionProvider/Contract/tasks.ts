@@ -20,9 +20,9 @@ export const buildConnection = async (api: ApiPromise, env: EnvContract): Promis
   const forwarderContract = getForwarderContract(api, env.forwarderAddress)
 
   const codec = createType(
-    "emo_Bases",
+    "Option<emo_Bases>",
     (await queryContract(storageContract, "getEmoBases")).toU8a()
-  )
+  ).unwrap()
 
   const emoBases = buildEmoBases(codec)
 
@@ -40,14 +40,14 @@ export const buildConnection = async (api: ApiPromise, env: EnvContract): Promis
 const buildConnectionQuery = (storageContract: ContractPromise): Connection["query"] => ({
   deckFixedEmoBaseIds: async () =>
     createType(
-      "Vec<u16>",
+      "Option<Vec<u16>>",
       (await queryContract(storageContract, "getDeckFixedEmoBaseIds")).toU8a()
-    ),
+    ).unwrap(),
   deckBuiltEmoBaseIds: async () =>
     createType(
-      "Vec<u16>",
+      "Option<Vec<u16>>",
       (await queryContract(storageContract, "getDeckBuiltEmoBaseIds")).toU8a()
-    ),
+    ).unwrap(),
   matchmakingGhosts: async (band) =>
     createType(
       "Option<Vec<(AccountId, u16, mtc_Ghost)>>",

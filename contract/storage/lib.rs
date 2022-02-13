@@ -5,87 +5,81 @@ use ink_lang as ink;
 #[ink::contract]
 pub mod contract {
     use common::codec_types::*;
-    use ink_prelude::vec as std_vec;
-    use ink_prelude::vec::Vec as StdVec;
-    use ink_storage::{lazy::Mapping, traits::SpreadAllocate, Lazy};
+    use ink_prelude::vec::Vec;
+    use ink_storage::lazy::Mapping; // remove `lazy` on next release
 
     #[ink(storage)]
-    #[derive(SpreadAllocate)]
+    #[derive(Default)]
     pub struct Storage {
-        emo_bases: Lazy<emo::Bases>,
-        deck_fixed_emo_base_ids: Lazy<StdVec<u16>>,
-        deck_built_emo_base_ids: Lazy<StdVec<u16>>,
+        emo_bases: Option<emo::Bases>,
+        deck_fixed_emo_base_ids: Option<Vec<u16>>,
+        deck_built_emo_base_ids: Option<Vec<u16>>,
 
-        matchmaking_ghosts: Mapping<u16, StdVec<(AccountId, u16, mtc::Ghost)>>,
+        matchmaking_ghosts: Mapping<u16, Vec<(AccountId, u16, mtc::Ghost)>>,
 
         player_ep: Mapping<AccountId, u16>,
 
         player_seed: Mapping<AccountId, u64>,
 
         // remove for each mtc
-        player_pool: Mapping<AccountId, StdVec<mtc::Emo>>,
+        player_pool: Mapping<AccountId, Vec<mtc::Emo>>,
         player_health: Mapping<AccountId, u8>,
-        player_grade_and_board_history: Mapping<AccountId, StdVec<mtc::GradeAndBoard>>,
+        player_grade_and_board_history: Mapping<AccountId, Vec<mtc::GradeAndBoard>>,
         player_upgrade_coin: Mapping<AccountId, u8>,
-        player_ghosts: Mapping<AccountId, StdVec<(AccountId, u16, mtc::Ghost)>>,
-        player_ghost_states: Mapping<AccountId, StdVec<mtc::GhostState>>,
+        player_ghosts: Mapping<AccountId, Vec<(AccountId, u16, mtc::Ghost)>>,
+        player_ghost_states: Mapping<AccountId, Vec<mtc::GhostState>>,
         player_battle_ghost_index: Mapping<AccountId, u8>,
 
         // allowed accounts
-        allowed_accounts: Lazy<StdVec<AccountId>>,
+        allowed_accounts: Vec<AccountId>,
     }
 
     impl Storage {
         #[ink(constructor)]
         pub fn new() -> Self {
-            ink_lang::codegen::initialize_contract(|contract: &mut Self| {
-                // avoid 'encountered empty storage cell' panic on read
-                contract.emo_bases = Lazy::new(Default::default());
-                contract.deck_fixed_emo_base_ids = Lazy::new(Default::default());
-                contract.deck_built_emo_base_ids = Lazy::new(Default::default());
-
-                contract.allowed_accounts = Lazy::new(std_vec![Self::env().caller()]);
-            })
+            let mut contract: Self = Default::default();
+            contract.allowed_accounts.push(Self::env().caller());
+            contract
         }
 
         #[ink(message)]
-        pub fn get_emo_bases(&self) -> emo::Bases {
+        pub fn get_emo_bases(&self) -> Option<emo::Bases> {
             self.emo_bases.clone()
         }
 
         #[ink(message)]
-        pub fn set_emo_bases(&mut self, value: emo::Bases) {
+        pub fn set_emo_bases(&mut self, value: Option<emo::Bases>) {
             self.only_allowed_caller();
-            *self.emo_bases = value;
+            self.emo_bases = value;
         }
 
         #[ink(message)]
-        pub fn get_deck_fixed_emo_base_ids(&self) -> StdVec<u16> {
+        pub fn get_deck_fixed_emo_base_ids(&self) -> Option<Vec<u16>> {
             self.deck_fixed_emo_base_ids.clone()
         }
 
         #[ink(message)]
-        pub fn set_deck_fixed_emo_base_ids(&mut self, value: StdVec<u16>) {
+        pub fn set_deck_fixed_emo_base_ids(&mut self, value: Option<Vec<u16>>) {
             self.only_allowed_caller();
-            *self.deck_fixed_emo_base_ids = value;
+            self.deck_fixed_emo_base_ids = value;
         }
 
         #[ink(message)]
-        pub fn get_deck_built_emo_base_ids(&self) -> StdVec<u16> {
+        pub fn get_deck_built_emo_base_ids(&self) -> Option<Vec<u16>> {
             self.deck_built_emo_base_ids.clone()
         }
 
         #[ink(message)]
-        pub fn set_deck_built_emo_base_ids(&mut self, value: StdVec<u16>) {
+        pub fn set_deck_built_emo_base_ids(&mut self, value: Option<Vec<u16>>) {
             self.only_allowed_caller();
-            *self.deck_built_emo_base_ids = value;
+            self.deck_built_emo_base_ids = value;
         }
 
         #[ink(message)]
         pub fn get_matchmaking_ghosts(
             &self,
             ep_band: u16,
-        ) -> Option<StdVec<(AccountId, u16, mtc::Ghost)>> {
+        ) -> Option<Vec<(AccountId, u16, mtc::Ghost)>> {
             self.matchmaking_ghosts.get(ep_band)
         }
 
@@ -93,7 +87,7 @@ pub mod contract {
         pub fn set_matchmaking_ghosts(
             &mut self,
             ep_band: u16,
-            value: StdVec<(AccountId, u16, mtc::Ghost)>,
+            value: Vec<(AccountId, u16, mtc::Ghost)>,
         ) {
             self.only_allowed_caller();
             self.matchmaking_ghosts.insert(ep_band, &value);
@@ -140,12 +134,12 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_player_pool(&self, account: AccountId) -> Option<StdVec<mtc::Emo>> {
+        pub fn get_player_pool(&self, account: AccountId) -> Option<Vec<mtc::Emo>> {
             self.player_pool.get(&account)
         }
 
         #[ink(message)]
-        pub fn set_player_pool(&mut self, account: AccountId, value: StdVec<mtc::Emo>) {
+        pub fn set_player_pool(&mut self, account: AccountId, value: Vec<mtc::Emo>) {
             self.only_allowed_caller();
             self.player_pool.insert(account, &value);
         }
@@ -177,7 +171,7 @@ pub mod contract {
         pub fn get_player_grade_and_board_history(
             &self,
             account: AccountId,
-        ) -> Option<StdVec<mtc::GradeAndBoard>> {
+        ) -> Option<Vec<mtc::GradeAndBoard>> {
             self.player_grade_and_board_history.get(&account)
         }
 
@@ -185,7 +179,7 @@ pub mod contract {
         pub fn set_player_grade_and_board_history(
             &mut self,
             account: AccountId,
-            value: StdVec<mtc::GradeAndBoard>,
+            value: Vec<mtc::GradeAndBoard>,
         ) {
             self.only_allowed_caller();
             self.player_grade_and_board_history.insert(account, &value);
@@ -218,7 +212,7 @@ pub mod contract {
         pub fn get_player_ghosts(
             &self,
             account: AccountId,
-        ) -> Option<StdVec<(AccountId, u16, mtc::Ghost)>> {
+        ) -> Option<Vec<(AccountId, u16, mtc::Ghost)>> {
             self.player_ghosts.get(&account)
         }
 
@@ -226,7 +220,7 @@ pub mod contract {
         pub fn set_player_ghosts(
             &mut self,
             account: AccountId,
-            value: StdVec<(AccountId, u16, mtc::Ghost)>,
+            value: Vec<(AccountId, u16, mtc::Ghost)>,
         ) {
             self.only_allowed_caller();
             self.player_ghosts.insert(account, &value);
@@ -239,19 +233,12 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_player_ghost_states(
-            &self,
-            account: AccountId,
-        ) -> Option<StdVec<mtc::GhostState>> {
+        pub fn get_player_ghost_states(&self, account: AccountId) -> Option<Vec<mtc::GhostState>> {
             self.player_ghost_states.get(&account)
         }
 
         #[ink(message)]
-        pub fn set_player_ghost_states(
-            &mut self,
-            account: AccountId,
-            value: StdVec<mtc::GhostState>,
-        ) {
+        pub fn set_player_ghost_states(&mut self, account: AccountId, value: Vec<mtc::GhostState>) {
             self.only_allowed_caller();
             self.player_ghost_states.insert(account, &value);
         }
@@ -282,7 +269,7 @@ pub mod contract {
         // allowed accounts
 
         #[ink(message)]
-        pub fn get_allowed_accounts(&self) -> StdVec<AccountId> {
+        pub fn get_allowed_accounts(&self) -> Vec<AccountId> {
             self.allowed_accounts.clone()
         }
 
@@ -299,10 +286,10 @@ pub mod contract {
         }
 
         fn only_allowed_caller(&self) {
+            let caller = &self.env().caller();
             assert!(
-                self.allowed_accounts.contains(&self.env().caller()),
-                "allowed accounts: this caller is not allowed: {:?}",
-                &self.env().caller()
+                self.allowed_accounts.contains(caller),
+                "allowed accounts: this caller is not allowed: {caller:?}",
             );
         }
     }

@@ -2,12 +2,14 @@ use crate::codec_types::*;
 use sp_std::prelude::*;
 
 pub fn check_and_build_emo_bases(
-    mut bases: emo::Bases,
+    bases_opt: Option<emo::Bases>,
     new_bases: emo::Bases,
     fixed_base_ids: &[u16],
     built_base_ids: &[u16],
     force_bases_update: bool,
 ) -> Result<emo::Bases, &'static str> {
+    let mut bases = bases_opt.unwrap_or_else(emo::Bases::new);
+
     if force_bases_update {
         bases = new_bases;
     } else {

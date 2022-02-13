@@ -47,6 +47,13 @@ In addition, you'll create a one-time account internally during the game, which 
 
 You need Rust and Yarn.
 
+### Setup
+
+```
+yarn install
+cp common/js/src/envs/local.example.json common/js/src/envs/local.json
+```
+
 ### Start chain
 
 ```
@@ -59,7 +66,6 @@ make dev
 
 ```
 cd chain/scripts
-yarn install
 yarn seed-data:dev
 ```
 
@@ -69,6 +75,5 @@ yarn seed-data:dev
 
 ```
 cd front
-yarn install
 yarn dev
 ```

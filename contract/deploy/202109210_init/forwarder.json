@@ -1,1 +1,397 @@
-{"source":{"hash":"0x565ea2ef7ac57ef9337a63f12bff3f5c167cf22aea5976bb45824d524d81bbc2","language":"ink! 3.0.0-rc8","compiler":"rustc 1.60.0-nightly"},"contract":{"name":"forwarder","version":"0.1.0","authors":["Open Emoji Battler"],"license":"Apache-2.0"},"V3":{"spec":{"constructors":[{"args":[{"label":"logic_account_id","type":{"displayName":["AccountId"],"type":0}}],"docs":[],"label":"new","payable":false,"selector":"0x9bae9d5e"}],"docs":[],"events":[],"messages":[{"args":[{"label":"deck_emo_base_ids","type":{"displayName":[],"type":4}}],"docs":[],"label":"start_mtc","mutates":true,"payable":false,"returnType":null,"selector":"0x04bfdb29"},{"args":[{"label":"player_operations","type":{"displayName":["StdVec"],"type":6}}],"docs":[],"label":"finish_mtc_shop","mutates":true,"payable":false,"returnType":null,"selector":"0xfbd3f532"},{"args":[],"docs":[],"label":"get_logic_account_id","mutates":false,"payable":false,"returnType":{"displayName":["AccountId"],"type":0},"selector":"0x6fc06073"},{"args":[],"docs":[],"label":"get_logic","mutates":false,"payable":false,"returnType":{"displayName":["LogicRef"],"type":9},"selector":"0x0ef7da6f"},{"args":[{"label":"new_account_id","type":{"displayName":["AccountId"],"type":0}}],"docs":[],"label":"change_logic_account_id","mutates":true,"payable":false,"returnType":null,"selector":"0x4ca6a149"},{"args":[],"docs":[],"label":"get_allowed_accounts","mutates":false,"payable":false,"returnType":{"displayName":["StdVec"],"type":3},"selector":"0xc35cfacd"},{"args":[{"label":"account_id","type":{"displayName":["AccountId"],"type":0}}],"docs":[],"label":"allow_account","mutates":true,"payable":false,"returnType":null,"selector":"0x815c22c2"},{"args":[{"label":"account_id","type":{"displayName":["AccountId"],"type":0}}],"docs":[],"label":"disallow_account","mutates":true,"payable":false,"returnType":null,"selector":"0xbb8bad9e"}]},"storage":{"struct":{"fields":[{"layout":{"cell":{"key":"0x0000000000000000000000000000000000000000000000000000000000000000","ty":0}},"name":"logic_account_id"},{"layout":{"cell":{"key":"0x0100000000000000000000000000000000000000000000000000000000000000","ty":3}},"name":"allowed_accounts"}]}},"types":[{"id":0,"type":{"def":{"composite":{"fields":[{"type":1,"typeName":"[u8; 32]"}]}},"path":["ink_env","types","AccountId"]}},{"id":1,"type":{"def":{"array":{"len":32,"type":2}}}},{"id":2,"type":{"def":{"primitive":"u8"}}},{"id":3,"type":{"def":{"sequence":{"type":0}}}},{"id":4,"type":{"def":{"array":{"len":6,"type":5}}}},{"id":5,"type":{"def":{"primitive":"u16"}}},{"id":6,"type":{"def":{"sequence":{"type":7}}}},{"id":7,"type":{"def":{"variant":{"variants":[{"fields":[{"name":"mtc_emo_id","type":5,"typeName":"u16"},{"name":"index","type":2,"typeName":"u8"}],"index":0,"name":"Buy"},{"fields":[{"name":"index","type":2,"typeName":"u8"}],"index":1,"name":"Sell"},{"fields":[{"name":"indexes","type":8,"typeName":"Vec<u8>"}],"index":2,"name":"Move"},{"index":3,"name":"NextCatalogLine"},{"index":4,"name":"Upgrade"}]}},"path":["common","codec_types","mtc","shop","PlayerOperation"]}},{"id":8,"type":{"def":{"sequence":{"type":2}}}},{"id":9,"type":{"def":{"composite":{"fields":[{"name":"inner","type":10,"typeName":"<Logic as::ink_lang::codegen::ContractCallBuilder>::Type"}]}},"path":["logic","contract","LogicRef"]}},{"id":10,"type":{"def":{"composite":{"fields":[{"name":"account_id","type":0,"typeName":"AccountId"}]}},"path":["logic","contract","CallBuilder"]}}]}}
+{
+  "source": {
+    "hash": "0x8f36361e851299bdfaa7f27314c0f335cc1d1435f3842df6a58540f48fafefbc",
+    "language": "ink! 3.0.0-rc8",
+    "compiler": "rustc 1.60.0-nightly"
+  },
+  "contract": {
+    "name": "forwarder",
+    "version": "0.1.0",
+    "authors": [
+      "Open Emoji Battler"
+    ],
+    "license": "Apache-2.0"
+  },
+  "V3": {
+    "spec": {
+      "constructors": [
+        {
+          "args": [
+            {
+              "label": "logic_account_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "docs": [],
+          "label": "new",
+          "payable": false,
+          "selector": "0x9bae9d5e"
+        }
+      ],
+      "docs": [],
+      "events": [],
+      "messages": [
+        {
+          "args": [
+            {
+              "label": "deck_emo_base_ids",
+              "type": {
+                "displayName": [],
+                "type": 4
+              }
+            }
+          ],
+          "docs": [],
+          "label": "start_mtc",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x04bfdb29"
+        },
+        {
+          "args": [
+            {
+              "label": "player_operations",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 6
+              }
+            }
+          ],
+          "docs": [],
+          "label": "finish_mtc_shop",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xfbd3f532"
+        },
+        {
+          "args": [],
+          "docs": [],
+          "label": "get_logic_account_id",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "AccountId"
+            ],
+            "type": 0
+          },
+          "selector": "0x6fc06073"
+        },
+        {
+          "args": [],
+          "docs": [],
+          "label": "get_logic",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "LogicRef"
+            ],
+            "type": 9
+          },
+          "selector": "0x0ef7da6f"
+        },
+        {
+          "args": [
+            {
+              "label": "new_account_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "docs": [],
+          "label": "change_logic_account_id",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x4ca6a149"
+        },
+        {
+          "args": [],
+          "docs": [],
+          "label": "get_allowed_accounts",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Vec"
+            ],
+            "type": 3
+          },
+          "selector": "0xc35cfacd"
+        },
+        {
+          "args": [
+            {
+              "label": "account_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "docs": [],
+          "label": "allow_account",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x815c22c2"
+        },
+        {
+          "args": [
+            {
+              "label": "account_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "docs": [],
+          "label": "disallow_account",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xbb8bad9e"
+        }
+      ]
+    },
+    "storage": {
+      "struct": {
+        "fields": [
+          {
+            "layout": {
+              "cell": {
+                "key": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                "ty": 0
+              }
+            },
+            "name": "logic_account_id"
+          },
+          {
+            "layout": {
+              "cell": {
+                "key": "0x0100000000000000000000000000000000000000000000000000000000000000",
+                "ty": 3
+              }
+            },
+            "name": "allowed_accounts"
+          }
+        ]
+      }
+    },
+    "types": [
+      {
+        "id": 0,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 1,
+                  "typeName": "[u8; 32]"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_env",
+            "types",
+            "AccountId"
+          ]
+        }
+      },
+      {
+        "id": 1,
+        "type": {
+          "def": {
+            "array": {
+              "len": 32,
+              "type": 2
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": {
+          "def": {
+            "primitive": "u8"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": {
+          "def": {
+            "array": {
+              "len": 6,
+              "type": 5
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "type": {
+          "def": {
+            "primitive": "u16"
+          }
+        }
+      },
+      {
+        "id": 6,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 7
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "name": "mtc_emo_id",
+                      "type": 5,
+                      "typeName": "u16"
+                    },
+                    {
+                      "name": "index",
+                      "type": 2,
+                      "typeName": "u8"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Buy"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "index",
+                      "type": 2,
+                      "typeName": "u8"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Sell"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "indexes",
+                      "type": 8,
+                      "typeName": "Vec<u8>"
+                    }
+                  ],
+                  "index": 2,
+                  "name": "Move"
+                },
+                {
+                  "index": 3,
+                  "name": "NextCatalogLine"
+                },
+                {
+                  "index": 4,
+                  "name": "Upgrade"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "shop",
+            "PlayerOperation"
+          ]
+        }
+      },
+      {
+        "id": 8,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 2
+            }
+          }
+        }
+      },
+      {
+        "id": 9,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "inner",
+                  "type": 10,
+                  "typeName": "<Logic as::ink_lang::codegen::ContractCallBuilder>::Type"
+                }
+              ]
+            }
+          },
+          "path": [
+            "logic",
+            "contract",
+            "LogicRef"
+          ]
+        }
+      },
+      {
+        "id": 10,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "account_id",
+                  "type": 0,
+                  "typeName": "AccountId"
+                }
+              ]
+            }
+          },
+          "path": [
+            "logic",
+            "contract",
+            "CallBuilder"
+          ]
+        }
+      }
+    ]
+  }
+}

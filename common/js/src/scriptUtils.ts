@@ -2,7 +2,7 @@ import { Keyring } from "@polkadot/keyring"
 import { cryptoWaitReady } from "@polkadot/util-crypto"
 
 import { createType } from "./api"
-import { getEnv } from "./utils"
+import { getEnv } from "./env"
 
 export const getChainEndpointAndKeyringPair = async (envName: string, mnemonic: string) => {
   const endpoint = getEnv(envName).chainEndpoint

@@ -1,0 +1,8 @@
+{
+  "chainEndpoint": "wss://proto0.open-emoji-battler.community/",
+  "contract": {
+    "endpoint": "",
+    "storageAddress": "",
+    "forwarderAddress": ""
+  }
+}
