@@ -3,12 +3,17 @@ import { ApiPromise } from "@polkadot/api"
 
 import { connect } from "common"
 
-import { useConnectionSetter, ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
+import {
+  useConnectionSetter,
+  ConnectionContext,
+  useAccountSetter,
+} from "~/components/App/ConnectionProvider/tasks"
 import { getContractEnv, buildConnection } from "./tasks"
 
 export function Contract(props: { children: React.ReactNode }) {
   const connection = React.useContext(ConnectionContext)
   const setConnection = useConnectionSetter()
+  const setAccount = useAccountSetter()
 
   React.useEffect(() => {
     const contractEnv = getContractEnv()
@@ -23,6 +28,7 @@ export function Contract(props: { children: React.ReactNode }) {
       .then(setConnection)
 
     return () => {
+      setAccount(null)
       setConnection(null)
       if (api) {
         api.disconnect()
