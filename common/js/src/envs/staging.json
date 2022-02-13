@@ -1,0 +1,8 @@
+{
+  "chainEndpoint": "",
+  "contract": {
+    "endpoint": "",
+    "storageAddress": "",
+    "forwarderAddress": ""
+  }
+}

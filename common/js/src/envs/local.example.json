@@ -1,0 +1,8 @@
+{
+  "chainEndpoint": "ws://127.0.0.1:9944",
+  "contract": {
+    "endpoint": "ws://127.0.0.1:9988",
+    "storageAddress": "",
+    "forwarderAddress": ""
+  }
+}
