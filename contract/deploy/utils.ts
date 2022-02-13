@@ -9,9 +9,6 @@ import type { IKeyringPair } from "@polkadot/types/types"
 
 import { getContractEnvAndKeyringPair } from "common/src/scriptUtils"
 
-// const SDN = 1_000_000_000_000_000_000n
-// const MILLISDN = SDN / 1_000n
-
 export const instantiateContract = async (
   api: ApiPromise,
   pair: IKeyringPair,
