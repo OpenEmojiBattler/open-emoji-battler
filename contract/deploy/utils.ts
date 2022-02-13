@@ -3,7 +3,7 @@ import path from "path"
 
 import { tx } from "common"
 
-import { WsProvider, ApiPromise } from "@polkadot/api"
+import { ApiPromise } from "@polkadot/api"
 import { CodePromise, ContractPromise } from "@polkadot/api-contract"
 import type { IKeyringPair } from "@polkadot/types/types"
 
@@ -18,12 +18,16 @@ export const instantiateContract = async (
   contractName: string,
   constructorArgs: any[],
   dirname: string,
-  envName: string
+  envName: string,
+  contractFilePath?: string
 ) => {
-  const abi = readFileSync(path.resolve(dirname, `./${contractName}.json`), "utf8")
-  const wasm = readFileSync(path.resolve(dirname, `./${contractName}.wasm`))
-
-  const code = new CodePromise(api, abi, wasm)
+  const code = contractFilePath
+    ? new CodePromise(api, readFileSync(path.resolve(dirname, contractFilePath), "utf8"), null)
+    : new CodePromise(
+        api,
+        readFileSync(path.resolve(dirname, `./${contractName}.json`), "utf8"),
+        readFileSync(path.resolve(dirname, `./${contractName}.wasm`))
+      )
 
   const contract = (
     (await tx(
