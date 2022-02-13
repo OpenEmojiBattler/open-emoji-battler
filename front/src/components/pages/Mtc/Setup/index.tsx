@@ -30,12 +30,16 @@ export function Setup(props: {
           <div className={"level-left"}></div>
           <div className={"level-right"}>
             <div className={"level-item"}>
-              <div style={{ width: "270px", marginRight: "8px" }}>
-                <small>
-                  No fee required but you are going to see a PoW solution on the tip field of the
-                  popup.
-                </small>
-              </div>
+              {account.kind === "chain" ? (
+                <div style={{ width: "270px", marginRight: "8px" }}>
+                  <small>
+                    No fee required but you are going to see a PoW solution on the tip field of the
+                    popup.
+                  </small>
+                </div>
+              ) : (
+                <></>
+              )}
               <div>
                 {hasPowButton ? (
                   account.kind === "chain" ? (
