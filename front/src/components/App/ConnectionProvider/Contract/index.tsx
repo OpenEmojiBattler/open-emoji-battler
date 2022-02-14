@@ -26,6 +26,7 @@ export function Contract(props: { children: React.ReactNode }) {
         return buildConnection(api, contractEnv)
       })
       .then(setConnection)
+      .catch(console.error)
 
     return () => {
       setAccount(null)

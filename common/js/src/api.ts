@@ -32,7 +32,13 @@ export const connected = async <T>(
 }
 
 export const connect = (endpoint: string, withTypes = true) => {
-  const provider = new WsProvider(endpoint)
+  let provider: WsProvider
+  try {
+    provider = new WsProvider(endpoint)
+  } catch (e) {
+    return Promise.reject(e)
+  }
+
   if (withTypes) {
     // if we don't pass `types` here,
     // it seems the types data will be cleared when the runtime upgrade occurs

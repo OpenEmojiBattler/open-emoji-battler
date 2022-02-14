@@ -24,6 +24,7 @@ export function Chain(props: { children: React.ReactNode }) {
         return buildConnection(api)
       })
       .then(setConnection)
+      .catch(console.error)
 
     return () => {
       setAccount(null)
