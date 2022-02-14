@@ -6,7 +6,7 @@
   "sideEffects": ["**/*.sass"],
   "scripts": {
     "dev": "OEB_ENV=local webpack serve --mode development --stats minimal --hot",
-    "build": "echo '\"\"' > ../common/js/src/envs/local.json && rm -rf ./dist && ./scripts/put-redirects.sh && OEB_ENV=production webpack --mode production",
+    "build": "cp ../common/js/src/envs/local.example.json ../common/js/src/envs/local.json && rm -rf ./dist && ./scripts/put-redirects.sh && OEB_ENV=production webpack --mode production",
     "lint": "prettier --write '{src,scripts}/**/*'",
     "update-wasm": "wasm-pack build --target bundler --release --out-dir pkgbundler wasm && wasm-pack build --target nodejs --release --out-dir pkgnodejs wasm && ts-node scripts/generateSrcWasm.ts",
     "check-ts": "tsc -p . --noEmit"
