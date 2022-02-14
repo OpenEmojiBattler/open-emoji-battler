@@ -27,7 +27,15 @@ export function Setup(props: {
     <section className="section">
       <div className={"container"}>
         <nav className={"level"} style={{ alignItems: "flex-start" }}>
-          <div className={"level-left"}></div>
+          <div className={"level-left"}>
+            {account.kind === "chain" ? (
+              <></>
+            ) : (
+              <div className={"level-item"}>
+                <div>Contract MVP</div>
+              </div>
+            )}
+          </div>
           <div className={"level-right"}>
             <div className={"level-item"}>
               {account.kind === "chain" ? (
