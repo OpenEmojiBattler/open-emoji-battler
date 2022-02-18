@@ -20,7 +20,7 @@ const main = async () => {
         [],
         __dirname,
         envName,
-        "../../storage/target/ink/storage.contract"
+        "../../target/ink/storage/storage.contract"
       )
 
       const logicContract = await instantiateContract(
@@ -30,7 +30,7 @@ const main = async () => {
         [storageContract.address.toString()],
         __dirname,
         envName,
-        "../../logic/target/ink/logic.contract"
+        "../../target/ink/logic/logic.contract"
       )
 
       const forwarderContract = await instantiateContract(
@@ -40,7 +40,7 @@ const main = async () => {
         [logicContract.address.toString()],
         __dirname,
         envName,
-        "../../forwarder/target/ink/forwarder.contract"
+        "../../target/ink/forwarder/forwarder.contract"
       )
 
       await txContract(

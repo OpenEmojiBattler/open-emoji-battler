@@ -16,9 +16,9 @@ ink_lang = { git = "https://github.com/paritytech/ink", rev = "be42524a23243c0ce
 scale = { package = "parity-scale-codec", version = "3", default-features = false, features = ["derive", "full"] }
 scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
 
-storage = { version = "0.1.0", path = "../storage", default-features = false, features = ["ink-as-dependency"] }
+storage = { path = "../storage", default-features = false, features = ["ink-as-dependency"] }
 
-common = { path = "../../common/rs", version = "0.1.0", default-features = false, features = ["ink"] }
+common = { path = "../../common/rs", default-features = false, features = ["ink"] }
 
 [lib]
 name = "logic"
