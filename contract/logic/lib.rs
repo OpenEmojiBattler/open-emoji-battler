@@ -8,7 +8,6 @@ pub mod contract {
         codec_types::*,
         mtc::{
             battle::organizer::{battle_all, select_battle_ghost_index},
-            emo_bases::check_and_build_emo_bases,
             ep::{EP_UNFINISH_PENALTY, INITIAL_EP, MIN_EP},
             finish::{
                 exceeds_grade_and_board_history_limit, get_turn_and_previous_grade_and_board,
@@ -30,7 +29,6 @@ pub mod contract {
     pub struct Logic {
         storage_account_id: AccountId,
         allowed_accounts: Vec<AccountId>,
-        root_account_id: AccountId,
     }
 
     impl Logic {
@@ -40,7 +38,6 @@ pub mod contract {
             Self {
                 storage_account_id,
                 allowed_accounts: vec![caller],
-                root_account_id: caller,
             }
         }
 
@@ -51,51 +48,6 @@ pub mod contract {
 
         fn get_storage(&self) -> StorageRef {
             FromAccountId::from_account_id(self.storage_account_id)
-        }
-
-        #[ink(message)]
-        pub fn get_root_account_id(&self) -> AccountId {
-            self.root_account_id
-        }
-
-        #[ink(message)]
-        pub fn set_root_account_id(&mut self, new_root_account_id: AccountId) {
-            self.only_root_caller();
-            self.root_account_id = new_root_account_id;
-        }
-
-        fn only_root_caller(&self) {
-            assert_eq!(
-                self.root_account_id,
-                self.env().caller(),
-                "only_root_caller: not allowed"
-            );
-        }
-
-        #[ink(message)]
-        pub fn update_emo_bases(
-            &mut self,
-            new_bases: emo::Bases,
-            fixed_base_ids: Vec<u16>,
-            built_base_ids: Vec<u16>,
-            force_bases_update: bool,
-        ) {
-            self.only_root_caller();
-
-            let mut storage = self.get_storage();
-
-            let bases = check_and_build_emo_bases(
-                storage.get_emo_bases(),
-                new_bases,
-                &fixed_base_ids,
-                &built_base_ids,
-                force_bases_update,
-            )
-            .expect("update_emo_bases: invalig arg");
-
-            storage.set_emo_bases(Some(bases));
-            storage.set_deck_fixed_emo_base_ids(Some(fixed_base_ids));
-            storage.set_deck_built_emo_base_ids(Some(built_base_ids));
         }
 
         #[ink(message)]
@@ -119,8 +71,12 @@ pub mod contract {
                 build_pool(
                     &deck_emo_base_ids,
                     &storage.get_emo_bases().expect("emo_bases none"),
-                    &storage.get_deck_fixed_emo_base_ids().expect("deck_fixed_emo_base_ids none"),
-                    &storage.get_deck_built_emo_base_ids().expect("deck_built_emo_base_ids none"),
+                    &storage
+                        .get_deck_fixed_emo_base_ids()
+                        .expect("deck_fixed_emo_base_ids none"),
+                    &storage
+                        .get_deck_built_emo_base_ids()
+                        .expect("deck_built_emo_base_ids none"),
                 )
                 .expect("failed to build player pool"),
             );
