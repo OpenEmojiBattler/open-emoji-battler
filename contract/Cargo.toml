@@ -3,5 +3,6 @@ members = [
     "storage",
     "logic",
     "logic_admin",
+    "logic_start_mtc",
     "forwarder",
 ]

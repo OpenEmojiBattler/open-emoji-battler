@@ -8,15 +8,13 @@ pub mod contract {
         codec_types::*,
         mtc::{
             battle::organizer::{battle_all, select_battle_ghost_index},
-            ep::{EP_UNFINISH_PENALTY, INITIAL_EP, MIN_EP},
+            ep::MIN_EP,
             finish::{
                 exceeds_grade_and_board_history_limit, get_turn_and_previous_grade_and_board,
             },
-            ghost::{build_matchmaking_ghosts, choose_ghosts, separate_player_ghosts},
-            setup::{build_initial_ghost_states, build_pool, PLAYER_INITIAL_HEALTH},
+            ghost::{build_matchmaking_ghosts, separate_player_ghosts},
             shop::{
-                coin::{decrease_upgrade_coin, get_upgrade_coin},
-                player_operation::verify_player_operations_and_update,
+                coin::decrease_upgrade_coin, player_operation::verify_player_operations_and_update,
             },
         },
     };
@@ -48,43 +46,6 @@ pub mod contract {
 
         fn get_storage(&self) -> StorageRef {
             FromAccountId::from_account_id(self.storage_account_id)
-        }
-
-        #[ink(message)]
-        pub fn start_mtc(&mut self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
-            self.only_allowed_caller();
-
-            let mut storage = self.get_storage();
-
-            if storage.get_player_pool(caller).is_some() {
-                self.cleanup_finished(&mut storage, caller);
-                let ep = storage.get_player_ep(caller).expect("player ep none");
-                storage.set_player_ep(caller, ep.saturating_sub(EP_UNFINISH_PENALTY));
-            }
-
-            let seed = self.get_random_seed(caller, b"start_mtc");
-
-            storage.set_player_health(caller, PLAYER_INITIAL_HEALTH);
-            storage.set_player_seed(caller, seed);
-            storage.set_player_pool(
-                caller,
-                build_pool(
-                    &deck_emo_base_ids,
-                    &storage.get_emo_bases().expect("emo_bases none"),
-                    &storage
-                        .get_deck_fixed_emo_base_ids()
-                        .expect("deck_fixed_emo_base_ids none"),
-                    &storage
-                        .get_deck_built_emo_base_ids()
-                        .expect("deck_built_emo_base_ids none"),
-                )
-                .expect("failed to build player pool"),
-            );
-            storage.set_player_grade_and_board_history(caller, Vec::new());
-            storage.set_player_battle_ghost_index(caller, 0);
-            self.update_upgrade_coin(&mut storage, caller, get_upgrade_coin(2));
-
-            self.matchmake(caller, &mut storage, seed)
         }
 
         #[ink(message)]
@@ -196,19 +157,6 @@ pub mod contract {
             } else {
                 storage.remove_player_upgrade_coin(account_id);
             }
-        }
-
-        fn matchmake(&self, account_id: AccountId, storage: &mut StorageRef, seed: u64) {
-            let ep = storage.get_player_ep(account_id).unwrap_or_else(|| {
-                storage.set_player_ep(account_id, INITIAL_EP);
-                INITIAL_EP
-            });
-
-            let selected =
-                choose_ghosts(ep, seed, &|ep_band| storage.get_matchmaking_ghosts(ep_band));
-
-            storage.set_player_ghosts(account_id, selected);
-            storage.set_player_ghost_states(account_id, build_initial_ghost_states());
         }
 
         fn finish(
