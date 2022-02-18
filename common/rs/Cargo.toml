@@ -10,17 +10,17 @@ rand_pcg = { version = "=0.3.1", default-features = false }
 sp-std = { version = "=3.0.0", default-features = false }
 anyhow = { version = "=1.0.53", default-features = false }
 
-parity-scale-codec = { version = "2", default-features = false, features = ["derive"] }
+parity-scale-codec = { version = "< 4", default-features = false, features = ["derive"] }
 
 # chain
 blake2-rfc = { version = "0.2.18", default-features = false, optional = true }
 libm = { version = "0.2.1", default-features = false, optional = true }
 
 # contract
-scale-info = { version = "1", default-features = false, features = ["derive"], optional = true }
-ink_storage = { version = "3.0.0-rc8", default-features = false, optional = true }
-ink_primitives = { version = "3.0.0-rc8", default-features = false, optional = true }
-ink_metadata = { version = "3.0.0-rc8", default-features = false, optional = true }
+scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
+ink_storage = { git = "https://github.com/paritytech/ink", rev = "be42524a23243c0ce497a54b9bf5405a04cc74b5", default-features = false, optional = true }
+ink_primitives = { git = "https://github.com/paritytech/ink", rev = "be42524a23243c0ce497a54b9bf5405a04cc74b5", default-features = false, optional = true }
+ink_metadata = { git = "https://github.com/paritytech/ink", rev = "be42524a23243c0ce497a54b9bf5405a04cc74b5", default-features = false, optional = true }
 codec_types_derive = { path = "./codec_types_derive", optional = true }
 
 [dev-dependencies]

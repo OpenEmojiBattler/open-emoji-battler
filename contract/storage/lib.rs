@@ -6,10 +6,10 @@ use ink_lang as ink;
 pub mod contract {
     use common::codec_types::*;
     use ink_prelude::vec::Vec;
-    use ink_storage::lazy::Mapping; // remove `lazy` on next release
+    use ink_storage::{traits::SpreadAllocate, Mapping};
 
     #[ink(storage)]
-    #[derive(Default)]
+    #[derive(SpreadAllocate)]
     pub struct Storage {
         emo_bases: Option<emo::Bases>,
         deck_fixed_emo_base_ids: Option<Vec<u16>>,
@@ -37,9 +37,9 @@ pub mod contract {
     impl Storage {
         #[ink(constructor)]
         pub fn new() -> Self {
-            let mut contract: Self = Default::default();
-            contract.allowed_accounts.push(Self::env().caller());
-            contract
+            ink_lang::utils::initialize_contract(|contract: &mut Self| {
+                contract.allowed_accounts.push(Self::env().caller());
+            })
         }
 
         #[ink(message)]
