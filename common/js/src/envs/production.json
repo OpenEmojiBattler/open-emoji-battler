@@ -1,7 +1,7 @@
 {
   "chainEndpoint": "wss://proto0.open-emoji-battler.community/",
   "contract": {
-    "endpoint": "",
+    "endpoint": "wss://rococo-canvas-rpc.polkadot.io/",
     "storageAddress": "",
     "forwarderAddress": ""
   }
