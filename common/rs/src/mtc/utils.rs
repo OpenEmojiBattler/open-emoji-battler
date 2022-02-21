@@ -1,5 +1,5 @@
 use crate::codec_types::*;
-use anyhow::{anyhow, bail, Result};
+use crate::error::{anyhow, bail, Result};
 use sp_std::prelude::*;
 
 pub const BOARD_EMO_MAX_COUNT: u8 = 7;
@@ -31,9 +31,7 @@ impl emo::Bases {
     }
 
     pub fn find(&self, id: u16) -> Result<&emo::Base> {
-        self.0
-            .get(&id)
-            .ok_or_else(|| anyhow!("emo base not found: {}", id))
+        self.0.get(&id).ok_or_else(|| anyhow!("emo base not found"))
     }
 }
 
@@ -77,7 +75,7 @@ pub fn get_pool_emo_count_by_grade(grade: u8) -> Result<u8> {
         4 => 5,
         5 => 5,
         6 => 4,
-        _ => bail!("invalid grade: {}", grade),
+        _ => bail!("invalid grade"),
     })
 }
 

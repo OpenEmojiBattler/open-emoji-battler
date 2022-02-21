@@ -1,3 +1,4 @@
+use crate::error::{anyhow, bail, ensure, Result};
 use crate::{
     codec_types::*,
     mtc::{
@@ -7,7 +8,6 @@ use crate::{
         utils::{double_attack_and_health_if, is_matched_typ_and_triple, BOARD_EMO_MAX_COUNT},
     },
 };
-use anyhow::{anyhow, bail, ensure, Result};
 use rand::{
     seq::{IteratorRandom, SliceRandom},
     Rng,

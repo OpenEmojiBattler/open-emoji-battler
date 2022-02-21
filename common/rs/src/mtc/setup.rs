@@ -1,5 +1,5 @@
+use crate::error::{bail, ensure, Result};
 use crate::{codec_types::*, mtc::utils};
-use anyhow::{bail, ensure, Result};
 use sp_std::prelude::*;
 
 pub const PLAYER_INITIAL_HEALTH: u8 = 30;
@@ -48,7 +48,7 @@ fn build_built_base_ids(
     for id in selected_built_base_ids.iter() {
         let base = bases.find(*id)?;
         if !built_base_ids.contains(&base.id) {
-            bail!("not contained in allowlist: {}", id);
+            bail!("not contained in allowlist");
         }
         if used_grades.contains(&base.grade) {
             bail!("contains same grade");

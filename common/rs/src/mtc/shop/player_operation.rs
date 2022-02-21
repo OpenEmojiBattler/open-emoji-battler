@@ -1,3 +1,4 @@
+use crate::error::{anyhow, bail, ensure, Result};
 use crate::{
     codec_types::*,
     mtc::shop::{
@@ -7,7 +8,6 @@ use crate::{
         common::ShopBoard,
     },
 };
-use anyhow::{anyhow, bail, ensure, Result};
 use sp_std::prelude::*;
 
 const NEXT_CATALOG_LINE_COIN: u8 = 1;

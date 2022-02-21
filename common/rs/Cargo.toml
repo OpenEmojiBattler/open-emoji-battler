@@ -8,7 +8,6 @@ license = "Apache-2.0"
 rand = { version = "=0.8.4", default-features = false, features=["alloc"] }
 rand_pcg = { version = "=0.3.1", default-features = false }
 sp-std = { version = "=3.0.0", default-features = false }
-anyhow = { version = "=1.0.53", default-features = false }
 
 parity-scale-codec = { version = "< 4", default-features = false, features = ["derive"] }
 
@@ -33,7 +32,6 @@ std = [
     "rand/std",
     "parity-scale-codec/std",
     "sp-std/std",
-    "anyhow/std",
 ]
 view-logs = []
 chain = ["blake2-rfc", "libm"]

@@ -1,3 +1,4 @@
+use crate::error::{bail, ensure, Result};
 use crate::{
     codec_types::*,
     mtc::{
@@ -8,7 +9,6 @@ use crate::{
         },
     },
 };
-use anyhow::{bail, ensure, Result};
 use rand::seq::SliceRandom;
 use rand::SeedableRng;
 use rand_pcg::Pcg64Mcg;

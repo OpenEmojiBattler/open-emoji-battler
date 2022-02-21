@@ -1,5 +1,5 @@
 use crate::codec_types::*;
-use anyhow::{anyhow, Result};
+use crate::error::{anyhow, Result};
 use rand::seq::{IteratorRandom, SliceRandom};
 use rand::SeedableRng;
 use rand_pcg::Pcg64Mcg;

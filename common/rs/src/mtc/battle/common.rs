@@ -1,9 +1,9 @@
+use crate::error::{anyhow, Result};
 use crate::{
     codec_types::*,
     mtc::utils::{build_emo_attributes, is_matched_typ_and_triple},
     utils::is_view_logs_enabled,
 };
-use anyhow::{anyhow, Result};
 use core::sync::atomic::{AtomicU16, Ordering};
 use sp_std::prelude::*;
 
@@ -55,13 +55,13 @@ impl BattleBoards {
     pub fn get_board(&self, player_index: u8) -> Result<&Vec<BattleEmo>> {
         self.0
             .get(player_index as usize)
-            .ok_or_else(|| anyhow!("board not found: {}", player_index))
+            .ok_or_else(|| anyhow!("board not found"))
     }
 
     pub fn get_board_mut(&mut self, player_index: u8) -> Result<&mut Vec<BattleEmo>> {
         self.0
             .get_mut(player_index as usize)
-            .ok_or_else(|| anyhow!("board mut not found: {}", player_index))
+            .ok_or_else(|| anyhow!("board mut not found"))
     }
 
     pub fn is_empty_board(&self, player_index: u8) -> Result<bool> {
@@ -75,13 +75,13 @@ impl BattleBoards {
     pub fn get_emo(&self, player_index: u8, emo_index: u8) -> Result<&BattleEmo> {
         self.get_board(player_index)?
             .get(emo_index as usize)
-            .ok_or_else(|| anyhow!("emo not found: {}", emo_index))
+            .ok_or_else(|| anyhow!("emo not found"))
     }
 
     pub fn get_emo_mut(&mut self, player_index: u8, emo_index: u8) -> Result<&mut BattleEmo> {
         self.get_board_mut(player_index)?
             .get_mut(emo_index as usize)
-            .ok_or_else(|| anyhow!("emo mut not found: {}", emo_index))
+            .ok_or_else(|| anyhow!("emo mut not found"))
     }
 
     pub fn find_emo_index_by_id(&self, player_index: u8, emo_id: u16) -> Result<Option<u8>> {

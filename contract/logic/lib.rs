@@ -224,7 +224,7 @@ pub mod contract {
                         MIN_EP
                     }
                 }
-                _ => panic!("unsupported place: {:?}", place),
+                _ => panic!("unsupported place"),
             };
 
             storage.set_player_ep(account_id, new_ep);
@@ -297,7 +297,7 @@ pub mod contract {
             let caller = &self.env().caller();
             assert!(
                 self.allowed_accounts.contains(caller),
-                "allowed accounts: this caller is not allowed: {caller:?}",
+                "allowed accounts: this caller is not allowed",
             );
         }
     }

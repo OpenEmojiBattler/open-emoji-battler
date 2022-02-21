@@ -1,5 +1,5 @@
+use crate::error::{anyhow, Result};
 use crate::{codec_types::*, mtc::utils::build_emo_attributes, utils::is_view_logs_enabled};
-use anyhow::{anyhow, Result};
 use core::sync::atomic::{AtomicU16, Ordering};
 use sp_std::prelude::*;
 
@@ -110,19 +110,19 @@ impl ShopBoard {
             .iter()
             .zip(0u8..)
             .find(|(e, _)| e.id == shop_board_emo_id)
-            .ok_or_else(|| anyhow!("emo not found: id {}", shop_board_emo_id))
+            .ok_or_else(|| anyhow!("emo not found"))
     }
 
     pub fn get_emo(&self, emo_index: u8) -> Result<&ShopBoardEmo> {
         self.0
             .get(emo_index as usize)
-            .ok_or_else(|| anyhow!("emo not found: index {}", emo_index))
+            .ok_or_else(|| anyhow!("emo not found"))
     }
 
     pub fn get_emo_mut(&mut self, emo_index: u8) -> Result<&mut ShopBoardEmo> {
         self.0
             .get_mut(emo_index as usize)
-            .ok_or_else(|| anyhow!("emo for mut not found: index {}", emo_index))
+            .ok_or_else(|| anyhow!("emo for mut not found"))
     }
 
     pub fn emos(&self) -> Vec<&ShopBoardEmo> {
