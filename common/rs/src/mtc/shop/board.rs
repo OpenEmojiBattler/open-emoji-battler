@@ -1005,19 +1005,12 @@ fn process_triple(
 }
 
 fn remove_triple_emos(board: &mut ShopBoard, triple_source_indexes: &[u8]) -> Vec<ShopBoardEmo> {
-    let mut removed = Vec::<ShopBoardEmo>::new();
-
-    let mut indexes = triple_source_indexes.to_vec();
-    indexes.sort_unstable();
-    indexes.reverse();
-
-    for &i in indexes.iter() {
-        removed.push(board.remove_emo(i));
-    }
-
-    removed.reverse();
-
-    removed
+    triple_source_indexes
+        .iter()
+        .rev()
+        .map(|&i| board.remove_emo(i))
+        .rev()
+        .collect()
 }
 
 fn build_triple_emo(

@@ -209,7 +209,6 @@ fn calc_final_place(
 }
 
 struct GhostSet<'a> {
-    index: u8,
     ghost: mtc::Ghost,
     state: &'a mut mtc::GhostState,
 }
@@ -227,9 +226,7 @@ fn battle_pvg_and_gvg(
     let mut ghost_sets = ghosts
         .iter()
         .zip(ghost_states.iter_mut())
-        .enumerate()
-        .map(|(i, (g, gs))| GhostSet {
-            index: i as u8,
+        .map(|(g, gs)| GhostSet {
             ghost: g.clone(),
             state: gs,
         })
@@ -269,8 +266,6 @@ fn battle_pvg_and_gvg(
         seed,
         emo_bases,
     )?;
-
-    ghost_sets.sort_unstable_by_key(|g| g.index);
 
     Ok(())
 }
