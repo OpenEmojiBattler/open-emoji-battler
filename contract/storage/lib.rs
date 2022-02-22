@@ -269,7 +269,20 @@ pub mod contract {
         // batch ops
 
         #[ink(message)]
-        pub fn get_data_for_finish_mtc_shop(
+        pub fn remove_player_mtc(&mut self, account: AccountId) {
+            self.only_allowed_caller();
+
+            self.player_pool.remove(&account);
+            self.player_health.remove(&account);
+            self.player_grade_and_board_history.remove(&account);
+            self.player_upgrade_coin.remove(&account);
+            self.player_ghosts.remove(&account);
+            self.player_ghost_states.remove(&account);
+            self.player_battle_ghost_index.remove(&account);
+        }
+
+        #[ink(message)]
+        pub fn get_data_for_logic_finish_mtc_shop(
             &self,
             account: AccountId,
         ) -> (
@@ -300,7 +313,7 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn set_data_for_finish_mtc_shop_finish_battle(
+        pub fn set_data_for_logic_finish_mtc_shop_finish_battle(
             &mut self,
             account: AccountId,
             grade_and_board_history: Vec<mtc::GradeAndBoard>,
@@ -308,21 +321,14 @@ pub mod contract {
             ghost_states: Vec<mtc::GhostState>,
             battle_ghost_index: u8,
         ) {
-            self.set_player_grade_and_board_history(account, grade_and_board_history);
-            self.set_player_health(account, health);
-            self.set_player_ghost_states(account, ghost_states);
-            self.set_player_battle_ghost_index(account, battle_ghost_index);
-        }
+            self.only_allowed_caller();
 
-        #[ink(message)]
-        pub fn remove_data_for_finish_mtc_shop_cleanup_finished(&mut self, account: AccountId) {
-            self.remove_player_pool(account);
-            self.remove_player_health(account);
-            self.remove_player_grade_and_board_history(account);
-            self.remove_player_upgrade_coin(account);
-            self.remove_player_ghosts(account);
-            self.remove_player_ghost_states(account);
-            self.remove_player_battle_ghost_index(account);
+            self.player_grade_and_board_history
+                .insert(account, &grade_and_board_history);
+            self.player_health.insert(account, &health);
+            self.player_ghost_states.insert(account, &ghost_states);
+            self.player_battle_ghost_index
+                .insert(account, &battle_ghost_index);
         }
 
         // allowed accounts

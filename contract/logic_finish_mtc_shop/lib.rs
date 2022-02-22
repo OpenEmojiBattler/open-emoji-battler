@@ -58,7 +58,7 @@ pub mod contract {
                 battle_ghost_index,
                 mut ghost_states,
                 player_ghosts,
-            ) = storage.get_data_for_finish_mtc_shop(caller);
+            ) = storage.get_data_for_logic_finish_mtc_shop(caller);
 
             let (
                 turn,
@@ -109,10 +109,6 @@ pub mod contract {
                 grade_and_board_history,
                 final_place,
             );
-        }
-
-        fn cleanup_finished(&self, storage: &mut StorageRef, account: AccountId) {
-            storage.remove_data_for_finish_mtc_shop_cleanup_finished(account);
         }
 
         fn get_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
@@ -182,7 +178,7 @@ pub mod contract {
                 self.register_ghost(storage, account_id, ep, grade_and_board_history);
             }
 
-            self.cleanup_finished(storage, account_id);
+            storage.remove_player_mtc(account_id);
         }
 
         fn update_ep(&self, storage: &mut StorageRef, account_id: AccountId, place: u8) -> u16 {
@@ -243,7 +239,7 @@ pub mod contract {
                 select_battle_ghost_index(&ghost_states, battle_ghost_index, new_seed)
                     .expect("battle ghost selection failed");
 
-            storage.set_data_for_finish_mtc_shop_finish_battle(
+            storage.set_data_for_logic_finish_mtc_shop_finish_battle(
                 account_id,
                 grade_and_board_history,
                 health,

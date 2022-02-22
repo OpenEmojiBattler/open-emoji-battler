@@ -38,7 +38,7 @@ pub mod contract {
             let mut storage = StorageRef::from_account_id(self.storage_account_id);
 
             if storage.get_player_pool(caller).is_some() {
-                self.cleanup_finished(&mut storage, caller);
+                storage.remove_player_mtc(caller);
                 let ep = storage.get_player_ep(caller).expect("player ep none");
                 storage.set_player_ep(caller, ep.saturating_sub(EP_UNFINISH_PENALTY));
             }
@@ -66,16 +66,6 @@ pub mod contract {
             self.update_upgrade_coin(&mut storage, caller, get_upgrade_coin(2));
 
             self.matchmake(caller, &mut storage, seed)
-        }
-
-        fn cleanup_finished(&self, storage: &mut StorageRef, account: AccountId) {
-            storage.remove_player_pool(account);
-            storage.remove_player_health(account);
-            storage.remove_player_grade_and_board_history(account);
-            storage.remove_player_upgrade_coin(account);
-            storage.remove_player_ghosts(account);
-            storage.remove_player_ghost_states(account);
-            storage.remove_player_battle_ghost_index(account);
         }
 
         fn get_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
