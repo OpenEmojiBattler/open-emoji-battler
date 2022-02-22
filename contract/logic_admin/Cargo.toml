@@ -21,7 +21,7 @@ storage = { path = "../storage", default-features = false, features = ["ink-as-d
 common = { path = "../../common/rs", default-features = false, features = ["ink"] }
 
 [lib]
-name = "logic"
+name = "logic_admin"
 path = "lib.rs"
 crate-type = [
     "cdylib",

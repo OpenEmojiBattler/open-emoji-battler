@@ -10,27 +10,18 @@ pub mod contract {
     use storage::contract::StorageRef;
 
     #[ink(storage)]
-    pub struct LogicAdmin {
+    pub struct Logic {
         storage_account_id: AccountId,
         allowed_accounts: Vec<AccountId>,
     }
 
-    impl LogicAdmin {
+    impl Logic {
         #[ink(constructor)]
         pub fn new(storage_account_id: AccountId) -> Self {
             Self {
                 storage_account_id,
                 allowed_accounts: vec![Self::env().caller()],
             }
-        }
-
-        #[ink(message)]
-        pub fn get_storage_account_id(&self) -> AccountId {
-            self.storage_account_id
-        }
-
-        fn get_storage(&self) -> StorageRef {
-            FromAccountId::from_account_id(self.storage_account_id)
         }
 
         #[ink(message)]
@@ -43,7 +34,7 @@ pub mod contract {
         ) {
             self.only_allowed_caller();
 
-            let mut storage = self.get_storage();
+            let mut storage = StorageRef::from_account_id(self.storage_account_id);
 
             let bases = check_and_build_emo_bases(
                 storage.get_emo_bases(),

@@ -40,15 +40,6 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_storage_account_id(&self) -> AccountId {
-            self.storage_account_id
-        }
-
-        fn get_storage(&self) -> StorageRef {
-            FromAccountId::from_account_id(self.storage_account_id)
-        }
-
-        #[ink(message)]
         pub fn finish_mtc_shop(
             &mut self,
             caller: AccountId,
@@ -56,7 +47,7 @@ pub mod contract {
         ) {
             self.only_allowed_caller();
 
-            let mut storage = self.get_storage();
+            let mut storage = StorageRef::from_account_id(self.storage_account_id);
             let (
                 emo_bases,
                 grade_and_board_history,

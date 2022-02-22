@@ -1,8 +1,8 @@
 [workspace]
 members = [
     "storage",
-    "logic",
     "logic_admin",
     "logic_start_mtc",
+    "logic_finish_mtc_shop",
     "forwarder",
 ]

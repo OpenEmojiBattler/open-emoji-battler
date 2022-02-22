@@ -1,5 +1,5 @@
 [package]
-name = "logic"
+name = "logic_finish_mtc_shop"
 version = "0.1.0"
 edition = "2021"
 license = "Apache-2.0"
@@ -21,7 +21,7 @@ storage = { path = "../storage", default-features = false, features = ["ink-as-d
 common = { path = "../../common/rs", default-features = false, features = ["ink"] }
 
 [lib]
-name = "logic"
+name = "logic_finish_mtc_shop"
 path = "lib.rs"
 crate-type = [
     "cdylib",

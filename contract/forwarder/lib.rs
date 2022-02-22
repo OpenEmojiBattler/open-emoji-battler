@@ -7,51 +7,59 @@ mod contract {
     use common::codec_types::*;
     use ink_env::call::FromAccountId;
     use ink_prelude::{vec, vec::Vec};
-    use logic::contract::LogicRef;
 
     #[ink(storage)]
     pub struct Forwarder {
-        logic_account_id: AccountId,
+        logic_start_mtc_account_id: AccountId,
+        logic_finish_mtc_shop_account_id: AccountId,
         allowed_accounts: Vec<AccountId>,
     }
 
     impl Forwarder {
         #[ink(constructor)]
-        pub fn new(logic_account_id: AccountId) -> Self {
+        pub fn new(
+            logic_start_mtc_account_id: AccountId,
+            logic_finish_mtc_shop_account_id: AccountId,
+        ) -> Self {
             Self {
-                logic_account_id,
+                logic_start_mtc_account_id,
+                logic_finish_mtc_shop_account_id,
                 allowed_accounts: vec![Self::env().caller()],
             }
         }
 
         #[ink(message)]
         pub fn start_mtc(&mut self, deck_emo_base_ids: [u16; 6]) {
-            let caller = self.env().caller();
-            let mut logic = self.get_logic();
-            logic.start_mtc(caller, deck_emo_base_ids);
+            logic_start_mtc::contract::LogicRef::from_account_id(self.logic_start_mtc_account_id)
+                .start_mtc(self.env().caller(), deck_emo_base_ids);
         }
 
         #[ink(message)]
         pub fn finish_mtc_shop(&mut self, player_operations: Vec<mtc::shop::PlayerOperation>) {
-            let caller = self.env().caller();
-            let mut logic = self.get_logic();
-            logic.finish_mtc_shop(caller, player_operations);
+            logic_finish_mtc_shop::contract::LogicRef::from_account_id(
+                self.logic_finish_mtc_shop_account_id,
+            )
+            .finish_mtc_shop(self.env().caller(), player_operations);
         }
 
         #[ink(message)]
-        pub fn get_logic_account_id(&self) -> AccountId {
-            self.logic_account_id
+        pub fn get_logic_account_ids(&self) -> (AccountId, AccountId) {
+            (
+                self.logic_start_mtc_account_id,
+                self.logic_finish_mtc_shop_account_id,
+            )
         }
 
         #[ink(message)]
-        pub fn get_logic(&self) -> LogicRef {
-            FromAccountId::from_account_id(self.logic_account_id)
-        }
-
-        #[ink(message)]
-        pub fn change_logic_account_id(&mut self, new_account_id: AccountId) {
+        pub fn change_logic_account_id(
+            &mut self,
+            logic_start_mtc_account_id: AccountId,
+            logic_finish_mtc_shop_account_id: AccountId,
+        ) {
             self.only_allowed_caller();
-            self.logic_account_id = new_account_id;
+
+            self.logic_start_mtc_account_id = logic_start_mtc_account_id;
+            self.logic_finish_mtc_shop_account_id = logic_finish_mtc_shop_account_id;
         }
 
         // allowed accounts

@@ -32,19 +32,10 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_storage_account_id(&self) -> AccountId {
-            self.storage_account_id
-        }
-
-        fn get_storage(&self) -> StorageRef {
-            FromAccountId::from_account_id(self.storage_account_id)
-        }
-
-        #[ink(message)]
         pub fn start_mtc(&mut self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
             self.only_allowed_caller();
 
-            let mut storage = self.get_storage();
+            let mut storage = StorageRef::from_account_id(self.storage_account_id);
 
             if storage.get_player_pool(caller).is_some() {
                 self.cleanup_finished(&mut storage, caller);

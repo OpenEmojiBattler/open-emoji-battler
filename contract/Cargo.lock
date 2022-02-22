@@ -61,9 +61,9 @@ dependencies = [
 
 [[package]]
 name = "blake2"
-version = "0.10.3"
+version = "0.10.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f08f9f6871a8eacbb960d18db3d077ae6db1f0bc0df3272a78ca09eef8c5a931"
+checksum = "b9cf849ee05b2ee5fba5e36f97ff8ec2533916700fc0758d40d92136a42f3388"
 dependencies = [
  "digest 0.10.3",
 ]
@@ -200,7 +200,8 @@ dependencies = [
  "ink_prelude",
  "ink_primitives",
  "ink_storage",
- "logic",
+ "logic_finish_mtc_shop",
+ "logic_start_mtc",
  "parity-scale-codec",
  "scale-info",
 ]
@@ -443,9 +444,9 @@ checksum = "67c21572b4949434e4fc1e1978b99c5f77064153c59d998bf13ecd96fb5ecba7"
 
 [[package]]
 name = "libc"
-version = "0.2.118"
+version = "0.2.119"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "06e509672465a0504304aa87f9f176f2b2b716ed8fb105ebe5c02dc6dce96a94"
+checksum = "1bf2e165bb3457c8e098ea76f3e3bc9db55f87aa90d52d0e6be741470916aaa4"
 
 [[package]]
 name = "libsecp256k1"
@@ -493,7 +494,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "logic"
+name = "logic_admin"
 version = "0.1.0"
 dependencies = [
  "common",
@@ -509,7 +510,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "logic_admin"
+name = "logic_finish_mtc_shop"
 version = "0.1.0"
 dependencies = [
  "common",
