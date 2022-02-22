@@ -54,7 +54,7 @@ export const connect = (endpoint: string, withTypes = true) => {
   }
 }
 
-export const tx = (
+export const tx = async (
   api: ApiPromise,
   f: (tx: ApiPromise["tx"]) => SubmittableExtrinsic<"promise">,
   account: KeyringPairOrAddressAndSigner,
@@ -62,7 +62,7 @@ export const tx = (
 ) => {
   const [pairOrAddress, options] = extractTxArgs(account, powSolution)
 
-  return new Promise<SubmittableResult>(async (resolve, reject) => {
+  const result = await new Promise<SubmittableResult>(async (resolve, reject) => {
     const unsub = await f(api.tx)
       .signAndSend(pairOrAddress, options, (result: SubmittableResult) => {
         if (!result.isCompleted) {
@@ -104,6 +104,15 @@ export const tx = (
         return
       })
   })
+
+  console.log(
+    `tx: ${(result.status.isInBlock
+      ? result.status.asInBlock
+      : result.status.asFinalized
+    ).toString()}`
+  )
+
+  return result
 }
 
 export const sudo = (

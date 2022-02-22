@@ -20,12 +20,7 @@ const main = async () => {
   await connected(endpoint, async (api) => {
     console.log((await api.query.system.lastRuntimeUpgrade()).unwrap().specVersion.toString())
 
-    const h = await tx(
-      api,
-      (t) => t.sudo.sudoUncheckedWeight(t.system.setCode(`0x${code}`), 0),
-      keyringPair
-    )
-    console.log(h.status.asInBlock.toString())
+    await tx(api, (t) => t.sudo.sudoUncheckedWeight(t.system.setCode(`0x${code}`), 0), keyringPair)
   })
 }
 

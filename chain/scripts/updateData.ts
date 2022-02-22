@@ -20,7 +20,7 @@ const main = async () => {
       builtIds: oldBuiltIds,
     } = await getCurrentDataIds(api)
 
-    const h = await sudo(
+    await sudo(
       api,
       (t) =>
         t.game.updateEmoBases(
@@ -31,7 +31,6 @@ const main = async () => {
         ),
       keyringPair
     )
-    console.log(h.status.asInBlock.toString())
 
     const {
       baseIds: newBaseIds,
