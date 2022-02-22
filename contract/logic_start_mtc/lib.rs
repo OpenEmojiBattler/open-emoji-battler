@@ -45,10 +45,10 @@ pub mod contract {
 
             let seed = self.get_random_seed(caller, b"start_mtc");
 
-            storage.set_player_health(caller, PLAYER_INITIAL_HEALTH);
-            storage.set_player_seed(caller, seed);
-            storage.set_player_pool(
+            storage.set_data_for_logic_start_mtc(
                 caller,
+                PLAYER_INITIAL_HEALTH,
+                seed,
                 build_pool(
                     &deck_emo_base_ids,
                     &storage.get_emo_bases().expect("emo_bases none"),
@@ -60,10 +60,10 @@ pub mod contract {
                         .expect("deck_built_emo_base_ids none"),
                 )
                 .expect("failed to build player pool"),
+                Vec::new(),
+                0,
+                get_upgrade_coin(2),
             );
-            storage.set_player_grade_and_board_history(caller, Vec::new());
-            storage.set_player_battle_ghost_index(caller, 0);
-            self.update_upgrade_coin(&mut storage, caller, get_upgrade_coin(2));
 
             self.matchmake(caller, &mut storage, seed)
         }
@@ -73,19 +73,6 @@ pub mod contract {
                 .env()
                 .random(&self.env().hash_encoded::<Blake2x128, _>(&(subject, caller)));
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
-        }
-
-        fn update_upgrade_coin(
-            &self,
-            storage: &mut StorageRef,
-            account_id: AccountId,
-            upgrade_coin: Option<u8>,
-        ) {
-            if let Some(c) = upgrade_coin {
-                storage.set_player_upgrade_coin(account_id, c);
-            } else {
-                storage.remove_player_upgrade_coin(account_id);
-            }
         }
 
         fn matchmake(&self, account_id: AccountId, storage: &mut StorageRef, seed: u64) {

@@ -118,19 +118,6 @@ pub mod contract {
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
 
-        fn update_upgrade_coin(
-            &self,
-            storage: &mut StorageRef,
-            account_id: AccountId,
-            upgrade_coin: Option<u8>,
-        ) {
-            if let Some(c) = upgrade_coin {
-                storage.set_player_upgrade_coin(account_id, c);
-            } else {
-                storage.remove_player_upgrade_coin(account_id);
-            }
-        }
-
         fn finish(
             &self,
             storage: &mut StorageRef,
@@ -245,8 +232,8 @@ pub mod contract {
                 health,
                 ghost_states,
                 new_battle_ghost_index,
+                upgrade_coin,
             );
-            self.update_upgrade_coin(storage, account_id, upgrade_coin);
         }
 
         // allowed accounts

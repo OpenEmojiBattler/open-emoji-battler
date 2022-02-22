@@ -282,6 +282,30 @@ pub mod contract {
         }
 
         #[ink(message)]
+        pub fn set_data_for_logic_start_mtc(
+            &mut self,
+            account: AccountId,
+            player_health: u8,
+            player_seed: u64,
+            player_pool: Vec<mtc::Emo>,
+            player_grade_and_board_history: Vec<mtc::GradeAndBoard>,
+            player_battle_ghost_index: u8,
+            upgrade_coin: Option<u8>,
+        ) {
+            self.only_allowed_caller();
+
+            self.player_health.insert(account, &player_health);
+            self.player_seed.insert(account, &player_seed);
+            self.player_pool.insert(account, &player_pool);
+            self.player_grade_and_board_history
+                .insert(account, &player_grade_and_board_history);
+            self.player_battle_ghost_index
+                .insert(account, &player_battle_ghost_index);
+
+            self.update_upgrade_coin(account, upgrade_coin);
+        }
+
+        #[ink(message)]
         pub fn get_data_for_logic_finish_mtc_shop(
             &self,
             account: AccountId,
@@ -320,6 +344,7 @@ pub mod contract {
             health: u8,
             ghost_states: Vec<mtc::GhostState>,
             battle_ghost_index: u8,
+            upgrade_coin: Option<u8>,
         ) {
             self.only_allowed_caller();
 
@@ -329,6 +354,18 @@ pub mod contract {
             self.player_ghost_states.insert(account, &ghost_states);
             self.player_battle_ghost_index
                 .insert(account, &battle_ghost_index);
+
+            self.update_upgrade_coin(account, upgrade_coin);
+        }
+
+        // utils
+
+        fn update_upgrade_coin(&mut self, account: AccountId, upgrade_coin: Option<u8>) {
+            if let Some(c) = upgrade_coin {
+                self.player_upgrade_coin.insert(account, &c);
+            } else {
+                self.player_upgrade_coin.remove(&account);
+            }
         }
 
         // allowed accounts
