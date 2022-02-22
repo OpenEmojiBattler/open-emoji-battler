@@ -1,35 +1,8 @@
-#[cfg(not(feature = "ink"))]
-mod notink {
-    pub type Result<T> = core::result::Result<T, &'static str>;
+#[cfg(feature = "error")]
+pub use anyhow::{anyhow, bail, ensure, Result};
 
-    macro_rules! anyhow {
-        ($msg:literal $(,)?) => {{
-            $msg
-        }};
-    }
-    pub(crate) use anyhow;
-
-    macro_rules! bail {
-        ($msg:literal $(,)?) => {
-            return Err($msg)
-        };
-    }
-    pub(crate) use bail;
-
-    macro_rules! ensure {
-        ($cond:expr, $msg:literal $(,)?) => {
-            if !$cond {
-                return Err($msg);
-            }
-        };
-    }
-    pub(crate) use ensure;
-}
-#[cfg(not(feature = "ink"))]
-pub use notink::*;
-
-#[cfg(feature = "ink")]
-mod ink {
+#[cfg(not(feature = "error"))]
+mod noterror {
     pub type Result<T> = core::result::Result<T, ()>;
 
     macro_rules! anyhow {
@@ -55,5 +28,5 @@ mod ink {
     }
     pub(crate) use ensure;
 }
-#[cfg(feature = "ink")]
-pub use ink::*;
+#[cfg(not(feature = "error"))]
+pub use noterror::*;

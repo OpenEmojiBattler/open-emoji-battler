@@ -19,7 +19,7 @@ scale-info = { version = "2", default-features = false, features = ["derive"], o
 logic_start_mtc = { path = "../logic_start_mtc", default-features = false, features = ["ink-as-dependency"] }
 logic_finish_mtc_shop = { path = "../logic_finish_mtc_shop", default-features = false, features = ["ink-as-dependency"] }
 
-common = { path = "../../common/rs", default-features = false, features = ["ink"] }
+common = { path = "../../common/rs", default-features = false, features = ["contract"] }
 
 [lib]
 name = "forwarder"
@@ -44,6 +44,6 @@ std = [
     "logic_start_mtc/std",
     "logic_finish_mtc_shop/std",
 
-    "common/ink-std",
+    "common/contract-std",
 ]
 ink-as-dependency = []

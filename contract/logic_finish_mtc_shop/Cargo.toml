@@ -18,7 +18,7 @@ scale-info = { version = "2", default-features = false, features = ["derive"], o
 
 storage = { path = "../storage", default-features = false, features = ["ink-as-dependency"] }
 
-common = { path = "../../common/rs", default-features = false, features = ["ink"] }
+common = { path = "../../common/rs", default-features = false, features = ["contract"] }
 
 [lib]
 name = "logic_finish_mtc_shop"
@@ -43,6 +43,6 @@ std = [
 
     "storage/std",
 
-    "common/ink-std",
+    "common/contract-std",
 ]
 ink-as-dependency = []
