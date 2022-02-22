@@ -99,8 +99,8 @@ export const tx = async (
         reject("tx: unknown state")
         return
       })
-      .catch(() => {
-        reject("tx: failed")
+      .catch((r) => {
+        reject(`tx: failed: ${r}`)
         return
       })
   })
