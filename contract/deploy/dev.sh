@@ -1,10 +1,6 @@
 #!/bin/sh -ex
 
-cd ../storage && cargo contract build && cd -
-cd ../logic_admin && cargo contract build && cd -
-cd ../logic_start_mtc && cargo contract build && cd -
-cd ../logic_finish_mtc_shop && cargo contract build && cd -
-cd ../forwarder && cargo contract build && cd -
+./build-all.sh
 
 yarn ts-node ./dev/deployAll.ts local
 
