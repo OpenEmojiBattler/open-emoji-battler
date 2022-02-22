@@ -57,12 +57,17 @@ pub mod contract {
             self.only_allowed_caller();
 
             let mut storage = self.get_storage();
-
-            let emo_bases = storage.get_emo_bases().expect("emo_bases none");
-            let grade_and_board_history = storage
-                .get_player_grade_and_board_history(caller)
-                .expect("player_grade_and_board_history none");
-            let mut upgrade_coin = storage.get_player_upgrade_coin(caller);
+            let (
+                emo_bases,
+                grade_and_board_history,
+                mut upgrade_coin,
+                player_pool,
+                player_seed,
+                mut health,
+                battle_ghost_index,
+                mut ghost_states,
+                player_ghosts,
+            ) = storage.get_data_for_finish_mtc_shop(caller);
 
             let (
                 turn,
@@ -77,29 +82,15 @@ pub mod contract {
                 &mut grade,
                 &mut upgrade_coin,
                 &player_operations,
-                &storage.get_player_pool(caller).expect("player_pool none"),
-                storage.get_player_seed(caller).expect("player_seed none"),
+                &player_pool,
+                player_seed,
                 turn,
                 &emo_bases,
             )
             .expect("invalid shop player operations");
 
-            let mut health = storage
-                .get_player_health(caller)
-                .expect("player_health none");
-            let battle_ghost_index = storage
-                .get_player_battle_ghost_index(caller)
-                .expect("battle_ghost_index none");
-            let mut ghost_states = storage
-                .get_player_ghost_states(caller)
-                .expect("ghost_states none");
-
             let new_seed = self.get_random_seed(caller, b"finish_mtc_shop");
-            let (ghosts, _ghost_eps) = separate_player_ghosts(
-                storage
-                    .get_player_ghosts(caller)
-                    .expect("player_ghosts none"),
-            );
+            let (ghosts, _ghost_eps) = separate_player_ghosts(player_ghosts);
 
             let final_place = battle_all(
                 &board,
@@ -130,13 +121,7 @@ pub mod contract {
         }
 
         fn cleanup_finished(&self, storage: &mut StorageRef, account: AccountId) {
-            storage.remove_player_pool(account);
-            storage.remove_player_health(account);
-            storage.remove_player_grade_and_board_history(account);
-            storage.remove_player_upgrade_coin(account);
-            storage.remove_player_ghosts(account);
-            storage.remove_player_ghost_states(account);
-            storage.remove_player_battle_ghost_index(account);
+            storage.remove_data_for_finish_mtc_shop_cleanup_finished(account);
         }
 
         fn get_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
@@ -267,10 +252,13 @@ pub mod contract {
                 select_battle_ghost_index(&ghost_states, battle_ghost_index, new_seed)
                     .expect("battle ghost selection failed");
 
-            storage.set_player_grade_and_board_history(account_id, grade_and_board_history);
-            storage.set_player_health(account_id, health);
-            storage.set_player_ghost_states(account_id, ghost_states);
-            storage.set_player_battle_ghost_index(account_id, new_battle_ghost_index);
+            storage.set_data_for_finish_mtc_shop_finish_battle(
+                account_id,
+                grade_and_board_history,
+                health,
+                ghost_states,
+                new_battle_ghost_index,
+            );
             self.update_upgrade_coin(storage, account_id, upgrade_coin);
         }
 

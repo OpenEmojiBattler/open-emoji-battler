@@ -266,6 +266,65 @@ pub mod contract {
             self.player_battle_ghost_index.remove(&account)
         }
 
+        // batch ops
+
+        #[ink(message)]
+        pub fn get_data_for_finish_mtc_shop(
+            &self,
+            account: AccountId,
+        ) -> (
+            emo::Bases,
+            Vec<mtc::GradeAndBoard>,
+            Option<u8>,
+            Vec<mtc::Emo>,
+            u64,
+            u8,
+            u8,
+            Vec<mtc::GhostState>,
+            Vec<(AccountId, u16, mtc::Ghost)>,
+        ) {
+            (
+                self.get_emo_bases().expect("emo_bases none"),
+                self.get_player_grade_and_board_history(account)
+                    .expect("player_grade_and_board_history none"),
+                self.get_player_upgrade_coin(account),
+                self.get_player_pool(account).expect("player_pool none"),
+                self.get_player_seed(account).expect("player_seed none"),
+                self.get_player_health(account).expect("player_health none"),
+                self.get_player_battle_ghost_index(account)
+                    .expect("battle_ghost_index none"),
+                self.get_player_ghost_states(account)
+                    .expect("ghost_states none"),
+                self.get_player_ghosts(account).expect("player_ghosts none"),
+            )
+        }
+
+        #[ink(message)]
+        pub fn set_data_for_finish_mtc_shop_finish_battle(
+            &mut self,
+            account: AccountId,
+            grade_and_board_history: Vec<mtc::GradeAndBoard>,
+            health: u8,
+            ghost_states: Vec<mtc::GhostState>,
+            battle_ghost_index: u8,
+        ) {
+            self.set_player_grade_and_board_history(account, grade_and_board_history);
+            self.set_player_health(account, health);
+            self.set_player_ghost_states(account, ghost_states);
+            self.set_player_battle_ghost_index(account, battle_ghost_index);
+        }
+
+        #[ink(message)]
+        pub fn remove_data_for_finish_mtc_shop_cleanup_finished(&mut self, account: AccountId) {
+            self.remove_player_pool(account);
+            self.remove_player_health(account);
+            self.remove_player_grade_and_board_history(account);
+            self.remove_player_upgrade_coin(account);
+            self.remove_player_ghosts(account);
+            self.remove_player_ghost_states(account);
+            self.remove_player_battle_ghost_index(account);
+        }
+
         // allowed accounts
 
         #[ink(message)]
