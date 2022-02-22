@@ -23,21 +23,39 @@ const main = async () => {
         "../../target/ink/storage/storage.contract"
       )
 
-      const logicContract = await instantiateContract(
+      const logicAdminContract = await instantiateContract(
         api,
         keyringPair,
-        "logic",
+        "logic_admin",
         [storageContract.address.toString()],
         __dirname,
         envName,
-        "../../target/ink/logic/logic.contract"
+        "../../target/ink/logic_admin/logic_admin.contract"
+      )
+      const logicStartMtcContract = await instantiateContract(
+        api,
+        keyringPair,
+        "logic_start_mtc",
+        [storageContract.address.toString()],
+        __dirname,
+        envName,
+        "../../target/ink/logic_start_mtc/logic_start_mtc.contract"
+      )
+      const logicFinishMtcShopContract = await instantiateContract(
+        api,
+        keyringPair,
+        "logic_finish_mtc_shop",
+        [storageContract.address.toString()],
+        __dirname,
+        envName,
+        "../../target/ink/logic_finish_mtc_shop/logic_finish_mtc_shop.contract"
       )
 
       const forwarderContract = await instantiateContract(
         api,
         keyringPair,
         "forwarder",
-        [logicContract.address.toString()],
+        [logicStartMtcContract.address.toString(), logicFinishMtcShopContract.address.toString()],
         __dirname,
         envName,
         "../../target/ink/forwarder/forwarder.contract"
@@ -46,23 +64,46 @@ const main = async () => {
       await txContract(
         storageContract,
         "allowAccount",
-        [logicContract.address.toString()],
+        [logicAdminContract.address.toString()],
         keyringPair
       )
       await txContract(
-        logicContract,
+        storageContract,
+        "allowAccount",
+        [logicStartMtcContract.address.toString()],
+        keyringPair
+      )
+      await txContract(
+        storageContract,
+        "allowAccount",
+        [logicFinishMtcShopContract.address.toString()],
+        keyringPair
+      )
+
+      await txContract(
+        logicStartMtcContract,
+        "allowAccount",
+        [forwarderContract.address.toString()],
+        keyringPair
+      )
+      await txContract(
+        logicFinishMtcShopContract,
         "allowAccount",
         [forwarderContract.address.toString()],
         keyringPair
       )
 
-      const bases = loadEmoBases(
-        readFileSync(path.resolve(__dirname, "../../../data/emoBases.json"), "utf8")
-      )
       await txContract(
-        logicContract,
+        logicAdminContract,
         "updateEmoBases",
-        [bases.toU8a(), availableEmoBaseIds.fixed, availableEmoBaseIds.built, true],
+        [
+          loadEmoBases(
+            readFileSync(path.resolve(__dirname, "../../../data/emoBases.json"), "utf8")
+          ).toU8a(),
+          availableEmoBaseIds.fixed,
+          availableEmoBaseIds.built,
+          true,
+        ],
         keyringPair
       )
     },
