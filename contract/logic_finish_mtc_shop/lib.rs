@@ -273,10 +273,9 @@ pub mod contract {
         }
 
         fn only_allowed_caller(&self) {
-            let caller = &self.env().caller();
             assert!(
-                self.allowed_accounts.contains(caller),
-                "allowed accounts: this caller is not allowed",
+                self.allowed_accounts.contains(&self.env().caller()),
+                "only_allowed_caller: this caller is not allowed",
             );
         }
     }
