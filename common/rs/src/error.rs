@@ -6,12 +6,13 @@ mod not_error {
     pub type Result<T> = core::result::Result<T, ()>;
 
     macro_rules! format_err {
-        ($msg:literal $(,)?) => {{
-            ()
-        }};
-        ($fmt:expr, $($arg:tt)*) => {
+        ($msg:literal $(,)?) => {
             ()
         };
+        ($fmt:expr, $($arg:tt)*) => ({
+            let _ = ($($arg)*);
+            ()
+        });
     }
     pub(crate) use format_err;
 
@@ -19,9 +20,10 @@ mod not_error {
         ($msg:literal $(,)?) => {
             return Err(())
         };
-        ($fmt:expr, $($arg:tt)*) => {
-            return Err(())
-        };
+        ($fmt:expr, $($arg:tt)*) => ({
+            let _ = ($($arg)*);
+            return Err(());
+        });
     }
     pub(crate) use bail;
 
@@ -32,6 +34,7 @@ mod not_error {
             }
         };
         ($cond:expr, $fmt:expr, $($arg:tt)*) => {
+            let _ = ($($arg)*);
             if !$cond {
                 return Err(());
             }
