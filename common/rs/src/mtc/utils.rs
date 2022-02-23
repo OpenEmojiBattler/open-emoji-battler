@@ -92,6 +92,6 @@ mod tests {
     fn test_emo_bases_find() {
         let bases = emo::Bases(BTreeMap::new());
         let r = bases.find(1);
-        assert_eq!(r.is_err(), true);
+        assert!(r.is_err());
     }
 }

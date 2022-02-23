@@ -217,16 +217,26 @@ mod tests {
 
     #[test]
     fn test_mov() {
-        let mut board_emo0: ShopBoardEmo = Default::default();
-        board_emo0.mtc_emo_ids = vec![0];
-        let mut board_emo1: ShopBoardEmo = Default::default();
-        board_emo1.mtc_emo_ids = vec![1];
-        let mut board_emo2: ShopBoardEmo = Default::default();
-        board_emo2.mtc_emo_ids = vec![2];
-        let mut board_emo3: ShopBoardEmo = Default::default();
-        board_emo3.mtc_emo_ids = vec![3];
-        let mut board_emo4: ShopBoardEmo = Default::default();
-        board_emo4.mtc_emo_ids = vec![4];
+        let board_emo0 = ShopBoardEmo {
+            mtc_emo_ids: vec![0],
+            ..Default::default()
+        };
+        let board_emo1 = ShopBoardEmo {
+            mtc_emo_ids: vec![1],
+            ..Default::default()
+        };
+        let board_emo2 = ShopBoardEmo {
+            mtc_emo_ids: vec![2],
+            ..Default::default()
+        };
+        let board_emo3 = ShopBoardEmo {
+            mtc_emo_ids: vec![3],
+            ..Default::default()
+        };
+        let board_emo4 = ShopBoardEmo {
+            mtc_emo_ids: vec![4],
+            ..Default::default()
+        };
 
         let mut board = ShopBoard(vec![
             board_emo0, board_emo1, board_emo2, board_emo3, board_emo4,

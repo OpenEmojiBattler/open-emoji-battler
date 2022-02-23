@@ -1091,19 +1091,23 @@ mod tests {
     use super::*;
 
     fn setup_emo_bases() -> emo::Bases {
-        let mut emo_base1: emo::Base = Default::default();
-        emo_base1.id = 1;
+        let emo_base1 = emo::Base {
+            id: 1,
+            ..Default::default()
+        };
 
-        let mut emo_base2: emo::Base = Default::default();
-        emo_base2.id = 2;
-        emo_base2.abilities = vec![emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(
-            emo::ability::shop::Peri::AsOneself {
-                trigger: emo::ability::shop::PeriAsOneselfTrigger::Set,
-                action: emo::ability::shop::NormalAction::SetEmo {
-                    base_id: emo_base1.id,
+        let emo_base2 = emo::Base {
+            id: 2,
+            abilities: vec![emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(
+                emo::ability::shop::Peri::AsOneself {
+                    trigger: emo::ability::shop::PeriAsOneselfTrigger::Set,
+                    action: emo::ability::shop::NormalAction::SetEmo {
+                        base_id: emo_base1.id,
+                    },
                 },
-            },
-        ))];
+            ))],
+            ..Default::default()
+        };
 
         let mut emo_bases = emo::Bases::new();
         emo_bases.add(emo_base1);

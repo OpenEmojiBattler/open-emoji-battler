@@ -63,7 +63,7 @@ mod tests {
         let count = 1;
         let solution = u64::from_le_bytes([0, 0, 0, 0, 94, 95, 51, 0]);
         let b = check_solution(&account, count, solution);
-        assert_eq!(b, true);
+        assert!(b);
     }
 
     #[test]
@@ -73,6 +73,6 @@ mod tests {
         account[..3].copy_from_slice(&[1, 2, 3]);
         let count = 1;
         let solution = solve(&account, count);
-        assert_eq!(check_solution(&account, count, solution), true);
+        assert!(check_solution(&account, count, solution));
     }
 }
