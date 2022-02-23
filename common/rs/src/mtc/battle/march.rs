@@ -1,4 +1,4 @@
-use crate::error::{anyhow, Result};
+use crate::error::{format_err, Result};
 use crate::{
     codec_types::*,
     mtc::battle::{
@@ -35,7 +35,7 @@ impl Tick {
         self.num = self
             .num
             .checked_add(1)
-            .ok_or_else(|| anyhow!("reached maximum tick"))?;
+            .ok_or_else(|| format_err!("reached maximum tick"))?;
         Ok(())
     }
 }

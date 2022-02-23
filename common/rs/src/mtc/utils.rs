@@ -1,5 +1,5 @@
 use crate::codec_types::*;
-use crate::error::{anyhow, bail, Result};
+use crate::error::{format_err, bail, Result};
 use sp_std::prelude::*;
 
 pub const BOARD_EMO_MAX_COUNT: u8 = 7;
@@ -31,7 +31,7 @@ impl emo::Bases {
     }
 
     pub fn find(&self, id: u16) -> Result<&emo::Base> {
-        self.0.get(&id).ok_or_else(|| anyhow!("emo base not found"))
+        self.0.get(&id).ok_or_else(|| format_err!("emo base not found"))
     }
 }
 

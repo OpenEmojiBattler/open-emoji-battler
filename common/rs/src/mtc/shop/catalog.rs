@@ -1,5 +1,5 @@
 use crate::codec_types::*;
-use crate::error::{anyhow, Result};
+use crate::error::{format_err, Result};
 use rand::seq::{IteratorRandom, SliceRandom};
 use rand::SeedableRng;
 use rand_pcg::Pcg64Mcg;
@@ -28,7 +28,7 @@ pub fn get_catalog(pool: &[mtc::Emo], board: &mtc::Board, seed: u64) -> Result<m
         for _j in 0..CATALOG_LINE_EMO_COUNT {
             catalog_line
                 .0
-                .push(emos.pop().ok_or_else(|| anyhow!("catalog failed"))?);
+                .push(emos.pop().ok_or_else(|| format_err!("catalog failed"))?);
         }
         catalog.0.push(catalog_line);
     }

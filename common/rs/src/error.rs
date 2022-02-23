@@ -1,19 +1,25 @@
 #[cfg(feature = "error")]
-pub use anyhow::{anyhow, bail, ensure, Result};
+pub use anyhow::{bail, ensure, format_err, Result};
 
 #[cfg(not(feature = "error"))]
-mod noterror {
+mod not_error {
     pub type Result<T> = core::result::Result<T, ()>;
 
-    macro_rules! anyhow {
+    macro_rules! format_err {
         ($msg:literal $(,)?) => {{
             ()
         }};
+        ($fmt:expr, $($arg:tt)*) => {
+            ()
+        };
     }
-    pub(crate) use anyhow;
+    pub(crate) use format_err;
 
     macro_rules! bail {
         ($msg:literal $(,)?) => {
+            return Err(())
+        };
+        ($fmt:expr, $($arg:tt)*) => {
             return Err(())
         };
     }
@@ -25,8 +31,13 @@ mod noterror {
                 return Err(());
             }
         };
+        ($cond:expr, $fmt:expr, $($arg:tt)*) => {
+            if !$cond {
+                return Err(());
+            }
+        };
     }
     pub(crate) use ensure;
 }
 #[cfg(not(feature = "error"))]
-pub use noterror::*;
+pub use not_error::*;

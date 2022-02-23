@@ -1,4 +1,4 @@
-use crate::error::{anyhow, ensure, Result};
+use crate::error::{format_err, ensure, Result};
 use crate::{
     codec_types::*,
     mtc::battle::{common::BattleEmo, march::march},
@@ -44,7 +44,7 @@ pub fn battle_all(
             .iter_mut()
             .enumerate()
             .find(|(_, s)| matches!(s, mtc::GhostState::Active { health: _ }))
-            .ok_or_else(|| anyhow!("battle_all: invalid"))?;
+            .ok_or_else(|| format_err!("battle_all: invalid"))?;
 
         battle_pvg(
             grade,
@@ -143,7 +143,7 @@ pub fn select_battle_ghost_index(
         .collect::<Vec<_>>()
         .choose(&mut rng)
         .copied()
-        .ok_or_else(|| anyhow!("choose failed"))
+        .ok_or_else(|| format_err!("choose failed"))
 }
 
 fn build_battle_emos_from_board(
@@ -238,13 +238,13 @@ fn battle_pvg_and_gvg(
 
     let (ghost_set0, gs) = ghost_sets
         .split_first_mut()
-        .ok_or_else(|| anyhow!("failed to split ghost_sets"))?;
+        .ok_or_else(|| format_err!("failed to split ghost_sets"))?;
     let (ghost_set1, gs) = gs
         .split_first_mut()
-        .ok_or_else(|| anyhow!("failed to split ghost_sets"))?;
+        .ok_or_else(|| format_err!("failed to split ghost_sets"))?;
     let (ghost_set2, _) = gs
         .split_first_mut()
-        .ok_or_else(|| anyhow!("failed to split ghost_sets"))?;
+        .ok_or_else(|| format_err!("failed to split ghost_sets"))?;
 
     battle_pvg(
         grade,

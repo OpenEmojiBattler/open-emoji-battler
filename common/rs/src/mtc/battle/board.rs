@@ -1,4 +1,4 @@
-use crate::error::{anyhow, bail, ensure, Result};
+use crate::error::{format_err, bail, ensure, Result};
 use crate::{
     codec_types::*,
     mtc::{
@@ -325,7 +325,7 @@ fn get_lowest_attack_emo_index(emos: &[BattleEmo], rng: &mut Pcg64Mcg) -> Result
     let mut lowest_attack_emo_indexes = vec![0u8];
     let mut lowest_attack = emos
         .get(0)
-        .ok_or_else(|| anyhow!("emos[0] not found"))?
+        .ok_or_else(|| format_err!("emos[0] not found"))?
         .attributes
         .attack;
 
@@ -342,7 +342,7 @@ fn get_lowest_attack_emo_index(emos: &[BattleEmo], rng: &mut Pcg64Mcg) -> Result
 
     let index = lowest_attack_emo_indexes
         .choose(rng)
-        .ok_or_else(|| anyhow!("choose none for lowest"))?;
+        .ok_or_else(|| format_err!("choose none for lowest"))?;
 
     Ok(*index)
 }
@@ -765,7 +765,7 @@ fn get_matched_emo_indexs_from_board(
                         vec![(
                             board
                                 .get::<usize>(index.into())
-                                .ok_or_else(|| anyhow!("left emo not found, invalid state"))?,
+                                .ok_or_else(|| format_err!("left emo not found, invalid state"))?,
                             index,
                         )]
                     } else {
