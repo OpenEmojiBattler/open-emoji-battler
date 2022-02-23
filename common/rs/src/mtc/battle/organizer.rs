@@ -208,10 +208,6 @@ fn calc_final_place(
     }
 }
 
-struct GhostSet<'a> {
-    ghost: mtc::Ghost,
-    state: &'a mut mtc::GhostState,
-}
 fn battle_pvg_and_gvg(
     board: &mtc::Board,
     grade: u8,
@@ -226,11 +222,7 @@ fn battle_pvg_and_gvg(
     let mut ghost_sets = ghosts
         .iter()
         .zip(ghost_states.iter_mut())
-        .map(|(g, gs)| GhostSet {
-            ghost: g.clone(),
-            state: gs,
-        })
-        .collect::<Vec<GhostSet>>();
+        .collect::<Vec<_>>();
 
     if battle_ghost_index != 0 {
         ghost_sets.swap(0, battle_ghost_index as usize);
@@ -238,30 +230,30 @@ fn battle_pvg_and_gvg(
 
     let (ghost_set0, gs) = ghost_sets
         .split_first_mut()
-        .ok_or_else(|| format_err!("failed to split ghost_sets"))?;
+        .ok_or_else(|| format_err!("failed to split ghost_sets 0"))?;
     let (ghost_set1, gs) = gs
         .split_first_mut()
-        .ok_or_else(|| format_err!("failed to split ghost_sets"))?;
+        .ok_or_else(|| format_err!("failed to split ghost_sets 1"))?;
     let (ghost_set2, _) = gs
         .split_first_mut()
-        .ok_or_else(|| format_err!("failed to split ghost_sets"))?;
+        .ok_or_else(|| format_err!("failed to split ghost_sets 2"))?;
 
     battle_pvg(
         grade,
         health,
         board,
-        ghost_set0.state,
-        &ghost_set0.ghost.history,
+        ghost_set0.1,
+        &ghost_set0.0.history,
         turn,
         seed,
         emo_bases,
     )?;
 
     battle_gvg(
-        ghost_set1.state,
-        &ghost_set1.ghost.history,
-        ghost_set2.state,
-        &ghost_set2.ghost.history,
+        ghost_set1.1,
+        &ghost_set1.0.history,
+        ghost_set2.1,
+        &ghost_set2.0.history,
         turn,
         seed,
         emo_bases,
@@ -345,4 +337,50 @@ fn battle_gvg(
     );
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_battle_pvg_and_gvg() {
+        fn build_ghost(grade: u8) -> mtc::Ghost {
+            mtc::Ghost {
+                history: vec![mtc::GradeAndGhostBoard {
+                    grade,
+                    ..Default::default()
+                }],
+            }
+        }
+
+        let ghosts = vec![build_ghost(1), build_ghost(2), build_ghost(3)];
+        let mut ghost_states = vec![
+            mtc::GhostState::Active { health: 1 },
+            mtc::GhostState::Active { health: 2 },
+            mtc::GhostState::Active { health: 3 },
+        ];
+
+        assert!(battle_pvg_and_gvg(
+            &Default::default(),
+            1,
+            &mut 1,
+            &ghosts,
+            &mut ghost_states,
+            2,
+            1,
+            1,
+            &Default::default()
+        )
+        .is_ok());
+
+        assert_eq!(
+            ghost_states,
+            vec![
+                mtc::GhostState::Active { health: 1 },
+                mtc::GhostState::Active { health: 2 },
+                mtc::GhostState::Active { health: 3 },
+            ]
+        )
+    }
 }
