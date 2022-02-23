@@ -51,7 +51,7 @@ fn build_built_base_ids(
     for id in selected_built_base_ids.iter() {
         let base = bases.find(*id)?;
         if !built_base_ids.contains(&base.id) {
-            bail!("not contained in allowlist");
+            bail!("not contained in allowlist: {}", id);
         }
         if used_grades.contains(&base.grade) {
             bail!("contains same grade");

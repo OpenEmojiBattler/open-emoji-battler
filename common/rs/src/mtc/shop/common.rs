@@ -114,19 +114,19 @@ impl ShopBoard {
             .iter()
             .zip(0u8..)
             .find(|(e, _)| e.id == shop_board_emo_id)
-            .ok_or_else(|| format_err!("emo not found"))
+            .ok_or_else(|| format_err!("emo not found: id {}", shop_board_emo_id))
     }
 
     pub fn get_emo(&self, emo_index: u8) -> Result<&ShopBoardEmo> {
         self.0
             .get(emo_index as usize)
-            .ok_or_else(|| format_err!("emo not found"))
+            .ok_or_else(|| format_err!("emo not found: index {}", emo_index))
     }
 
     pub fn get_emo_mut(&mut self, emo_index: u8) -> Result<&mut ShopBoardEmo> {
         self.0
             .get_mut(emo_index as usize)
-            .ok_or_else(|| format_err!("emo for mut not found"))
+            .ok_or_else(|| format_err!("emo for mut not found: index {}", emo_index))
     }
 
     pub fn emos(&self) -> Vec<&ShopBoardEmo> {

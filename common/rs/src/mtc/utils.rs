@@ -35,7 +35,7 @@ impl emo::Bases {
     pub fn find(&self, id: u16) -> Result<&emo::Base> {
         self.0
             .get(&id)
-            .ok_or_else(|| format_err!("emo base not found"))
+            .ok_or_else(|| format_err!("emo base not found: {}", id))
     }
 }
 
@@ -79,7 +79,7 @@ pub fn get_pool_emo_count_by_grade(grade: u8) -> Result<u8> {
         4 => 5,
         5 => 5,
         6 => 4,
-        _ => bail!("invalid grade"),
+        _ => bail!("invalid grade: {}", grade),
     })
 }
 
