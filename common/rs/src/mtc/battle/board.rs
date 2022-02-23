@@ -1,5 +1,6 @@
-use crate::{error::{format_err, bail, ensure, Result},
+use crate::{
     codec_types::*,
+    error::{bail, ensure, format_err, Result},
     mtc::{
         battle::common::{
             is_matched_typ_and_triple_for_emo, switch_player_index, BattleBoards, BattleEmo,

@@ -1,5 +1,6 @@
-use crate::{error::{format_err, ensure, Result},
+use crate::{
     codec_types::*,
+    error::{ensure, format_err, Result},
     mtc::battle::{common::BattleEmo, march::march},
 };
 use rand::{seq::SliceRandom, SeedableRng};

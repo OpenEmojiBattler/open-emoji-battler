@@ -1,5 +1,6 @@
-use crate::{error::{format_err, bail, ensure, Result},
+use crate::{
     codec_types::*,
+    error::{bail, ensure, format_err, Result},
     mtc::shop::{
         board::{add_emo, sell_emo, start_shop},
         catalog::get_catalog,

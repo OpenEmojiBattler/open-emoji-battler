@@ -1,4 +1,9 @@
-use crate::{error::{format_err, Result},codec_types::*, mtc::utils::build_emo_attributes, utils::is_view_logs_enabled};
+use crate::{
+    codec_types::*,
+    error::{format_err, Result},
+    mtc::utils::build_emo_attributes,
+    utils::is_view_logs_enabled,
+};
 use core::sync::atomic::{AtomicU16, Ordering};
 use sp_std::prelude::*;
 

@@ -1,5 +1,6 @@
-use crate::{error::{format_err, Result},
+use crate::{
     codec_types::*,
+    error::{format_err, Result},
     mtc::battle::{
         board::{attack, call_pre_abilities},
         common::{switch_player_index, BattleBoards, BattleEmo},

@@ -1,5 +1,6 @@
-use crate::{error::{format_err, Result},
+use crate::{
     codec_types::*,
+    error::{format_err, Result},
     mtc::utils::{build_emo_attributes, is_matched_typ_and_triple},
     utils::is_view_logs_enabled,
 };

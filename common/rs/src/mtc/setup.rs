@@ -1,4 +1,8 @@
-use crate::{error::{bail, ensure, Result},codec_types::*, mtc::utils};
+use crate::{
+    codec_types::*,
+    error::{bail, ensure, Result},
+    mtc::utils,
+};
 use sp_std::prelude::*;
 
 pub const PLAYER_INITIAL_HEALTH: u8 = 30;
