@@ -1,5 +1,4 @@
-use crate::error::{format_err, Result};
-use crate::{
+use crate::{error::{format_err, Result},
     codec_types::*,
     mtc::utils::{build_emo_attributes, is_matched_typ_and_triple},
     utils::is_view_logs_enabled,

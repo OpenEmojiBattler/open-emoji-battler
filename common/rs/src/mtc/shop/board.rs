@@ -1,5 +1,4 @@
-use crate::error::{bail, ensure, Result};
-use crate::{
+use crate::{error::{bail, ensure, Result},
     codec_types::*,
     mtc::{
         shop::common::{ShopBoard, ShopBoardEmo},

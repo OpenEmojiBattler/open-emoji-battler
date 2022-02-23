@@ -1,5 +1,4 @@
-use crate::error::{format_err, ensure, Result};
-use crate::{
+use crate::{error::{format_err, ensure, Result},
     codec_types::*,
     mtc::battle::{common::BattleEmo, march::march},
 };

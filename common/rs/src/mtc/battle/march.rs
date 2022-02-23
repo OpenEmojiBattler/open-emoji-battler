@@ -1,5 +1,4 @@
-use crate::error::{format_err, Result};
-use crate::{
+use crate::{error::{format_err, Result},
     codec_types::*,
     mtc::battle::{
         board::{attack, call_pre_abilities},
