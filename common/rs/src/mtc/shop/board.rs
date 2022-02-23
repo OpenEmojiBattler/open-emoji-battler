@@ -1004,13 +1004,19 @@ fn process_triple(
     Ok(())
 }
 
-fn remove_triple_emos(board: &mut ShopBoard, triple_source_indexes: &[u8]) -> Vec<ShopBoardEmo> {
-    triple_source_indexes
-        .iter()
-        .rev()
-        .map(|&i| board.remove_emo(i))
-        .rev()
-        .collect()
+fn remove_triple_emos(
+    board: &mut ShopBoard,
+    sorted_triple_source_indexes: &[u8],
+) -> Vec<ShopBoardEmo> {
+    let mut removed = Vec::new();
+
+    // temporary reverse it so `board` emo indexes don't change
+    for &i in sorted_triple_source_indexes.iter().rev() {
+        removed.push(board.remove_emo(i));
+    }
+    removed.reverse();
+
+    removed
 }
 
 fn build_triple_emo(
@@ -1117,5 +1123,37 @@ mod tests {
         let c = add_emo(&mut board, &mut logs, &[], 2, false, 4, &emo_bases).unwrap();
 
         assert_eq!(c, 10);
+    }
+
+    #[test]
+    fn test_remove_triple_emos() {
+        fn build_shop_board_emo(id: u16) -> ShopBoardEmo {
+            ShopBoardEmo {
+                id,
+                mtc_emo_ids: vec![],
+                base_id: 0,
+                attributes: Default::default(),
+            }
+        }
+
+        let shop_board_emo_1 = build_shop_board_emo(1);
+        let shop_board_emo_2 = build_shop_board_emo(2);
+        let shop_board_emo_3 = build_shop_board_emo(3);
+        let shop_board_emo_4 = build_shop_board_emo(4);
+
+        let mut shop_board = ShopBoard(vec![
+            shop_board_emo_1.clone(),
+            shop_board_emo_2.clone(),
+            shop_board_emo_3.clone(),
+            shop_board_emo_4.clone(),
+        ]);
+
+        let removed = remove_triple_emos(&mut shop_board, &[0, 2, 3]);
+
+        assert_eq!(shop_board, ShopBoard(vec![shop_board_emo_2]));
+        assert_eq!(
+            removed,
+            vec![shop_board_emo_1, shop_board_emo_3, shop_board_emo_4]
+        );
     }
 }
