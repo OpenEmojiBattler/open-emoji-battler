@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x1361f3fcfe27202af08a1707e5cbcd3d77693191e9c3351b30c8c7069c22f40d",
+    "hash": "0xb4cdb940440043f39d6331c56539020c5e122d66c5cad6d8c7e62ef4ebec8b75",
     "language": "ink! 3.0.0-rc8",
     "compiler": "rustc 1.60.0-nightly"
   },
@@ -864,6 +864,79 @@
                 ],
                 "type": 40
               }
+            },
+            {
+              "label": "player_health",
+              "type": {
+                "displayName": [
+                  "u8"
+                ],
+                "type": 5
+              }
+            },
+            {
+              "label": "player_seed",
+              "type": {
+                "displayName": [
+                  "u64"
+                ],
+                "type": 52
+              }
+            },
+            {
+              "label": "player_pool",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 54
+              }
+            },
+            {
+              "label": "player_grade_and_board_history",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 58
+              }
+            },
+            {
+              "label": "player_battle_ghost_index",
+              "type": {
+                "displayName": [
+                  "u8"
+                ],
+                "type": 5
+              }
+            },
+            {
+              "label": "upgrade_coin",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 75
+              }
+            }
+          ],
+          "docs": [],
+          "label": "set_data_for_logic_start_mtc",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x04f0f5e7"
+        },
+        {
+          "args": [
+            {
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 40
+              }
             }
           ],
           "docs": [],
@@ -921,6 +994,15 @@
                   "u8"
                 ],
                 "type": 5
+              }
+            },
+            {
+              "label": "upgrade_coin",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 75
               }
             }
           ],
