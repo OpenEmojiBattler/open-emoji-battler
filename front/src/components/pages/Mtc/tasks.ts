@@ -3,7 +3,8 @@ import BN from "bn.js"
 import { createType, mtc_Board } from "common"
 
 import type { EmoBases } from "~/misc/types"
-import { isDevelopment, withToggleAsync, checkArraysEquality } from "~/misc/utils"
+import { withToggleAsync, checkArraysEquality } from "~/misc/utils"
+import { isDevelopment } from "~/misc/env"
 import { finishBattle, MtcState, buildInitialMtcState, ResultState } from "~/misc/mtcUtils"
 import type { Account, Connection } from "~/components/App/ConnectionProvider/tasks"
 

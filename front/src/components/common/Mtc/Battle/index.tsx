@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { MtcState, getGradeText, getHealthFromState, getShortAddress } from "~/misc/mtcUtils"
 import { getGradeAndGhostBoard } from "~/wasm"
-import { isDevelopment } from "~/misc/utils"
+import { isDevelopment } from "~/misc/env"
 import { zeroAddress } from "~/misc/constants"
 import { AccountContext } from "~/components/App/ConnectionProvider/tasks"
 import { animateFinish } from "./tasks"

@@ -43,3 +43,27 @@ export const combineRouteIdAndParams = (id: RouteId, obj: object) => {
 export const changeLocationHashByRouteId = (id: RouteId) => {
   window.location.hash = `#${id}`
 }
+
+type ConnectionKind = "chain" | "contract" | "none"
+export const getRouteConnectionKind = (routeId: RouteId): ConnectionKind => {
+  switch (routeId) {
+    case "/":
+      return "chain"
+    case "/match":
+      return "chain"
+    case "/emo_bases":
+      return "chain"
+    case "/match_trial":
+      return "chain"
+    case "/match_contract":
+      return "contract"
+    case "/dev":
+      return "chain"
+    case "/match_debug":
+      return "chain"
+    case "/emo_ability_builder":
+      return "none"
+    case "/not_found":
+      return "none"
+  }
+}

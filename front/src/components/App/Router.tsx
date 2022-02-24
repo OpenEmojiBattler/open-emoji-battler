@@ -2,6 +2,8 @@ import * as React from "react"
 
 import type { Route, RouteId } from "~/misc/constants"
 
+import { getRouteConnectionKind } from "~/misc/route"
+
 import { Chain } from "./ConnectionProvider/Chain"
 import { Contract } from "./ConnectionProvider/Contract"
 
@@ -14,7 +16,8 @@ import { MtcDebug } from "../pages/MtcDebug"
 import { EmoAbilityBuilder } from "../pages/EmoAbilityBuilder"
 
 export function Router(props: { route: Route }) {
-  const [kind, e] = getElement(props.route.id)
+  const kind = getRouteConnectionKind(props.route.id)
+  const e = getElement(props.route.id)
 
   switch (kind) {
     case "chain":
@@ -26,26 +29,25 @@ export function Router(props: { route: Route }) {
   }
 }
 
-const getElement = (routeId: RouteId): ["chain" | "contract" | "none", JSX.Element] => {
+const getElement = (routeId: RouteId): JSX.Element => {
   switch (routeId) {
     case "/":
-      return ["chain", <Top />]
+      return <Top />
     case "/match":
-      return ["chain", <Mtc />]
+      return <Mtc />
     case "/emo_bases":
-      return ["chain", <EmoBases />]
+      return <EmoBases />
     case "/match_trial":
-      return ["chain", <MtcTrial />]
+      return <MtcTrial />
     case "/dev":
-      return ["chain", <Dev />]
+      return <Dev />
     case "/match_debug":
-      return ["chain", <MtcDebug />]
+      return <MtcDebug />
     case "/emo_ability_builder":
-      return ["none", <EmoAbilityBuilder />]
+      return <EmoAbilityBuilder />
     case "/match_contract":
-      return ["contract", <Mtc />]
+      return <Mtc />
     case "/not_found":
-    default:
-      return ["none", <h1>page not found</h1>]
+      return <h1>page not found</h1>
   }
 }

@@ -30,7 +30,7 @@ export function Frame(props: { route: Route }) {
 
   return (
     <>
-      {hasNav ? <Navbar /> : <></>}
+      {hasNav ? <Navbar routeId={props.route.id} /> : <></>}
       {blockMessage ? (
         <ModalWithReload message={blockMessage} />
       ) : (

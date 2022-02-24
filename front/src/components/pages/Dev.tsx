@@ -61,7 +61,7 @@ function Endpoint() {
 
   return (
     <div>
-      <label>Endpoint</label>{" "}
+      <label>Chain Endpoint</label>{" "}
       <input ref={inputRef} type="text" size={50} defaultValue={getEndpoint()} />{" "}
       <button onClick={change}>Change</button>
       {" / "}

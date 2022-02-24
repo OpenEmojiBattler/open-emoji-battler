@@ -2,7 +2,6 @@ import type { ApiPromise } from "@polkadot/api"
 import type { ContractPromise } from "@polkadot/api-contract"
 
 import {
-  getEnv,
   queryContract,
   txContract,
   createType,
@@ -12,8 +11,6 @@ import {
 } from "common"
 import { buildEmoBases } from "~/misc/mtcUtils"
 import type { Connection } from "../tasks"
-
-export const getContractEnv = () => getEnv(process.env.OEB_ENV).contract
 
 export const buildConnection = async (api: ApiPromise, env: EnvContract): Promise<Connection> => {
   const storageContract = getStorageContract(api, env.storageAddress)

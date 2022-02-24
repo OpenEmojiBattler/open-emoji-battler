@@ -1,8 +1,9 @@
 import type { ApiPromise } from "@polkadot/api"
 
-import { getEnv, tx, createType, buildKeyringPair } from "common"
+import { tx, createType, buildKeyringPair } from "common"
 import type { Connection } from "../tasks"
 import { buildEmoBases } from "~/misc/mtcUtils"
+import { getOebEnv } from "~/misc/env"
 
 const endpointStorageKey = "endpointV4"
 
@@ -11,7 +12,7 @@ export const getEndpoint = () => {
   if (endpoint) {
     return endpoint
   }
-  return getEnv(process.env.OEB_ENV).chainEndpoint
+  return getOebEnv().chainEndpoint
 }
 
 export const setEndpoint = (endpoint: string) => {
