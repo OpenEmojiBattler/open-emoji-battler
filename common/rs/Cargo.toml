@@ -19,9 +19,9 @@ libm = { version = "0.2.1", default-features = false, optional = true }
 
 # contract
 scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
-ink_storage = { git = "https://github.com/paritytech/ink", rev = "be42524a23243c0ce497a54b9bf5405a04cc74b5", default-features = false, optional = true }
-ink_primitives = { git = "https://github.com/paritytech/ink", rev = "be42524a23243c0ce497a54b9bf5405a04cc74b5", default-features = false, optional = true }
-ink_metadata = { git = "https://github.com/paritytech/ink", rev = "be42524a23243c0ce497a54b9bf5405a04cc74b5", default-features = false, optional = true }
+ink_storage = { version = "3.0.0-rc9", default-features = false, optional = true }
+ink_primitives = { version = "3.0.0-rc9", default-features = false, optional = true }
+ink_metadata = { version = "3.0.0-rc9", default-features = false, optional = true }
 codec_types_derive = { path = "./codec_types_derive", optional = true }
 
 [dev-dependencies]
