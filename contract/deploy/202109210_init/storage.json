@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x2903ff48fb44dc84a72a0f55d969bde904113e3fa1b96b259b3f0f5705908c93",
+    "hash": "0xb4cdb940440043f39d6331c56539020c5e122d66c5cad6d8c7e62ef4ebec8b75",
     "language": "ink! 3.0.0-rc8",
     "compiler": "rustc 1.60.0-nightly"
   },
@@ -834,6 +834,184 @@
           "payable": false,
           "returnType": null,
           "selector": "0x3ce4d740"
+        },
+        {
+          "args": [
+            {
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 40
+              }
+            }
+          ],
+          "docs": [],
+          "label": "remove_player_mtc",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x4f9a0e50"
+        },
+        {
+          "args": [
+            {
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 40
+              }
+            },
+            {
+              "label": "player_health",
+              "type": {
+                "displayName": [
+                  "u8"
+                ],
+                "type": 5
+              }
+            },
+            {
+              "label": "player_seed",
+              "type": {
+                "displayName": [
+                  "u64"
+                ],
+                "type": 52
+              }
+            },
+            {
+              "label": "player_pool",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 54
+              }
+            },
+            {
+              "label": "player_grade_and_board_history",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 58
+              }
+            },
+            {
+              "label": "player_battle_ghost_index",
+              "type": {
+                "displayName": [
+                  "u8"
+                ],
+                "type": 5
+              }
+            },
+            {
+              "label": "upgrade_coin",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 75
+              }
+            }
+          ],
+          "docs": [],
+          "label": "set_data_for_logic_start_mtc",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x04f0f5e7"
+        },
+        {
+          "args": [
+            {
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 40
+              }
+            }
+          ],
+          "docs": [],
+          "label": "get_data_for_logic_finish_mtc_shop",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [],
+            "type": 78
+          },
+          "selector": "0x8aac9c10"
+        },
+        {
+          "args": [
+            {
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 40
+              }
+            },
+            {
+              "label": "grade_and_board_history",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 58
+              }
+            },
+            {
+              "label": "health",
+              "type": {
+                "displayName": [
+                  "u8"
+                ],
+                "type": 5
+              }
+            },
+            {
+              "label": "ghost_states",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 65
+              }
+            },
+            {
+              "label": "battle_ghost_index",
+              "type": {
+                "displayName": [
+                  "u8"
+                ],
+                "type": 5
+              }
+            },
+            {
+              "label": "upgrade_coin",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 75
+              }
+            }
+          ],
+          "docs": [],
+          "label": "set_data_for_logic_finish_mtc_shop_finish_battle",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x30d4a280"
         },
         {
           "args": [],
@@ -3483,6 +3661,24 @@
           "path": [
             "Option"
           ]
+        }
+      },
+      {
+        "id": 78,
+        "type": {
+          "def": {
+            "tuple": [
+              69,
+              58,
+              75,
+              54,
+              52,
+              5,
+              5,
+              65,
+              38
+            ]
+          }
         }
       }
     ]

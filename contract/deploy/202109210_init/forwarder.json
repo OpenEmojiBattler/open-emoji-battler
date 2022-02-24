@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x8f36361e851299bdfaa7f27314c0f335cc1d1435f3842df6a58540f48fafefbc",
+    "hash": "0x817b7d16b9ac07643035a0365b0b810b0af8504e3c961e2c63bac8f1ffc48ad9",
     "language": "ink! 3.0.0-rc8",
     "compiler": "rustc 1.60.0-nightly"
   },
@@ -18,7 +18,16 @@
         {
           "args": [
             {
-              "label": "logic_account_id",
+              "label": "logic_start_mtc_account_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 0
+              }
+            },
+            {
+              "label": "logic_finish_mtc_shop_account_id",
               "type": {
                 "displayName": [
                   "AccountId"
@@ -75,35 +84,28 @@
         {
           "args": [],
           "docs": [],
-          "label": "get_logic_account_id",
+          "label": "get_logic_account_ids",
           "mutates": false,
           "payable": false,
           "returnType": {
-            "displayName": [
-              "AccountId"
-            ],
-            "type": 0
-          },
-          "selector": "0x6fc06073"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "get_logic",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "LogicRef"
-            ],
+            "displayName": [],
             "type": 9
           },
-          "selector": "0x0ef7da6f"
+          "selector": "0x45360feb"
         },
         {
           "args": [
             {
-              "label": "new_account_id",
+              "label": "logic_start_mtc_account_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 0
+              }
+            },
+            {
+              "label": "logic_finish_mtc_shop_account_id",
               "type": {
                 "displayName": [
                   "AccountId"
@@ -183,12 +185,21 @@
                 "ty": 0
               }
             },
-            "name": "logic_account_id"
+            "name": "logic_start_mtc_account_id"
           },
           {
             "layout": {
               "cell": {
                 "key": "0x0100000000000000000000000000000000000000000000000000000000000000",
+                "ty": 0
+              }
+            },
+            "name": "logic_finish_mtc_shop_account_id"
+          },
+          {
+            "layout": {
+              "cell": {
+                "key": "0x0200000000000000000000000000000000000000000000000000000000000000",
                 "ty": 3
               }
             },
@@ -354,42 +365,11 @@
         "id": 9,
         "type": {
           "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "inner",
-                  "type": 10,
-                  "typeName": "<Logic as::ink_lang::codegen::ContractCallBuilder>::Type"
-                }
-              ]
-            }
-          },
-          "path": [
-            "logic",
-            "contract",
-            "LogicRef"
-          ]
-        }
-      },
-      {
-        "id": 10,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "account_id",
-                  "type": 0,
-                  "typeName": "AccountId"
-                }
-              ]
-            }
-          },
-          "path": [
-            "logic",
-            "contract",
-            "CallBuilder"
-          ]
+            "tuple": [
+              0,
+              0
+            ]
+          }
         }
       }
     ]

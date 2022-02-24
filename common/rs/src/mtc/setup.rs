@@ -1,5 +1,8 @@
-use crate::{codec_types::*, mtc::utils};
-use anyhow::{bail, ensure, Result};
+use crate::{
+    codec_types::*,
+    error::{bail, ensure, Result},
+    mtc::utils,
+};
 use sp_std::prelude::*;
 
 pub const PLAYER_INITIAL_HEALTH: u8 = 30;

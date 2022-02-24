@@ -1,5 +1,5 @@
 [package]
-name = "storage"
+name = "logic_admin"
 version = "0.1.0"
 edition = "2021"
 license = "Apache-2.0"
@@ -16,10 +16,12 @@ ink_lang = { version = "3.0.0-rc9", default-features = false }
 scale = { package = "parity-scale-codec", version = "3", default-features = false, features = ["derive", "full"] }
 scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
 
+storage = { path = "../storage", default-features = false, features = ["ink-as-dependency"] }
+
 common = { path = "../../common/rs", default-features = false, features = ["contract"] }
 
 [lib]
-name = "storage"
+name = "logic_admin"
 path = "lib.rs"
 crate-type = [
     "cdylib",
@@ -38,6 +40,8 @@ std = [
 
     "scale/std",
     "scale-info/std",
+
+    "storage/std",
 
     "common/contract-std",
 ]

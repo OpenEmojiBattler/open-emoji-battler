@@ -6,10 +6,10 @@ use ink_lang as ink;
 pub mod contract {
     use common::codec_types::*;
     use ink_prelude::vec::Vec;
-    use ink_storage::lazy::Mapping; // remove `lazy` on next release
+    use ink_storage::{traits::SpreadAllocate, Mapping};
 
     #[ink(storage)]
-    #[derive(Default)]
+    #[derive(SpreadAllocate)]
     pub struct Storage {
         emo_bases: Option<emo::Bases>,
         deck_fixed_emo_base_ids: Option<Vec<u16>>,
@@ -37,9 +37,9 @@ pub mod contract {
     impl Storage {
         #[ink(constructor)]
         pub fn new() -> Self {
-            let mut contract: Self = Default::default();
-            contract.allowed_accounts.push(Self::env().caller());
-            contract
+            ink_lang::utils::initialize_contract(|contract: &mut Self| {
+                contract.allowed_accounts.push(Self::env().caller());
+            })
         }
 
         #[ink(message)]
@@ -266,6 +266,108 @@ pub mod contract {
             self.player_battle_ghost_index.remove(&account)
         }
 
+        // batch ops
+
+        #[ink(message)]
+        pub fn remove_player_mtc(&mut self, account: AccountId) {
+            self.only_allowed_caller();
+
+            self.player_pool.remove(&account);
+            self.player_health.remove(&account);
+            self.player_grade_and_board_history.remove(&account);
+            self.player_upgrade_coin.remove(&account);
+            self.player_ghosts.remove(&account);
+            self.player_ghost_states.remove(&account);
+            self.player_battle_ghost_index.remove(&account);
+        }
+
+        #[ink(message)]
+        pub fn set_data_for_logic_start_mtc(
+            &mut self,
+            account: AccountId,
+            player_health: u8,
+            player_seed: u64,
+            player_pool: Vec<mtc::Emo>,
+            player_grade_and_board_history: Vec<mtc::GradeAndBoard>,
+            player_battle_ghost_index: u8,
+            upgrade_coin: Option<u8>,
+        ) {
+            self.only_allowed_caller();
+
+            self.player_health.insert(account, &player_health);
+            self.player_seed.insert(account, &player_seed);
+            self.player_pool.insert(account, &player_pool);
+            self.player_grade_and_board_history
+                .insert(account, &player_grade_and_board_history);
+            self.player_battle_ghost_index
+                .insert(account, &player_battle_ghost_index);
+
+            self.update_upgrade_coin(account, upgrade_coin);
+        }
+
+        #[ink(message)]
+        pub fn get_data_for_logic_finish_mtc_shop(
+            &self,
+            account: AccountId,
+        ) -> (
+            emo::Bases,
+            Vec<mtc::GradeAndBoard>,
+            Option<u8>,
+            Vec<mtc::Emo>,
+            u64,
+            u8,
+            u8,
+            Vec<mtc::GhostState>,
+            Vec<(AccountId, u16, mtc::Ghost)>,
+        ) {
+            (
+                self.get_emo_bases().expect("emo_bases none"),
+                self.get_player_grade_and_board_history(account)
+                    .expect("player_grade_and_board_history none"),
+                self.get_player_upgrade_coin(account),
+                self.get_player_pool(account).expect("player_pool none"),
+                self.get_player_seed(account).expect("player_seed none"),
+                self.get_player_health(account).expect("player_health none"),
+                self.get_player_battle_ghost_index(account)
+                    .expect("battle_ghost_index none"),
+                self.get_player_ghost_states(account)
+                    .expect("ghost_states none"),
+                self.get_player_ghosts(account).expect("player_ghosts none"),
+            )
+        }
+
+        #[ink(message)]
+        pub fn set_data_for_logic_finish_mtc_shop_finish_battle(
+            &mut self,
+            account: AccountId,
+            grade_and_board_history: Vec<mtc::GradeAndBoard>,
+            health: u8,
+            ghost_states: Vec<mtc::GhostState>,
+            battle_ghost_index: u8,
+            upgrade_coin: Option<u8>,
+        ) {
+            self.only_allowed_caller();
+
+            self.player_grade_and_board_history
+                .insert(account, &grade_and_board_history);
+            self.player_health.insert(account, &health);
+            self.player_ghost_states.insert(account, &ghost_states);
+            self.player_battle_ghost_index
+                .insert(account, &battle_ghost_index);
+
+            self.update_upgrade_coin(account, upgrade_coin);
+        }
+
+        // utils
+
+        fn update_upgrade_coin(&mut self, account: AccountId, upgrade_coin: Option<u8>) {
+            if let Some(c) = upgrade_coin {
+                self.player_upgrade_coin.insert(account, &c);
+            } else {
+                self.player_upgrade_coin.remove(&account);
+            }
+        }
+
         // allowed accounts
 
         #[ink(message)]
@@ -286,10 +388,9 @@ pub mod contract {
         }
 
         fn only_allowed_caller(&self) {
-            let caller = &self.env().caller();
             assert!(
-                self.allowed_accounts.contains(caller),
-                "allowed accounts: this caller is not allowed: {caller:?}",
+                self.allowed_accounts.contains(&self.env().caller()),
+                "only_allowed_caller: this caller is not allowed",
             );
         }
     }

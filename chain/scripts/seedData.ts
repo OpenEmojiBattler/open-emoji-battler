@@ -14,14 +14,12 @@ const main = async () => {
   const bases = loadEmoBases(readFileSync("../../data/emoBases.json", "utf8"))
 
   await connected(endpoint, async (api) => {
-    const h = await sudo(
+    await sudo(
       api,
       (t) =>
         t.game.updateEmoBases(bases, availableEmoBaseIds.fixed, availableEmoBaseIds.built, true),
       keyringPair
     )
-
-    console.log(h.status.asInBlock.toString())
 
     const { baseIds, fixedIds, builtIds } = await getCurrentDataIds(api)
     console.log(baseIds, fixedIds, builtIds)

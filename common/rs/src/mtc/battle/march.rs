@@ -1,11 +1,11 @@
 use crate::{
     codec_types::*,
+    error::{format_err, Result},
     mtc::battle::{
         board::{attack, call_pre_abilities},
         common::{switch_player_index, BattleBoards, BattleEmo},
     },
 };
-use anyhow::{Error, Result};
 use rand::{Rng, SeedableRng};
 use rand_pcg::Pcg64Mcg;
 use sp_std::{cmp, prelude::*};
@@ -35,7 +35,7 @@ impl Tick {
         self.num = self
             .num
             .checked_add(1)
-            .ok_or_else(|| Error::msg("reached maximum tick"))?;
+            .ok_or_else(|| format_err!("reached maximum tick"))?;
         Ok(())
     }
 }

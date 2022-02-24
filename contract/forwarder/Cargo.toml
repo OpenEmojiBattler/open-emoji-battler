@@ -6,19 +6,20 @@ license = "Apache-2.0"
 authors = ["Open Emoji Battler"]
 
 [dependencies]
-ink_primitives = { version = "3.0.0-rc8", default-features = false }
-ink_metadata = { version = "3.0.0-rc8", default-features = false, features = ["derive"], optional = true }
-ink_env = { version = "3.0.0-rc8", default-features = false }
-ink_storage = { version = "3.0.0-rc8", default-features = false }
-ink_prelude = { version = "3.0.0-rc8", default-features = false }
-ink_lang = { version = "3.0.0-rc8", default-features = false }
+ink_primitives = { version = "3.0.0-rc9", default-features = false }
+ink_metadata = { version = "3.0.0-rc9", default-features = false, features = ["derive"], optional = true }
+ink_env = { version = "3.0.0-rc9", default-features = false }
+ink_storage = { version = "3.0.0-rc9", default-features = false }
+ink_prelude = { version = "3.0.0-rc9", default-features = false }
+ink_lang = { version = "3.0.0-rc9", default-features = false }
 
-scale = { package = "parity-scale-codec", version = "2", default-features = false, features = ["derive"] }
-scale-info = { version = "1", default-features = false, features = ["derive"], optional = true }
+scale = { package = "parity-scale-codec", version = "3", default-features = false, features = ["derive", "full"] }
+scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
 
-logic = { version = "0.1.0", path = "../logic", default-features = false, features = ["ink-as-dependency"] }
+logic_start_mtc = { path = "../logic_start_mtc", default-features = false, features = ["ink-as-dependency"] }
+logic_finish_mtc_shop = { path = "../logic_finish_mtc_shop", default-features = false, features = ["ink-as-dependency"] }
 
-common = { path = "../../common/rs", version = "0.1.0", default-features = false, features = ["ink"] }
+common = { path = "../../common/rs", default-features = false, features = ["contract"] }
 
 [lib]
 name = "forwarder"
@@ -40,8 +41,9 @@ std = [
     "scale/std",
     "scale-info/std",
 
-    "logic/std",
+    "logic_start_mtc/std",
+    "logic_finish_mtc_shop/std",
 
-    "common/ink-std",
+    "common/contract-std",
 ]
 ink-as-dependency = []

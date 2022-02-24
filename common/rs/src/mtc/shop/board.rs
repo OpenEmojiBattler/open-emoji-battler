@@ -1,5 +1,6 @@
 use crate::{
     codec_types::*,
+    error::{bail, ensure, Result},
     mtc::{
         shop::common::{ShopBoard, ShopBoardEmo},
         utils::{
@@ -8,7 +9,6 @@ use crate::{
         },
     },
 };
-use anyhow::{bail, ensure, Result};
 use rand::seq::SliceRandom;
 use rand::SeedableRng;
 use rand_pcg::Pcg64Mcg;
@@ -1004,17 +1004,16 @@ fn process_triple(
     Ok(())
 }
 
-fn remove_triple_emos(board: &mut ShopBoard, triple_source_indexes: &[u8]) -> Vec<ShopBoardEmo> {
-    let mut removed = Vec::<ShopBoardEmo>::new();
+fn remove_triple_emos(
+    board: &mut ShopBoard,
+    sorted_triple_source_indexes: &[u8],
+) -> Vec<ShopBoardEmo> {
+    let mut removed = Vec::new();
 
-    let mut indexes = triple_source_indexes.to_vec();
-    indexes.sort_unstable();
-    indexes.reverse();
-
-    for &i in indexes.iter() {
+    // temporary reverse it so `board` emo indexes don't change
+    for &i in sorted_triple_source_indexes.iter().rev() {
         removed.push(board.remove_emo(i));
     }
-
     removed.reverse();
 
     removed
@@ -1092,19 +1091,23 @@ mod tests {
     use super::*;
 
     fn setup_emo_bases() -> emo::Bases {
-        let mut emo_base1: emo::Base = Default::default();
-        emo_base1.id = 1;
+        let emo_base1 = emo::Base {
+            id: 1,
+            ..Default::default()
+        };
 
-        let mut emo_base2: emo::Base = Default::default();
-        emo_base2.id = 2;
-        emo_base2.abilities = vec![emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(
-            emo::ability::shop::Peri::AsOneself {
-                trigger: emo::ability::shop::PeriAsOneselfTrigger::Set,
-                action: emo::ability::shop::NormalAction::SetEmo {
-                    base_id: emo_base1.id,
+        let emo_base2 = emo::Base {
+            id: 2,
+            abilities: vec![emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(
+                emo::ability::shop::Peri::AsOneself {
+                    trigger: emo::ability::shop::PeriAsOneselfTrigger::Set,
+                    action: emo::ability::shop::NormalAction::SetEmo {
+                        base_id: emo_base1.id,
+                    },
                 },
-            },
-        ))];
+            ))],
+            ..Default::default()
+        };
 
         let mut emo_bases = emo::Bases::new();
         emo_bases.add(emo_base1);
@@ -1124,5 +1127,37 @@ mod tests {
         let c = add_emo(&mut board, &mut logs, &[], 2, false, 4, &emo_bases).unwrap();
 
         assert_eq!(c, 10);
+    }
+
+    #[test]
+    fn test_remove_triple_emos() {
+        fn build_shop_board_emo(id: u16) -> ShopBoardEmo {
+            ShopBoardEmo {
+                id,
+                mtc_emo_ids: vec![],
+                base_id: 0,
+                attributes: Default::default(),
+            }
+        }
+
+        let shop_board_emo_1 = build_shop_board_emo(1);
+        let shop_board_emo_2 = build_shop_board_emo(2);
+        let shop_board_emo_3 = build_shop_board_emo(3);
+        let shop_board_emo_4 = build_shop_board_emo(4);
+
+        let mut shop_board = ShopBoard(vec![
+            shop_board_emo_1.clone(),
+            shop_board_emo_2.clone(),
+            shop_board_emo_3.clone(),
+            shop_board_emo_4.clone(),
+        ]);
+
+        let removed = remove_triple_emos(&mut shop_board, &[0, 2, 3]);
+
+        assert_eq!(shop_board, ShopBoard(vec![shop_board_emo_2]));
+        assert_eq!(
+            removed,
+            vec![shop_board_emo_1, shop_board_emo_3, shop_board_emo_4]
+        );
     }
 }

@@ -25,7 +25,7 @@ where
 
     loop {
         let mut ghosts = get_ghosts(ep_band)
-            .unwrap_or_else(Vec::new)
+            .unwrap_or_default()
             .into_iter()
             .choose_multiple(&mut rng, n);
         ghosts.shuffle(&mut rng);
@@ -85,7 +85,7 @@ where
     let ep_band = get_ep_band(ep);
     let ghost = build_ghost_from_history(grade_and_board_history);
 
-    let mut ghosts_with_data = get_matchmaking_ghosts(ep_band).unwrap_or_else(Vec::new);
+    let mut ghosts_with_data = get_matchmaking_ghosts(ep_band).unwrap_or_default();
 
     if let Some(ghost_with_data) = ghosts_with_data
         .iter_mut()

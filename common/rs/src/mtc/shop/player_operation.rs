@@ -1,5 +1,6 @@
 use crate::{
     codec_types::*,
+    error::{bail, ensure, format_err, Result},
     mtc::shop::{
         board::{add_emo, sell_emo, start_shop},
         catalog::get_catalog,
@@ -7,7 +8,6 @@ use crate::{
         common::ShopBoard,
     },
 };
-use anyhow::{anyhow, bail, ensure, Result};
 use sp_std::prelude::*;
 
 const NEXT_CATALOG_LINE_COIN: u8 = 1;
@@ -106,17 +106,17 @@ fn buy(
 
     *coin = coin
         .checked_sub(EMO_BUY_COIN)
-        .ok_or_else(|| anyhow!("Not enough coin to buy"))?;
+        .ok_or_else(|| format_err!("Not enough coin to buy"))?;
 
     let current_catalog_line = catalog
         .0
         .get(catalog_line_index as usize)
-        .ok_or_else(|| anyhow!("non catalog_line"))?;
+        .ok_or_else(|| format_err!("non catalog_line"))?;
     let mtc_emo = current_catalog_line
         .0
         .iter()
         .find(|ec| ec.id == bought_mtc_emo_id)
-        .ok_or_else(|| anyhow!("target emo to buy not found"))?;
+        .ok_or_else(|| format_err!("target emo to buy not found"))?;
     let base = emo_bases.find(mtc_emo.base_id)?;
 
     ensure!(base.grade <= grade, "higher grade");
@@ -164,7 +164,7 @@ fn mov(board: &mut ShopBoard, result_indexes: &[u8]) -> Result<()> {
             .zip(0u8..)
             .find(|&(&current_index, _)| current_index == result_index)
             .map(|(_, i)| i)
-            .ok_or_else(|| anyhow!("invalid index"))?;
+            .ok_or_else(|| format_err!("invalid index"))?;
 
         current_indexes.swap(idx.into(), actual_index.into());
         board.swap_emos(idx, actual_index);
@@ -182,14 +182,14 @@ fn next_catalog_line(
     if turn > 1 || *next_catalog_line_counter >= MULLIGAN_COUNT {
         *coin = coin
             .checked_sub(NEXT_CATALOG_LINE_COIN)
-            .ok_or_else(|| anyhow!("Not enough coin for next catalog_line"))?;
+            .ok_or_else(|| format_err!("Not enough coin for next catalog_line"))?;
     }
     *next_catalog_line_counter = next_catalog_line_counter
         .checked_add(1)
-        .ok_or_else(|| anyhow!("invalid counter"))?;
+        .ok_or_else(|| format_err!("invalid counter"))?;
     *catalog_line_index = catalog_line_index
         .checked_add(1)
-        .ok_or_else(|| anyhow!("invalid index"))?;
+        .ok_or_else(|| format_err!("invalid index"))?;
     Ok(())
 }
 
@@ -198,7 +198,7 @@ fn upgrade(grade: &mut u8, upgrade_coin: &mut Option<u8>, coin: &mut u8) -> Resu
         Some(c) => {
             *coin = coin
                 .checked_sub(c)
-                .ok_or_else(|| anyhow!("Not enough coin for upgrade"))?;
+                .ok_or_else(|| format_err!("Not enough coin for upgrade"))?;
             ensure!(*grade < LAST_GRADE, "already last grade");
             *grade += 1;
             *upgrade_coin = get_upgrade_coin(*grade);
@@ -217,16 +217,26 @@ mod tests {
 
     #[test]
     fn test_mov() {
-        let mut board_emo0: ShopBoardEmo = Default::default();
-        board_emo0.mtc_emo_ids = vec![0];
-        let mut board_emo1: ShopBoardEmo = Default::default();
-        board_emo1.mtc_emo_ids = vec![1];
-        let mut board_emo2: ShopBoardEmo = Default::default();
-        board_emo2.mtc_emo_ids = vec![2];
-        let mut board_emo3: ShopBoardEmo = Default::default();
-        board_emo3.mtc_emo_ids = vec![3];
-        let mut board_emo4: ShopBoardEmo = Default::default();
-        board_emo4.mtc_emo_ids = vec![4];
+        let board_emo0 = ShopBoardEmo {
+            mtc_emo_ids: vec![0],
+            ..Default::default()
+        };
+        let board_emo1 = ShopBoardEmo {
+            mtc_emo_ids: vec![1],
+            ..Default::default()
+        };
+        let board_emo2 = ShopBoardEmo {
+            mtc_emo_ids: vec![2],
+            ..Default::default()
+        };
+        let board_emo3 = ShopBoardEmo {
+            mtc_emo_ids: vec![3],
+            ..Default::default()
+        };
+        let board_emo4 = ShopBoardEmo {
+            mtc_emo_ids: vec![4],
+            ..Default::default()
+        };
 
         let mut board = ShopBoard(vec![
             board_emo0, board_emo1, board_emo2, board_emo3, board_emo4,

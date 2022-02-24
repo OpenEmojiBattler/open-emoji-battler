@@ -5,7 +5,7 @@ edition = '2018'
 license = "Apache-2.0"
 
 [dependencies]
-common = { path = '../../../common/rs', version = '0.1.0', default-features = false, features = ['chain'] }
+common = { path = '../../../common/rs', default-features = false, features = ['chain'] }
 hex = { version = "0.4.2", default-features = false }
 parity-scale-codec = { version = "2.0.0", default-features = false, features = ['derive']}
 pallet-randomness-collective-flip = { version = '3.0.0', default-features = false }

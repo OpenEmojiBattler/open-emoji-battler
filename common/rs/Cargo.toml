@@ -8,19 +8,20 @@ license = "Apache-2.0"
 rand = { version = "=0.8.4", default-features = false, features=["alloc"] }
 rand_pcg = { version = "=0.3.1", default-features = false }
 sp-std = { version = "=3.0.0", default-features = false }
-anyhow = { version = "=1.0.53", default-features = false }
+parity-scale-codec = { version = "< 4", default-features = false, features = ["derive"] }
 
-parity-scale-codec = { version = "2", default-features = false, features = ["derive"] }
+# option
+anyhow = { version = "=1.0.53", default-features = false, optional = true }
 
 # chain
 blake2-rfc = { version = "0.2.18", default-features = false, optional = true }
 libm = { version = "0.2.1", default-features = false, optional = true }
 
 # contract
-scale-info = { version = "1", default-features = false, features = ["derive"], optional = true }
-ink_storage = { version = "3.0.0-rc8", default-features = false, optional = true }
-ink_primitives = { version = "3.0.0-rc8", default-features = false, optional = true }
-ink_metadata = { version = "3.0.0-rc8", default-features = false, optional = true }
+scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
+ink_storage = { version = "3.0.0-rc9", default-features = false, optional = true }
+ink_primitives = { version = "3.0.0-rc9", default-features = false, optional = true }
+ink_metadata = { version = "3.0.0-rc9", default-features = false, optional = true }
 codec_types_derive = { path = "./codec_types_derive", optional = true }
 
 [dev-dependencies]
@@ -28,17 +29,22 @@ hex = { version = "0.4.2" }
 criterion = "0.3.3"
 
 [features]
-default = ["std", "view-logs"]
+default = ["std", "chain", "front", "contract-std"]
+
 std = [
     "rand/std",
     "parity-scale-codec/std",
     "sp-std/std",
-    "anyhow/std",
+    "anyhow/std"
 ]
+error = ["anyhow"]
 view-logs = []
-chain = ["blake2-rfc", "libm"]
-ink = ["ink_storage", "ink_primitives", "codec_types_derive"]
-ink-std = ["std", "ink", "scale-info/std", "ink_storage/std", "ink_primitives/std", "ink_metadata/std"]
+
+contract = ["ink_storage", "ink_primitives", "codec_types_derive"]
+contract-std = ["std", "contract", "scale-info/std", "ink_storage/std", "ink_primitives/std", "ink_metadata/std"]
+
+chain = ["blake2-rfc", "libm", "error"]
+front = ["view-logs", "error"]
 
 [[bench]]
 name = "my_benchmark"

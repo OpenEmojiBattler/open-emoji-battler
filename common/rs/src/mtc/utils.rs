@@ -1,5 +1,7 @@
-use crate::codec_types::*;
-use anyhow::{anyhow, bail, Result};
+use crate::{
+    codec_types::*,
+    error::{bail, format_err, Result},
+};
 use sp_std::prelude::*;
 
 pub const BOARD_EMO_MAX_COUNT: u8 = 7;
@@ -33,7 +35,7 @@ impl emo::Bases {
     pub fn find(&self, id: u16) -> Result<&emo::Base> {
         self.0
             .get(&id)
-            .ok_or_else(|| anyhow!("emo base not found: {}", id))
+            .ok_or_else(|| format_err!("emo base not found: {}", id))
     }
 }
 
@@ -90,6 +92,6 @@ mod tests {
     fn test_emo_bases_find() {
         let bases = emo::Bases(BTreeMap::new());
         let r = bases.find(1);
-        assert_eq!(r.is_err(), true);
+        assert!(r.is_err());
     }
 }

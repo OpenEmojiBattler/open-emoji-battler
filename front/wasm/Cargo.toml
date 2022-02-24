@@ -8,7 +8,7 @@ license = "Apache-2.0"
 crate-type = ["cdylib"]
 
 [dependencies]
-common = { version = "0.1.0", path = '../../common/rs', default-features = false, features = ['view-logs'] }
+common = { path = '../../common/rs', default-features = false, features = ['front'] }
 wasm-bindgen = "0.2.79"
 parity-scale-codec = { version = "2", default-features = false, features = ["derive"] }
 wee_alloc = "0.4.5"
