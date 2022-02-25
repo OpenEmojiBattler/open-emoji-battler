@@ -3,12 +3,13 @@ import { ApiPromise } from "@polkadot/api"
 
 import { connect } from "common"
 
+import { getOebEnv } from "~/misc/env"
 import {
   useConnectionSetter,
   ConnectionContext,
   useAccountSetter,
 } from "~/components/App/ConnectionProvider/tasks"
-import { getContractEnv, buildConnection } from "./tasks"
+import { buildConnection } from "./tasks"
 
 export function Contract(props: { children: React.ReactNode }) {
   const connection = React.useContext(ConnectionContext)
@@ -16,7 +17,7 @@ export function Contract(props: { children: React.ReactNode }) {
   const setAccount = useAccountSetter()
 
   React.useEffect(() => {
-    const contractEnv = getContractEnv()
+    const contractEnv = getOebEnv().contract
 
     let api: ApiPromise | undefined
 
