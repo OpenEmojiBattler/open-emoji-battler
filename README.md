@@ -20,11 +20,11 @@ https://user-images.githubusercontent.com/81064017/115994138-aef65980-a610-11eb-
 
 ## Introduction
 
-Open Emoji Battler is a decentralized blockchain game, owned by the community, running on-chain. This game is implemented in Rust, built into Wasm, and ran in blockchains and web frontend. There is no central server, and the web frontend can be hosted on IPFS.
+**Open Emoji Battler** is a decentralized blockchain game, owned by the community, running on-chain. This game is implemented in Rust, built into Wasm, and ran in blockchains and web frontend. There is no central server, and the web frontend can be hosted on [IPFS](https://github.com/ipfs/ipfs).
 
-For the on-chain part, we initially started to build this game as an independent chain with blockchain framework Substrate, but now we also have a smart-contract implementation using Ink. Both implementations share the most codebase with minor differences.
+For the on-chain part, we initially started to build this game as an independent chain with blockchain framework [Substrate](https://github.com/paritytech/substrate), but now we also have a smart-contract implementation using [ink!](https://github.com/paritytech/ink). Both implementations share the most codebase with minor differences.
 
-The strategic gameplay is inspired by auto battler games, mainly Hearthstone Battlegrounds. Build your deck using emojis, and defeat other players!
+The strategic gameplay is inspired by [auto battler](https://en.wikipedia.org/wiki/Auto_battler) games, mainly Hearthstone Battlegrounds. Build your deck using emojis, and defeat other players!
 
 ## Vision
 
@@ -104,6 +104,6 @@ yarn dev
 
 ## Contribution
 
-Any contributions are welcome! We will appreciate that.
+Any contributions are [welcome](https://forum.open-emoji-battler.community/t/topic/38)! We will appreciate that.
 
 We know this isn't enough documented, so feel free to make an issue or ask us on our Discord server.
