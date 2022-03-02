@@ -4,6 +4,7 @@ import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { Decks } from "./Decks"
 import { PowButton } from "~/components/common/PowButton"
+import { ExternalLink } from "~/components/common/ExternalLink"
 import { useAccount } from "~/components/App/ConnectionProvider/tasks"
 import { Accounts } from "./Accounts"
 
@@ -34,10 +35,7 @@ export function Setup(props: {
               <div className={"level-item"}>
                 <div>
                   This is a smart-contract MVP on a testnet. See{" "}
-                  <a href="#" target="_blank" rel="noopener noreferrer">
-                    this post
-                  </a>{" "}
-                  for detail.
+                  <ExternalLink href="#">this post</ExternalLink> for detail.
                 </div>
               </div>
             )}
