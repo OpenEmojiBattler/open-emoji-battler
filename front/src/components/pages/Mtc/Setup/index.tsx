@@ -32,7 +32,13 @@ export function Setup(props: {
               <></>
             ) : (
               <div className={"level-item"}>
-                <div>Contract MVP</div>
+                <div>
+                  This is a smart-contract MVP on a testnet. See{" "}
+                  <a href="#" target="_blank" rel="noopener noreferrer">
+                    this post
+                  </a>{" "}
+                  for detail.
+                </div>
               </div>
             )}
           </div>
@@ -41,8 +47,7 @@ export function Setup(props: {
               {account.kind === "chain" ? (
                 <div style={{ width: "270px", marginRight: "8px" }}>
                   <small>
-                    No fee required but you are going to see a PoW solution on the tip field of the
-                    popup.
+                    No fee is required. The popup will show the PoW solution on the tip field.
                   </small>
                 </div>
               ) : (

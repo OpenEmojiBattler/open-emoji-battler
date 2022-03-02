@@ -53,7 +53,7 @@ export function SetupWrapper(props: {
     connection.query.playerPool(account.address).then((p) => {
       if (isMounted && p.isSome) {
         setMessage(
-          "The previous match didn't finish normally, and the EP might decrease a little next time."
+          "The previous match didn't normally finish, so the EP might decrease a little next time."
         )
       } else {
         setMessage("")
