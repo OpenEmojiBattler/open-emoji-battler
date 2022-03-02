@@ -35,7 +35,10 @@ export function Setup(props: {
               <div className={"level-item"}>
                 <div>
                   This is a smart-contract MVP on a testnet. See{" "}
-                  <ExternalLink href="#">this post</ExternalLink> for detail.
+                  <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/55">
+                    this post
+                  </ExternalLink>{" "}
+                  for detail.
                 </div>
               </div>
             )}
