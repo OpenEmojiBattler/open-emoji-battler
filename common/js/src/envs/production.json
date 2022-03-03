@@ -4,7 +4,7 @@
   "contract": {
     "name": "Shibuya Testnet",
     "endpoint": "wss://rpc.shibuya.astar.network/",
-    "storageAddress": "ZBxCmZJ5NUNtiwWVq297XM2UR7EBWRpL387HRkSncgzi9K4",
-    "forwarderAddress": "YpCw8tis8J9CcHe3YK4u3H7a4BgwDRue7hqHujXLpKNFkqN"
+    "storageAddress": "Z63k7b6Hwn5h5v51F3eJB7c46aK4Mry9BcsfrK7VbaRVwjm",
+    "forwarderAddress": "WPwKwZ9vqTSsLFaMfmfcax7xwDaaiz4hoZhEjk3y14og9bk"
   }
 }
