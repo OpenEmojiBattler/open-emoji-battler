@@ -4,6 +4,7 @@ import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { Decks } from "./Decks"
 import { PowButton } from "~/components/common/PowButton"
+import { ExternalLink } from "~/components/common/ExternalLink"
 import { useAccount } from "~/components/App/ConnectionProvider/tasks"
 import { Accounts } from "./Accounts"
 
@@ -32,7 +33,13 @@ export function Setup(props: {
               <></>
             ) : (
               <div className={"level-item"}>
-                <div>Contract MVP</div>
+                <div>
+                  This is a smart-contract MVP on a testnet. See{" "}
+                  <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/55">
+                    this post
+                  </ExternalLink>{" "}
+                  for detail.
+                </div>
               </div>
             )}
           </div>
@@ -41,8 +48,7 @@ export function Setup(props: {
               {account.kind === "chain" ? (
                 <div style={{ width: "270px", marginRight: "8px" }}>
                   <small>
-                    No fee required but you are going to see a PoW solution on the tip field of the
-                    popup.
+                    No fee is required. The popup will show the PoW solution on the tip field.
                   </small>
                 </div>
               ) : (

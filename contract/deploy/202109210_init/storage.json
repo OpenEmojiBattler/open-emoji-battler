@@ -1,7 +1,7 @@
 {
   "source": {
-    "hash": "0xb4cdb940440043f39d6331c56539020c5e122d66c5cad6d8c7e62ef4ebec8b75",
-    "language": "ink! 3.0.0-rc8",
+    "hash": "0xeda40de151d378102d5bd918dacb2c21e7e648d688a71858faa2ad318c098710",
+    "language": "ink! 3.0.0-rc9",
     "compiler": "rustc 1.60.0-nightly"
   },
   "contract": {
@@ -36,7 +36,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 68
+            "type": 70
           },
           "selector": "0x7864382a"
         },
@@ -48,7 +48,7 @@
                 "displayName": [
                   "Option"
                 ],
-                "type": 68
+                "type": 70
               }
             }
           ],
@@ -69,7 +69,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 70
+            "type": 72
           },
           "selector": "0x3e89cbad"
         },
@@ -81,7 +81,7 @@
                 "displayName": [
                   "Option"
                 ],
-                "type": 70
+                "type": 72
               }
             }
           ],
@@ -102,7 +102,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 70
+            "type": 72
           },
           "selector": "0x5604c526"
         },
@@ -114,7 +114,7 @@
                 "displayName": [
                   "Option"
                 ],
-                "type": 70
+                "type": 72
               }
             }
           ],
@@ -145,7 +145,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 71
+            "type": 73
           },
           "selector": "0x5d04aced"
         },
@@ -216,7 +216,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 72
+            "type": 74
           },
           "selector": "0xa7a3db39"
         },
@@ -287,7 +287,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 73
+            "type": 75
           },
           "selector": "0x09425436"
         },
@@ -358,7 +358,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 74
+            "type": 76
           },
           "selector": "0x83e00bfa"
         },
@@ -429,7 +429,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 75
+            "type": 64
           },
           "selector": "0x7560bd82"
         },
@@ -500,7 +500,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 76
+            "type": 77
           },
           "selector": "0x4dd1791b"
         },
@@ -571,7 +571,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 75
+            "type": 78
           },
           "selector": "0xdf1f8165"
         },
@@ -590,9 +590,9 @@
               "label": "value",
               "type": {
                 "displayName": [
-                  "u8"
+                  "Option"
                 ],
-                "type": 5
+                "type": 64
               }
             }
           ],
@@ -642,7 +642,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 71
+            "type": 73
           },
           "selector": "0xb12c7ae3"
         },
@@ -713,7 +713,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 77
+            "type": 79
           },
           "selector": "0x2235eb1c"
         },
@@ -734,7 +734,7 @@
                 "displayName": [
                   "Vec"
                 ],
-                "type": 65
+                "type": 67
               }
             }
           ],
@@ -784,7 +784,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 75
+            "type": 64
           },
           "selector": "0x5cbf6203"
         },
@@ -838,6 +838,236 @@
         {
           "args": [
             {
+              "label": "player_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 40
+              }
+            },
+            {
+              "label": "emo_bases",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "deck_fixed_emo_base_ids",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "deck_built_emo_base_ids",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "player_ep",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "player_seed",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "player_pool",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "player_health",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "player_grade_and_board_history",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "player_upgrade_coin",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "player_ghosts",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "player_ghost_states",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            },
+            {
+              "label": "player_battle_ghost_index",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            }
+          ],
+          "docs": [],
+          "label": "get_player_batch",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [],
+            "type": 80
+          },
+          "selector": "0x13f473a4"
+        },
+        {
+          "args": [
+            {
+              "label": "player_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 40
+              }
+            },
+            {
+              "label": "player_ep",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 74
+              }
+            },
+            {
+              "label": "player_seed",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 75
+              }
+            },
+            {
+              "label": "player_pool",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 76
+              }
+            },
+            {
+              "label": "player_health",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 64
+              }
+            },
+            {
+              "label": "player_grade_and_board_history",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 77
+              }
+            },
+            {
+              "label": "player_upgrade_coin",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 78
+              }
+            },
+            {
+              "label": "player_ghosts",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 73
+              }
+            },
+            {
+              "label": "player_ghost_states",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 79
+              }
+            },
+            {
+              "label": "player_battle_ghost_index",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 64
+              }
+            }
+          ],
+          "docs": [],
+          "label": "set_player_batch",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x241717f7"
+        },
+        {
+          "args": [
+            {
               "label": "account",
               "type": {
                 "displayName": [
@@ -866,12 +1096,12 @@
               }
             },
             {
-              "label": "player_health",
+              "label": "player_ep",
               "type": {
                 "displayName": [
-                  "u8"
+                  "u16"
                 ],
-                "type": 5
+                "type": 1
               }
             },
             {
@@ -884,134 +1114,21 @@
               }
             },
             {
-              "label": "player_pool",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 54
-              }
-            },
-            {
-              "label": "player_grade_and_board_history",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 58
-              }
-            },
-            {
-              "label": "player_battle_ghost_index",
-              "type": {
-                "displayName": [
-                  "u8"
-                ],
-                "type": 5
-              }
-            },
-            {
-              "label": "upgrade_coin",
+              "label": "matchmaking_ghosts",
               "type": {
                 "displayName": [
                   "Option"
                 ],
-                "type": 75
+                "type": 81
               }
             }
           ],
           "docs": [],
-          "label": "set_data_for_logic_start_mtc",
+          "label": "update_for_logic_finish_mtc_shop_finish_mtc",
           "mutates": true,
           "payable": false,
           "returnType": null,
-          "selector": "0x04f0f5e7"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_data_for_logic_finish_mtc_shop",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [],
-            "type": 78
-          },
-          "selector": "0x8aac9c10"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "grade_and_board_history",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 58
-              }
-            },
-            {
-              "label": "health",
-              "type": {
-                "displayName": [
-                  "u8"
-                ],
-                "type": 5
-              }
-            },
-            {
-              "label": "ghost_states",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 65
-              }
-            },
-            {
-              "label": "battle_ghost_index",
-              "type": {
-                "displayName": [
-                  "u8"
-                ],
-                "type": 5
-              }
-            },
-            {
-              "label": "upgrade_coin",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 75
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_data_for_logic_finish_mtc_shop_finish_battle",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x30d4a280"
+          "selector": "0x1044b977"
         },
         {
           "args": [],
@@ -1023,7 +1140,7 @@
             "displayName": [
               "Vec"
             ],
-            "type": 67
+            "type": 69
           },
           "selector": "0xc35cfacd"
         },
@@ -1215,7 +1332,7 @@
             "layout": {
               "cell": {
                 "key": "0x0900000000000000000000000000000000000000000000000000000000000000",
-                "ty": 56
+                "ty": 63
               }
             },
             "name": "player_upgrade_coin"
@@ -1224,7 +1341,7 @@
             "layout": {
               "cell": {
                 "key": "0x0a00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 63
+                "ty": 65
               }
             },
             "name": "player_ghosts"
@@ -1233,7 +1350,7 @@
             "layout": {
               "cell": {
                 "key": "0x0b00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 64
+                "ty": 66
               }
             },
             "name": "player_ghost_states"
@@ -1251,7 +1368,7 @@
             "layout": {
               "cell": {
                 "key": "0x0d00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 67
+                "ty": 69
               }
             },
             "name": "allowed_accounts"
@@ -3243,7 +3360,7 @@
             },
             {
               "name": "V",
-              "type": 38
+              "type": 64
             }
           ],
           "path": [
@@ -3256,6 +3373,39 @@
       },
       {
         "id": 64,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 5
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 5
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 65,
         "type": {
           "def": {
             "composite": {
@@ -3275,7 +3425,7 @@
             },
             {
               "name": "V",
-              "type": 65
+              "type": 38
             }
           ],
           "path": [
@@ -3287,17 +3437,49 @@
         }
       },
       {
-        "id": 65,
+        "id": 66,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 49,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 40
+            },
+            {
+              "name": "V",
+              "type": 67
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 67,
         "type": {
           "def": {
             "sequence": {
-              "type": 66
+              "type": 68
             }
           }
         }
       },
       {
-        "id": 66,
+        "id": 68,
         "type": {
           "def": {
             "variant": {
@@ -3336,7 +3518,7 @@
         }
       },
       {
-        "id": 67,
+        "id": 69,
         "type": {
           "def": {
             "sequence": {
@@ -3346,7 +3528,7 @@
         }
       },
       {
-        "id": 68,
+        "id": 70,
         "type": {
           "def": {
             "variant": {
@@ -3358,7 +3540,7 @@
                 {
                   "fields": [
                     {
-                      "type": 69
+                      "type": 71
                     }
                   ],
                   "index": 1,
@@ -3370,7 +3552,7 @@
           "params": [
             {
               "name": "T",
-              "type": 69
+              "type": 71
             }
           ],
           "path": [
@@ -3379,7 +3561,7 @@
         }
       },
       {
-        "id": 69,
+        "id": 71,
         "type": {
           "def": {
             "composite": {
@@ -3400,7 +3582,7 @@
         }
       },
       {
-        "id": 70,
+        "id": 72,
         "type": {
           "def": {
             "variant": {
@@ -3433,7 +3615,7 @@
         }
       },
       {
-        "id": 71,
+        "id": 73,
         "type": {
           "def": {
             "variant": {
@@ -3466,7 +3648,7 @@
         }
       },
       {
-        "id": 72,
+        "id": 74,
         "type": {
           "def": {
             "variant": {
@@ -3499,7 +3681,7 @@
         }
       },
       {
-        "id": 73,
+        "id": 75,
         "type": {
           "def": {
             "variant": {
@@ -3532,7 +3714,7 @@
         }
       },
       {
-        "id": 74,
+        "id": 76,
         "type": {
           "def": {
             "variant": {
@@ -3565,40 +3747,7 @@
         }
       },
       {
-        "id": 75,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 5
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 5
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 76,
+        "id": 77,
         "type": {
           "def": {
             "variant": {
@@ -3631,7 +3780,7 @@
         }
       },
       {
-        "id": 77,
+        "id": 78,
         "type": {
           "def": {
             "variant": {
@@ -3643,7 +3792,7 @@
                 {
                   "fields": [
                     {
-                      "type": 65
+                      "type": 64
                     }
                   ],
                   "index": 1,
@@ -3655,7 +3804,7 @@
           "params": [
             {
               "name": "T",
-              "type": 65
+              "type": 64
             }
           ],
           "path": [
@@ -3664,18 +3813,98 @@
         }
       },
       {
-        "id": 78,
+        "id": 79,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 67
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 67
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 80,
         "type": {
           "def": {
             "tuple": [
-              69,
-              58,
+              70,
+              72,
+              72,
+              74,
               75,
-              54,
-              52,
-              5,
-              5,
-              65,
+              76,
+              64,
+              77,
+              78,
+              73,
+              79,
+              64
+            ]
+          }
+        }
+      },
+      {
+        "id": 81,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 82
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 82
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 82,
+        "type": {
+          "def": {
+            "tuple": [
+              1,
               38
             ]
           }

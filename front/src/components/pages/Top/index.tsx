@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import { InternalLink } from "~/components/common/InternalLink"
+import { ExternalLink } from "~/components/common/ExternalLink"
 import { DemoMtcBattle } from "./DemoMtcBattle"
 
 export function Top() {
@@ -17,61 +18,31 @@ export function Top() {
                 </h1>
               </div>
               <div className={"block"}>
-                <a
-                  href="https://app.subsocial.network/@OpenEmojiBattler/what-is-open-emoji-battler-18370"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href="https://app.subsocial.network/@OpenEmojiBattler/what-is-open-emoji-battler-18370">
                   About
-                </a>
+                </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <a
-                  href="https://forum.open-emoji-battler.community/t/topic/17"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/17">
                   How to Play
-                </a>
+                </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <a href="https://youtu.be/ah3-sWMATSM" target="_blank" rel="noopener noreferrer">
-                  Demo Video
-                </a>
+                <ExternalLink href="https://youtu.be/ah3-sWMATSM">Demo Video</ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <a
-                  href="https://twitter.com/OEB_community"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Twitter
-                </a>
+                <ExternalLink href="https://twitter.com/OEB_community">Twitter</ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <a href="https://discord.gg/fvXzW8hFQ7" target="_blank" rel="noopener noreferrer">
-                  Discord
-                </a>
+                <ExternalLink href="https://discord.gg/fvXzW8hFQ7">Discord</ExternalLink>
                 <br />
-                <a
-                  href="https://forum.open-emoji-battler.community/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href="https://forum.open-emoji-battler.community/">
                   Forum
-                </a>
+                </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <a
-                  href="https://github.com/OpenEmojiBattler/open-emoji-battler"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href="https://github.com/OpenEmojiBattler/open-emoji-battler">
                   GitHub
-                </a>
+                </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <a
-                  href="https://forum.open-emoji-battler.community/t/topic/18"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/18">
                   Japanese 遊び方
-                </a>
+                </ExternalLink>
               </div>
             </div>
             <div style={{ width: "550px" }}>
@@ -109,13 +80,9 @@ export function Top() {
               </li>
               <li>
                 <strong>Community</strong>: Open Emoji Battler is not a company. Instead,{" "}
-                <a
-                  href="https://forum.open-emoji-battler.community/t/topic/38"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/38">
                   it's an independent community project
-                </a>{" "}
+                </ExternalLink>{" "}
                 made by contributors.
               </li>
               <li>
@@ -138,13 +105,9 @@ export function Top() {
             </ul>
             <p>
               The detail can be found{" "}
-              <a
-                href="https://forum.open-emoji-battler.community/t/topic/37"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/37">
                 here
-              </a>
+              </ExternalLink>
               .
             </p>
           </div>
@@ -153,9 +116,7 @@ export function Top() {
             <ul>
               <li>
                 Media partner (Japan):{" "}
-                <a href="https://blockchaingame.jp/" target="_blank" rel="noopener noreferrer">
-                  BlockchainGame Info
-                </a>
+                <ExternalLink href="https://blockchaingame.jp/">BlockchainGame Info</ExternalLink>
               </li>
             </ul>
           </div>

@@ -18,14 +18,13 @@ pub mod contract {
         matchmaking_ghosts: Mapping<u16, Vec<(AccountId, u16, mtc::Ghost)>>,
 
         player_ep: Mapping<AccountId, u16>,
-
         player_seed: Mapping<AccountId, u64>,
 
         // remove for each mtc
         player_pool: Mapping<AccountId, Vec<mtc::Emo>>,
         player_health: Mapping<AccountId, u8>,
         player_grade_and_board_history: Mapping<AccountId, Vec<mtc::GradeAndBoard>>,
-        player_upgrade_coin: Mapping<AccountId, u8>,
+        player_upgrade_coin: Mapping<AccountId, Option<u8>>,
         player_ghosts: Mapping<AccountId, Vec<(AccountId, u16, mtc::Ghost)>>,
         player_ghost_states: Mapping<AccountId, Vec<mtc::GhostState>>,
         player_battle_ghost_index: Mapping<AccountId, u8>,
@@ -192,12 +191,12 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_player_upgrade_coin(&self, account: AccountId) -> Option<u8> {
+        pub fn get_player_upgrade_coin(&self, account: AccountId) -> Option<Option<u8>> {
             self.player_upgrade_coin.get(&account)
         }
 
         #[ink(message)]
-        pub fn set_player_upgrade_coin(&mut self, account: AccountId, value: u8) {
+        pub fn set_player_upgrade_coin(&mut self, account: AccountId, value: Option<u8>) {
             self.only_allowed_caller();
             self.player_upgrade_coin.insert(account, &value);
         }
@@ -269,6 +268,150 @@ pub mod contract {
         // batch ops
 
         #[ink(message)]
+        pub fn get_player_batch(
+            &self,
+            player_id: AccountId,
+
+            emo_bases: bool,
+            deck_fixed_emo_base_ids: bool,
+            deck_built_emo_base_ids: bool,
+
+            player_ep: bool,
+            player_seed: bool,
+
+            player_pool: bool,
+            player_health: bool,
+            player_grade_and_board_history: bool,
+            player_upgrade_coin: bool,
+            player_ghosts: bool,
+            player_ghost_states: bool,
+            player_battle_ghost_index: bool,
+        ) -> (
+            Option<emo::Bases>,
+            Option<Vec<u16>>,
+            Option<Vec<u16>>,
+            Option<u16>,
+            Option<u64>,
+            Option<Vec<mtc::Emo>>,
+            Option<u8>,
+            Option<Vec<mtc::GradeAndBoard>>,
+            Option<Option<u8>>,
+            Option<Vec<(AccountId, u16, mtc::Ghost)>>,
+            Option<Vec<mtc::GhostState>>,
+            Option<u8>,
+        ) {
+            (
+                if emo_bases {
+                    self.emo_bases.clone()
+                } else {
+                    None
+                },
+                if deck_fixed_emo_base_ids {
+                    self.deck_fixed_emo_base_ids.clone()
+                } else {
+                    None
+                },
+                if deck_built_emo_base_ids {
+                    self.deck_built_emo_base_ids.clone()
+                } else {
+                    None
+                },
+                if player_ep {
+                    self.player_ep.get(player_id)
+                } else {
+                    None
+                },
+                if player_seed {
+                    self.player_seed.get(player_id)
+                } else {
+                    None
+                },
+                if player_pool {
+                    self.player_pool.get(player_id)
+                } else {
+                    None
+                },
+                if player_health {
+                    self.player_health.get(player_id)
+                } else {
+                    None
+                },
+                if player_grade_and_board_history {
+                    self.player_grade_and_board_history.get(player_id)
+                } else {
+                    None
+                },
+                if player_upgrade_coin {
+                    self.player_upgrade_coin.get(player_id)
+                } else {
+                    None
+                },
+                if player_ghosts {
+                    self.player_ghosts.get(player_id)
+                } else {
+                    None
+                },
+                if player_ghost_states {
+                    self.player_ghost_states.get(player_id)
+                } else {
+                    None
+                },
+                if player_battle_ghost_index {
+                    self.player_battle_ghost_index.get(player_id)
+                } else {
+                    None
+                },
+            )
+        }
+
+        #[ink(message)]
+        pub fn set_player_batch(
+            &mut self,
+            player_id: AccountId,
+
+            player_ep: Option<u16>,
+            player_seed: Option<u64>,
+
+            player_pool: Option<Vec<mtc::Emo>>,
+            player_health: Option<u8>,
+            player_grade_and_board_history: Option<Vec<mtc::GradeAndBoard>>,
+            player_upgrade_coin: Option<Option<u8>>,
+            player_ghosts: Option<Vec<(AccountId, u16, mtc::Ghost)>>,
+            player_ghost_states: Option<Vec<mtc::GhostState>>,
+            player_battle_ghost_index: Option<u8>,
+        ) {
+            self.only_allowed_caller();
+
+            if let Some(p) = player_ep {
+                self.player_ep.insert(player_id, &p)
+            }
+            if let Some(p) = player_seed {
+                self.player_seed.insert(player_id, &p)
+            }
+            if let Some(p) = player_pool {
+                self.player_pool.insert(player_id, &p)
+            }
+            if let Some(p) = player_health {
+                self.player_health.insert(player_id, &p)
+            }
+            if let Some(p) = player_grade_and_board_history {
+                self.player_grade_and_board_history.insert(player_id, &p)
+            }
+            if let Some(p) = player_upgrade_coin {
+                self.player_upgrade_coin.insert(player_id, &p)
+            }
+            if let Some(p) = player_ghosts {
+                self.player_ghosts.insert(player_id, &p)
+            }
+            if let Some(p) = player_ghost_states {
+                self.player_ghost_states.insert(player_id, &p)
+            }
+            if let Some(p) = player_battle_ghost_index {
+                self.player_battle_ghost_index.insert(player_id, &p)
+            }
+        }
+
+        #[ink(message)]
         pub fn remove_player_mtc(&mut self, account: AccountId) {
             self.only_allowed_caller();
 
@@ -282,90 +425,23 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn set_data_for_logic_start_mtc(
+        pub fn update_for_logic_finish_mtc_shop_finish_mtc(
             &mut self,
             account: AccountId,
-            player_health: u8,
+            player_ep: u16,
             player_seed: u64,
-            player_pool: Vec<mtc::Emo>,
-            player_grade_and_board_history: Vec<mtc::GradeAndBoard>,
-            player_battle_ghost_index: u8,
-            upgrade_coin: Option<u8>,
+            matchmaking_ghosts: Option<(u16, Vec<(AccountId, u16, mtc::Ghost)>)>,
         ) {
             self.only_allowed_caller();
 
-            self.player_health.insert(account, &player_health);
+            self.player_ep.insert(account, &player_ep);
             self.player_seed.insert(account, &player_seed);
-            self.player_pool.insert(account, &player_pool);
-            self.player_grade_and_board_history
-                .insert(account, &player_grade_and_board_history);
-            self.player_battle_ghost_index
-                .insert(account, &player_battle_ghost_index);
 
-            self.update_upgrade_coin(account, upgrade_coin);
-        }
-
-        #[ink(message)]
-        pub fn get_data_for_logic_finish_mtc_shop(
-            &self,
-            account: AccountId,
-        ) -> (
-            emo::Bases,
-            Vec<mtc::GradeAndBoard>,
-            Option<u8>,
-            Vec<mtc::Emo>,
-            u64,
-            u8,
-            u8,
-            Vec<mtc::GhostState>,
-            Vec<(AccountId, u16, mtc::Ghost)>,
-        ) {
-            (
-                self.get_emo_bases().expect("emo_bases none"),
-                self.get_player_grade_and_board_history(account)
-                    .expect("player_grade_and_board_history none"),
-                self.get_player_upgrade_coin(account),
-                self.get_player_pool(account).expect("player_pool none"),
-                self.get_player_seed(account).expect("player_seed none"),
-                self.get_player_health(account).expect("player_health none"),
-                self.get_player_battle_ghost_index(account)
-                    .expect("battle_ghost_index none"),
-                self.get_player_ghost_states(account)
-                    .expect("ghost_states none"),
-                self.get_player_ghosts(account).expect("player_ghosts none"),
-            )
-        }
-
-        #[ink(message)]
-        pub fn set_data_for_logic_finish_mtc_shop_finish_battle(
-            &mut self,
-            account: AccountId,
-            grade_and_board_history: Vec<mtc::GradeAndBoard>,
-            health: u8,
-            ghost_states: Vec<mtc::GhostState>,
-            battle_ghost_index: u8,
-            upgrade_coin: Option<u8>,
-        ) {
-            self.only_allowed_caller();
-
-            self.player_grade_and_board_history
-                .insert(account, &grade_and_board_history);
-            self.player_health.insert(account, &health);
-            self.player_ghost_states.insert(account, &ghost_states);
-            self.player_battle_ghost_index
-                .insert(account, &battle_ghost_index);
-
-            self.update_upgrade_coin(account, upgrade_coin);
-        }
-
-        // utils
-
-        fn update_upgrade_coin(&mut self, account: AccountId, upgrade_coin: Option<u8>) {
-            if let Some(c) = upgrade_coin {
-                self.player_upgrade_coin.insert(account, &c);
-            } else {
-                self.player_upgrade_coin.remove(&account);
+            if let Some((ep_band, g)) = matchmaking_ghosts {
+                self.matchmaking_ghosts.insert(ep_band, &g);
             }
+
+            self.remove_player_mtc(account);
         }
 
         // allowed accounts
