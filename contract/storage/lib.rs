@@ -425,57 +425,18 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_data_for_logic_finish_mtc_shop(
-            &self,
-            account: AccountId,
-        ) -> (
-            emo::Bases,
-            Vec<mtc::GradeAndBoard>,
-            Option<u8>,
-            Vec<mtc::Emo>,
-            u64,
-            u8,
-            u8,
-            Vec<mtc::GhostState>,
-            Vec<(AccountId, u16, mtc::Ghost)>,
-        ) {
-            (
-                self.get_emo_bases().expect("emo_bases none"),
-                self.get_player_grade_and_board_history(account)
-                    .expect("player_grade_and_board_history none"),
-                self.get_player_upgrade_coin(account)
-                    .expect("player_upgrade_coin none"),
-                self.get_player_pool(account).expect("player_pool none"),
-                self.get_player_seed(account).expect("player_seed none"),
-                self.get_player_health(account).expect("player_health none"),
-                self.get_player_battle_ghost_index(account)
-                    .expect("battle_ghost_index none"),
-                self.get_player_ghost_states(account)
-                    .expect("ghost_states none"),
-                self.get_player_ghosts(account).expect("player_ghosts none"),
-            )
-        }
-
-        #[ink(message)]
-        pub fn set_data_for_logic_finish_mtc_shop_finish_battle(
+        pub fn update_for_logic_finish_mtc_shop_finish_mtc(
             &mut self,
             account: AccountId,
-            grade_and_board_history: Vec<mtc::GradeAndBoard>,
-            health: u8,
-            ghost_states: Vec<mtc::GhostState>,
-            battle_ghost_index: u8,
-            upgrade_coin: Option<u8>,
+            matchmaking_ghosts: Option<(u16, Vec<(AccountId, u16, mtc::Ghost)>)>,
         ) {
             self.only_allowed_caller();
 
-            self.player_grade_and_board_history
-                .insert(account, &grade_and_board_history);
-            self.player_health.insert(account, &health);
-            self.player_ghost_states.insert(account, &ghost_states);
-            self.player_battle_ghost_index
-                .insert(account, &battle_ghost_index);
+            if let Some((ep_band, g)) = matchmaking_ghosts {
+                self.matchmaking_ghosts.insert(ep_band, &g);
+            }
 
-            self.player_upgrade_coin.insert(account, &upgrade_coin);
+            self.remove_player_mtc(account);
         }
 
         // allowed accounts
