@@ -428,9 +428,14 @@ pub mod contract {
         pub fn update_for_logic_finish_mtc_shop_finish_mtc(
             &mut self,
             account: AccountId,
+            player_ep: u16,
+            player_seed: u64,
             matchmaking_ghosts: Option<(u16, Vec<(AccountId, u16, mtc::Ghost)>)>,
         ) {
             self.only_allowed_caller();
+
+            self.player_ep.insert(account, &player_ep);
+            self.player_seed.insert(account, &player_seed);
 
             if let Some((ep_band, g)) = matchmaking_ghosts {
                 self.matchmaking_ghosts.insert(ep_band, &g);

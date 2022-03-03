@@ -150,22 +150,16 @@ pub mod contract {
         ) {
             grade_and_board_history.push(mtc::GradeAndBoard { grade, board });
 
-            let (
-                ep_opt,
-                health_opt,
-                grade_and_board_history_opt,
-                upgrade_coin_opt,
-                ghost_states_opt,
-                battle_ghost_index_opt,
-            ) = if let Some(place) = final_place {
-                (
-                    Some(self.finish_mtc(storage, account_id, place, &grade_and_board_history, ep)),
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                )
+            if let Some(place) = final_place {
+                let (new_ep, mathchmaking_ghosts_opt) =
+                    self.finish_mtc(storage, account_id, place, &grade_and_board_history, ep);
+
+                storage.update_for_logic_finish_mtc_shop_finish_mtc(
+                    account_id,
+                    new_ep,
+                    new_seed,
+                    mathchmaking_ghosts_opt,
+                );
             } else {
                 let (new_upgrade_coin, new_battle_ghost_index) = finish_battle(
                     upgrade_coin,
@@ -174,28 +168,19 @@ pub mod contract {
                     new_seed,
                     &grade_and_board_history,
                 );
-                (
+                storage.set_player_batch(
+                    account_id,
+                    None,
+                    Some(new_seed),
                     None,
                     Some(health),
                     Some(grade_and_board_history),
                     Some(new_upgrade_coin),
+                    None,
                     Some(ghost_states),
                     Some(new_battle_ghost_index),
-                )
-            };
-
-            storage.set_player_batch(
-                account_id,
-                ep_opt,
-                Some(new_seed),
-                None,
-                health_opt,
-                grade_and_board_history_opt,
-                upgrade_coin_opt,
-                None,
-                ghost_states_opt,
-                battle_ghost_index_opt,
-            );
+                );
+            }
         }
 
         fn finish_mtc(
@@ -205,7 +190,7 @@ pub mod contract {
             place: u8,
             grade_and_board_history: &[mtc::GradeAndBoard],
             ep: u16,
-        ) -> u16 {
+        ) -> (u16, Option<(u16, Vec<(AccountId, u16, mtc::Ghost)>)>) {
             let new_ep = calc_new_ep(place, ep);
 
             let mathchmaking_ghosts_opt = if place < 4 {
@@ -219,10 +204,7 @@ pub mod contract {
                 None
             };
 
-            storage
-                .update_for_logic_finish_mtc_shop_finish_mtc(account_id, mathchmaking_ghosts_opt);
-
-            new_ep
+            (new_ep, mathchmaking_ghosts_opt)
         }
 
         // allowed accounts
