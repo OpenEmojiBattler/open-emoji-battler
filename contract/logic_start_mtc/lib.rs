@@ -24,10 +24,9 @@ pub mod contract {
     impl Logic {
         #[ink(constructor)]
         pub fn new(storage_account_id: AccountId) -> Self {
-            let caller = Self::env().caller();
             Self {
                 storage_account_id,
-                allowed_accounts: vec![caller],
+                allowed_accounts: vec![Self::env().caller()],
             }
         }
 
@@ -37,35 +36,62 @@ pub mod contract {
 
             let mut storage = StorageRef::from_account_id(self.storage_account_id);
 
-            if storage.get_player_pool(caller).is_some() {
-                storage.remove_player_mtc(caller);
-                let ep = storage.get_player_ep(caller).expect("player ep none");
-                storage.set_player_ep(caller, ep.saturating_sub(EP_UNFINISH_PENALTY));
-            }
+            let (
+                emo_bases,
+                deck_fixed_emo_base_ids,
+                deck_built_emo_base_ids,
+                player_ep,
+                _,
+                _,
+                player_health,
+                ..,
+            ) = storage.get_player_batch(
+                caller, true, true, true, true, false, false, true, false, false, false, false,
+                false,
+            );
+
+            let ep = if player_health.is_some() {
+                // the previous mtc didn't normally finish
+                player_ep
+                    .expect("player ep none")
+                    .saturating_sub(EP_UNFINISH_PENALTY)
+            } else {
+                player_ep.unwrap_or(INITIAL_EP)
+            };
 
             let seed = self.get_random_seed(caller, b"start_mtc");
 
-            storage.set_data_for_logic_start_mtc(
-                caller,
-                PLAYER_INITIAL_HEALTH,
-                seed,
-                build_pool(
-                    &deck_emo_base_ids,
-                    &storage.get_emo_bases().expect("emo_bases none"),
-                    &storage
-                        .get_deck_fixed_emo_base_ids()
-                        .expect("deck_fixed_emo_base_ids none"),
-                    &storage
-                        .get_deck_built_emo_base_ids()
-                        .expect("deck_built_emo_base_ids none"),
-                )
-                .expect("failed to build player pool"),
-                Vec::new(),
-                0,
-                get_upgrade_coin(2),
-            );
+            let selected_ghosts =
+                choose_ghosts(ep, seed, &|ep_band| storage.get_matchmaking_ghosts(ep_band));
 
-            self.matchmake(caller, &mut storage, seed)
+            storage.set_player_batch(
+                caller,
+                if let Some(e) = player_ep {
+                    if e == ep {
+                        None
+                    } else {
+                        Some(ep)
+                    }
+                } else {
+                    Some(ep)
+                },
+                Some(seed),
+                Some(
+                    build_pool(
+                        &deck_emo_base_ids,
+                        &emo_bases.expect("emo_bases none"),
+                        &deck_fixed_emo_base_ids.expect("deck_fixed_emo_base_ids none"),
+                        &deck_built_emo_base_ids.expect("deck_built_emo_base_ids none"),
+                    )
+                    .expect("failed to build player pool"),
+                ),
+                Some(PLAYER_INITIAL_HEALTH),
+                Some(Vec::new()),
+                Some(get_upgrade_coin(2)),
+                Some(selected_ghosts),
+                Some(build_initial_ghost_states()),
+                Some(0),
+            );
         }
 
         fn get_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
@@ -73,19 +99,6 @@ pub mod contract {
                 .env()
                 .random(&self.env().hash_encoded::<Blake2x128, _>(&(subject, caller)));
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
-        }
-
-        fn matchmake(&self, account_id: AccountId, storage: &mut StorageRef, seed: u64) {
-            let ep = storage.get_player_ep(account_id).unwrap_or_else(|| {
-                storage.set_player_ep(account_id, INITIAL_EP);
-                INITIAL_EP
-            });
-
-            let selected =
-                choose_ghosts(ep, seed, &|ep_band| storage.get_matchmaking_ghosts(ep_band));
-
-            storage.set_player_ghosts(account_id, selected);
-            storage.set_player_ghost_states(account_id, build_initial_ghost_states());
         }
 
         // allowed accounts
