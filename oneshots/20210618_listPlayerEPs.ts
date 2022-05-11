@@ -1,11 +1,11 @@
 import { writeFileSync } from "fs"
 
-import { connected, getEnv, query } from "common"
+import { connected, getEnv } from "common"
 
 // result: https://gist.github.com/tash-2s/1c5e548c0722eef3ed548ec13927c3d1
 
-connected(getEnv("production").chainEndpoint, async () =>
-  query((q) => q.game.playerEp.entries()).then((entries) => {
+connected(getEnv("production").chainEndpoint, async (api) =>
+  api.query.game.playerEp.entries().then((entries) => {
     const data: [string, number][] = []
 
     for (const [key, value] of entries) {
