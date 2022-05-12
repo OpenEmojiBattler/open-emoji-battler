@@ -18,17 +18,9 @@ export const connected = async <T>(
   f: (api: ApiPromise) => Promise<T>,
   withTypes = true
 ) => {
-  let api: ApiPromise | null = null
-  try {
-    api = await connect(endpoint, withTypes)
-    await f(api)
-  } catch (e) {
-    console.error(e)
-  } finally {
-    if (api) {
-      await api.disconnect()
-    }
-  }
+  const api = await connect(endpoint, withTypes)
+  await f(api)
+  await api.disconnect()
 }
 
 export const connect = (endpoint: string, withTypes = true) => {
