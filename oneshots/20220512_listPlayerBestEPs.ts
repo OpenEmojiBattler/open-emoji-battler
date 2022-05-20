@@ -1,27 +1,25 @@
 import { writeFileSync, readFileSync } from "fs"
 
-import { connected, getEnv } from "common"
+import { connected } from "common"
 
-type Data = { blockNumber: number; bestEP: Record<string, number> }
+type Data = { blockNumber: { start: number; end: number }; bestEP: Record<string, number> }
 
 const dataFilePath = "./20220512_listPlayerBestEPs.json"
 
 const main = async () => {
   const data: Data = JSON.parse(readFileSync(dataFilePath, "utf8"))
-  if (data.blockNumber < 1) {
-    throw new Error("unexpected data")
-  }
-  data.blockNumber -= 1
 
-  console.log(`start: ${data.blockNumber}, ${new Date().toISOString()}`)
+  console.log(
+    `start: ${data.blockNumber.start}..=${data.blockNumber.end}, ${new Date().toISOString()}`
+  )
 
   await connected("ws://127.0.0.1:9944", async (api) => {
-    let blockHash = await api.rpc.chain.getBlockHash(data.blockNumber)
+    let blockHash = await api.rpc.chain.getBlockHash(data.blockNumber.start)
 
-    while (data.blockNumber > 0) {
+    while (data.blockNumber.start >= data.blockNumber.end) {
       const block = (await api.rpc.chain.getBlock(blockHash)).block
 
-      if (data.blockNumber !== block.header.number.unwrap().toNumber()) {
+      if (data.blockNumber.start !== block.header.number.unwrap().toNumber()) {
         throw new Error("unexpected data")
       }
 
@@ -54,12 +52,12 @@ const main = async () => {
         })
       }
 
-      if (data.blockNumber % 2000 === 0) {
+      if (data.blockNumber.start % 2000 === 0) {
         saveData(data)
-        console.log(`progress: ${data.blockNumber}, ${new Date().toISOString()}`)
+        console.log(`progress: ${data.blockNumber.start}, ${new Date().toISOString()}`)
       }
 
-      data.blockNumber -= 1
+      data.blockNumber.start -= 1
       blockHash = block.header.parentHash
     }
   })
