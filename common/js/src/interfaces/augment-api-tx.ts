@@ -4,7 +4,7 @@
 import type { emo_Bases, mtc_shop_PlayerOperation } from './all';
 import type { ApiTypes } from '@polkadot/api-base/types';
 import type { Bytes, Compact, Option, Vec, bool, u16, u32, u64 } from '@polkadot/types-codec';
-import type { AnyNumber } from '@polkadot/types-codec/types';
+import type { AnyNumber, IMethod } from '@polkadot/types-codec/types';
 import type { GrandpaEquivocationProof, KeyOwnerProof } from '@polkadot/types/interfaces/grandpa';
 import type { AccountId, Balance, BlockNumber, Call, ChangesTrieConfiguration, KeyValue, LookupSource, Moment, Perbill, Weight } from '@polkadot/types/interfaces/runtime';
 import type { Key } from '@polkadot/types/interfaces/system';
@@ -174,7 +174,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - Weight of derivative `call` execution + 10,000.
        * # </weight>
        **/
-      sudo: AugmentedSubmittable<(call: Call | { callIndex?: any; args?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Call]>;
+      sudo: AugmentedSubmittable<(call: Call | IMethod | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Call]>;
       /**
        * Authenticates the sudo key and dispatches a function call with `Signed` origin from
        * a given account.
@@ -188,7 +188,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - Weight of derivative `call` execution + 10,000.
        * # </weight>
        **/
-      sudoAs: AugmentedSubmittable<(who: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, call: Call | { callIndex?: any; args?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [LookupSource, Call]>;
+      sudoAs: AugmentedSubmittable<(who: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, call: Call | IMethod | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [LookupSource, Call]>;
       /**
        * Authenticates the sudo key and dispatches a function call with `Root` origin.
        * This function does not check the weight of the call, and instead allows the
@@ -201,7 +201,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - The weight of this call is defined by the caller.
        * # </weight>
        **/
-      sudoUncheckedWeight: AugmentedSubmittable<(call: Call | { callIndex?: any; args?: any } | string | Uint8Array, weight: Weight | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Call, Weight]>;
+      sudoUncheckedWeight: AugmentedSubmittable<(call: Call | IMethod | string | Uint8Array, weight: Weight | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Call, Weight]>;
       /**
        * Generic tx
        **/
