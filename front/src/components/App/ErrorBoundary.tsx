@@ -3,7 +3,7 @@ import * as React from "react"
 import { ModalWithoutClose } from "~/components/common/ModalWithoutClose"
 import { ModalWithReload } from "../common/ModalWithReload"
 
-export class ErrorBoundary extends React.Component {
+export class ErrorBoundary extends React.Component<{ children: React.ReactNode }> {
   state = { hasError: false }
 
   static getDerivedStateFromError(_error: Error) {

@@ -12,6 +12,7 @@ export class InternalLink extends React.Component<{
   to: RouteId | RouteIdWithParamsObj
   className?: string
   innerHTML?: string
+  children?: React.ReactNode
 }> {
   aRef = React.createRef<HTMLAnchorElement>()
 
