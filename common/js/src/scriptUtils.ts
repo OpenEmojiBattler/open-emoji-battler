@@ -18,7 +18,7 @@ export const getContractEnvAndKeyringPair = async (envName: string, mnemonic: st
   return { contract, keyringPair }
 }
 
-const getKeyringPair = async (mnemonic: string) => {
+export const getKeyringPair = async (mnemonic: string) => {
   if (!mnemonic) {
     console.log("Use Alice")
   }
