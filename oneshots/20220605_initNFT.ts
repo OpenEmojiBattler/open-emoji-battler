@@ -27,7 +27,7 @@ const main = async () => {
 
       if (step === 0) {
         const collectionMetadata = buildMetadata(
-          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' style='background:black'></svg>",
+          "<svg xmlns='http://www.w3.org/2000/svg' style='background:black'></svg>",
           "👑"
         )
 
