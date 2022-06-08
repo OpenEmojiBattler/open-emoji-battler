@@ -9,11 +9,7 @@ import { getKeyringPair } from "common/src/scriptUtils"
 
 const main = async () => {
   const target = getTarget()
-  const collectionId = 123
-  const collectionMetadata = buildMetadata(
-    "<svg xmlns='http://www.w3.org/2000/svg' style='background:black'></svg>",
-    "👑"
-  )
+  const collectionId = 3
 
   const sender = await getKeyringPair(process.argv[2])
 
@@ -22,14 +18,19 @@ const main = async () => {
     throw new Error("invalid step")
   }
 
-  console.log(`sender: ${sender.address}`)
+  console.log(`step: ${step}, sender: ${sender.address}`)
 
   await connected(
-    "wss://westmint-rpc.polkadot.io",
+    "wss://statemine-rpc.polkadot.io",
     async (api) => {
       const txs: Array<SubmittableExtrinsic<"promise">> = []
 
       if (step === 0) {
+        const collectionMetadata = buildMetadata(
+          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' style='background:black'></svg>",
+          "👑"
+        )
+
         txs.push(
           api.tx.uniques.create(collectionId, sender.address),
           api.tx.uniques.setClassMetadata(collectionId, collectionMetadata, false)
@@ -46,7 +47,7 @@ const main = async () => {
 
         const [emoji, addresses] = target[targetIndex]
         const itemMetadata = buildMetadata(
-          `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 -7 9 9'><text font-size='7'>${emoji}</text></svg>`
+          `<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -5 9 9'><text font-size='1'>${emoji}</text></svg>`
         )
         for (const address of addresses) {
           txs.push(
