@@ -60,6 +60,7 @@ const main = async () => {
               stringToHex(emoji)
             )
           )
+          itemId++
         }
       }
 
