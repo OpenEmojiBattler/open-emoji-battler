@@ -76,3 +76,5 @@ export const solvePowPure = (solver: SolverFn, publicKey: Uint8Array, count: num
 
 export const getPowWasmBytes = () => decode(base64)
 export const getPowSolutionBNFromBytes = (solution: Uint8Array) => new BN(solution, undefined, "le")
+
+export const range = (n: number) => Array.from(new Array(n), (_, i) => i)
