@@ -18,8 +18,8 @@ export function Top() {
                 </h1>
               </div>
               <div className={"block"}>
-                <ExternalLink href="https://app.subsocial.network/@OpenEmojiBattler/what-is-open-emoji-battler-18370">
-                  About
+                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/60">
+                  <strong>About</strong>
                 </ExternalLink>
                 <span className={"mx-3"}>•</span>
                 <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/17">
