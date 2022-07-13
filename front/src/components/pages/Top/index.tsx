@@ -14,7 +14,7 @@ export function Top() {
               <div className={"block"}>
                 <h1 className={"is-size-3"}>
                   <strong>Open Emoji Battler</strong>
-                  <span> is a decentralized competitive game led by the community.</span>
+                  <span> is a decentralized multiplayer game owned by the community.</span>
                 </h1>
               </div>
               <div className={"block"}>
@@ -67,7 +67,7 @@ export function Top() {
       </section>
       <section style={{ padding: "4rem 1.5rem 3rem" }}>
         <div className={"top-container"}>
-          <h1 className={"title"}>What is this?</h1>
+          <h1 className={"title"}>What is Open Emoji Battler?</h1>
           <div className={"content"}>
             <ul>
               <li>
@@ -75,41 +75,38 @@ export function Top() {
                 Polkadot ecosystem.
               </li>
               <li>
-                <strong>Decentralized</strong>: The DAO governs this project. In contrast, most
-                other blockchain games are centralized.
+                <strong>Decentralization</strong>: The DAO owns and governs this project, whereas
+                most other blockchain games are centralized.
               </li>
               <li>
-                <strong>Community</strong>: Open Emoji Battler is not a company. Instead,{" "}
-                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/38">
-                  it's an independent community project
-                </ExternalLink>{" "}
-                made by contributors.
+                <strong>Community</strong>: Open Emoji Battler is not a company. Instead, it's an
+                independent community project made by contributors.
               </li>
               <li>
-                <strong>Fun</strong>: We have skilled gameplay! It's a browser auto-battler game
-                inspired by Hearthstone Battlegrounds. Players can battle and earn in strategic PvP
-                matches with emojis. 😁
+                <strong>Fun & Sustainable</strong>: We have skilled gameplay. It's an auto-battler
+                game playable in your browser. Players battle in strategic PvP matches with their
+                emoji units. 😎
               </li>
             </ul>
+            <p>
+              <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/60">
+                Learn more.
+              </ExternalLink>
+            </p>
           </div>
           <h1 className={"title"}>Plan</h1>
           <div className={"content"}>
-            <p>We already have a minimum playable prototype. So what's coming next?</p>
+            <p>We have a minimum playable prototype now. So what's coming next?</p>
             <ul>
               <li>Gameplay upgrade</li>
-              <li>EMO NFT</li>
+              <li>Leaderboard and prizes</li>
+              <li>NFT</li>
               <li>DAO</li>
-              <li>Play-to-Earn</li>
-              <li>Tutorial</li>
+              <li>Tutorial and guide</li>
+              <li>Graphics/UI/UX upgrade</li>
+              <li>Growth</li>
               <li>and more...</li>
             </ul>
-            <p>
-              The detail can be found{" "}
-              <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/37">
-                here
-              </ExternalLink>
-              .
-            </p>
           </div>
           <h1 className={"title"}>Partnerships</h1>
           <div className={"content"}>
