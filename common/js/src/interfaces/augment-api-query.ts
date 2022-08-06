@@ -1,8 +1,12 @@
 // Auto-generated via `yarn polkadot-types-from-chain`, do not edit
 /* eslint-disable */
 
+// import type lookup before we augment - in some environments
+// this is required to allow for ambient/previous definitions
+import '@polkadot/api-base/types/storage';
+
 import type { emo_Bases, mtc_Emo, mtc_Ghost, mtc_GhostState, mtc_GradeAndBoard } from './all';
-import type { ApiTypes } from '@polkadot/api-base/types';
+import type { ApiTypes, AugmentedQuery, QueryableStorageEntry } from '@polkadot/api-base/types';
 import type { Bytes, Option, Vec, bool, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { AnyNumber, ITuple } from '@polkadot/types-codec/types';
 import type { AccountData, BalanceLock } from '@polkadot/types/interfaces/balances';
@@ -13,8 +17,11 @@ import type { AccountInfo, ConsumedWeight, DigestOf, EventIndex, EventRecord, La
 import type { Multiplier } from '@polkadot/types/interfaces/txpayment';
 import type { Observable } from '@polkadot/types/types';
 
+export type __AugmentedQuery<ApiType extends ApiTypes> = AugmentedQuery<ApiType, () => unknown>;
+export type __QueryableStorageEntry<ApiType extends ApiTypes> = QueryableStorageEntry<ApiType>;
+
 declare module '@polkadot/api-base/types/storage' {
-  export interface AugmentedQueries<ApiType extends ApiTypes> {
+  interface AugmentedQueries<ApiType extends ApiTypes> {
     balances: {
       /**
        * The balance of an account.

@@ -1,8 +1,7 @@
 import * as React from "react"
 
-import { mtc_Emo } from "common"
+import { mtc_Emo, range } from "common"
 
-import { range } from "~/misc/utils"
 import { Operation } from "./tasks"
 
 export function EmoLineButtons(props: {
