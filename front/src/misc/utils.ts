@@ -17,8 +17,6 @@ export const groupBy = <K, V>(
     }, new Map<K, V[]>())
   )
 
-export const range = (n: number) => Array.from(new Array(n), (_, i) => i)
-
 export const checkArraysEquality = <T>(a: T[], b: T[]) => {
   if (a.length !== b.length) return false
 
