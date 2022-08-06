@@ -24,11 +24,10 @@ where
     let mut circuitbreaker = 0u8;
 
     loop {
-        let mut ghosts = get_ghosts(ep_band)
+        let ghosts = get_ghosts(ep_band)
             .unwrap_or_default()
             .into_iter()
             .choose_multiple(&mut rng, n);
-        ghosts.shuffle(&mut rng);
         selected.extend(ghosts);
 
         if selected.len() >= GHOST_COUNT || ep_band < 1 {
@@ -42,6 +41,7 @@ where
             break;
         }
     }
+    selected.shuffle(&mut rng);
 
     if selected.len() < GHOST_COUNT {
         for _ in 0..(GHOST_COUNT - selected.len()) {
