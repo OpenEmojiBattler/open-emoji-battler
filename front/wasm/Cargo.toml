@@ -8,13 +8,13 @@ license = "Apache-2.0"
 crate-type = ["cdylib"]
 
 [dependencies]
-common = { path = '../../common/rs', default-features = false, features = ['front'] }
-wasm-bindgen = "0.2.79"
-parity-scale-codec = { version = "2", default-features = false, features = ["derive"] }
+common = { path = "../../common/rs", default-features = false, features = ["front"] }
+wasm-bindgen = "0.2.82"
+parity-scale-codec = { version = "3", default-features = false, features = ["derive"] }
 wee_alloc = "0.4.5"
 console_error_panic_hook = "0.1.7"
 hex = "0.4.3"
-anyhow = { version = "1.0.53", default-features = false }
+anyhow = { version = "1.0.59", default-features = false }
 
 [profile.release]
 opt-level = "z"
