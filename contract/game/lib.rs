@@ -1,29 +1,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use common::{
-    codec_types::*,
-    mtc::{
-        battle::organizer::{battle_all, select_battle_ghost_index},
-        ep::MIN_EP,
-        finish::{exceeds_grade_and_board_history_limit, get_turn_and_previous_grade_and_board},
-        ghost::{build_matchmaking_ghosts, separate_player_ghosts},
-        shop::{
-            coin::decrease_upgrade_coin, player_operation::verify_player_operations_and_update,
-        },
-    },
-};
+use common::{codec_types::*, mtc::*};
 use ink_lang as ink;
 
 #[ink::contract]
 pub mod contract {
     use super::*;
-    use common::mtc::*;
-    use common::mtc::{
-        ep::{EP_UNFINISH_PENALTY, INITIAL_EP},
-        ghost::choose_ghosts,
-        setup::{build_initial_ghost_states, build_pool, PLAYER_INITIAL_HEALTH},
-        shop::coin::get_upgrade_coin,
-    };
     use ink_env::hash::Blake2x128;
     use ink_prelude::vec::Vec;
     use ink_storage::{traits::SpreadAllocate, Mapping};
@@ -112,15 +94,15 @@ pub mod contract {
                 // the previous mtc didn't normally finish
                 player_ep
                     .expect("player ep none")
-                    .saturating_sub(EP_UNFINISH_PENALTY)
+                    .saturating_sub(ep::EP_UNFINISH_PENALTY)
             } else {
-                player_ep.unwrap_or(INITIAL_EP)
+                player_ep.unwrap_or(ep::INITIAL_EP)
             };
 
             let seed = self.get_random_seed(caller, b"start_mtc");
 
             let selected_ghosts =
-                choose_ghosts(ep, seed, &|ep_band| self.matchmaking_ghosts.get(ep_band));
+                ghost::choose_ghosts(ep, seed, &|ep_band| self.matchmaking_ghosts.get(ep_band));
 
             if let Some(e) = player_ep {
                 if e != ep {
@@ -132,7 +114,7 @@ pub mod contract {
             self.player_seed.insert(caller, &seed);
             self.player_pool.insert(
                 caller,
-                &build_pool(
+                &setup::build_pool(
                     &deck_emo_base_ids,
                     &emo_bases.expect("emo_bases none"),
                     &deck_fixed_emo_base_ids.expect("deck_fixed_emo_base_ids none"),
@@ -140,14 +122,15 @@ pub mod contract {
                 )
                 .expect("failed to build player pool"),
             );
-            self.player_health.insert(caller, &PLAYER_INITIAL_HEALTH);
+            self.player_health
+                .insert(caller, &setup::PLAYER_INITIAL_HEALTH);
             self.player_grade_and_board_history
                 .insert(caller, &Vec::<mtc::GradeAndBoard>::new());
             self.player_upgrade_coin
-                .insert(caller, &get_upgrade_coin(2));
+                .insert(caller, &shop::coin::get_upgrade_coin(2));
             self.player_ghosts.insert(caller, &selected_ghosts);
             self.player_ghost_states
-                .insert(caller, &build_initial_ghost_states());
+                .insert(caller, &setup::build_initial_ghost_states());
             self.player_battle_ghost_index.insert(caller, &0);
         }
 
@@ -181,9 +164,9 @@ pub mod contract {
                     mut grade,
                     mut board,
                 },
-            ) = get_turn_and_previous_grade_and_board(&grade_and_board_history);
+            ) = finish::get_turn_and_previous_grade_and_board(&grade_and_board_history);
 
-            board = verify_player_operations_and_update(
+            board = shop::player_operation::verify_player_operations_and_update(
                 board,
                 &mut grade,
                 &mut upgrade_coin,
@@ -197,9 +180,9 @@ pub mod contract {
 
             let new_seed = self.get_random_seed(caller, b"finish_mtc_shop");
             let (ghosts, _ghost_eps) =
-                separate_player_ghosts(player_ghosts.expect("player_ghosts none"));
+                ghost::separate_player_ghosts(player_ghosts.expect("player_ghosts none"));
 
-            let final_place = battle_all(
+            let final_place = battle::organizer::battle_all(
                 &board,
                 &mut health,
                 &mut ghost_states,
@@ -292,7 +275,7 @@ pub mod contract {
             let new_ep = calc_new_ep(place, ep);
 
             let mathchmaking_ghosts_opt = if place < 4 {
-                Some(build_matchmaking_ghosts(
+                Some(ghost::build_matchmaking_ghosts(
                     &account_id,
                     new_ep,
                     grade_and_board_history,
@@ -424,14 +407,14 @@ fn finish_battle(
     new_seed: u64,
     grade_and_board_history: &[mtc::GradeAndBoard],
 ) -> (Option<u8>, u8) {
-    if exceeds_grade_and_board_history_limit(grade_and_board_history) {
+    if finish::exceeds_grade_and_board_history_limit(grade_and_board_history) {
         panic!("max turn exceeded");
     }
 
-    let upgrade_coin = decrease_upgrade_coin(upgrade_coin);
+    let upgrade_coin = shop::coin::decrease_upgrade_coin(upgrade_coin);
 
     let new_battle_ghost_index =
-        select_battle_ghost_index(ghost_states, battle_ghost_index, new_seed)
+        battle::organizer::select_battle_ghost_index(ghost_states, battle_ghost_index, new_seed)
             .expect("battle ghost selection failed");
 
     (upgrade_coin, new_battle_ghost_index)
@@ -444,10 +427,10 @@ fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
         3 => old_ep,
         4 => {
             let e = old_ep.saturating_sub(40);
-            if e > MIN_EP {
+            if e > ep::MIN_EP {
                 e
             } else {
-                MIN_EP
+                ep::MIN_EP
             }
         }
         _ => panic!("unsupported place"),
