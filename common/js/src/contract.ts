@@ -4,14 +4,10 @@ import { ContractPromise } from "@polkadot/api-contract"
 import { tx } from "./api"
 import type { KeyringPairOrAddressAndSigner } from "./utils"
 
-import storageAbi from "../../../contract/deploy/202109210_init/storage.json"
-import forwarderAbi from "../../../contract/deploy/202109210_init/forwarder.json"
+import gameAbi from "../../../contract/deploy/202109210_init/game.json"
 
-export const getStorageContract = (api: ApiPromise, address: string) =>
-  new ContractPromise(api, storageAbi, address)
-
-export const getForwarderContract = (api: ApiPromise, address: string) =>
-  new ContractPromise(api, forwarderAbi, address)
+export const getGameContract = (api: ApiPromise, address: string) =>
+  new ContractPromise(api, gameAbi, address)
 
 export const queryContract = async (
   contract: ContractPromise,

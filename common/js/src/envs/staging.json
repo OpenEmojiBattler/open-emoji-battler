@@ -4,7 +4,6 @@
   "contract": {
     "name": "",
     "endpoint": "",
-    "storageAddress": "",
-    "forwarderAddress": ""
+    "gameAddress": ""
   }
 }

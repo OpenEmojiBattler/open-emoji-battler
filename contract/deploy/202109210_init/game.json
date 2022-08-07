@@ -1,11 +1,11 @@
 {
   "source": {
-    "hash": "0xeda40de151d378102d5bd918dacb2c21e7e648d688a71858faa2ad318c098710",
-    "language": "ink! 3.0.0-rc9",
-    "compiler": "rustc 1.60.0-nightly"
+    "hash": "0x439b55d6239f3a5d3ec7bf5beba337e21f84ff15bd3ec5f93c75f1cba924dd13",
+    "language": "ink! 3.3.0",
+    "compiler": "rustc 1.64.0-nightly"
   },
   "contract": {
-    "name": "storage",
+    "name": "game",
     "version": "0.1.0",
     "authors": [
       "Open Emoji Battler"
@@ -27,6 +27,106 @@
       "events": [],
       "messages": [
         {
+          "args": [
+            {
+              "label": "code_hash",
+              "type": {
+                "displayName": [],
+                "type": 41
+              }
+            }
+          ],
+          "docs": [],
+          "label": "set_code",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x694fb50f"
+        },
+        {
+          "args": [
+            {
+              "label": "new_bases",
+              "type": {
+                "displayName": [
+                  "emo",
+                  "Bases"
+                ],
+                "type": 70
+              }
+            },
+            {
+              "label": "fixed_base_ids",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 36
+              }
+            },
+            {
+              "label": "built_base_ids",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 36
+              }
+            },
+            {
+              "label": "force_bases_update",
+              "type": {
+                "displayName": [
+                  "bool"
+                ],
+                "type": 16
+              }
+            }
+          ],
+          "docs": [],
+          "label": "update_emo_bases",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xd1bd8ea7"
+        },
+        {
+          "args": [
+            {
+              "label": "deck_emo_base_ids",
+              "type": {
+                "displayName": [],
+                "type": 71
+              }
+            }
+          ],
+          "docs": [],
+          "label": "start_mtc",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x04bfdb29"
+        },
+        {
+          "args": [
+            {
+              "label": "player_operations",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 72
+              }
+            }
+          ],
+          "docs": [],
+          "label": "finish_mtc_shop",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xfbd3f532"
+        },
+        {
           "args": [],
           "docs": [],
           "label": "get_emo_bases",
@@ -36,28 +136,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 70
+            "type": 75
           },
           "selector": "0x7864382a"
-        },
-        {
-          "args": [
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 70
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_emo_bases",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x7a393350"
         },
         {
           "args": [],
@@ -69,28 +150,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 72
+            "type": 76
           },
           "selector": "0x3e89cbad"
-        },
-        {
-          "args": [
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 72
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_deck_fixed_emo_base_ids",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x838a1328"
         },
         {
           "args": [],
@@ -102,28 +164,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 72
+            "type": 76
           },
           "selector": "0x5604c526"
-        },
-        {
-          "args": [
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 72
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_deck_built_emo_base_ids",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x25cde072"
         },
         {
           "args": [
@@ -145,56 +188,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 73
+            "type": 77
           },
           "selector": "0x5d04aced"
-        },
-        {
-          "args": [
-            {
-              "label": "ep_band",
-              "type": {
-                "displayName": [
-                  "u16"
-                ],
-                "type": 1
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 38
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_matchmaking_ghosts",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xc9f45dd6"
-        },
-        {
-          "args": [
-            {
-              "label": "ep_band",
-              "type": {
-                "displayName": [
-                  "u16"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_matchmaking_ghosts",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x3597d231"
         },
         {
           "args": [
@@ -216,56 +212,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 74
+            "type": 78
           },
           "selector": "0xa7a3db39"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "u16"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_ep",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x5ac44f3e"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_ep",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xa7147181"
         },
         {
           "args": [
@@ -287,56 +236,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 75
+            "type": 79
           },
           "selector": "0x09425436"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "u64"
-                ],
-                "type": 52
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_seed",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xb49918c7"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_seed",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xde5a1632"
         },
         {
           "args": [
@@ -358,56 +260,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 76
+            "type": 80
           },
           "selector": "0x83e00bfa"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 54
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_pool",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xf200ee58"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_pool",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xa8ed1dc9"
         },
         {
           "args": [
@@ -443,53 +298,6 @@
                 ],
                 "type": 40
               }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "u8"
-                ],
-                "type": 5
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_health",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xd2bf1525"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_health",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xa7269337"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
             }
           ],
           "docs": [],
@@ -500,56 +308,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 77
+            "type": 81
           },
           "selector": "0x4dd1791b"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 58
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_grade_and_board_history",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xe842181b"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_grade_and_board_history",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x343ac42e"
         },
         {
           "args": [
@@ -571,56 +332,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 78
+            "type": 82
           },
           "selector": "0xdf1f8165"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 64
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_upgrade_coin",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x9ccfabad"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_upgrade_coin",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x1d8e9ab3"
         },
         {
           "args": [
@@ -642,56 +356,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 73
+            "type": 77
           },
           "selector": "0xb12c7ae3"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 38
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_ghosts",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x313fe40f"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_ghosts",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x3b727975"
         },
         {
           "args": [
@@ -713,56 +380,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 79
+            "type": 83
           },
           "selector": "0x2235eb1c"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 67
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_ghost_states",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x3018fabc"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_ghost_states",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x5d679eca"
         },
         {
           "args": [
@@ -787,348 +407,6 @@
             "type": 64
           },
           "selector": "0x5cbf6203"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "u8"
-                ],
-                "type": 5
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_battle_ghost_index",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x5028205d"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_battle_ghost_index",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x3ce4d740"
-        },
-        {
-          "args": [
-            {
-              "label": "player_id",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "emo_bases",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "deck_fixed_emo_base_ids",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "deck_built_emo_base_ids",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_ep",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_seed",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_pool",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_health",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_grade_and_board_history",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_upgrade_coin",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_ghosts",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_ghost_states",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_battle_ghost_index",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_batch",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [],
-            "type": 80
-          },
-          "selector": "0x13f473a4"
-        },
-        {
-          "args": [
-            {
-              "label": "player_id",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "player_ep",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 74
-              }
-            },
-            {
-              "label": "player_seed",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 75
-              }
-            },
-            {
-              "label": "player_pool",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 76
-              }
-            },
-            {
-              "label": "player_health",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 64
-              }
-            },
-            {
-              "label": "player_grade_and_board_history",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 77
-              }
-            },
-            {
-              "label": "player_upgrade_coin",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 78
-              }
-            },
-            {
-              "label": "player_ghosts",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 73
-              }
-            },
-            {
-              "label": "player_ghost_states",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 79
-              }
-            },
-            {
-              "label": "player_battle_ghost_index",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 64
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_batch",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x241717f7"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_mtc",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x4f9a0e50"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "player_ep",
-              "type": {
-                "displayName": [
-                  "u16"
-                ],
-                "type": 1
-              }
-            },
-            {
-              "label": "player_seed",
-              "type": {
-                "displayName": [
-                  "u64"
-                ],
-                "type": 52
-              }
-            },
-            {
-              "label": "matchmaking_ghosts",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 81
-              }
-            }
-          ],
-          "docs": [],
-          "label": "update_for_logic_finish_mtc_shop_finish_mtc",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x1044b977"
         },
         {
           "args": [],
@@ -3531,39 +2809,6 @@
         "id": 70,
         "type": {
           "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 71
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 71
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 71,
-        "type": {
-          "def": {
             "composite": {
               "fields": [
                 {
@@ -3582,7 +2827,135 @@
         }
       },
       {
+        "id": 71,
+        "type": {
+          "def": {
+            "array": {
+              "len": 6,
+              "type": 1
+            }
+          }
+        }
+      },
+      {
         "id": 72,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 73
+            }
+          }
+        }
+      },
+      {
+        "id": 73,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "name": "mtc_emo_id",
+                      "type": 1,
+                      "typeName": "u16"
+                    },
+                    {
+                      "name": "index",
+                      "type": 5,
+                      "typeName": "u8"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Buy"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "index",
+                      "type": 5,
+                      "typeName": "u8"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Sell"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "indexes",
+                      "type": 74,
+                      "typeName": "Vec<u8>"
+                    }
+                  ],
+                  "index": 2,
+                  "name": "Move"
+                },
+                {
+                  "index": 3,
+                  "name": "NextCatalogLine"
+                },
+                {
+                  "index": 4,
+                  "name": "Upgrade"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "shop",
+            "PlayerOperation"
+          ]
+        }
+      },
+      {
+        "id": 74,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 5
+            }
+          }
+        }
+      },
+      {
+        "id": 75,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 70
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 70
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 76,
         "type": {
           "def": {
             "variant": {
@@ -3615,7 +2988,7 @@
         }
       },
       {
-        "id": 73,
+        "id": 77,
         "type": {
           "def": {
             "variant": {
@@ -3648,7 +3021,7 @@
         }
       },
       {
-        "id": 74,
+        "id": 78,
         "type": {
           "def": {
             "variant": {
@@ -3681,7 +3054,7 @@
         }
       },
       {
-        "id": 75,
+        "id": 79,
         "type": {
           "def": {
             "variant": {
@@ -3714,7 +3087,7 @@
         }
       },
       {
-        "id": 76,
+        "id": 80,
         "type": {
           "def": {
             "variant": {
@@ -3747,7 +3120,7 @@
         }
       },
       {
-        "id": 77,
+        "id": 81,
         "type": {
           "def": {
             "variant": {
@@ -3780,7 +3153,7 @@
         }
       },
       {
-        "id": 78,
+        "id": 82,
         "type": {
           "def": {
             "variant": {
@@ -3813,7 +3186,7 @@
         }
       },
       {
-        "id": 79,
+        "id": 83,
         "type": {
           "def": {
             "variant": {
@@ -3843,71 +3216,6 @@
           "path": [
             "Option"
           ]
-        }
-      },
-      {
-        "id": 80,
-        "type": {
-          "def": {
-            "tuple": [
-              70,
-              72,
-              72,
-              74,
-              75,
-              76,
-              64,
-              77,
-              78,
-              73,
-              79,
-              64
-            ]
-          }
-        }
-      },
-      {
-        "id": 81,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 82
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 82
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 82,
-        "type": {
-          "def": {
-            "tuple": [
-              1,
-              38
-            ]
-          }
         }
       }
     ]
