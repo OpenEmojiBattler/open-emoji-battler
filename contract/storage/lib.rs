@@ -4,9 +4,17 @@ use ink_lang as ink;
 
 #[ink::contract]
 pub mod contract {
+    use common::mtc::{
+        ep::{EP_UNFINISH_PENALTY, INITIAL_EP},
+        ghost::choose_ghosts,
+        setup::{build_initial_ghost_states, build_pool, PLAYER_INITIAL_HEALTH},
+        shop::coin::get_upgrade_coin,
+    };
     use common::{codec_types::*, mtc::*};
+    use ink_env::hash::Blake2x128;
     use ink_prelude::vec::Vec;
     use ink_storage::{traits::SpreadAllocate, Mapping};
+    use scale::Decode;
 
     #[ink(storage)]
     #[derive(SpreadAllocate)]
@@ -63,6 +71,75 @@ pub mod contract {
             self.set_emo_bases(Some(bases));
             self.set_deck_fixed_emo_base_ids(Some(fixed_base_ids));
             self.set_deck_built_emo_base_ids(Some(built_base_ids));
+        }
+
+        #[ink(message)]
+        pub fn start_mtc(&mut self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
+            self.only_allowed_caller();
+
+            let (
+                emo_bases,
+                deck_fixed_emo_base_ids,
+                deck_built_emo_base_ids,
+                player_ep,
+                _,
+                _,
+                player_health,
+                ..,
+            ) = self.get_player_batch(
+                caller, true, true, true, true, false, false, true, false, false, false, false,
+                false,
+            );
+
+            let ep = if player_health.is_some() {
+                // the previous mtc didn't normally finish
+                player_ep
+                    .expect("player ep none")
+                    .saturating_sub(EP_UNFINISH_PENALTY)
+            } else {
+                player_ep.unwrap_or(INITIAL_EP)
+            };
+
+            let seed = self.get_random_seed(caller, b"start_mtc");
+
+            let selected_ghosts =
+                choose_ghosts(ep, seed, &|ep_band| self.get_matchmaking_ghosts(ep_band));
+
+            self.set_player_batch(
+                caller,
+                if let Some(e) = player_ep {
+                    if e == ep {
+                        None
+                    } else {
+                        Some(ep)
+                    }
+                } else {
+                    Some(ep)
+                },
+                Some(seed),
+                Some(
+                    build_pool(
+                        &deck_emo_base_ids,
+                        &emo_bases.expect("emo_bases none"),
+                        &deck_fixed_emo_base_ids.expect("deck_fixed_emo_base_ids none"),
+                        &deck_built_emo_base_ids.expect("deck_built_emo_base_ids none"),
+                    )
+                    .expect("failed to build player pool"),
+                ),
+                Some(PLAYER_INITIAL_HEALTH),
+                Some(Vec::new()),
+                Some(get_upgrade_coin(2)),
+                Some(selected_ghosts),
+                Some(build_initial_ghost_states()),
+                Some(0),
+            );
+        }
+
+        fn get_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
+            let (seed, _) = self
+                .env()
+                .random(&self.env().hash_encoded::<Blake2x128, _>(&(subject, caller)));
+            <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
 
         #[ink(message)]
