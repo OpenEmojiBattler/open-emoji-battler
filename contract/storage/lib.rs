@@ -87,7 +87,8 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn start_mtc(&mut self, caller: AccountId, deck_emo_base_ids: [u16; 6]) {
+        pub fn start_mtc(&mut self, deck_emo_base_ids: [u16; 6]) {
+            let caller = self.env().caller();
             self.only_allowed_caller();
 
             let (
@@ -149,11 +150,8 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn finish_mtc_shop(
-            &mut self,
-            caller: AccountId,
-            player_operations: Vec<mtc::shop::PlayerOperation>,
-        ) {
+        pub fn finish_mtc_shop(&mut self, player_operations: Vec<mtc::shop::PlayerOperation>) {
+            let caller = self.env().caller();
             self.only_allowed_caller();
 
             let (
