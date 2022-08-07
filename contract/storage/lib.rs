@@ -63,6 +63,18 @@ pub mod contract {
         }
 
         #[ink(message)]
+        pub fn set_code(&mut self, code_hash: [u8; 32]) {
+            self.only_allowed_caller();
+
+            ink_env::set_code_hash(&code_hash).unwrap_or_else(|err| {
+                panic!(
+                    "Failed to `set_code_hash` to {:?} due to {:?}",
+                    code_hash, err
+                )
+            });
+        }
+
+        #[ink(message)]
         pub fn update_emo_bases(
             &mut self,
             new_bases: emo::Bases,
