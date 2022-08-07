@@ -4,7 +4,7 @@ use ink_lang as ink;
 
 #[ink::contract]
 pub mod contract {
-    use common::codec_types::*;
+    use common::{codec_types::*, mtc::*};
     use ink_prelude::vec::Vec;
     use ink_storage::{traits::SpreadAllocate, Mapping};
 
@@ -39,6 +39,30 @@ pub mod contract {
             ink_lang::utils::initialize_contract(|contract: &mut Self| {
                 contract.allowed_accounts.push(Self::env().caller());
             })
+        }
+
+        #[ink(message)]
+        pub fn update_emo_bases(
+            &mut self,
+            new_bases: emo::Bases,
+            fixed_base_ids: Vec<u16>,
+            built_base_ids: Vec<u16>,
+            force_bases_update: bool,
+        ) {
+            self.only_allowed_caller();
+
+            let bases = emo_bases::check_and_build_emo_bases(
+                self.get_emo_bases(),
+                new_bases,
+                &fixed_base_ids,
+                &built_base_ids,
+                force_bases_update,
+            )
+            .expect("update_emo_bases: invalig arg");
+
+            self.set_emo_bases(Some(bases));
+            self.set_deck_fixed_emo_base_ids(Some(fixed_base_ids));
+            self.set_deck_built_emo_base_ids(Some(built_base_ids));
         }
 
         #[ink(message)]

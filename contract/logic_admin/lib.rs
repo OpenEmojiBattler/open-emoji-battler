@@ -24,32 +24,6 @@ pub mod contract {
             }
         }
 
-        #[ink(message)]
-        pub fn update_emo_bases(
-            &mut self,
-            new_bases: emo::Bases,
-            fixed_base_ids: Vec<u16>,
-            built_base_ids: Vec<u16>,
-            force_bases_update: bool,
-        ) {
-            self.only_allowed_caller();
-
-            let mut storage = StorageRef::from_account_id(self.storage_account_id);
-
-            let bases = check_and_build_emo_bases(
-                storage.get_emo_bases(),
-                new_bases,
-                &fixed_base_ids,
-                &built_base_ids,
-                force_bases_update,
-            )
-            .expect("update_emo_bases: invalig arg");
-
-            storage.set_emo_bases(Some(bases));
-            storage.set_deck_fixed_emo_base_ids(Some(fixed_base_ids));
-            storage.set_deck_built_emo_base_ids(Some(built_base_ids));
-        }
-
         // allowed accounts
 
         #[ink(message)]
