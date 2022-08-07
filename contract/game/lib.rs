@@ -31,7 +31,7 @@ pub mod contract {
 
     #[ink(storage)]
     #[derive(SpreadAllocate)]
-    pub struct Storage {
+    pub struct Contract {
         emo_bases: Option<emo::Bases>,
         deck_fixed_emo_base_ids: Option<Vec<u16>>,
         deck_built_emo_base_ids: Option<Vec<u16>>,
@@ -54,7 +54,7 @@ pub mod contract {
         allowed_accounts: Vec<AccountId>,
     }
 
-    impl Storage {
+    impl Contract {
         #[ink(constructor)]
         pub fn new() -> Self {
             ink_lang::utils::initialize_contract(|contract: &mut Self| {
