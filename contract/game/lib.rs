@@ -67,7 +67,7 @@ pub mod contract {
             self.only_allowed_caller();
 
             let bases = emo_bases::check_and_build_emo_bases(
-                self.get_emo_bases(),
+                self.emo_bases.clone(),
                 new_bases,
                 &fixed_base_ids,
                 &built_base_ids,
@@ -234,13 +234,13 @@ pub mod contract {
             grade_and_board_history.push(mtc::GradeAndBoard { grade, board });
 
             if let Some(place) = final_place {
-                let (new_ep, mathchmaking_ghosts_opt) =
+                let (new_ep, matchmaking_ghosts_opt) =
                     self.finish_mtc(account_id, place, &grade_and_board_history, ep);
 
                 self.player_ep.insert(account_id, &new_ep);
                 self.player_seed.insert(account_id, &new_seed);
 
-                if let Some((ep_band, g)) = mathchmaking_ghosts_opt {
+                if let Some((ep_band, g)) = matchmaking_ghosts_opt {
                     self.matchmaking_ghosts.insert(ep_band, &g);
                 }
 
@@ -274,18 +274,18 @@ pub mod contract {
         ) -> (u16, Option<(u16, Vec<(AccountId, u16, mtc::Ghost)>)>) {
             let new_ep = calc_new_ep(place, ep);
 
-            let mathchmaking_ghosts_opt = if place < 4 {
+            let matchmaking_ghosts_opt = if place < 4 {
                 Some(ghost::build_matchmaking_ghosts(
                     &account_id,
                     new_ep,
                     grade_and_board_history,
-                    &|ep_band| self.get_matchmaking_ghosts(ep_band),
+                    &|ep_band| self.matchmaking_ghosts.get(ep_band),
                 ))
             } else {
                 None
             };
 
-            (new_ep, mathchmaking_ghosts_opt)
+            (new_ep, matchmaking_ghosts_opt)
         }
 
         #[ink(message)]
