@@ -89,7 +89,6 @@ pub mod contract {
         #[ink(message)]
         pub fn start_mtc(&mut self, deck_emo_base_ids: [u16; 6]) {
             let caller = self.env().caller();
-            self.only_allowed_caller();
 
             let emo_bases = self.emo_bases.clone();
             let deck_fixed_emo_base_ids = self.deck_fixed_emo_base_ids.clone();
@@ -143,7 +142,6 @@ pub mod contract {
         #[ink(message)]
         pub fn finish_mtc_shop(&mut self, player_operations: Vec<mtc::shop::PlayerOperation>) {
             let caller = self.env().caller();
-            self.only_allowed_caller();
 
             let emo_bases_opt = self.emo_bases.clone();
             let player_ep = self.player_ep.get(caller);
@@ -370,8 +368,6 @@ pub mod contract {
         }
 
         fn remove_player_mtc(&mut self, account: AccountId) {
-            self.only_allowed_caller();
-
             self.player_pool.remove(&account);
             self.player_health.remove(&account);
             self.player_grade_and_board_history.remove(&account);
