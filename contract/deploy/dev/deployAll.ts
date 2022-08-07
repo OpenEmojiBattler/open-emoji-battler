@@ -13,88 +13,18 @@ const main = async () => {
   await connected(
     endpoint,
     async (api) => {
-      const storageContract = await instantiateContract(
+      const gameContract = await instantiateContract(
         api,
         keyringPair,
-        "storage",
+        "game",
         [],
         __dirname,
         envName,
-        "../../target/ink/storage/storage.contract"
-      )
-
-      const logicAdminContract = await instantiateContract(
-        api,
-        keyringPair,
-        "logic_admin",
-        [storageContract.address.toString()],
-        __dirname,
-        envName,
-        "../../target/ink/logic_admin/logic_admin.contract"
-      )
-      const logicStartMtcContract = await instantiateContract(
-        api,
-        keyringPair,
-        "logic_start_mtc",
-        [storageContract.address.toString()],
-        __dirname,
-        envName,
-        "../../target/ink/logic_start_mtc/logic_start_mtc.contract"
-      )
-      const logicFinishMtcShopContract = await instantiateContract(
-        api,
-        keyringPair,
-        "logic_finish_mtc_shop",
-        [storageContract.address.toString()],
-        __dirname,
-        envName,
-        "../../target/ink/logic_finish_mtc_shop/logic_finish_mtc_shop.contract"
-      )
-
-      const forwarderContract = await instantiateContract(
-        api,
-        keyringPair,
-        "forwarder",
-        [logicStartMtcContract.address.toString(), logicFinishMtcShopContract.address.toString()],
-        __dirname,
-        envName,
-        "../../target/ink/forwarder/forwarder.contract"
+        "../../game/target/ink/game.contract"
       )
 
       await txContract(
-        storageContract,
-        "allowAccount",
-        [logicAdminContract.address.toString()],
-        keyringPair
-      )
-      await txContract(
-        storageContract,
-        "allowAccount",
-        [logicStartMtcContract.address.toString()],
-        keyringPair
-      )
-      await txContract(
-        storageContract,
-        "allowAccount",
-        [logicFinishMtcShopContract.address.toString()],
-        keyringPair
-      )
-
-      await txContract(
-        logicStartMtcContract,
-        "allowAccount",
-        [forwarderContract.address.toString()],
-        keyringPair
-      )
-      await txContract(
-        logicFinishMtcShopContract,
-        "allowAccount",
-        [forwarderContract.address.toString()],
-        keyringPair
-      )
-
-      await txContract(
-        logicAdminContract,
+        gameContract,
         "updateEmoBases",
         [
           loadEmoBases(
