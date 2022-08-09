@@ -68,10 +68,19 @@ export const finishBattleAndBuildState = (
     ensureFinished(connection, account.address)
     return {
       mtcState: s.mtcState,
-      resultState: connection.query.playerEp(account.address).then((ep) => ({
-        place,
-        ep: ep.unwrap().toNumber(),
-      })),
+      resultState: Promise.all([
+        connection.query.playerEp(account.address),
+        connection.query.leaderboard(),
+      ]).then(([ep, l]) => {
+        const ranks = l.toArray().map(([_e, a], i) => ({ rank: i + 1, address: a.toString() }))
+        const o = ranks.find(({ address }) => address === account.address)
+        const rank = o ? o.rank : null
+        return {
+          place,
+          ep: ep.unwrap().toNumber(),
+          rank,
+        }
+      }),
     }
   }
 

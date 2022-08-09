@@ -130,6 +130,7 @@ export interface GhostAddressAndEp {
 export interface ResultState {
   place: number
   ep: number
+  rank: number | null
 }
 
 const initialGhostState = { Active: { health: initialHealth } }
