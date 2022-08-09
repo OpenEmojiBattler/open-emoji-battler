@@ -1,6 +1,8 @@
 import * as React from "react"
+import { web3Accounts } from "@polkadot/extension-dapp"
 
 import { Connection, ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
+import { web3EnableOEB } from "~/misc/accountUtils"
 
 export function Leaderboard() {
   return (
@@ -26,6 +28,7 @@ function Con() {
 
 function Inner(props: { connection: Connection }) {
   const [leaderboard, setLeaderboard] = React.useState<{ ep: number; account: string }[]>([])
+  const [injectedAddresses, setInjectedAddresses] = React.useState<string[]>([])
 
   React.useEffect(() => {
     let isMounted = true
@@ -36,6 +39,16 @@ function Inner(props: { connection: Connection }) {
       }
     })
 
+    web3EnableOEB().then((exts) => {
+      if (exts.length > 0) {
+        web3Accounts().then((injectedAccounts) => {
+          if (isMounted) {
+            setInjectedAddresses(injectedAccounts.map((o) => o.address))
+          }
+        })
+      }
+    })
+
     return () => {
       isMounted = false
     }
@@ -43,9 +56,13 @@ function Inner(props: { connection: Connection }) {
 
   return (
     <div>
+      <div>Rank, Account, EP</div>
       {leaderboard.slice(0, 100).map((row, i) => {
         return (
-          <div key={row.account}>
+          <div
+            key={row.account}
+            style={injectedAddresses.includes(row.account) ? { backgroundColor: "navy" } : {}}
+          >
             {i + 1}, {row.account}, {row.ep}
           </div>
         )

@@ -12,10 +12,12 @@ import type {
   AccountChainSession,
 } from "~/components/App/ConnectionProvider/tasks"
 
+export const web3EnableOEB = () => web3Enable("Open Emoji Battler")
+
 export const setupExtension = async (): Promise<
   { kind: "ok"; injectedAccounts: InjectedAccountWithMeta[] } | { kind: "ng"; message: string }
 > => {
-  const extensions = await web3Enable("Open Emoji Battler")
+  const extensions = await web3EnableOEB()
 
   if (extensions.length === 0) {
     return {
