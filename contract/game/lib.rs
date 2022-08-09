@@ -14,8 +14,7 @@ pub mod contract {
     #[ink(storage)]
     #[derive(SpreadAllocate)]
     pub struct Contract {
-        // allowed accounts
-        allowed_accounts: Vec<AccountId>,
+        admins: Vec<AccountId>,
 
         emo_bases: Option<emo::Bases>,
         deck_fixed_emo_base_ids: Option<Vec<u16>>,
@@ -40,39 +39,37 @@ pub mod contract {
         #[ink(constructor)]
         pub fn new() -> Self {
             ink_lang::utils::initialize_contract(|contract: &mut Self| {
-                contract.allowed_accounts.push(Self::env().caller());
+                contract.admins.push(Self::env().caller());
             })
         }
 
-        // allowed accounts
-
         #[ink(message)]
-        pub fn get_allowed_accounts(&self) -> Vec<AccountId> {
-            self.allowed_accounts.clone()
+        pub fn get_admins(&self) -> Vec<AccountId> {
+            self.admins.clone()
         }
 
         #[ink(message)]
-        pub fn allow_account(&mut self, account_id: AccountId) {
-            self.only_allowed_caller();
-            self.allowed_accounts.push(account_id);
+        pub fn add_admin(&mut self, account_id: AccountId) {
+            self.assert_admin();
+            self.admins.push(account_id);
         }
 
         #[ink(message)]
-        pub fn disallow_account(&mut self, account_id: AccountId) {
-            self.only_allowed_caller();
-            self.allowed_accounts.retain(|a| a != &account_id);
+        pub fn remove_admin(&mut self, account_id: AccountId) {
+            self.assert_admin();
+            self.admins.retain(|a| a != &account_id);
         }
 
-        fn only_allowed_caller(&self) {
+        fn assert_admin(&self) {
             assert!(
-                self.allowed_accounts.contains(&self.env().caller()),
-                "only_allowed_caller: this caller is not allowed",
+                self.admins.contains(&self.env().caller()),
+                "assert_admin: caller is not admin",
             );
         }
 
         #[ink(message)]
         pub fn set_code(&mut self, code_hash: [u8; 32]) {
-            self.only_allowed_caller();
+            self.assert_admin();
 
             ink_env::set_code_hash(&code_hash).unwrap_or_else(|err| {
                 panic!(
@@ -90,7 +87,7 @@ pub mod contract {
             built_base_ids: Vec<u16>,
             force_bases_update: bool,
         ) {
-            self.only_allowed_caller();
+            self.assert_admin();
 
             let bases = emo_bases::check_and_build_emo_bases(
                 self.emo_bases.clone(),
