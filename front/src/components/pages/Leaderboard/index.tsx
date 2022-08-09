@@ -43,7 +43,7 @@ function Inner(props: { connection: Connection }) {
 
   return (
     <div>
-      {leaderboard.map((row, i) => {
+      {leaderboard.slice(0, 100).map((row, i) => {
         return (
           <div key={row.account}>
             {i + 1}, {row.account}, {row.ep}
