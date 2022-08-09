@@ -20,6 +20,7 @@ pub mod contract {
         deck_built_emo_base_ids: Option<Vec<u16>>,
 
         matchmaking_ghosts: Mapping<u16, Vec<(AccountId, u16, mtc::Ghost)>>,
+        leaderboard: Vec<(u16, AccountId)>,
 
         player_ep: Mapping<AccountId, u16>,
         player_seed: Mapping<AccountId, u64>,
