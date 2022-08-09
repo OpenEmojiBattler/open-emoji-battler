@@ -6,7 +6,6 @@ use ink_lang as ink;
 #[ink::contract]
 pub mod contract {
     use super::*;
-    use ink_env::hash::Blake2x128;
     use ink_prelude::vec::Vec;
     use ink_storage::{traits::SpreadAllocate, Mapping};
     use scale::Decode;
@@ -66,7 +65,7 @@ pub mod contract {
                 self.admins.contains(&caller),
                 "assert_admin: caller is not admin",
             );
-            return caller;
+            caller
         }
 
         #[ink(message)]
@@ -124,7 +123,7 @@ pub mod contract {
                 player_ep.unwrap_or(ep::INITIAL_EP)
             };
 
-            let seed = self.get_random_seed(caller, b"start_mtc");
+            let seed = self.get_insecure_random_seed(caller, b"start_mtc");
 
             let selected_ghosts =
                 ghost::choose_ghosts(ep, seed, &|ep_band| self.matchmaking_ghosts.get(ep_band));
@@ -203,7 +202,7 @@ pub mod contract {
             )
             .expect("invalid shop player operations");
 
-            let new_seed = self.get_random_seed(caller, b"finish_mtc_shop");
+            let new_seed = self.get_insecure_random_seed(caller, b"finish_mtc_shop");
             let (ghosts, _ghost_eps) =
                 ghost::separate_player_ghosts(player_ghosts.expect("player_ghosts none"));
 
@@ -235,10 +234,12 @@ pub mod contract {
             );
         }
 
-        fn get_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
-            let (seed, _) = self
-                .env()
-                .random(&self.env().hash_encoded::<Blake2x128, _>(&(subject, caller)));
+        fn get_insecure_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
+            let (seed, _) = self.env().random(
+                &self
+                    .env()
+                    .hash_encoded::<ink_env::hash::Blake2x128, _>(&(subject, caller)),
+            );
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
 
