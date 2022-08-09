@@ -36,6 +36,9 @@ const buildConnectionQuery = (api: ApiPromise): Connection["query"] => ({
   deckFixedEmoBaseIds: async () => (await api.query.game.deckFixedEmoBaseIds()).unwrap(),
   deckBuiltEmoBaseIds: async () => (await api.query.game.deckBuiltEmoBaseIds()).unwrap(),
   matchmakingGhosts: (band) => api.query.game.matchmakingGhosts(band),
+  leaderboard: () => {
+    throw new Error("unimplemented")
+  },
   playerEp: (address) => api.query.game.playerEp(address),
   playerSeed: (address) => api.query.game.playerSeed(address),
   playerPool: (address) => api.query.game.playerPool(address),

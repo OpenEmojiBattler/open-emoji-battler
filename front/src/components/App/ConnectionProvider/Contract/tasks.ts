@@ -42,6 +42,11 @@ const buildConnectionQuery = (gameContract: ContractPromise): Connection["query"
       "Option<Vec<(AccountId, u16, mtc_Ghost)>>",
       (await queryContract(gameContract, "getMatchmakingGhosts", [band])).toU8a()
     ),
+  leaderboard: async () =>
+    createType(
+      "Vec<(u16, AccountId)>",
+      (await queryContract(gameContract, "getLeaderboard")).toU8a()
+    ),
   playerEp: async (address) =>
     createType(
       "Option<u16>",
