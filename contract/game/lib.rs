@@ -60,11 +60,13 @@ pub mod contract {
             self.admins.retain(|a| a != &account_id);
         }
 
-        fn assert_admin(&self) {
+        fn assert_admin(&self) -> AccountId {
+            let caller = self.env().caller();
             assert!(
-                self.admins.contains(&self.env().caller()),
+                self.admins.contains(&caller),
                 "assert_admin: caller is not admin",
             );
+            return caller;
         }
 
         #[ink(message)]
