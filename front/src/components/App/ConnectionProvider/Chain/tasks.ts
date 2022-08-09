@@ -1,4 +1,5 @@
 import type { ApiPromise } from "@polkadot/api"
+import { encodeAddress } from "@polkadot/util-crypto"
 
 import { tx, createType, buildKeyringPair } from "common"
 import type { Connection } from "../tasks"
@@ -29,6 +30,7 @@ export const buildConnection = async (api: ApiPromise): Promise<Connection> => {
     tx: buildConnectionTx(api),
     emoBases,
     api: () => api,
+    transformAddress: (a) => encodeAddress(a, api.registry.chainSS58),
   }
 }
 

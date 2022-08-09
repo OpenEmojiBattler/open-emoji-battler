@@ -33,6 +33,7 @@ export interface Connection {
   }
   emoBases: EmoBases
   api: () => ApiPromise // only avaiable for chain
+  transformAddress: (address: string) => string
 }
 
 export type Account =

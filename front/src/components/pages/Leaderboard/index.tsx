@@ -43,7 +43,9 @@ function Inner(props: { connection: Connection }) {
       if (exts.length > 0) {
         web3Accounts().then((injectedAccounts) => {
           if (isMounted) {
-            setInjectedAddresses(injectedAccounts.map((o) => o.address))
+            setInjectedAddresses(
+              injectedAccounts.map((o) => props.connection.transformAddress(o.address))
+            )
           }
         })
       }
