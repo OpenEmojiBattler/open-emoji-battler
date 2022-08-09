@@ -14,6 +14,9 @@ pub mod contract {
     #[ink(storage)]
     #[derive(SpreadAllocate)]
     pub struct Contract {
+        // allowed accounts
+        allowed_accounts: Vec<AccountId>,
+
         emo_bases: Option<emo::Bases>,
         deck_fixed_emo_base_ids: Option<Vec<u16>>,
         deck_built_emo_base_ids: Option<Vec<u16>>,
@@ -31,9 +34,6 @@ pub mod contract {
         player_ghosts: Mapping<AccountId, Vec<(AccountId, u16, mtc::Ghost)>>,
         player_ghost_states: Mapping<AccountId, Vec<mtc::GhostState>>,
         player_battle_ghost_index: Mapping<AccountId, u8>,
-
-        // allowed accounts
-        allowed_accounts: Vec<AccountId>,
     }
 
     impl Contract {
@@ -42,6 +42,32 @@ pub mod contract {
             ink_lang::utils::initialize_contract(|contract: &mut Self| {
                 contract.allowed_accounts.push(Self::env().caller());
             })
+        }
+
+        // allowed accounts
+
+        #[ink(message)]
+        pub fn get_allowed_accounts(&self) -> Vec<AccountId> {
+            self.allowed_accounts.clone()
+        }
+
+        #[ink(message)]
+        pub fn allow_account(&mut self, account_id: AccountId) {
+            self.only_allowed_caller();
+            self.allowed_accounts.push(account_id);
+        }
+
+        #[ink(message)]
+        pub fn disallow_account(&mut self, account_id: AccountId) {
+            self.only_allowed_caller();
+            self.allowed_accounts.retain(|a| a != &account_id);
+        }
+
+        fn only_allowed_caller(&self) {
+            assert!(
+                self.allowed_accounts.contains(&self.env().caller()),
+                "only_allowed_caller: this caller is not allowed",
+            );
         }
 
         #[ink(message)]
@@ -370,32 +396,6 @@ pub mod contract {
             self.player_ghosts.remove(&account);
             self.player_ghost_states.remove(&account);
             self.player_battle_ghost_index.remove(&account);
-        }
-
-        // allowed accounts
-
-        #[ink(message)]
-        pub fn get_allowed_accounts(&self) -> Vec<AccountId> {
-            self.allowed_accounts.clone()
-        }
-
-        #[ink(message)]
-        pub fn allow_account(&mut self, account_id: AccountId) {
-            self.only_allowed_caller();
-            self.allowed_accounts.push(account_id);
-        }
-
-        #[ink(message)]
-        pub fn disallow_account(&mut self, account_id: AccountId) {
-            self.only_allowed_caller();
-            self.allowed_accounts.retain(|a| a != &account_id);
-        }
-
-        fn only_allowed_caller(&self) {
-            assert!(
-                self.allowed_accounts.contains(&self.env().caller()),
-                "only_allowed_caller: this caller is not allowed",
-            );
         }
     }
 }
