@@ -2,11 +2,11 @@
 
 use common::{codec_types::*, mtc::*};
 use ink_lang as ink;
+use ink_prelude::vec::Vec;
 
 #[ink::contract]
 pub mod contract {
     use super::*;
-    use ink_prelude::vec::Vec;
     use ink_storage::{traits::SpreadAllocate, Mapping};
     use scale::Decode;
 
@@ -271,6 +271,8 @@ pub mod contract {
                     self.matchmaking_ghosts.insert(ep_band, &g);
                 }
 
+                update_leaderboard(&mut self.leaderboard, new_ep, &account_id);
+
                 self.remove_player_mtc(account_id);
             } else {
                 let (new_upgrade_coin, new_battle_ghost_index) = finish_battle(
@@ -435,5 +437,45 @@ fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
             }
         }
         _ => panic!("unsupported place"),
+    }
+}
+
+const LEADERBOARD_SIZE: u8 = 100;
+const LEADERBOARD_SURPLUS_SIZE: u8 = 30;
+const LEADERBOARD_REAL_SIZE: u8 = LEADERBOARD_SIZE + LEADERBOARD_SURPLUS_SIZE;
+
+fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16, account: &A) {
+    let mut same_account_index_opt = None;
+    let mut new_place_index_opt = None;
+
+    for (index, (iter_ep, iter_account)) in leaderboard.iter().enumerate() {
+        if iter_account == account {
+            same_account_index_opt = Some(index);
+        }
+        if iter_ep <= &ep {
+            new_place_index_opt = Some(index);
+        }
+    }
+
+    if let Some(same_account_index) = same_account_index_opt {
+        if let Some(new_place_index) = new_place_index_opt {
+            leaderboard.swap(same_account_index, new_place_index);
+        } else {
+            let len = leaderboard.len();
+            if len < LEADERBOARD_REAL_SIZE.into() {
+                leaderboard.swap(same_account_index, len - 1);
+            } else {
+                leaderboard.remove(same_account_index);
+            }
+        }
+    } else {
+        if let Some(new_place_index) = new_place_index_opt {
+            leaderboard.insert(new_place_index, (ep, *account));
+            leaderboard.truncate(LEADERBOARD_REAL_SIZE.into());
+        } else {
+            if leaderboard.len() < LEADERBOARD_REAL_SIZE.into() {
+                leaderboard.push((ep, *account));
+            }
+        }
     }
 }
