@@ -341,6 +341,11 @@ pub mod contract {
         }
 
         #[ink(message)]
+        pub fn get_leaderboard(&self) -> Vec<(u16, AccountId)> {
+            self.leaderboard.clone()
+        }
+
+        #[ink(message)]
         pub fn get_player_ep(&self, account: AccountId) -> Option<u16> {
             self.player_ep.get(account)
         }
