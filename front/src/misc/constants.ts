@@ -4,6 +4,7 @@ export const routeIds = [
   "/emo_bases",
   "/match_trial",
   "/match_contract",
+  "/leaderboard",
   "/dev",
   "/match_debug",
   "/emo_ability_builder",
