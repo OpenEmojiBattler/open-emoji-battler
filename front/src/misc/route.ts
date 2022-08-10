@@ -57,6 +57,8 @@ export const getRouteConnectionKind = (routeId: RouteId): ConnectionKind => {
       return "chain"
     case "/match_contract":
       return "contract"
+    case "/leaderboard":
+      return "contract"
     case "/dev":
       return "chain"
     case "/match_debug":

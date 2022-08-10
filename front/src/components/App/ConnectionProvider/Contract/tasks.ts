@@ -1,5 +1,6 @@
 import type { ApiPromise } from "@polkadot/api"
 import type { ContractPromise } from "@polkadot/api-contract"
+import { encodeAddress } from "@polkadot/util-crypto"
 
 import { queryContract, txContract, createType, EnvContract, getGameContract } from "common"
 import { buildEmoBases } from "~/misc/mtcUtils"
@@ -23,6 +24,7 @@ export const buildConnection = async (api: ApiPromise, env: EnvContract): Promis
     api: () => {
       throw new Error("connection is not chain")
     },
+    transformAddress: (a) => encodeAddress(a, api.registry.chainSS58),
   }
 }
 
@@ -41,6 +43,11 @@ const buildConnectionQuery = (gameContract: ContractPromise): Connection["query"
     createType(
       "Option<Vec<(AccountId, u16, mtc_Ghost)>>",
       (await queryContract(gameContract, "getMatchmakingGhosts", [band])).toU8a()
+    ),
+  leaderboard: async () =>
+    createType(
+      "Vec<(u16, AccountId)>",
+      (await queryContract(gameContract, "getLeaderboard")).toU8a()
     ),
   playerEp: async (address) =>
     createType(

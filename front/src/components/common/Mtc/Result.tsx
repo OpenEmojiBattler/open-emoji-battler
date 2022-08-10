@@ -32,7 +32,11 @@ export function Result(props: {
           <h2 className={"title"}>
             <Ranking place={props.resultState.place} />
           </h2>
-          <Ep previousEp={props.mtcState.previousEp} newEp={props.resultState.ep} />
+          <Ep
+            previousEp={props.mtcState.previousEp}
+            newEp={props.resultState.ep}
+            rank={props.resultState.rank}
+          />
           <div className={"block"}>
             <div className={"emo-group emo-group-highlight"}>
               <div className={"emo-group-line emo-group-line-center emo-group-line-emo"}>
@@ -70,7 +74,7 @@ function Ranking(props: { place: number }) {
   return <span className={cssClass}>{getRankingString(props.place)}</span>
 }
 
-function Ep(props: { previousEp: number; newEp: number }) {
+function Ep(props: { previousEp: number; newEp: number; rank: number | null }) {
   const epDiffText =
     props.newEp >= props.previousEp
       ? `+${props.newEp - props.previousEp}`
@@ -80,7 +84,7 @@ function Ep(props: { previousEp: number; newEp: number }) {
     <div className={"block"}>
       EP (Emoji Power) {epDiffText}
       <br />
-      <strong>{props.newEp}</strong>
+      <strong>{props.newEp}</strong> {props.rank ? <span>(Rank: {props.rank})</span> : <></>}
     </div>
   )
 }

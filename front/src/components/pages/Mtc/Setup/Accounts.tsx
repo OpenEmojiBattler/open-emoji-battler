@@ -6,7 +6,11 @@ import { Identicon } from "~/components/common/Identicon"
 import { AccountsDropdown } from "~/components/common/AccountsDropdown"
 import { useAccount } from "~/components/App/ConnectionProvider/tasks"
 
-export function Accounts(props: { ep: number; injectedAccounts: InjectedAccountWithMeta[] }) {
+export function Accounts(props: {
+  ep: number
+  rank: number | null
+  injectedAccounts: InjectedAccountWithMeta[]
+}) {
   const playerAddress = useAccount().address
   return (
     <>
@@ -22,7 +26,7 @@ export function Accounts(props: { ep: number; injectedAccounts: InjectedAccountW
             <div>
               EP (Emoji Power)
               <br />
-              <strong>{props.ep}</strong>
+              <strong>{props.ep}</strong> {props.rank ? <span>(Rank: {props.rank})</span> : <></>}
             </div>
           </div>
         </div>

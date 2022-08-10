@@ -1,4 +1,6 @@
 import type { Vec, u16 } from "@polkadot/types"
+import type { ITuple } from "@polkadot/types-codec/types"
+import type { AccountId } from "@polkadot/types/interfaces/runtime"
 
 import {
   mtc_Emo,
@@ -11,7 +13,7 @@ import {
   createType,
 } from "common"
 
-import { initialHealth, emoTyps, EmoTyp } from "~/misc/constants"
+import { initialHealth, emoTyps, EmoTyp, leaderboardSize } from "~/misc/constants"
 import { EmoBases } from "./types"
 import { groupBy } from "~/misc/utils"
 import { battleAll, selectBattleGhostIndex } from "~/wasm"
@@ -130,6 +132,7 @@ export interface GhostAddressAndEp {
 export interface ResultState {
   place: number
   ep: number
+  rank: number | null
 }
 
 const initialGhostState = { Active: { health: initialHealth } }
@@ -196,4 +199,19 @@ export const finishBattle = (
     mtcState: { ...mtcState, ...state, turn: mtcState.turn + 1, upgradeCoin, battleGhostIndex },
     finalPlace: null,
   }
+}
+
+export const translateLeaderboardCodec = (leaderboard: Vec<ITuple<[u16, AccountId]>>) =>
+  leaderboard
+    .toArray()
+    .slice(0, leaderboardSize)
+    .map(([e, a], i) => ({ rank: i + 1, ep: e.toNumber(), address: a.toString() }))
+
+export const getRankFromLeaderboardCodec = (
+  leaderboard: Vec<ITuple<[u16, AccountId]>>,
+  address: string
+) => {
+  const l = translateLeaderboardCodec(leaderboard)
+  const o = l.find((o) => o.address === address)
+  return o ? o.rank : null
 }

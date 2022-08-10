@@ -2,23 +2,25 @@
 
 use common::{codec_types::*, mtc::*};
 use ink_lang as ink;
+use ink_prelude::vec::Vec;
 
 #[ink::contract]
 pub mod contract {
     use super::*;
-    use ink_env::hash::Blake2x128;
-    use ink_prelude::vec::Vec;
     use ink_storage::{traits::SpreadAllocate, Mapping};
     use scale::Decode;
 
     #[ink(storage)]
     #[derive(SpreadAllocate)]
     pub struct Contract {
+        admins: Vec<AccountId>,
+
         emo_bases: Option<emo::Bases>,
         deck_fixed_emo_base_ids: Option<Vec<u16>>,
         deck_built_emo_base_ids: Option<Vec<u16>>,
 
         matchmaking_ghosts: Mapping<u16, Vec<(AccountId, u16, mtc::Ghost)>>,
+        leaderboard: Vec<(u16, AccountId)>,
 
         player_ep: Mapping<AccountId, u16>,
         player_seed: Mapping<AccountId, u64>,
@@ -31,22 +33,45 @@ pub mod contract {
         player_ghosts: Mapping<AccountId, Vec<(AccountId, u16, mtc::Ghost)>>,
         player_ghost_states: Mapping<AccountId, Vec<mtc::GhostState>>,
         player_battle_ghost_index: Mapping<AccountId, u8>,
-
-        // allowed accounts
-        allowed_accounts: Vec<AccountId>,
     }
 
     impl Contract {
         #[ink(constructor)]
         pub fn new() -> Self {
             ink_lang::utils::initialize_contract(|contract: &mut Self| {
-                contract.allowed_accounts.push(Self::env().caller());
+                contract.admins.push(Self::env().caller());
             })
         }
 
         #[ink(message)]
+        pub fn get_admins(&self) -> Vec<AccountId> {
+            self.admins.clone()
+        }
+
+        #[ink(message)]
+        pub fn add_admin(&mut self, account_id: AccountId) {
+            self.assert_admin();
+            self.admins.push(account_id);
+        }
+
+        #[ink(message)]
+        pub fn remove_admin(&mut self, account_id: AccountId) {
+            self.assert_admin();
+            self.admins.retain(|a| a != &account_id);
+        }
+
+        fn assert_admin(&self) -> AccountId {
+            let caller = self.env().caller();
+            assert!(
+                self.admins.contains(&caller),
+                "assert_admin: caller is not admin",
+            );
+            caller
+        }
+
+        #[ink(message)]
         pub fn set_code(&mut self, code_hash: [u8; 32]) {
-            self.only_allowed_caller();
+            self.assert_admin();
 
             ink_env::set_code_hash(&code_hash).unwrap_or_else(|err| {
                 panic!(
@@ -64,7 +89,7 @@ pub mod contract {
             built_base_ids: Vec<u16>,
             force_bases_update: bool,
         ) {
-            self.only_allowed_caller();
+            self.assert_admin();
 
             let bases = emo_bases::check_and_build_emo_bases(
                 self.emo_bases.clone(),
@@ -99,7 +124,7 @@ pub mod contract {
                 player_ep.unwrap_or(ep::INITIAL_EP)
             };
 
-            let seed = self.get_random_seed(caller, b"start_mtc");
+            let seed = self.get_insecure_random_seed(caller, b"start_mtc");
 
             let selected_ghosts =
                 ghost::choose_ghosts(ep, seed, &|ep_band| self.matchmaking_ghosts.get(ep_band));
@@ -178,7 +203,7 @@ pub mod contract {
             )
             .expect("invalid shop player operations");
 
-            let new_seed = self.get_random_seed(caller, b"finish_mtc_shop");
+            let new_seed = self.get_insecure_random_seed(caller, b"finish_mtc_shop");
             let (ghosts, _ghost_eps) =
                 ghost::separate_player_ghosts(player_ghosts.expect("player_ghosts none"));
 
@@ -210,10 +235,12 @@ pub mod contract {
             );
         }
 
-        fn get_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
-            let (seed, _) = self
-                .env()
-                .random(&self.env().hash_encoded::<Blake2x128, _>(&(subject, caller)));
+        fn get_insecure_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
+            let (seed, _) = self.env().random(
+                &self
+                    .env()
+                    .hash_encoded::<ink_env::hash::Blake2x128, _>(&(subject, caller)),
+            );
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
 
@@ -243,6 +270,8 @@ pub mod contract {
                 if let Some((ep_band, g)) = matchmaking_ghosts_opt {
                     self.matchmaking_ghosts.insert(ep_band, &g);
                 }
+
+                update_leaderboard(&mut self.leaderboard, new_ep, &account_id);
 
                 self.remove_player_mtc(account_id);
             } else {
@@ -312,6 +341,11 @@ pub mod contract {
         }
 
         #[ink(message)]
+        pub fn get_leaderboard(&self) -> Vec<(u16, AccountId)> {
+            self.leaderboard.clone()
+        }
+
+        #[ink(message)]
         pub fn get_player_ep(&self, account: AccountId) -> Option<u16> {
             self.player_ep.get(account)
         }
@@ -371,32 +405,6 @@ pub mod contract {
             self.player_ghost_states.remove(&account);
             self.player_battle_ghost_index.remove(&account);
         }
-
-        // allowed accounts
-
-        #[ink(message)]
-        pub fn get_allowed_accounts(&self) -> Vec<AccountId> {
-            self.allowed_accounts.clone()
-        }
-
-        #[ink(message)]
-        pub fn allow_account(&mut self, account_id: AccountId) {
-            self.only_allowed_caller();
-            self.allowed_accounts.push(account_id);
-        }
-
-        #[ink(message)]
-        pub fn disallow_account(&mut self, account_id: AccountId) {
-            self.only_allowed_caller();
-            self.allowed_accounts.retain(|a| a != &account_id);
-        }
-
-        fn only_allowed_caller(&self) {
-            assert!(
-                self.allowed_accounts.contains(&self.env().caller()),
-                "only_allowed_caller: this caller is not allowed",
-            );
-        }
     }
 }
 
@@ -434,5 +442,45 @@ fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
             }
         }
         _ => panic!("unsupported place"),
+    }
+}
+
+const LEADERBOARD_SIZE: u8 = 100;
+const LEADERBOARD_SURPLUS_SIZE: u8 = 30;
+const LEADERBOARD_REAL_SIZE: u8 = LEADERBOARD_SIZE + LEADERBOARD_SURPLUS_SIZE;
+
+fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16, account: &A) {
+    let mut same_account_index_opt = None;
+    let mut new_place_index_opt = None;
+
+    for (index, (iter_ep, iter_account)) in leaderboard.iter().enumerate() {
+        if iter_account == account {
+            same_account_index_opt = Some(index);
+        }
+        if iter_ep <= &ep {
+            new_place_index_opt = Some(index);
+        }
+    }
+
+    if let Some(same_account_index) = same_account_index_opt {
+        if let Some(new_place_index) = new_place_index_opt {
+            leaderboard.swap(same_account_index, new_place_index);
+        } else {
+            let len = leaderboard.len();
+            if len < LEADERBOARD_REAL_SIZE.into() {
+                leaderboard.swap(same_account_index, len - 1);
+            } else {
+                leaderboard.remove(same_account_index);
+            }
+        }
+    } else {
+        if let Some(new_place_index) = new_place_index_opt {
+            leaderboard.insert(new_place_index, (ep, *account));
+            leaderboard.truncate(LEADERBOARD_REAL_SIZE.into());
+        } else {
+            if leaderboard.len() < LEADERBOARD_REAL_SIZE.into() {
+                leaderboard.push((ep, *account));
+            }
+        }
     }
 }

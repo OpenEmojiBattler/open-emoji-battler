@@ -4,6 +4,7 @@ export const routeIds = [
   "/emo_bases",
   "/match_trial",
   "/match_contract",
+  "/leaderboard",
   "/dev",
   "/match_debug",
   "/emo_ability_builder",
@@ -24,6 +25,7 @@ export const emoSellCoin = 1
 export const lastGrade = 6
 export const initialEp = 1000
 export const mulliganCount = 2
+export const leaderboardSize = 100
 
 export const emoTyps = ["Food", "Nature", "Human", "Object"] as const
 export type EmoTyp = typeof emoTyps[number]

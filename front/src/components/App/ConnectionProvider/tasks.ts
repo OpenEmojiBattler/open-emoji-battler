@@ -15,6 +15,7 @@ export interface Connection {
     deckFixedEmoBaseIds: () => Promise<Vec<u16>>
     deckBuiltEmoBaseIds: () => Promise<Vec<u16>>
     matchmakingGhosts: (band: number) => Promise<Option<Vec<ITuple<[AccountId, u16, mtc_Ghost]>>>>
+    leaderboard: () => Promise<Vec<ITuple<[u16, AccountId]>>>
     playerEp: (address: string) => Promise<Option<u16>>
     playerSeed: (address: string) => Promise<Option<u64>>
     playerPool: (address: string) => Promise<Option<Vec<mtc_Emo>>>
@@ -32,6 +33,7 @@ export interface Connection {
   }
   emoBases: EmoBases
   api: () => ApiPromise // only avaiable for chain
+  transformAddress: (address: string) => string
 }
 
 export type Account =
