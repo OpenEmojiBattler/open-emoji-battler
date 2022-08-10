@@ -1,17 +1,12 @@
 import * as React from "react"
 
-import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
-
 import { withToggleAsync } from "~/misc/utils"
 import { Dropdown } from "~/components/common/Dropdown"
 import { useWaitingSetter } from "~/components/App/Frame/tasks"
 import { useAccountSetter, useConnection } from "~/components/App/ConnectionProvider/tasks"
-import { generateAccount } from "~/misc/accountUtils"
+import { ExtensionAccount, generateAccount } from "~/misc/accountUtils"
 
-export function AccountsDropdown(props: {
-  accounts: InjectedAccountWithMeta[]
-  playerAddress: string
-}) {
+export function AccountsDropdown(props: { accounts: ExtensionAccount[]; playerAddress: string }) {
   const connection = useConnection()
   const setWaiting = useWaitingSetter()
   const setAccount = useAccountSetter()
@@ -20,7 +15,7 @@ export function AccountsDropdown(props: {
     return [
       account.address,
       <span>
-        {account.meta.name || ""} {account.address}
+        {account.name || ""} {account.address}
       </span>,
     ]
   })

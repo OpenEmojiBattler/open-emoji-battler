@@ -2,36 +2,38 @@ import * as React from "react"
 import { web3Accounts } from "@polkadot/extension-dapp"
 
 import { Connection, ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
-import { web3EnableOEB } from "~/misc/accountUtils"
+import { web3EnableOEB, buildExtensionAccounts } from "~/misc/accountUtils"
 import { translateLeaderboardCodec } from "~/misc/mtcUtils"
 
 export function Leaderboard() {
   return (
     <section className="section">
       <div className="container">
-        leaderboard
-        <br />
-        <Con />
+        <h1 className="title">Leaderboard</h1>
+        <div className="block">TODO: text.</div>
+        <div className="block">
+          <ConnectionComponent />
+        </div>
       </div>
     </section>
   )
 }
 
-function Con() {
+function ConnectionComponent() {
   const connection = React.useContext(ConnectionContext)
 
   if (connection) {
-    return <Inner connection={connection} />
+    return <Table connection={connection} />
   } else {
     return <p>Loading...</p>
   }
 }
 
-function Inner(props: { connection: Connection }) {
+function Table(props: { connection: Connection }) {
   const [leaderboard, setLeaderboard] = React.useState<
     { rank: number; ep: number; address: string }[]
   >([])
-  const [injectedAddresses, setInjectedAddresses] = React.useState<string[]>([])
+  const [extensionAddresses, setExtensionAddresses] = React.useState<string[]>([])
 
   React.useEffect(() => {
     let isMounted = true
@@ -46,8 +48,10 @@ function Inner(props: { connection: Connection }) {
       if (exts.length > 0) {
         web3Accounts().then((injectedAccounts) => {
           if (isMounted) {
-            setInjectedAddresses(
-              injectedAccounts.map((o) => props.connection.transformAddress(o.address))
+            setExtensionAddresses(
+              buildExtensionAccounts(injectedAccounts, props.connection).map(
+                ({ address }) => address
+              )
             )
           }
         })
@@ -60,18 +64,28 @@ function Inner(props: { connection: Connection }) {
   }, [])
 
   return (
-    <div>
-      <div>Rank, Account, EP</div>
-      {leaderboard.map((row) => {
-        return (
-          <div
-            key={row.address}
-            style={injectedAddresses.includes(row.address) ? { backgroundColor: "navy" } : {}}
-          >
-            {row.rank}, {row.address}, {row.ep}
-          </div>
-        )
-      })}
-    </div>
+    <table className="table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Account</th>
+          <th>EP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {leaderboard.map(({ rank, ep, address }) => {
+          return (
+            <tr
+              key={address}
+              style={extensionAddresses.includes(address) ? { backgroundColor: "#222" } : {}}
+            >
+              <td>{rank}</td>
+              <td>{address}</td>
+              <td>{ep}</td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
   )
 }

@@ -1,15 +1,15 @@
 import * as React from "react"
 import BN from "bn.js"
-import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { Decks } from "./Decks"
 import { PowButton } from "~/components/common/PowButton"
 import { ExternalLink } from "~/components/common/ExternalLink"
 import { useAccount } from "~/components/App/ConnectionProvider/tasks"
 import { Accounts } from "./Accounts"
+import { ExtensionAccount } from "~/misc/accountUtils"
 
 export function Setup(props: {
-  injectedAccounts: InjectedAccountWithMeta[]
+  extensionAccounts: ExtensionAccount[]
   builtEmoBaseIds: string[]
   startMtc: (deckEmoBaseIds: string[], solution?: BN) => void
   ep: number
@@ -77,7 +77,7 @@ export function Setup(props: {
           </div>
         </nav>
         <h1 className={"title"}>Account</h1>
-        <Accounts ep={props.ep} rank={props.rank} injectedAccounts={props.injectedAccounts} />
+        <Accounts ep={props.ep} rank={props.rank} extensionAccounts={props.extensionAccounts} />
         <div className={"block"}>
           <small>{props.message}</small>
         </div>

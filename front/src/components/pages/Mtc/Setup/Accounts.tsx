@@ -1,21 +1,20 @@
 import * as React from "react"
 
-import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
-
 import { Identicon } from "~/components/common/Identicon"
 import { AccountsDropdown } from "~/components/common/AccountsDropdown"
 import { useAccount } from "~/components/App/ConnectionProvider/tasks"
+import { ExtensionAccount } from "~/misc/accountUtils"
 
 export function Accounts(props: {
   ep: number
   rank: number | null
-  injectedAccounts: InjectedAccountWithMeta[]
+  extensionAccounts: ExtensionAccount[]
 }) {
   const playerAddress = useAccount().address
   return (
     <>
       <div className={"block"}>
-        <AccountsDropdown accounts={props.injectedAccounts} playerAddress={playerAddress} />
+        <AccountsDropdown accounts={props.extensionAccounts} playerAddress={playerAddress} />
       </div>
       <div className={"block"}>
         <div className={"player-icon-and-text-box"}>
