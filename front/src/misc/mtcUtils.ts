@@ -13,7 +13,7 @@ import {
   createType,
 } from "common"
 
-import { initialHealth, emoTyps, EmoTyp } from "~/misc/constants"
+import { initialHealth, emoTyps, EmoTyp, leaderboardSize } from "~/misc/constants"
 import { EmoBases } from "./types"
 import { groupBy } from "~/misc/utils"
 import { battleAll, selectBattleGhostIndex } from "~/wasm"
@@ -204,7 +204,7 @@ export const finishBattle = (
 export const translateLeaderboardCodec = (leaderboard: Vec<ITuple<[u16, AccountId]>>) =>
   leaderboard
     .toArray()
-    .slice(0, 100)
+    .slice(0, leaderboardSize)
     .map(([e, a], i) => ({ rank: i, ep: e.toNumber(), address: a.toString() }))
 
 export const getRankFromLeaderboardCodec = (
