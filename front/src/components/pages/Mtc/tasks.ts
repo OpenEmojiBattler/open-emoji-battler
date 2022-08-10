@@ -5,7 +5,13 @@ import { createType, mtc_Board } from "common"
 import type { EmoBases } from "~/misc/types"
 import { withToggleAsync, checkArraysEquality } from "~/misc/utils"
 import { isDevelopment } from "~/misc/env"
-import { finishBattle, MtcState, buildInitialMtcState, ResultState } from "~/misc/mtcUtils"
+import {
+  finishBattle,
+  MtcState,
+  buildInitialMtcState,
+  ResultState,
+  getRankFromLeaderboardCodec,
+} from "~/misc/mtcUtils"
 import type { Account, Connection } from "~/components/App/ConnectionProvider/tasks"
 
 export const start = (
@@ -71,16 +77,11 @@ export const finishBattleAndBuildState = (
       resultState: Promise.all([
         connection.query.playerEp(account.address),
         connection.query.leaderboard(),
-      ]).then(([ep, l]) => {
-        const ranks = l.toArray().map(([_e, a], i) => ({ rank: i + 1, address: a.toString() }))
-        const o = ranks.find(({ address }) => address === account.address)
-        const rank = o ? o.rank : null
-        return {
-          place,
-          ep: ep.unwrap().toNumber(),
-          rank,
-        }
-      }),
+      ]).then(([ep, l]) => ({
+        place,
+        ep: ep.unwrap().toNumber(),
+        rank: getRankFromLeaderboardCodec(l, account.address),
+      })),
     }
   }
 

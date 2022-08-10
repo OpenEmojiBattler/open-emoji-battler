@@ -1,4 +1,6 @@
 import type { Vec, u16 } from "@polkadot/types"
+import type { ITuple } from "@polkadot/types-codec/types"
+import type { AccountId } from "@polkadot/types/interfaces/runtime"
 
 import {
   mtc_Emo,
@@ -197,4 +199,19 @@ export const finishBattle = (
     mtcState: { ...mtcState, ...state, turn: mtcState.turn + 1, upgradeCoin, battleGhostIndex },
     finalPlace: null,
   }
+}
+
+export const translateLeaderboardCodec = (leaderboard: Vec<ITuple<[u16, AccountId]>>) =>
+  leaderboard
+    .toArray()
+    .slice(0, 100)
+    .map(([e, a], i) => ({ rank: i, ep: e.toNumber(), address: a.toString() }))
+
+export const getRankFromLeaderboardCodec = (
+  leaderboard: Vec<ITuple<[u16, AccountId]>>,
+  address: string
+) => {
+  const l = translateLeaderboardCodec(leaderboard)
+  const o = l.find((o) => o.address === address)
+  return o ? o.rank : null
 }

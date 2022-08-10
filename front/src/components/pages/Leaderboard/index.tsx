@@ -3,6 +3,7 @@ import { web3Accounts } from "@polkadot/extension-dapp"
 
 import { Connection, ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
 import { web3EnableOEB } from "~/misc/accountUtils"
+import { translateLeaderboardCodec } from "~/misc/mtcUtils"
 
 export function Leaderboard() {
   return (
@@ -27,7 +28,9 @@ function Con() {
 }
 
 function Inner(props: { connection: Connection }) {
-  const [leaderboard, setLeaderboard] = React.useState<{ ep: number; account: string }[]>([])
+  const [leaderboard, setLeaderboard] = React.useState<
+    { rank: number; ep: number; address: string }[]
+  >([])
   const [injectedAddresses, setInjectedAddresses] = React.useState<string[]>([])
 
   React.useEffect(() => {
@@ -35,7 +38,7 @@ function Inner(props: { connection: Connection }) {
 
     props.connection.query.leaderboard().then((l) => {
       if (isMounted) {
-        setLeaderboard(l.toArray().map(([e, a]) => ({ ep: e.toNumber(), account: a.toString() })))
+        setLeaderboard(translateLeaderboardCodec(l))
       }
     })
 
@@ -59,13 +62,13 @@ function Inner(props: { connection: Connection }) {
   return (
     <div>
       <div>Rank, Account, EP</div>
-      {leaderboard.slice(0, 100).map((row, i) => {
+      {leaderboard.map((row) => {
         return (
           <div
-            key={row.account}
-            style={injectedAddresses.includes(row.account) ? { backgroundColor: "navy" } : {}}
+            key={row.address}
+            style={injectedAddresses.includes(row.address) ? { backgroundColor: "navy" } : {}}
           >
-            {i + 1}, {row.account}, {row.ep}
+            {row.rank}, {row.address}, {row.ep}
           </div>
         )
       })}

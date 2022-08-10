@@ -12,6 +12,7 @@ import {
   useAccountSetter,
 } from "~/components/App/ConnectionProvider/tasks"
 import { Loading } from "../../../common/Loading"
+import { getRankFromLeaderboardCodec } from "~/misc/mtcUtils"
 
 export function SetupWrapper(props: {
   startMtc: (deckEmoBaseIds: string[], previousEp: number, solution?: BN) => void
@@ -52,13 +53,7 @@ export function SetupWrapper(props: {
       }
     })
     connection.query.leaderboard().then((l) => {
-      const ranks = l.toArray().map(([_e, a], i) => ({ rank: i + 1, address: a.toString() }))
-      const o = ranks.find(({ address }) => address === account.address)
-      if (o) {
-        setRank(o.rank)
-      } else {
-        setRank(null)
-      }
+      setRank(getRankFromLeaderboardCodec(l, account.address))
     })
     connection.query.playerPool(account.address).then((p) => {
       if (isMounted && p.isSome) {
