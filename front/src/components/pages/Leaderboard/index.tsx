@@ -62,18 +62,28 @@ function Inner(props: { connection: Connection }) {
   }, [])
 
   return (
-    <div>
-      <div>Rank, Account, EP</div>
-      {leaderboard.map((row) => {
-        return (
-          <div
-            key={row.address}
-            style={extensionAddresses.includes(row.address) ? { backgroundColor: "navy" } : {}}
-          >
-            {row.rank}, {row.address}, {row.ep}
-          </div>
-        )
-      })}
-    </div>
+    <table className={"table"}>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Account</th>
+          <th>EP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {leaderboard.map(({ rank, ep, address }) => {
+          return (
+            <tr
+              key={address}
+              style={extensionAddresses.includes(address) ? { backgroundColor: "#222" } : {}}
+            >
+              <td>{rank}</td>
+              <td>{address}</td>
+              <td>{ep}</td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
   )
 }
