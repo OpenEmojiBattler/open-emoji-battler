@@ -2,7 +2,7 @@ import * as React from "react"
 import { web3Accounts } from "@polkadot/extension-dapp"
 
 import { Connection, ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
-import { web3EnableOEB } from "~/misc/accountUtils"
+import { web3EnableOEB, buildExtensionAccounts } from "~/misc/accountUtils"
 import { translateLeaderboardCodec } from "~/misc/mtcUtils"
 
 export function Leaderboard() {
@@ -31,7 +31,7 @@ function Inner(props: { connection: Connection }) {
   const [leaderboard, setLeaderboard] = React.useState<
     { rank: number; ep: number; address: string }[]
   >([])
-  const [injectedAddresses, setInjectedAddresses] = React.useState<string[]>([])
+  const [extensionAddresses, setExtensionAddresses] = React.useState<string[]>([])
 
   React.useEffect(() => {
     let isMounted = true
@@ -46,8 +46,10 @@ function Inner(props: { connection: Connection }) {
       if (exts.length > 0) {
         web3Accounts().then((injectedAccounts) => {
           if (isMounted) {
-            setInjectedAddresses(
-              injectedAccounts.map((o) => props.connection.transformAddress(o.address))
+            setExtensionAddresses(
+              buildExtensionAccounts(injectedAccounts, props.connection).map(
+                ({ address }) => address
+              )
             )
           }
         })
@@ -66,7 +68,7 @@ function Inner(props: { connection: Connection }) {
         return (
           <div
             key={row.address}
-            style={injectedAddresses.includes(row.address) ? { backgroundColor: "navy" } : {}}
+            style={extensionAddresses.includes(row.address) ? { backgroundColor: "navy" } : {}}
           >
             {row.rank}, {row.address}, {row.ep}
           </div>
