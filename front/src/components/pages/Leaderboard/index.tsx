@@ -12,24 +12,24 @@ export function Leaderboard() {
         <h1 className="title">Leaderboard</h1>
         <div className="block">TODO: text.</div>
         <div className="block">
-          <Con />
+          <ConnectionComponent />
         </div>
       </div>
     </section>
   )
 }
 
-function Con() {
+function ConnectionComponent() {
   const connection = React.useContext(ConnectionContext)
 
   if (connection) {
-    return <Inner connection={connection} />
+    return <Table connection={connection} />
   } else {
     return <p>Loading...</p>
   }
 }
 
-function Inner(props: { connection: Connection }) {
+function Table(props: { connection: Connection }) {
   const [leaderboard, setLeaderboard] = React.useState<
     { rank: number; ep: number; address: string }[]
   >([])
@@ -64,7 +64,7 @@ function Inner(props: { connection: Connection }) {
   }, [])
 
   return (
-    <table className={"table"}>
+    <table className="table">
       <thead>
         <tr>
           <th>Rank</th>
