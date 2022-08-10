@@ -9,9 +9,11 @@ export function Leaderboard() {
   return (
     <section className="section">
       <div className="container">
-        leaderboard
-        <br />
-        <Con />
+        <h1 className="title">Leaderboard</h1>
+        <div className="block">TODO: text.</div>
+        <div className="block">
+          <Con />
+        </div>
       </div>
     </section>
   )
