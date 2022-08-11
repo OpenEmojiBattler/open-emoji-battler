@@ -309,7 +309,7 @@ pub mod contract {
                 } else {
                     Some(ghost::build_matchmaking_ghosts(
                         &account_id,
-                        new_ep,
+                        ep,
                         grade_and_board_history,
                         &|ep_band| self.matchmaking_ghosts.get(ep_band),
                     ))
