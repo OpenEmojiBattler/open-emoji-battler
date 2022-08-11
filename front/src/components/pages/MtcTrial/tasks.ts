@@ -10,7 +10,7 @@ export const buildMtcState = (connection: Connection) =>
   Promise.all([
     connection.query.deckBuiltEmoBaseIds(),
     connection.query.deckFixedEmoBaseIds(),
-    connection.query.matchmakingGhosts(3),
+    connection.query.matchmakingGhosts(initialEp / 100),
   ]).then(([_builtIds, _fixedIds, matchmakingGhosts]) => {
     const builtEmoBaseIds = _builtIds.map((id) => id.toString())
     const fixedEmoBaseIds = _fixedIds.map((id) => id.toString())
