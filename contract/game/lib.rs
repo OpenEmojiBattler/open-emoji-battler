@@ -155,7 +155,7 @@ pub mod contract {
                 .insert(caller, &shop::coin::get_upgrade_coin(2));
             self.player_ghosts.insert(caller, &selected_ghosts);
             self.player_ghost_states
-                .insert(caller, &setup::build_initial_ghost_states());
+                .insert(caller, &build_initial_ghost_states(ep));
             self.player_battle_ghost_index.insert(caller, &0);
         }
 
@@ -499,4 +499,20 @@ fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16, ac
             }
         }
     }
+}
+
+fn build_initial_ghost_states(ep: u16) -> Vec<mtc::GhostState> {
+    let health = match ep::get_ep_band(ep) {
+        0 => 14,
+        1 => 16,
+        2 => 18,
+        3 => 20,
+        4 => 22,
+        5 => 24,
+        6 => 26,
+        7 => 28,
+        8.. => 30,
+    };
+
+    vec![mtc::GhostState::Active { health }; 3]
 }
