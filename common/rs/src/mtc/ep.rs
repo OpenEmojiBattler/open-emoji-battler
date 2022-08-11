@@ -1,9 +1,9 @@
-pub const INITIAL_EP: u16 = 1000;
+pub const INITIAL_EP: u16 = 300;
 pub const EP_BANDWIDTH: u16 = 100;
 pub const MAX_EP: u16 = u16::MAX;
 pub const MIN_EP: u16 = 1;
 pub const EP_K: f32 = 16f32;
-pub const EP_UNFINISH_PENALTY: u16 = 30;
+pub const EP_UNFINISH_PENALTY: u16 = 60;
 
 pub fn get_ep_band(ep: u16) -> u16 {
     ep / EP_BANDWIDTH

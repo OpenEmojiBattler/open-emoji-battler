@@ -155,7 +155,7 @@ pub mod contract {
                 .insert(caller, &shop::coin::get_upgrade_coin(2));
             self.player_ghosts.insert(caller, &selected_ghosts);
             self.player_ghost_states
-                .insert(caller, &setup::build_initial_ghost_states());
+                .insert(caller, &build_initial_ghost_states(ep));
             self.player_battle_ghost_index.insert(caller, &0);
         }
 
@@ -303,16 +303,17 @@ pub mod contract {
         ) -> (u16, Option<(u16, Vec<(AccountId, u16, mtc::Ghost)>)>) {
             let new_ep = calc_new_ep(place, ep);
 
-            let matchmaking_ghosts_opt = if place < 4 {
-                Some(ghost::build_matchmaking_ghosts(
-                    &account_id,
-                    new_ep,
-                    grade_and_board_history,
-                    &|ep_band| self.matchmaking_ghosts.get(ep_band),
-                ))
-            } else {
-                None
-            };
+            let matchmaking_ghosts_opt =
+                if grade_and_board_history.last().unwrap().board.0.is_empty() {
+                    None
+                } else {
+                    Some(ghost::build_matchmaking_ghosts(
+                        &account_id,
+                        ep,
+                        grade_and_board_history,
+                        &|ep_band| self.matchmaking_ghosts.get(ep_band),
+                    ))
+                };
 
             (new_ep, matchmaking_ghosts_opt)
         }
@@ -429,19 +430,34 @@ fn finish_battle(
 }
 
 fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
-    match place {
-        1 => old_ep.saturating_add(80),
-        2 => old_ep.saturating_add(40),
-        3 => old_ep,
-        4 => {
-            let e = old_ep.saturating_sub(40);
-            if e > ep::MIN_EP {
-                e
+    if let Some(plus) = match place {
+        1 => Some(70),
+        2 => Some(50),
+        _ => None,
+    } {
+        return if old_ep > ep::INITIAL_EP {
+            let x = (old_ep - ep::INITIAL_EP) / 40;
+            if x < plus {
+                plus - x
             } else {
-                ep::MIN_EP
+                1
             }
-        }
-        _ => panic!("unsupported place"),
+        } else {
+            plus
+        };
+    }
+
+    let minus = match place {
+        3 => 30,
+        4 => 50,
+        _ => panic!("unsupported place: {}", place),
+    };
+
+    let e = old_ep.saturating_sub(minus);
+    if e > ep::MIN_EP {
+        e
+    } else {
+        ep::MIN_EP
     }
 }
 
@@ -483,4 +499,20 @@ fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16, ac
             }
         }
     }
+}
+
+fn build_initial_ghost_states(ep: u16) -> Vec<mtc::GhostState> {
+    let health = match ep::get_ep_band(ep) {
+        0 => 14,
+        1 => 16,
+        2 => 18,
+        3 => 20,
+        4 => 22,
+        5 => 24,
+        6 => 26,
+        7 => 28,
+        8.. => 30,
+    };
+
+    vec![mtc::GhostState::Active { health }; 3]
 }
