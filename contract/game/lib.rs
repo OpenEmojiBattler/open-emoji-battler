@@ -303,16 +303,17 @@ pub mod contract {
         ) -> (u16, Option<(u16, Vec<(AccountId, u16, mtc::Ghost)>)>) {
             let new_ep = calc_new_ep(place, ep);
 
-            let matchmaking_ghosts_opt = if place < 4 {
-                Some(ghost::build_matchmaking_ghosts(
-                    &account_id,
-                    new_ep,
-                    grade_and_board_history,
-                    &|ep_band| self.matchmaking_ghosts.get(ep_band),
-                ))
-            } else {
-                None
-            };
+            let matchmaking_ghosts_opt =
+                if grade_and_board_history.last().unwrap().board.0.is_empty() {
+                    None
+                } else {
+                    Some(ghost::build_matchmaking_ghosts(
+                        &account_id,
+                        new_ep,
+                        grade_and_board_history,
+                        &|ep_band| self.matchmaking_ghosts.get(ep_band),
+                    ))
+                };
 
             (new_ep, matchmaking_ghosts_opt)
         }
