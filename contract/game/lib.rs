@@ -430,19 +430,34 @@ fn finish_battle(
 }
 
 fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
-    match place {
-        1 => old_ep.saturating_add(80),
-        2 => old_ep.saturating_add(40),
-        3 => old_ep,
-        4 => {
-            let e = old_ep.saturating_sub(40);
-            if e > ep::MIN_EP {
-                e
+    if let Some(plus) = match place {
+        1 => Some(70),
+        2 => Some(50),
+        _ => None,
+    } {
+        return if old_ep > ep::INITIAL_EP {
+            let x = (old_ep - ep::INITIAL_EP) / 40;
+            if x < plus {
+                plus - x
             } else {
-                ep::MIN_EP
+                1
             }
-        }
-        _ => panic!("unsupported place"),
+        } else {
+            plus
+        };
+    }
+
+    let minus = match place {
+        3 => 30,
+        4 => 50,
+        _ => panic!("unsupported place: {}", place),
+    };
+
+    let e = old_ep.saturating_sub(minus);
+    if e > ep::MIN_EP {
+        e
+    } else {
+        ep::MIN_EP
     }
 }
 
