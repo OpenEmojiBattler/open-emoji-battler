@@ -27,7 +27,7 @@ pub mod contract {
         player_ep: Mapping<AccountId, u16>,
         player_seed: Mapping<AccountId, u64>,
 
-        // remove for each mtc
+        // remove on each mtc
         player_mtc_immutable: Mapping<AccountId, (Vec<mtc::Emo>, Vec<(AccountId, mtc::Ghost)>)>,
         player_mtc_mutable: Mapping<AccountId, mtc::storage::PlayerMutable>,
     }
@@ -106,41 +106,26 @@ pub mod contract {
         pub fn start_mtc(&mut self, deck_emo_base_ids: [u16; 6]) {
             let caller = self.env().caller();
 
-            let emo_bases = self.emo_bases.clone();
-            let deck_fixed_emo_base_ids = self.deck_fixed_emo_base_ids.clone();
-            let deck_built_emo_base_ids = self.deck_built_emo_base_ids.clone();
-            let player_ep = self.player_ep.get(caller);
-
-            let ep = if self.player_mtc_mutable.contains(caller) {
-                // the previous mtc didn't normally finish
-                player_ep
-                    .expect("player ep none")
-                    .saturating_sub(ep::EP_UNFINISH_PENALTY)
-            } else {
-                player_ep.unwrap_or(ep::INITIAL_EP)
-            };
+            let ep = self.create_or_update_player_ep(caller);
 
             let seed = self.get_insecure_random_seed(caller, b"start_mtc");
 
             let selected_ghosts =
                 ghost::choose_ghosts(ep, seed, &|ep_band| self.matchmaking_ghosts.get(ep_band));
 
-            if let Some(e) = player_ep {
-                if e != ep {
-                    self.player_ep.insert(caller, &ep);
-                }
-            } else {
-                self.player_ep.insert(caller, &ep);
-            }
             self.player_seed.insert(caller, &seed);
             self.player_mtc_immutable.insert(
                 caller,
                 &(
                     setup::build_pool(
                         &deck_emo_base_ids,
-                        &emo_bases.expect("emo_bases none"),
-                        &deck_fixed_emo_base_ids.expect("deck_fixed_emo_base_ids none"),
-                        &deck_built_emo_base_ids.expect("deck_built_emo_base_ids none"),
+                        self.emo_bases.as_ref().expect("emo_bases none"),
+                        self.deck_fixed_emo_base_ids
+                            .as_ref()
+                            .expect("deck_fixed_emo_base_ids none"),
+                        self.deck_fixed_emo_base_ids
+                            .as_ref()
+                            .expect("deck_built_emo_base_ids none"),
                     )
                     .expect("failed to build player pool"),
                     selected_ghosts,
@@ -233,6 +218,22 @@ pub mod contract {
                 final_place,
                 player_ep.expect("player_ep none"),
             );
+        }
+
+        fn create_or_update_player_ep(&mut self, account_id: AccountId) -> u16 {
+            let new_ep = if let Some(old_ep) = self.player_ep.get(account_id) {
+                if self.player_mtc_mutable.contains(account_id) {
+                    old_ep.saturating_sub(ep::EP_UNFINISH_PENALTY)
+                } else {
+                    return old_ep;
+                }
+            } else {
+                ep::INITIAL_EP
+            };
+
+            self.player_ep.insert(account_id, &new_ep);
+
+            new_ep
         }
 
         fn get_insecure_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
