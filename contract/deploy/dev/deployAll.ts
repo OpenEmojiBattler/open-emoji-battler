@@ -1,6 +1,7 @@
 import { readFileSync } from "fs"
 import path from "path"
 
+import { randomAsU8a } from "@polkadot/util-crypto"
 import { txContract, connected } from "common"
 import { loadEmoBases } from "common/src/scriptUtils"
 import { instantiateContract, getEndpointAndPair } from "../utils"
@@ -20,7 +21,8 @@ const main = async () => {
         [],
         __dirname,
         envName,
-        "../../game/target/ink/game.contract"
+        "../../game/target/ink/game.contract",
+        randomAsU8a()
       )
 
       await txContract(
