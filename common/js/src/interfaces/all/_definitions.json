@@ -157,6 +157,13 @@
       "RemoveBattleAbility": "mtc_battle_Log_RemoveBattleAbility"
     }
   },
+  "mtc_storage_PlayerMutable": {
+    "health": "u8",
+    "grade_and_board_history": "Vec<mtc_GradeAndBoard>",
+    "upgrade_coin": "Option<u8>",
+    "ghost_states": "Vec<mtc_GhostState>",
+    "battle_ghost_index": "u8"
+  },
   "emo_Bases": "(BTreeMap<u16, emo_Base>)",
   "emo_Base": {
     "id": "u16",
