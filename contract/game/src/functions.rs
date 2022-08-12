@@ -81,15 +81,11 @@ pub fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16
                 leaderboard.remove(same_account_index);
             }
         }
-    } else {
-        if let Some(new_place_index) = new_place_index_opt {
-            leaderboard.insert(new_place_index, (ep, *account));
-            leaderboard.truncate(LEADERBOARD_REAL_SIZE.into());
-        } else {
-            if leaderboard.len() < LEADERBOARD_REAL_SIZE.into() {
-                leaderboard.push((ep, *account));
-            }
-        }
+    } else if let Some(new_place_index) = new_place_index_opt {
+        leaderboard.insert(new_place_index, (ep, *account));
+        leaderboard.truncate(LEADERBOARD_REAL_SIZE.into());
+    } else if leaderboard.len() < LEADERBOARD_REAL_SIZE.into() {
+        leaderboard.push((ep, *account));
     }
 }
 
