@@ -104,18 +104,18 @@ pub mod contract {
 
         #[ink(message)]
         pub fn start_mtc(&mut self, deck_emo_base_ids: [u16; 6]) {
-            let caller = self.env().caller();
+            let player = self.env().caller();
 
-            let ep = self.create_or_update_player_ep(caller);
+            let ep = self.create_or_update_player_ep(player);
 
-            let seed = self.get_insecure_random_seed(caller, b"start_mtc");
+            let seed = self.get_insecure_random_seed(player, b"start_mtc");
 
             let selected_ghosts =
                 ghost::choose_ghosts(ep, seed, &|ep_band| self.matchmaking_ghosts.get(ep_band));
 
-            self.player_seed.insert(caller, &seed);
+            self.player_seed.insert(player, &seed);
             self.player_mtc_immutable.insert(
-                caller,
+                player,
                 &(
                     setup::build_pool(
                         &deck_emo_base_ids,
@@ -132,7 +132,7 @@ pub mod contract {
                 ),
             );
             self.player_mtc_mutable.insert(
-                caller,
+                player,
                 &mtc::storage::PlayerMutable {
                     health: setup::PLAYER_INITIAL_HEALTH,
                     grade_and_board_history: Vec::new(),
@@ -145,18 +145,18 @@ pub mod contract {
 
         #[ink(message)]
         pub fn finish_mtc_shop(&mut self, player_operations: Vec<mtc::shop::PlayerOperation>) {
-            let caller = self.env().caller();
+            let player = self.env().caller();
 
             let emo_bases_opt = self.emo_bases.clone();
-            let player_ep = self.player_ep.get(caller);
-            let player_seed = self.player_seed.get(caller);
+            let player_ep = self.player_ep.get(player);
+            let player_seed = self.player_seed.get(player);
             let (player_pool, player_ghosts) = self
                 .player_mtc_immutable
-                .get(caller)
+                .get(player)
                 .expect("player_mtc_immutable none");
             let player_mtc_mutable = self
                 .player_mtc_mutable
-                .get(caller)
+                .get(player)
                 .expect("player_mtc_mutable none");
 
             let emo_bases = emo_bases_opt.expect("emo_bases_opt none");
@@ -186,7 +186,7 @@ pub mod contract {
             )
             .expect("invalid shop player operations");
 
-            let new_seed = self.get_insecure_random_seed(caller, b"finish_mtc_shop");
+            let new_seed = self.get_insecure_random_seed(player, b"finish_mtc_shop");
             let ghosts = player_ghosts
                 .into_iter()
                 .map(|(_, ghost)| ghost)
@@ -206,7 +206,7 @@ pub mod contract {
             .expect("battle failed");
 
             self.finish(
-                caller,
+                player,
                 grade,
                 board,
                 new_seed,
@@ -220,9 +220,9 @@ pub mod contract {
             );
         }
 
-        fn create_or_update_player_ep(&mut self, account_id: AccountId) -> u16 {
-            let new_ep = if let Some(old_ep) = self.player_ep.get(account_id) {
-                if self.player_mtc_mutable.contains(account_id) {
+        fn create_or_update_player_ep(&mut self, player: AccountId) -> u16 {
+            let new_ep = if let Some(old_ep) = self.player_ep.get(player) {
+                if self.player_mtc_mutable.contains(player) {
                     old_ep.saturating_sub(ep::EP_UNFINISH_PENALTY)
                 } else {
                     return old_ep;
@@ -231,23 +231,23 @@ pub mod contract {
                 ep::INITIAL_EP
             };
 
-            self.player_ep.insert(account_id, &new_ep);
+            self.player_ep.insert(player, &new_ep);
 
             new_ep
         }
 
-        fn get_insecure_random_seed(&self, caller: AccountId, subject: &[u8]) -> u64 {
+        fn get_insecure_random_seed(&self, account_id: AccountId, subject: &[u8]) -> u64 {
             let (seed, _) = self.env().random(
                 &self
                     .env()
-                    .hash_encoded::<ink_env::hash::Blake2x128, _>(&(subject, caller)),
+                    .hash_encoded::<ink_env::hash::Blake2x128, _>(&(subject, account_id)),
             );
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
 
         fn finish(
             &mut self,
-            account_id: AccountId,
+            player: AccountId,
             grade: u8,
             board: mtc::Board,
             new_seed: u64,
@@ -263,18 +263,18 @@ pub mod contract {
 
             if let Some(place) = final_place {
                 let (new_ep, matchmaking_ghosts_opt) =
-                    self.finish_mtc(account_id, place, &grade_and_board_history, ep);
+                    self.finish_mtc(player, place, &grade_and_board_history, ep);
 
-                self.player_ep.insert(account_id, &new_ep);
-                self.player_seed.insert(account_id, &new_seed);
+                self.player_ep.insert(player, &new_ep);
+                self.player_seed.insert(player, &new_seed);
 
                 if let Some((ep_band, g)) = matchmaking_ghosts_opt {
                     self.matchmaking_ghosts.insert(ep_band, &g);
                 }
 
-                update_leaderboard(&mut self.leaderboard, new_ep, &account_id);
+                update_leaderboard(&mut self.leaderboard, new_ep, &player);
 
-                self.remove_player_mtc(account_id);
+                self.remove_player_mtc(player);
             } else {
                 let (new_upgrade_coin, new_battle_ghost_index) = finish_battle(
                     upgrade_coin,
@@ -283,9 +283,9 @@ pub mod contract {
                     new_seed,
                     &grade_and_board_history,
                 );
-                self.player_seed.insert(account_id, &new_seed);
+                self.player_seed.insert(player, &new_seed);
                 self.player_mtc_mutable.insert(
-                    account_id,
+                    player,
                     &mtc::storage::PlayerMutable {
                         health,
                         grade_and_board_history,
@@ -299,7 +299,7 @@ pub mod contract {
 
         fn finish_mtc(
             &self,
-            account_id: AccountId,
+            player: AccountId,
             place: u8,
             grade_and_board_history: &[mtc::GradeAndBoard],
             ep: u16,
@@ -311,7 +311,7 @@ pub mod contract {
                     None
                 } else {
                     Some(ghost::build_matchmaking_ghosts(
-                        &account_id,
+                        &player,
                         ep,
                         grade_and_board_history,
                         &|ep_band| self.matchmaking_ghosts.get(ep_band),
