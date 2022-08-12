@@ -41,10 +41,5 @@ export const txContract = (
     throw new Error(`tx fn not found: ${fnName}`)
   }
 
-  return tx(
-    contract.api as ApiPromise,
-    // should have gasLimit?
-    () => contract.tx[fnName]({ value: 0 }, ...fnArgs),
-    account
-  )
+  return tx(contract.api as ApiPromise, () => contract.tx[fnName]({ value: 0 }, ...fnArgs), account)
 }
