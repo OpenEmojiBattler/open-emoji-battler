@@ -2,7 +2,7 @@
 
 use common::{codec_types::*, mtc::*};
 use ink_lang as ink;
-use ink_prelude::vec::Vec;
+use ink_prelude::{vec, vec::Vec};
 
 #[ink::contract]
 pub mod contract {
