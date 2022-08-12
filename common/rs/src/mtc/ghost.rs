@@ -1,7 +1,4 @@
-use crate::{
-    codec_types::*,
-    mtc::ep::{get_ep_band, INITIAL_EP},
-};
+use crate::{codec_types::*, mtc::ep::get_ep_band};
 use rand::{
     seq::{IteratorRandom, SliceRandom},
     SeedableRng,
@@ -11,10 +8,10 @@ use sp_std::prelude::*;
 
 pub const GHOST_COUNT: usize = 3;
 
-pub fn choose_ghosts<A, F>(ep: u16, seed: u64, get_ghosts: &F) -> Vec<(A, u16, mtc::Ghost)>
+pub fn choose_ghosts<A, F>(ep: u16, seed: u64, get_ghosts: &F) -> Vec<(A, mtc::Ghost)>
 where
     A: Default,
-    F: Fn(u16) -> Option<Vec<(A, u16, mtc::Ghost)>>,
+    F: Fn(u16) -> Option<Vec<(A, mtc::Ghost)>>,
 {
     let mut rng = Pcg64Mcg::seed_from_u64(seed);
 
@@ -45,11 +42,7 @@ where
 
     if selected.len() < GHOST_COUNT {
         for _ in 0..(GHOST_COUNT - selected.len()) {
-            selected.push((
-                Default::default(),
-                INITIAL_EP,
-                mtc::Ghost { history: vec![] },
-            ));
+            selected.push((Default::default(), mtc::Ghost { history: vec![] }));
         }
     }
 
@@ -77,10 +70,10 @@ pub fn build_matchmaking_ghosts<A, F>(
     ep: u16,
     grade_and_board_history: &[mtc::GradeAndBoard],
     get_matchmaking_ghosts: &F,
-) -> (u16, Vec<(A, u16, mtc::Ghost)>)
+) -> (u16, Vec<(A, mtc::Ghost)>)
 where
     A: Eq + Clone,
-    F: Fn(u16) -> Option<Vec<(A, u16, mtc::Ghost)>>,
+    F: Fn(u16) -> Option<Vec<(A, mtc::Ghost)>>,
 {
     let ep_band = get_ep_band(ep);
     let ghost = build_ghost_from_history(grade_and_board_history);
@@ -89,15 +82,14 @@ where
 
     if let Some(ghost_with_data) = ghosts_with_data
         .iter_mut()
-        .find(|(aid, _, _)| aid == account_id)
+        .find(|(aid, _)| aid == account_id)
     {
-        ghost_with_data.1 = ep;
-        ghost_with_data.2 = ghost;
+        ghost_with_data.1 = ghost;
     } else if ghosts_with_data.len() < 20 {
-        ghosts_with_data.push((account_id.clone(), ep, ghost));
+        ghosts_with_data.push((account_id.clone(), ghost));
     } else {
         ghosts_with_data.remove(0);
-        ghosts_with_data.push((account_id.clone(), ep, ghost));
+        ghosts_with_data.push((account_id.clone(), ghost));
     }
 
     (ep_band, ghosts_with_data)

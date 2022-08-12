@@ -21,20 +21,15 @@ pub mod contract {
         deck_fixed_emo_base_ids: Option<Vec<u16>>,
         deck_built_emo_base_ids: Option<Vec<u16>>,
 
-        matchmaking_ghosts: Mapping<u16, Vec<(AccountId, u16, mtc::Ghost)>>,
+        matchmaking_ghosts: Mapping<u16, Vec<(AccountId, mtc::Ghost)>>,
         leaderboard: Vec<(u16, AccountId)>,
 
         player_ep: Mapping<AccountId, u16>,
         player_seed: Mapping<AccountId, u64>,
 
         // remove for each mtc
-        player_pool: Mapping<AccountId, Vec<mtc::Emo>>,
-        player_health: Mapping<AccountId, u8>,
-        player_grade_and_board_history: Mapping<AccountId, Vec<mtc::GradeAndBoard>>,
-        player_upgrade_coin: Mapping<AccountId, Option<u8>>,
-        player_ghosts: Mapping<AccountId, Vec<(AccountId, u16, mtc::Ghost)>>,
-        player_ghost_states: Mapping<AccountId, Vec<mtc::GhostState>>,
-        player_battle_ghost_index: Mapping<AccountId, u8>,
+        player_mtc_immutable: Mapping<AccountId, (Vec<mtc::Emo>, Vec<(AccountId, mtc::Ghost)>)>,
+        player_mtc_mutable: Mapping<AccountId, mtc::storage::PlayerMutable>,
     }
 
     impl Contract {
@@ -115,9 +110,8 @@ pub mod contract {
             let deck_fixed_emo_base_ids = self.deck_fixed_emo_base_ids.clone();
             let deck_built_emo_base_ids = self.deck_built_emo_base_ids.clone();
             let player_ep = self.player_ep.get(caller);
-            let player_health = self.player_health.get(caller);
 
-            let ep = if player_health.is_some() {
+            let ep = if self.player_mtc_mutable.contains(caller) {
                 // the previous mtc didn't normally finish
                 player_ep
                     .expect("player ep none")
@@ -139,26 +133,29 @@ pub mod contract {
                 self.player_ep.insert(caller, &ep);
             }
             self.player_seed.insert(caller, &seed);
-            self.player_pool.insert(
+            self.player_mtc_immutable.insert(
                 caller,
-                &setup::build_pool(
-                    &deck_emo_base_ids,
-                    &emo_bases.expect("emo_bases none"),
-                    &deck_fixed_emo_base_ids.expect("deck_fixed_emo_base_ids none"),
-                    &deck_built_emo_base_ids.expect("deck_built_emo_base_ids none"),
-                )
-                .expect("failed to build player pool"),
+                &(
+                    setup::build_pool(
+                        &deck_emo_base_ids,
+                        &emo_bases.expect("emo_bases none"),
+                        &deck_fixed_emo_base_ids.expect("deck_fixed_emo_base_ids none"),
+                        &deck_built_emo_base_ids.expect("deck_built_emo_base_ids none"),
+                    )
+                    .expect("failed to build player pool"),
+                    selected_ghosts,
+                ),
             );
-            self.player_health
-                .insert(caller, &setup::PLAYER_INITIAL_HEALTH);
-            self.player_grade_and_board_history
-                .insert(caller, &Vec::<mtc::GradeAndBoard>::new());
-            self.player_upgrade_coin
-                .insert(caller, &shop::coin::get_upgrade_coin(2));
-            self.player_ghosts.insert(caller, &selected_ghosts);
-            self.player_ghost_states
-                .insert(caller, &build_initial_ghost_states(ep));
-            self.player_battle_ghost_index.insert(caller, &0);
+            self.player_mtc_mutable.insert(
+                caller,
+                &mtc::storage::PlayerMutable {
+                    health: setup::PLAYER_INITIAL_HEALTH,
+                    grade_and_board_history: Vec::new(),
+                    upgrade_coin: shop::coin::get_upgrade_coin(2),
+                    ghost_states: build_initial_ghost_states(ep),
+                    battle_ghost_index: 0,
+                },
+            );
         }
 
         #[ink(message)]
@@ -168,22 +165,19 @@ pub mod contract {
             let emo_bases_opt = self.emo_bases.clone();
             let player_ep = self.player_ep.get(caller);
             let player_seed = self.player_seed.get(caller);
-            let player_pool = self.player_pool.get(caller);
-            let player_health = self.player_health.get(caller);
-            let player_grade_and_board_history = self.player_grade_and_board_history.get(caller);
-            let player_upgrade_coin = self.player_upgrade_coin.get(caller);
-            let player_ghosts = self.player_ghosts.get(caller);
-            let player_ghost_states = self.player_ghost_states.get(caller);
-            let player_battle_ghost_index = self.player_battle_ghost_index.get(caller);
+            let (player_pool, player_ghosts) = self
+                .player_mtc_immutable
+                .get(caller)
+                .expect("player_mtc_immutable none");
+            let player_mtc_mutable = self
+                .player_mtc_mutable
+                .get(caller)
+                .expect("player_mtc_mutable none");
 
             let emo_bases = emo_bases_opt.expect("emo_bases_opt none");
-            let mut health = player_health.expect("player_health none");
-            let grade_and_board_history =
-                player_grade_and_board_history.expect("player_grade_and_board_history none");
-            let mut upgrade_coin = player_upgrade_coin.expect("player_upgrade_coin none");
-            let mut ghost_states = player_ghost_states.expect("player_ghost_states none");
-            let battle_ghost_index =
-                player_battle_ghost_index.expect("player_battle_ghost_index none");
+            let mut health = player_mtc_mutable.health;
+            let mut upgrade_coin = player_mtc_mutable.upgrade_coin;
+            let mut ghost_states = player_mtc_mutable.ghost_states;
 
             let (
                 turn,
@@ -191,14 +185,16 @@ pub mod contract {
                     mut grade,
                     mut board,
                 },
-            ) = finish::get_turn_and_previous_grade_and_board(&grade_and_board_history);
+            ) = finish::get_turn_and_previous_grade_and_board(
+                &player_mtc_mutable.grade_and_board_history,
+            );
 
             board = shop::player_operation::verify_player_operations_and_update(
                 board,
                 &mut grade,
                 &mut upgrade_coin,
                 &player_operations,
-                &player_pool.expect("player_pool none"),
+                &player_pool,
                 player_seed.expect("player_seed none"),
                 turn,
                 &emo_bases,
@@ -206,8 +202,10 @@ pub mod contract {
             .expect("invalid shop player operations");
 
             let new_seed = self.get_insecure_random_seed(caller, b"finish_mtc_shop");
-            let (ghosts, _ghost_eps) =
-                ghost::separate_player_ghosts(player_ghosts.expect("player_ghosts none"));
+            let ghosts = player_ghosts
+                .into_iter()
+                .map(|(_, ghost)| ghost)
+                .collect::<Vec<_>>();
 
             let final_place = battle::organizer::battle_all(
                 &board,
@@ -215,7 +213,7 @@ pub mod contract {
                 &mut ghost_states,
                 grade,
                 &ghosts,
-                battle_ghost_index,
+                player_mtc_mutable.battle_ghost_index,
                 turn,
                 new_seed,
                 &emo_bases,
@@ -228,10 +226,10 @@ pub mod contract {
                 board,
                 new_seed,
                 upgrade_coin,
-                battle_ghost_index,
+                player_mtc_mutable.battle_ghost_index,
                 health,
                 ghost_states,
-                grade_and_board_history,
+                player_mtc_mutable.grade_and_board_history,
                 final_place,
                 player_ep.expect("player_ep none"),
             );
@@ -285,14 +283,16 @@ pub mod contract {
                     &grade_and_board_history,
                 );
                 self.player_seed.insert(account_id, &new_seed);
-                self.player_health.insert(account_id, &health);
-                self.player_grade_and_board_history
-                    .insert(account_id, &grade_and_board_history);
-                self.player_upgrade_coin
-                    .insert(account_id, &new_upgrade_coin);
-                self.player_ghost_states.insert(account_id, &ghost_states);
-                self.player_battle_ghost_index
-                    .insert(account_id, &new_battle_ghost_index);
+                self.player_mtc_mutable.insert(
+                    account_id,
+                    &mtc::storage::PlayerMutable {
+                        health,
+                        grade_and_board_history,
+                        upgrade_coin: new_upgrade_coin,
+                        ghost_states,
+                        battle_ghost_index: new_battle_ghost_index,
+                    },
+                );
             }
         }
 
@@ -302,7 +302,7 @@ pub mod contract {
             place: u8,
             grade_and_board_history: &[mtc::GradeAndBoard],
             ep: u16,
-        ) -> (u16, Option<(u16, Vec<(AccountId, u16, mtc::Ghost)>)>) {
+        ) -> (u16, Option<(u16, Vec<(AccountId, mtc::Ghost)>)>) {
             let new_ep = calc_new_ep(place, ep);
 
             let matchmaking_ghosts_opt =
@@ -336,10 +336,7 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_matchmaking_ghosts(
-            &self,
-            ep_band: u16,
-        ) -> Option<Vec<(AccountId, u16, mtc::Ghost)>> {
+        pub fn get_matchmaking_ghosts(&self, ep_band: u16) -> Option<Vec<(AccountId, mtc::Ghost)>> {
             self.matchmaking_ghosts.get(ep_band)
         }
 
@@ -359,54 +356,24 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_player_pool(&self, account: AccountId) -> Option<Vec<mtc::Emo>> {
-            self.player_pool.get(&account)
-        }
-
-        #[ink(message)]
-        pub fn get_player_health(&self, account: AccountId) -> Option<u8> {
-            self.player_health.get(&account)
-        }
-
-        #[ink(message)]
-        pub fn get_player_grade_and_board_history(
+        pub fn get_player_mtc_immutable(
             &self,
             account: AccountId,
-        ) -> Option<Vec<mtc::GradeAndBoard>> {
-            self.player_grade_and_board_history.get(&account)
+        ) -> Option<(Vec<mtc::Emo>, Vec<(AccountId, mtc::Ghost)>)> {
+            self.player_mtc_immutable.get(&account)
         }
 
         #[ink(message)]
-        pub fn get_player_upgrade_coin(&self, account: AccountId) -> Option<Option<u8>> {
-            self.player_upgrade_coin.get(&account)
-        }
-
-        #[ink(message)]
-        pub fn get_player_ghosts(
+        pub fn get_player_mtc_mutable(
             &self,
             account: AccountId,
-        ) -> Option<Vec<(AccountId, u16, mtc::Ghost)>> {
-            self.player_ghosts.get(&account)
-        }
-
-        #[ink(message)]
-        pub fn get_player_ghost_states(&self, account: AccountId) -> Option<Vec<mtc::GhostState>> {
-            self.player_ghost_states.get(&account)
-        }
-
-        #[ink(message)]
-        pub fn get_player_battle_ghost_index(&self, account: AccountId) -> Option<u8> {
-            self.player_battle_ghost_index.get(&account)
+        ) -> Option<mtc::storage::PlayerMutable> {
+            self.player_mtc_mutable.get(&account)
         }
 
         fn remove_player_mtc(&mut self, account: AccountId) {
-            self.player_pool.remove(&account);
-            self.player_health.remove(&account);
-            self.player_grade_and_board_history.remove(&account);
-            self.player_upgrade_coin.remove(&account);
-            self.player_ghosts.remove(&account);
-            self.player_ghost_states.remove(&account);
-            self.player_battle_ghost_index.remove(&account);
+            self.player_mtc_immutable.remove(&account);
+            self.player_mtc_mutable.remove(&account);
         }
     }
 }
