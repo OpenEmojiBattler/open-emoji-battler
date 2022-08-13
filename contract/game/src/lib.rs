@@ -198,15 +198,8 @@ pub mod contract {
                 .get(player)
                 .expect("player_mtc_mutable none");
 
-            let (
-                turn,
-                mtc::GradeAndBoard {
-                    mut grade,
-                    mut board,
-                },
-            ) = finish::get_turn_and_previous_grade_and_board(
-                &player_mtc_mutable.grade_and_board_history,
-            );
+            let (turn, mut grade, mut board) =
+                get_turn_and_previous_grade_and_board(&player_mtc_mutable.grade_and_board_history);
 
             board = shop::player_operation::verify_player_operations_and_update(
                 board,

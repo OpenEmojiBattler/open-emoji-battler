@@ -1,15 +1,21 @@
 use common::{codec_types::*, mtc::*};
 use ink_prelude::{vec, vec::Vec};
 
+pub fn get_turn_and_previous_grade_and_board(
+    history: &[mtc::GradeAndBoard],
+) -> (u8, u8, mtc::Board) {
+    let (turn, mtc::GradeAndBoard { grade, board }) =
+        finish::get_turn_and_previous_grade_and_board(history);
+
+    assert!(turn < 40, "max turn exceeded");
+
+    (turn, grade, board)
+}
+
 pub fn update_player_mtc_mutable_after_battle(
     player_mtc_mutable: &mut mtc::storage::PlayerMutable,
     new_seed: u64,
 ) {
-    assert!(
-        !finish::exceeds_grade_and_board_history_limit(&player_mtc_mutable.grade_and_board_history),
-        "max turn exceeded"
-    );
-
     player_mtc_mutable.upgrade_coin =
         shop::coin::decrease_upgrade_coin(player_mtc_mutable.upgrade_coin);
 
