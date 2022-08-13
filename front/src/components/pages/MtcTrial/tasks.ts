@@ -23,17 +23,14 @@ export const buildMtcState = (connection: Connection) =>
       "Vec<mtc_Ghost>",
       _ghosts.map(([_a, _e, ghost]) => ghost)
     )
-    const addressesAndEps = _ghosts.map(([a, e, _]) => ({
-      address: a.toString(),
-      ep: e.toNumber(),
-    }))
+    const addresses = _ghosts.map(([a, _e, _]) => a.toString())
 
     const deckEmoBaseIds = getDefaultDeck(connection.emoBases, builtEmoBaseIds)
 
     const pool = buildPool(deckEmoBaseIds, connection.emoBases, fixedEmoBaseIds, builtEmoBaseIds)
     const seed = getSeed()
 
-    return buildInitialMtcState(initialEp, seed, pool, ghosts, addressesAndEps)
+    return buildInitialMtcState(initialEp, seed, pool, ghosts, addresses)
   })
 
 export const getSeed = () => `${Math.round(Math.random() * 10000)}`
