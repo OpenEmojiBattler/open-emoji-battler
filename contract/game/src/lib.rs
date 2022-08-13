@@ -60,15 +60,6 @@ pub mod contract {
             self.admins.retain(|a| a != &account_id);
         }
 
-        fn assert_admin(&self) -> AccountId {
-            let caller = self.env().caller();
-            assert!(
-                self.admins.contains(&caller),
-                "assert_admin: caller is not admin",
-            );
-            caller
-        }
-
         #[ink(message)]
         pub fn set_code(&mut self, code_hash: [u8; 32]) {
             self.assert_admin();
@@ -79,6 +70,54 @@ pub mod contract {
                     code_hash, err
                 )
             });
+        }
+
+        #[ink(message)]
+        pub fn get_emo_bases(&self) -> Option<emo::Bases> {
+            self.emo_bases.clone()
+        }
+
+        #[ink(message)]
+        pub fn get_deck_fixed_emo_base_ids(&self) -> Option<Vec<u16>> {
+            self.deck_fixed_emo_base_ids.clone()
+        }
+
+        #[ink(message)]
+        pub fn get_deck_built_emo_base_ids(&self) -> Option<Vec<u16>> {
+            self.deck_built_emo_base_ids.clone()
+        }
+
+        #[ink(message)]
+        pub fn get_matchmaking_ghosts(&self, ep_band: u16) -> Option<Vec<(AccountId, mtc::Ghost)>> {
+            self.matchmaking_ghosts.get(ep_band)
+        }
+
+        #[ink(message)]
+        pub fn get_leaderboard(&self) -> Vec<(u16, AccountId)> {
+            self.leaderboard.clone()
+        }
+
+        #[ink(message)]
+        pub fn get_player_ep(&self, account: AccountId) -> Option<u16> {
+            self.player_ep.get(account)
+        }
+
+        #[ink(message)]
+        pub fn get_player_seed(&self, account: AccountId) -> Option<u64> {
+            self.player_seed.get(account)
+        }
+
+        #[ink(message)]
+        pub fn get_player_mtc_immutable(&self, account: AccountId) -> Option<PlayerImmutable> {
+            self.player_mtc_immutable.get(&account)
+        }
+
+        #[ink(message)]
+        pub fn get_player_mtc_mutable(
+            &self,
+            account: AccountId,
+        ) -> Option<mtc::storage::PlayerMutable> {
+            self.player_mtc_mutable.get(&account)
         }
 
         #[ink(message)]
@@ -223,6 +262,24 @@ pub mod contract {
             );
         }
 
+        fn assert_admin(&self) -> AccountId {
+            let caller = self.env().caller();
+            assert!(
+                self.admins.contains(&caller),
+                "assert_admin: caller is not admin",
+            );
+            caller
+        }
+
+        fn get_insecure_random_seed(&self, account_id: AccountId, subject: &[u8]) -> u64 {
+            let (seed, _) = self.env().random(
+                &self
+                    .env()
+                    .hash_encoded::<ink_env::hash::Blake2x128, _>(&(subject, account_id)),
+            );
+            <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
+        }
+
         fn create_or_update_player_ep(&mut self, player: AccountId) -> u16 {
             let new_ep = if let Some(old_ep) = self.player_ep.get(player) {
                 if self.player_mtc_mutable.contains(player) {
@@ -237,15 +294,6 @@ pub mod contract {
             self.player_ep.insert(player, &new_ep);
 
             new_ep
-        }
-
-        fn get_insecure_random_seed(&self, account_id: AccountId, subject: &[u8]) -> u64 {
-            let (seed, _) = self.env().random(
-                &self
-                    .env()
-                    .hash_encoded::<ink_env::hash::Blake2x128, _>(&(subject, account_id)),
-            );
-            <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
 
         fn finish(
@@ -322,54 +370,6 @@ pub mod contract {
                 };
 
             (new_ep, matchmaking_ghosts_opt)
-        }
-
-        #[ink(message)]
-        pub fn get_emo_bases(&self) -> Option<emo::Bases> {
-            self.emo_bases.clone()
-        }
-
-        #[ink(message)]
-        pub fn get_deck_fixed_emo_base_ids(&self) -> Option<Vec<u16>> {
-            self.deck_fixed_emo_base_ids.clone()
-        }
-
-        #[ink(message)]
-        pub fn get_deck_built_emo_base_ids(&self) -> Option<Vec<u16>> {
-            self.deck_built_emo_base_ids.clone()
-        }
-
-        #[ink(message)]
-        pub fn get_matchmaking_ghosts(&self, ep_band: u16) -> Option<Vec<(AccountId, mtc::Ghost)>> {
-            self.matchmaking_ghosts.get(ep_band)
-        }
-
-        #[ink(message)]
-        pub fn get_leaderboard(&self) -> Vec<(u16, AccountId)> {
-            self.leaderboard.clone()
-        }
-
-        #[ink(message)]
-        pub fn get_player_ep(&self, account: AccountId) -> Option<u16> {
-            self.player_ep.get(account)
-        }
-
-        #[ink(message)]
-        pub fn get_player_seed(&self, account: AccountId) -> Option<u64> {
-            self.player_seed.get(account)
-        }
-
-        #[ink(message)]
-        pub fn get_player_mtc_immutable(&self, account: AccountId) -> Option<PlayerImmutable> {
-            self.player_mtc_immutable.get(&account)
-        }
-
-        #[ink(message)]
-        pub fn get_player_mtc_mutable(
-            &self,
-            account: AccountId,
-        ) -> Option<mtc::storage::PlayerMutable> {
-            self.player_mtc_mutable.get(&account)
         }
 
         fn remove_player_mtc(&mut self, account: AccountId) {
