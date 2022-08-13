@@ -11,14 +11,18 @@ export function Dev() {
   return (
     <section className="section">
       <div className="container">
-        <Versions />
-        <Endpoint />
-        <li>
-          <InternalLink to={"/match_debug"}>match debugger</InternalLink>
-        </li>
-        <li>
-          <InternalLink to={"/emo_ability_builder"}>ability builder</InternalLink>
-        </li>
+        <div className="content">
+          <ul>
+            <Versions />
+            <Endpoint />
+            <li>
+              <InternalLink to={"/match_debug"}>match debugger</InternalLink>
+            </li>
+            <li>
+              <InternalLink to={"/emo_ability_builder"}>ability builder</InternalLink>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
   )
