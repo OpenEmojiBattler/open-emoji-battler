@@ -46,8 +46,6 @@ const getElement = (routeId: RouteId): JSX.Element => {
       return <MtcDebug />
     case "/emo_ability_builder":
       return <EmoAbilityBuilder />
-    case "/match_contract":
-      return <Mtc />
     case "/leaderboard":
       return <Leaderboard />
     case "/not_found":

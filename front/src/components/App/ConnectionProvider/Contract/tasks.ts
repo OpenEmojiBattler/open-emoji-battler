@@ -21,9 +21,7 @@ export const buildConnection = async (api: ApiPromise, env: EnvContract): Promis
     query: buildConnectionQuery(gameContract),
     tx: buildConnectionTx(gameContract),
     emoBases,
-    api: () => {
-      throw new Error("connection is not chain")
-    },
+    api: () => api,
     transformAddress: (a) => encodeAddress(a, api.registry.chainSS58),
   }
 }

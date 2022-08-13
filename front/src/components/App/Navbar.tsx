@@ -52,11 +52,7 @@ function NetName(props: { routeId: RouteId }) {
   if (currentEndpoint === productionEnv.chainEndpoint) {
     return <span className={"tag"}>{productionEnv.name}</span>
   } else if (currentEndpoint === productionEnv.contract.endpoint) {
-    return (
-      <span className={"tag"} style={{ backgroundColor: "darkgoldenrod" }}>
-        {productionEnv.contract.name}
-      </span>
-    )
+    return <span className={"tag"}>{productionEnv.contract.name}</span>
   } else {
     return (
       <span className={"tag"} style={{ backgroundColor: "navy" }}>

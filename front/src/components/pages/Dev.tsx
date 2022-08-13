@@ -29,11 +29,12 @@ export function Dev() {
 
 function Versions() {
   const connection = React.useContext(ConnectionContext)
-  const [specVersion, setSpecVersion] = React.useState("")
+  const [spec, setSpec] = React.useState("")
 
   React.useEffect(() => {
     if (connection) {
-      setSpecVersion(connection.api().runtimeVersion.specVersion.toString())
+      const a = connection.api()
+      setSpec(`${a.runtimeVersion.specName.toString()}/${a.runtimeVersion.specVersion.toNumber()}`)
     }
   }, [!connection])
 
@@ -41,7 +42,7 @@ function Versions() {
     <div className={"content"}>
       <ul>
         <li>front version: {process.env.GIT_VERSION}</li>
-        <li>chain runtime spec version: {specVersion}</li>
+        <li>chain runtime spec: {spec}</li>
       </ul>
     </div>
   )

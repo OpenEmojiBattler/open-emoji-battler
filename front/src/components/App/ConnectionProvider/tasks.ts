@@ -37,7 +37,7 @@ export interface Connection {
     ) => Promise<void>
   }
   emoBases: EmoBases
-  api: () => ApiPromise // only avaiable for chain
+  api: () => ApiPromise
   transformAddress: (address: string) => string
 }
 
