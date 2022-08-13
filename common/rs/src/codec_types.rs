@@ -238,6 +238,21 @@ pub mod mtc {
             }
         }
     }
+
+    pub mod storage {
+        use super::*;
+
+        #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
+        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
+        #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
+        pub struct PlayerMutable {
+            pub health: u8,
+            pub grade_and_board_history: Vec<mtc::GradeAndBoard>,
+            pub upgrade_coin: Option<u8>,
+            pub ghost_states: Vec<mtc::GhostState>,
+            pub battle_ghost_index: u8,
+        }
+    }
 }
 
 pub mod emo {

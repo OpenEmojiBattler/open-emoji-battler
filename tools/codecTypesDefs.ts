@@ -266,6 +266,23 @@ export const defs: AnyDef[] = [
           },
         ],
       },
+      {
+        type: "mod",
+        name: "storage",
+        params: [
+          {
+            type: "struct",
+            name: "PlayerMutable",
+            params: {
+              health: "u8",
+              grade_and_board_history: "Vec<mtc::GradeAndBoard>",
+              upgrade_coin: "Option<u8>",
+              ghost_states: "Vec<mtc::GhostState>",
+              battle_ghost_index: "u8",
+            },
+          },
+        ],
+      },
     ],
   },
   {

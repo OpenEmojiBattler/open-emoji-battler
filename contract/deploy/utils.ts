@@ -16,7 +16,8 @@ export const instantiateContract = async (
   constructorArgs: any[],
   dirname: string,
   envName: string,
-  contractFilePath?: string
+  contractFilePath?: string,
+  salt = new Uint8Array()
 ) => {
   const code = contractFilePath
     ? new CodePromise(api, readFileSync(path.resolve(dirname, contractFilePath), "utf8"), null)
@@ -29,7 +30,7 @@ export const instantiateContract = async (
   const contract = (
     (await tx(
       api,
-      () => code.tx.new({ gasLimit: 200_000n * 1_000_000n }, ...constructorArgs),
+      () => code.tx.new({ salt, gasLimit: 200_000n * 1_000_000n }, ...constructorArgs),
       pair
     )) as any
   ).contract as ContractPromise
