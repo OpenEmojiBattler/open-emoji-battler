@@ -245,7 +245,6 @@ pub mod contract {
                 new_seed,
                 player_mtc_mutable,
                 final_place,
-                self.player_ep.get(player).expect("player_ep none"),
             );
         }
     }
@@ -265,7 +264,7 @@ pub mod contract {
         fn get_insecure_random_seed(&self, account_id: AccountId, subject: &[u8]) -> u64 {
             assert!(
                 self.env().caller_is_origin(),
-                "contract is not allowed (for now)"
+                "contracts aren't supported yet"
             );
 
             let (seed, _) =
@@ -303,19 +302,13 @@ pub mod contract {
             new_seed: u64,
             mut player_mtc_mutable: mtc::storage::PlayerMutable,
             final_place: Option<u8>,
-            ep: u16,
         ) {
             player_mtc_mutable
                 .grade_and_board_history
                 .push(mtc::GradeAndBoard { grade, board });
 
             if let Some(place) = final_place {
-                self.finish_mtc(
-                    player,
-                    place,
-                    &player_mtc_mutable.grade_and_board_history,
-                    ep,
-                );
+                self.finish_mtc(player, place, &player_mtc_mutable.grade_and_board_history);
             } else {
                 self.finish_mtc_turn(player, player_mtc_mutable, new_seed);
             }
@@ -328,28 +321,24 @@ pub mod contract {
             player: AccountId,
             place: u8,
             grade_and_board_history: &[mtc::GradeAndBoard],
-            ep: u16,
         ) {
-            let new_ep = calc_new_ep(place, ep);
+            let old_ep = self.player_ep.get(player).expect("player_ep none");
+            let new_ep = calc_new_ep(place, old_ep);
             update_leaderboard(&mut self.leaderboard, new_ep, &player);
             self.player_ep.insert(player, &new_ep);
 
             if !grade_and_board_history.last().unwrap().board.0.is_empty() {
                 let (ep_band, g) = ghost::build_matchmaking_ghosts(
                     &player,
-                    ep,
+                    old_ep,
                     grade_and_board_history,
                     &|ep_band| self.matchmaking_ghosts.get(ep_band),
                 );
                 self.matchmaking_ghosts.insert(ep_band, &g);
             }
 
-            self.remove_player_mtc(player);
-        }
-
-        fn remove_player_mtc(&mut self, account: AccountId) {
-            self.player_mtc_immutable.remove(&account);
-            self.player_mtc_mutable.remove(&account);
+            self.player_mtc_immutable.remove(&player);
+            self.player_mtc_mutable.remove(&player);
         }
 
         fn finish_mtc_turn(
@@ -358,7 +347,7 @@ pub mod contract {
             mut player_mtc_mutable: mtc::storage::PlayerMutable,
             new_seed: u64,
         ) {
-            finish_battle(&mut player_mtc_mutable, new_seed);
+            update_player_mtc_mutable_after_battle(&mut player_mtc_mutable, new_seed);
             self.player_mtc_mutable.insert(player, &player_mtc_mutable);
         }
     }

@@ -1,7 +1,10 @@
 use common::{codec_types::*, mtc::*};
 use ink_prelude::{vec, vec::Vec};
 
-pub fn finish_battle(player_mtc_mutable: &mut mtc::storage::PlayerMutable, new_seed: u64) {
+pub fn update_player_mtc_mutable_after_battle(
+    player_mtc_mutable: &mut mtc::storage::PlayerMutable,
+    new_seed: u64,
+) {
     assert!(
         !finish::exceeds_grade_and_board_history_limit(&player_mtc_mutable.grade_and_board_history),
         "max turn exceeded"
