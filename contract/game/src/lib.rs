@@ -274,12 +274,21 @@ pub mod contract {
             caller
         }
 
+        // enough for this game
         fn get_insecure_random_seed(&self, account_id: AccountId, subject: &[u8]) -> u64 {
-            let (seed, _) = self.env().random(
-                &self
-                    .env()
-                    .hash_encoded::<ink_env::hash::Blake2x128, _>(&(subject, account_id)),
+            assert!(
+                self.env().caller_is_origin(),
+                "contract is not allowed (for now)"
             );
+
+            let (seed, _) =
+                self.env()
+                    .random(&self.env().hash_encoded::<ink_env::hash::Blake2x128, _>(&(
+                        subject,
+                        account_id,
+                        self.env().block_timestamp(),
+                    )));
+
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
 
