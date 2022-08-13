@@ -120,13 +120,8 @@ export interface MtcState {
   health: number
   ghosts: Vec<mtc_Ghost>
   ghostStates: Vec<mtc_GhostState>
-  ghostAddressesAndEps: GhostAddressAndEp[]
+  ghostAddresses: string[]
   battleGhostIndex: number
-}
-
-export interface GhostAddressAndEp {
-  address: string
-  ep: number
 }
 
 export interface ResultState {
@@ -142,7 +137,7 @@ export const buildInitialMtcState = (
   seed: string,
   pool: Vec<mtc_Emo>,
   ghosts: Vec<mtc_Ghost>,
-  ghostAddressesAndEps: GhostAddressAndEp[]
+  ghostAddresses: string[]
 ): MtcState => {
   return {
     previousEp,
@@ -160,7 +155,7 @@ export const buildInitialMtcState = (
     seed,
     pool,
     ghosts,
-    ghostAddressesAndEps,
+    ghostAddresses,
   }
 }
 

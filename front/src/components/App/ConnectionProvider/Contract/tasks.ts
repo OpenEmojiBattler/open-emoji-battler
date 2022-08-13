@@ -21,9 +21,7 @@ export const buildConnection = async (api: ApiPromise, env: EnvContract): Promis
     query: buildConnectionQuery(gameContract),
     tx: buildConnectionTx(gameContract),
     emoBases,
-    api: () => {
-      throw new Error("connection is not chain")
-    },
+    api: () => api,
     transformAddress: (a) => encodeAddress(a, api.registry.chainSS58),
   }
 }
@@ -41,7 +39,7 @@ const buildConnectionQuery = (gameContract: ContractPromise): Connection["query"
     ).unwrap(),
   matchmakingGhosts: async (band) =>
     createType(
-      "Option<Vec<(AccountId, u16, mtc_Ghost)>>",
+      "Option<Vec<(AccountId, mtc_Ghost)>>",
       (await queryContract(gameContract, "getMatchmakingGhosts", [band])).toU8a()
     ),
   leaderboard: async () =>
@@ -59,25 +57,15 @@ const buildConnectionQuery = (gameContract: ContractPromise): Connection["query"
       "Option<u64>",
       (await queryContract(gameContract, "getPlayerSeed", [address])).toU8a()
     ),
-  playerPool: async (address) =>
+  playerMtcImmutable: async (address) =>
     createType(
-      "Option<Vec<mtc_Emo>>",
-      (await queryContract(gameContract, "getPlayerPool", [address])).toU8a()
+      "Option<(Vec<mtc_Emo>, Vec<(AccountId, mtc_Ghost)>)>",
+      (await queryContract(gameContract, "getPlayerMtcImmutable", [address])).toU8a()
     ),
-  playerHealth: async (address) =>
+  playerMtcMutable: async (address) =>
     createType(
-      "Option<u8>",
-      (await queryContract(gameContract, "getPlayerHealth", [address])).toU8a()
-    ),
-  playerGradeAndBoardHistory: async (address) =>
-    createType(
-      "Option<Vec<mtc_GradeAndBoard>>",
-      (await queryContract(gameContract, "getPlayerGradeAndBoardHistory", [address])).toU8a()
-    ),
-  playerGhosts: async (address) =>
-    createType(
-      "Option<Vec<(AccountId, u16, mtc_Ghost)>>",
-      (await queryContract(gameContract, "getPlayerGhosts", [address])).toU8a()
+      "Option<mtc_storage_PlayerMutable>",
+      (await queryContract(gameContract, "getPlayerMtcMutable", [address])).toU8a()
     ),
 })
 

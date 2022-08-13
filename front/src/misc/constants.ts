@@ -3,7 +3,6 @@ export const routeIds = [
   "/match",
   "/emo_bases",
   "/match_trial",
-  "/match_contract",
   "/leaderboard",
   "/dev",
   "/match_debug",
@@ -37,3 +36,6 @@ export const shieldText = "▣"
 export const attractiveText = "✪"
 
 export const zeroAddress = "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
+
+export const connectionKind = ["chain", "contract"] as const
+export type ConnectionKind = typeof connectionKind[number]

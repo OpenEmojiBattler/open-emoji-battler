@@ -37,16 +37,20 @@ export const buildConnection = async (api: ApiPromise): Promise<Connection> => {
 const buildConnectionQuery = (api: ApiPromise): Connection["query"] => ({
   deckFixedEmoBaseIds: async () => (await api.query.game.deckFixedEmoBaseIds()).unwrap(),
   deckBuiltEmoBaseIds: async () => (await api.query.game.deckBuiltEmoBaseIds()).unwrap(),
-  matchmakingGhosts: (band) => api.query.game.matchmakingGhosts(band),
+  matchmakingGhosts: (_band) => {
+    throw new Error("unimplemented")
+  },
   leaderboard: () => {
     throw new Error("unimplemented")
   },
   playerEp: (address) => api.query.game.playerEp(address),
   playerSeed: (address) => api.query.game.playerSeed(address),
-  playerPool: (address) => api.query.game.playerPool(address),
-  playerHealth: (address) => api.query.game.playerHealth(address),
-  playerGradeAndBoardHistory: (address) => api.query.game.playerGradeAndBoardHistory(address),
-  playerGhosts: (address) => api.query.game.playerGhosts(address),
+  playerMtcImmutable: (_address) => {
+    throw new Error("unimplemented")
+  },
+  playerMtcMutable: (_address) => {
+    throw new Error("unimplemented")
+  },
 })
 
 const buildConnectionTx = (api: ApiPromise): Connection["tx"] => ({
