@@ -1,24 +1,21 @@
 use common::{codec_types::*, mtc::*};
 use ink_prelude::{vec, vec::Vec};
 
-pub fn finish_battle(
-    upgrade_coin: Option<u8>,
-    ghost_states: &[mtc::GhostState],
-    battle_ghost_index: u8,
-    new_seed: u64,
-    grade_and_board_history: &[mtc::GradeAndBoard],
-) -> (Option<u8>, u8) {
-    if finish::exceeds_grade_and_board_history_limit(grade_and_board_history) {
-        panic!("max turn exceeded");
-    }
+pub fn finish_battle(player_mtc_mutable: &mut mtc::storage::PlayerMutable, new_seed: u64) {
+    assert!(
+        !finish::exceeds_grade_and_board_history_limit(&player_mtc_mutable.grade_and_board_history),
+        "max turn exceeded"
+    );
 
-    let upgrade_coin = shop::coin::decrease_upgrade_coin(upgrade_coin);
+    player_mtc_mutable.upgrade_coin =
+        shop::coin::decrease_upgrade_coin(player_mtc_mutable.upgrade_coin);
 
-    let new_battle_ghost_index =
-        battle::organizer::select_battle_ghost_index(ghost_states, battle_ghost_index, new_seed)
-            .expect("battle ghost selection failed");
-
-    (upgrade_coin, new_battle_ghost_index)
+    player_mtc_mutable.battle_ghost_index = battle::organizer::select_battle_ghost_index(
+        &player_mtc_mutable.ghost_states,
+        player_mtc_mutable.battle_ghost_index,
+        new_seed,
+    )
+    .expect("battle ghost selection failed");
 }
 
 pub fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
