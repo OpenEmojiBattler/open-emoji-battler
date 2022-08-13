@@ -1,7 +1,7 @@
 {
   "source": {
-    "hash": "0x87b49b12e15ae36c2108b9619269ca32d9cd6af72567d64025061f9642b81034",
-    "language": "ink! 3.3.0",
+    "hash": "0xd4a53b85ad453c81ba34207e400aaa01a95403cf6df63107792ac09468a8f770",
+    "language": "ink! 3.3.1",
     "compiler": "rustc 1.64.0-nightly"
   },
   "contract": {
@@ -96,6 +96,182 @@
           "selector": "0x694fb50f"
         },
         {
+          "args": [],
+          "docs": [],
+          "label": "get_emo_bases",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Option"
+            ],
+            "type": 70
+          },
+          "selector": "0x7864382a"
+        },
+        {
+          "args": [],
+          "docs": [],
+          "label": "get_deck_fixed_emo_base_ids",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Option"
+            ],
+            "type": 72
+          },
+          "selector": "0x3e89cbad"
+        },
+        {
+          "args": [],
+          "docs": [],
+          "label": "get_deck_built_emo_base_ids",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Option"
+            ],
+            "type": 72
+          },
+          "selector": "0x5604c526"
+        },
+        {
+          "args": [
+            {
+              "label": "ep_band",
+              "type": {
+                "displayName": [
+                  "u16"
+                ],
+                "type": 5
+              }
+            }
+          ],
+          "docs": [],
+          "label": "get_matchmaking_ghosts",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Option"
+            ],
+            "type": 73
+          },
+          "selector": "0x5d04aced"
+        },
+        {
+          "args": [],
+          "docs": [],
+          "label": "get_leaderboard",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Vec"
+            ],
+            "type": 51
+          },
+          "selector": "0x091a420a"
+        },
+        {
+          "args": [
+            {
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [],
+          "label": "get_player_ep",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Option"
+            ],
+            "type": 74
+          },
+          "selector": "0xa7a3db39"
+        },
+        {
+          "args": [
+            {
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [],
+          "label": "get_player_seed",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Option"
+            ],
+            "type": 75
+          },
+          "selector": "0x09425436"
+        },
+        {
+          "args": [
+            {
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [],
+          "label": "get_player_mtc_immutable",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Option"
+            ],
+            "type": 76
+          },
+          "selector": "0x811a50ac"
+        },
+        {
+          "args": [
+            {
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [],
+          "label": "get_player_mtc_mutable",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Option"
+            ],
+            "type": 77
+          },
+          "selector": "0x35e55717"
+        },
+        {
           "args": [
             {
               "label": "new_bases",
@@ -104,7 +280,7 @@
                   "emo",
                   "Bases"
                 ],
-                "type": 72
+                "type": 71
               }
             },
             {
@@ -148,7 +324,7 @@
               "label": "deck_emo_base_ids",
               "type": {
                 "displayName": [],
-                "type": 73
+                "type": 78
               }
             }
           ],
@@ -167,7 +343,7 @@
                 "displayName": [
                   "Vec"
                 ],
-                "type": 74
+                "type": 79
               }
             }
           ],
@@ -177,302 +353,6 @@
           "payable": false,
           "returnType": null,
           "selector": "0xfbd3f532"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "get_emo_bases",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 77
-          },
-          "selector": "0x7864382a"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "get_deck_fixed_emo_base_ids",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 78
-          },
-          "selector": "0x3e89cbad"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "get_deck_built_emo_base_ids",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 78
-          },
-          "selector": "0x5604c526"
-        },
-        {
-          "args": [
-            {
-              "label": "ep_band",
-              "type": {
-                "displayName": [
-                  "u16"
-                ],
-                "type": 5
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_matchmaking_ghosts",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 79
-          },
-          "selector": "0x5d04aced"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "get_leaderboard",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Vec"
-            ],
-            "type": 51
-          },
-          "selector": "0x091a420a"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_ep",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 80
-          },
-          "selector": "0xa7a3db39"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_seed",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 81
-          },
-          "selector": "0x09425436"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_pool",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 82
-          },
-          "selector": "0x83e00bfa"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_health",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 67
-          },
-          "selector": "0x7560bd82"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_grade_and_board_history",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 83
-          },
-          "selector": "0x4dd1791b"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_upgrade_coin",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 84
-          },
-          "selector": "0xdf1f8165"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_ghosts",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 79
-          },
-          "selector": "0xb12c7ae3"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_ghost_states",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 85
-          },
-          "selector": "0x2235eb1c"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_battle_ghost_index",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 67
-          },
-          "selector": "0x5cbf6203"
         }
       ]
     },
@@ -618,61 +498,16 @@
                 "ty": 56
               }
             },
-            "name": "player_pool"
+            "name": "player_mtc_immutable"
           },
           {
             "layout": {
               "cell": {
                 "key": "0x0900000000000000000000000000000000000000000000000000000000000000",
-                "ty": 59
-              }
-            },
-            "name": "player_health"
-          },
-          {
-            "layout": {
-              "cell": {
-                "key": "0x0a00000000000000000000000000000000000000000000000000000000000000",
                 "ty": 60
               }
             },
-            "name": "player_grade_and_board_history"
-          },
-          {
-            "layout": {
-              "cell": {
-                "key": "0x0b00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 66
-              }
-            },
-            "name": "player_upgrade_coin"
-          },
-          {
-            "layout": {
-              "cell": {
-                "key": "0x0c00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 68
-              }
-            },
-            "name": "player_ghosts"
-          },
-          {
-            "layout": {
-              "cell": {
-                "key": "0x0d00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 69
-              }
-            },
-            "name": "player_ghost_states"
-          },
-          {
-            "layout": {
-              "cell": {
-                "key": "0x0e00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 59
-              }
-            },
-            "name": "player_battle_ghost_index"
+            "name": "player_mtc_mutable"
           }
         ]
       }
@@ -2166,7 +2001,6 @@
           "def": {
             "tuple": [
               1,
-              5,
               43
             ]
           }
@@ -2474,14 +2308,25 @@
         "id": 57,
         "type": {
           "def": {
-            "sequence": {
-              "type": 58
-            }
+            "tuple": [
+              58,
+              41
+            ]
           }
         }
       },
       {
         "id": 58,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 59
+            }
+          }
+        }
+      },
+      {
+        "id": 59,
         "type": {
           "def": {
             "composite": {
@@ -2504,38 +2349,6 @@
             "codec_types",
             "mtc",
             "Emo"
-          ]
-        }
-      },
-      {
-        "id": 59,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "offset_key",
-                  "type": 50,
-                  "typeName": "Key"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "K",
-              "type": 1
-            },
-            {
-              "name": "V",
-              "type": 3
-            }
-          ],
-          "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
           ]
         }
       },
@@ -2575,14 +2388,57 @@
         "id": 61,
         "type": {
           "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "health",
+                  "type": 3,
+                  "typeName": "u8"
+                },
+                {
+                  "name": "grade_and_board_history",
+                  "type": 62,
+                  "typeName": "Vec<mtc::GradeAndBoard>"
+                },
+                {
+                  "name": "upgrade_coin",
+                  "type": 67,
+                  "typeName": "Option<u8>"
+                },
+                {
+                  "name": "ghost_states",
+                  "type": 68,
+                  "typeName": "Vec<mtc::GhostState>"
+                },
+                {
+                  "name": "battle_ghost_index",
+                  "type": 3,
+                  "typeName": "u8"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "storage",
+            "PlayerMutable"
+          ]
+        }
+      },
+      {
+        "id": 62,
+        "type": {
+          "def": {
             "sequence": {
-              "type": 62
+              "type": 63
             }
           }
         }
       },
       {
-        "id": 62,
+        "id": 63,
         "type": {
           "def": {
             "composite": {
@@ -2594,7 +2450,7 @@
                 },
                 {
                   "name": "board",
-                  "type": 63,
+                  "type": 64,
                   "typeName": "mtc::Board"
                 }
               ]
@@ -2609,13 +2465,13 @@
         }
       },
       {
-        "id": 63,
+        "id": 64,
         "type": {
           "def": {
             "composite": {
               "fields": [
                 {
-                  "type": 64,
+                  "type": 65,
                   "typeName": "Vec<mtc::BoardEmo>"
                 }
               ]
@@ -2630,17 +2486,17 @@
         }
       },
       {
-        "id": 64,
+        "id": 65,
         "type": {
           "def": {
             "sequence": {
-              "type": 65
+              "type": 66
             }
           }
         }
       },
       {
-        "id": 65,
+        "id": 66,
         "type": {
           "def": {
             "composite": {
@@ -2668,38 +2524,6 @@
             "codec_types",
             "mtc",
             "BoardEmo"
-          ]
-        }
-      },
-      {
-        "id": 66,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "offset_key",
-                  "type": 50,
-                  "typeName": "Key"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "K",
-              "type": 1
-            },
-            {
-              "name": "V",
-              "type": 67
-            }
-          ],
-          "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
           ]
         }
       },
@@ -2740,78 +2564,14 @@
         "id": 68,
         "type": {
           "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "offset_key",
-                  "type": 50,
-                  "typeName": "Key"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "K",
-              "type": 1
-            },
-            {
-              "name": "V",
-              "type": 41
-            }
-          ],
-          "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
-          ]
-        }
-      },
-      {
-        "id": 69,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "offset_key",
-                  "type": 50,
-                  "typeName": "Key"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "K",
-              "type": 1
-            },
-            {
-              "name": "V",
-              "type": 70
-            }
-          ],
-          "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
-          ]
-        }
-      },
-      {
-        "id": 70,
-        "type": {
-          "def": {
             "sequence": {
-              "type": 71
+              "type": 69
             }
           }
         }
       },
       {
-        "id": 71,
+        "id": 69,
         "type": {
           "def": {
             "variant": {
@@ -2850,7 +2610,40 @@
         }
       },
       {
-        "id": 72,
+        "id": 70,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 71
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 71
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 71,
         "type": {
           "def": {
             "composite": {
@@ -2871,7 +2664,205 @@
         }
       },
       {
+        "id": 72,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 39
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 39
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
         "id": 73,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 41
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 41
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 74,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 5
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 5
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 75,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 55
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 55
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 76,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 57
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 57
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 77,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 61
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 61
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 78,
         "type": {
           "def": {
             "array": {
@@ -2882,17 +2873,17 @@
         }
       },
       {
-        "id": 74,
+        "id": 79,
         "type": {
           "def": {
             "sequence": {
-              "type": 75
+              "type": 80
             }
           }
         }
       },
       {
-        "id": 75,
+        "id": 80,
         "type": {
           "def": {
             "variant": {
@@ -2928,7 +2919,7 @@
                   "fields": [
                     {
                       "name": "indexes",
-                      "type": 76,
+                      "type": 81,
                       "typeName": "Vec<u8>"
                     }
                   ],
@@ -2956,310 +2947,13 @@
         }
       },
       {
-        "id": 76,
+        "id": 81,
         "type": {
           "def": {
             "sequence": {
               "type": 3
             }
           }
-        }
-      },
-      {
-        "id": 77,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 72
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 72
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 78,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 39
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 39
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 79,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 41
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 41
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 80,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 5
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 5
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 81,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 55
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 55
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 82,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 57
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 57
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 83,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 61
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 61
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 84,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 67
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 67
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 85,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 70
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 70
-            }
-          ],
-          "path": [
-            "Option"
-          ]
         }
       }
     ]
