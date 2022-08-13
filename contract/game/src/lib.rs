@@ -12,6 +12,9 @@ pub mod contract {
     use ink_storage::{traits::SpreadAllocate, Mapping};
     use scale::Decode;
 
+    type Ghosts = Vec<(AccountId, mtc::Ghost)>;
+    type PlayerImmutable = (Vec<mtc::Emo>, Ghosts); // (pool, ghosts)
+
     #[ink(storage)]
     #[derive(SpreadAllocate)]
     pub struct Contract {
@@ -21,14 +24,14 @@ pub mod contract {
         deck_fixed_emo_base_ids: Option<Vec<u16>>,
         deck_built_emo_base_ids: Option<Vec<u16>>,
 
-        matchmaking_ghosts: Mapping<u16, Vec<(AccountId, mtc::Ghost)>>,
+        matchmaking_ghosts: Mapping<u16, Ghosts>,
         leaderboard: Vec<(u16, AccountId)>,
 
         player_ep: Mapping<AccountId, u16>,
         player_seed: Mapping<AccountId, u64>,
 
         // remove on each mtc
-        player_mtc_immutable: Mapping<AccountId, (Vec<mtc::Emo>, Vec<(AccountId, mtc::Ghost)>)>,
+        player_mtc_immutable: Mapping<AccountId, PlayerImmutable>,
         player_mtc_mutable: Mapping<AccountId, mtc::storage::PlayerMutable>,
     }
 
@@ -303,7 +306,7 @@ pub mod contract {
             place: u8,
             grade_and_board_history: &[mtc::GradeAndBoard],
             ep: u16,
-        ) -> (u16, Option<(u16, Vec<(AccountId, mtc::Ghost)>)>) {
+        ) -> (u16, Option<(u16, Ghosts)>) {
             let new_ep = calc_new_ep(place, ep);
 
             let matchmaking_ghosts_opt =
@@ -357,10 +360,7 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_player_mtc_immutable(
-            &self,
-            account: AccountId,
-        ) -> Option<(Vec<mtc::Emo>, Vec<(AccountId, mtc::Ghost)>)> {
+        pub fn get_player_mtc_immutable(&self, account: AccountId) -> Option<PlayerImmutable> {
             self.player_mtc_immutable.get(&account)
         }
 
