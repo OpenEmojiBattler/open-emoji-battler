@@ -24,7 +24,7 @@ pub fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
         2 => Some(50),
         _ => None,
     } {
-        return if old_ep > ep::INITIAL_EP {
+        return (if old_ep > ep::INITIAL_EP {
             let x = (old_ep - ep::INITIAL_EP) / 40;
             if x < plus {
                 plus - x
@@ -33,7 +33,8 @@ pub fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
             }
         } else {
             plus
-        };
+        })
+        .saturating_add(old_ep);
     }
 
     let minus = match place {
@@ -57,8 +58,12 @@ pub fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16
         if iter_account == account {
             same_account_index_opt = Some(index);
         }
-        if iter_ep <= &ep {
+        if new_place_index_opt.is_none() && iter_ep <= &ep {
             new_place_index_opt = Some(index);
+        }
+
+        if same_account_index_opt.is_some() && new_place_index_opt.is_some() {
+            break;
         }
     }
 
@@ -66,11 +71,9 @@ pub fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16
         if let Some(new_place_index) = new_place_index_opt {
             leaderboard.swap(same_account_index, new_place_index);
         } else {
-            let len = leaderboard.len();
-            if len < LEADERBOARD_REAL_SIZE.into() {
-                leaderboard.swap(same_account_index, len - 1);
-            } else {
-                leaderboard.remove(same_account_index);
+            let removed = leaderboard.remove(same_account_index);
+            if leaderboard.len() < LEADERBOARD_REAL_SIZE.into() {
+                leaderboard.push(removed);
             }
         }
     } else if let Some(new_place_index) = new_place_index_opt {
