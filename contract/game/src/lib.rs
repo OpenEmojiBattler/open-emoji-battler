@@ -238,7 +238,7 @@ pub mod contract {
             )
             .expect("battle failed");
 
-            self.finish(
+            self.update_for_finish_mtc_shop(
                 player,
                 grade,
                 board,
@@ -295,7 +295,7 @@ pub mod contract {
             new_ep
         }
 
-        fn finish(
+        fn update_for_finish_mtc_shop(
             &mut self,
             player: AccountId,
             grade: u8,
@@ -310,57 +310,56 @@ pub mod contract {
                 .push(mtc::GradeAndBoard { grade, board });
 
             if let Some(place) = final_place {
-                let (new_ep, matchmaking_ghosts_opt) = self.finish_mtc(
+                self.finish_mtc(
                     player,
                     place,
                     &player_mtc_mutable.grade_and_board_history,
                     ep,
                 );
-
-                self.player_ep.insert(player, &new_ep);
-
-                if let Some((ep_band, g)) = matchmaking_ghosts_opt {
-                    self.matchmaking_ghosts.insert(ep_band, &g);
-                }
-
-                update_leaderboard(&mut self.leaderboard, new_ep, &player);
-
-                self.remove_player_mtc(player);
             } else {
-                finish_battle(&mut player_mtc_mutable, new_seed);
-                self.player_mtc_mutable.insert(player, &player_mtc_mutable);
+                self.finish_mtc_turn(player, player_mtc_mutable, new_seed);
             }
 
             self.player_seed.insert(player, &new_seed);
         }
 
         fn finish_mtc(
-            &self,
+            &mut self,
             player: AccountId,
             place: u8,
             grade_and_board_history: &[mtc::GradeAndBoard],
             ep: u16,
-        ) -> (u16, Option<(u16, Ghosts)>) {
+        ) {
             let new_ep = calc_new_ep(place, ep);
+            update_leaderboard(&mut self.leaderboard, new_ep, &player);
+            self.player_ep.insert(player, &new_ep);
 
-            let matchmaking_ghosts_opt =
-                if grade_and_board_history.last().unwrap().board.0.is_empty() {
-                    None
-                } else {
-                    Some(ghost::build_matchmaking_ghosts(
-                        &player,
-                        ep,
-                        grade_and_board_history,
-                        &|ep_band| self.matchmaking_ghosts.get(ep_band),
-                    ))
-                };
+            if !grade_and_board_history.last().unwrap().board.0.is_empty() {
+                let (ep_band, g) = ghost::build_matchmaking_ghosts(
+                    &player,
+                    ep,
+                    grade_and_board_history,
+                    &|ep_band| self.matchmaking_ghosts.get(ep_band),
+                );
+                self.matchmaking_ghosts.insert(ep_band, &g);
+            }
 
-            (new_ep, matchmaking_ghosts_opt)
+            self.remove_player_mtc(player);
         }
 
         fn remove_player_mtc(&mut self, account: AccountId) {
             self.player_mtc_immutable.remove(&account);
             self.player_mtc_mutable.remove(&account);
+        }
+
+        fn finish_mtc_turn(
+            &mut self,
+            player: AccountId,
+            mut player_mtc_mutable: mtc::storage::PlayerMutable,
+            new_seed: u64,
+        ) {
+            finish_battle(&mut player_mtc_mutable, new_seed);
+            self.player_mtc_mutable.insert(player, &player_mtc_mutable);
         }
     }
 }
