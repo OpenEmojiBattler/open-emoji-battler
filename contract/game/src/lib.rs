@@ -261,7 +261,10 @@ pub mod contract {
                 player_ep.expect("player_ep none"),
             );
         }
+    }
 
+    #[ink(impl)]
+    impl Contract {
         fn assert_admin(&self) -> AccountId {
             let caller = self.env().caller();
             assert!(
