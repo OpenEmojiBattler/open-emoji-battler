@@ -45,12 +45,7 @@ pub fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
         _ => panic!("unsupported place: {}", place),
     };
 
-    let e = old_ep.saturating_sub(minus);
-    if e > ep::MIN_EP {
-        e
-    } else {
-        ep::MIN_EP
-    }
+    ep::reduce_ep(old_ep, minus)
 }
 
 const LEADERBOARD_SIZE: u8 = 100;

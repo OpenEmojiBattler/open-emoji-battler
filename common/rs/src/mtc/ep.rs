@@ -9,6 +9,15 @@ pub fn get_ep_band(ep: u16) -> u16 {
     ep / EP_BANDWIDTH
 }
 
+pub fn reduce_ep(ep: u16, minus: u16) -> u16 {
+    let e = ep.saturating_sub(minus);
+    if e > MIN_EP {
+        e
+    } else {
+        MIN_EP
+    }
+}
+
 #[cfg(feature = "chain")]
 pub fn calculate_new_ep(player_ep: u16, player_place: u8, sorted_ghost_eps: &[u16]) -> u16 {
     let player_ep: f32 = player_ep.into();

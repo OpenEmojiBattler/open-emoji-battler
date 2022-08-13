@@ -286,7 +286,7 @@ pub mod contract {
         fn create_or_update_player_ep(&mut self, player: AccountId) -> u16 {
             let new_ep = if let Some(old_ep) = self.player_ep.get(player) {
                 if self.player_mtc_mutable.contains(player) {
-                    old_ep.saturating_sub(ep::EP_UNFINISH_PENALTY)
+                    ep::reduce_ep(old_ep, ep::EP_UNFINISH_PENALTY)
                 } else {
                     return old_ep;
                 }
