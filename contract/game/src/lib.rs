@@ -162,7 +162,7 @@ pub mod contract {
                         self.deck_fixed_emo_base_ids
                             .as_ref()
                             .expect("deck_fixed_emo_base_ids none"),
-                        self.deck_fixed_emo_base_ids
+                        self.deck_built_emo_base_ids
                             .as_ref()
                             .expect("deck_built_emo_base_ids none"),
                     )
