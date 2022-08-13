@@ -49,6 +49,12 @@ const getElement = (routeId: RouteId): JSX.Element => {
     case "/leaderboard":
       return <Leaderboard />
     case "/not_found":
-      return <h1>page not found</h1>
+      return (
+        <section className="section">
+          <div className="container">
+            <h1 className="title">Page Not Found</h1>
+          </div>
+        </section>
+      )
   }
 }

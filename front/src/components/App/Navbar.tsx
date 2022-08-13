@@ -45,9 +45,9 @@ function NetName(props: { routeId: RouteId }) {
   const productionEnv = getEnv("production")
 
   const currentEndpoint =
-    getRouteConnectionKind(props.routeId) === "contract"
-      ? getOebEnv().contract.endpoint
-      : getChainEndpoint()
+    getRouteConnectionKind(props.routeId) === "chain"
+      ? getChainEndpoint()
+      : getOebEnv().contract.endpoint
 
   if (currentEndpoint === productionEnv.chainEndpoint) {
     return <span className={"tag"}>{productionEnv.name}</span>

@@ -14,8 +14,10 @@ import type {
 } from "common"
 import type { EmoBases } from "~/misc/types"
 
+import type { ConnectionKind } from "~/misc/constants"
+
 export interface Connection {
-  kind: "chain" | "contract"
+  kind: ConnectionKind
   query: {
     deckFixedEmoBaseIds: () => Promise<Vec<u16>>
     deckBuiltEmoBaseIds: () => Promise<Vec<u16>>
