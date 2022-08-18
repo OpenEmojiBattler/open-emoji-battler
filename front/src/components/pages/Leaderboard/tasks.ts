@@ -29,7 +29,7 @@ export const queryKusamaAddressNames = async (
   for (const address of addresses) {
     const child = children[address]
     if (child) {
-      addressNames[address] = `${parents[child.parentAddress]}/${child.name}`
+      addressNames[address] = `${parents[child.parentAddress]} / ${child.name}`
     }
 
     const parent = parents[address]
