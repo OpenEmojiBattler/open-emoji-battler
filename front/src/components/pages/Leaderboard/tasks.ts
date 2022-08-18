@@ -10,8 +10,10 @@ export const queryKusamaAddressNames = async (
   contractConnection: Connection,
   addresses: string[]
 ) => {
+  const addressNames: Map<string, string> = new Map()
+
   if (addresses.length < 1) {
-    return {}
+    return addressNames
   }
 
   const api = await ApiPromise.create({
@@ -24,17 +26,15 @@ export const queryKusamaAddressNames = async (
     api
   )
 
-  const addressNames: Record<string, string> = {}
-
   for (const address of addresses) {
-    const child = children[address]
+    const child = children.get(address)
     if (child) {
-      addressNames[address] = `${parents[child.parentAddress]} / ${child.name}`
+      addressNames.set(address, `${parents.get(child.parentAddress)} / ${child.name}`)
     }
 
-    const parent = parents[address]
+    const parent = parents.get(address)
     if (parent) {
-      addressNames[address] = parent
+      addressNames.set(address, parent)
     }
   }
 
@@ -48,7 +48,7 @@ const getChildlen = async (
   addresses: string[],
   api: ApiPromise
 ) => {
-  const children: Record<string, { parentAddress: string; name: string }> = {}
+  const children: Map<string, { parentAddress: string; name: string }> = new Map()
 
   const result = await api.query.identity.superOf.multi(addresses)
 
@@ -62,17 +62,17 @@ const getChildlen = async (
       return
     }
 
-    children[addresses[i]] = {
+    children.set(addresses[i], {
       parentAddress: contractConnection.transformAddress(accountId.toString()),
       name: u8aToString(data.asRaw),
-    }
+    })
   })
 
   return children
 }
 
 const getParents = async (addresses: string[], api: ApiPromise) => {
-  const parents: Record<string, string> = {}
+  const parents: Map<string, string> = new Map()
 
   const result = await api.query.identity.identityOf.multi(addresses)
 
@@ -86,7 +86,7 @@ const getParents = async (addresses: string[], api: ApiPromise) => {
       return
     }
 
-    parents[addresses[i]] = u8aToString(display.asRaw)
+    parents.set(addresses[i], u8aToString(display.asRaw))
   })
 
   return parents

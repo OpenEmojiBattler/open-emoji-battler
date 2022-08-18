@@ -34,7 +34,7 @@ function Table(props: { connection: Connection }) {
   const [leaderboard, setLeaderboard] = React.useState<
     { rank: number; ep: number; address: string }[]
   >([])
-  const [addressNames, setAddressNames] = React.useState<Record<string, string>>({})
+  const [addressNames, setAddressNames] = React.useState<Map<string, string>>(new Map())
   const [extensionAddresses, setExtensionAddresses] = React.useState<string[]>([])
 
   React.useEffect(() => {
@@ -88,9 +88,9 @@ function Table(props: { connection: Connection }) {
             >
               <td>{rank}</td>
               <td>
-                {addressNames[address] ? (
+                {addressNames.has(address) ? (
                   <>
-                    <strong>{addressNames[address]}</strong> ({address})
+                    <strong>{addressNames.get(address)}</strong> ({address})
                   </>
                 ) : (
                   <>{address}</>
