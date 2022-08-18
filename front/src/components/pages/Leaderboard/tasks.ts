@@ -22,7 +22,7 @@ export const queryKusamaAddressNames = async (
 
   const children = await getChildlen(contractConnection, addresses, api)
   const parents = await getParents(
-    uniqueArray(addresses.concat(Object.values(children).map((o) => o.parentAddress))),
+    uniqueArray(addresses.concat(Array.from(children.values()).map((o) => o.parentAddress))),
     api
   )
 
