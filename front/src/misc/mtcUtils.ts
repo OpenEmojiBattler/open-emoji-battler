@@ -13,11 +13,10 @@ import {
   createType,
 } from "common"
 
-import { initialHealth, emoTyps, EmoTyp, leaderboardSize } from "~/misc/constants"
+import { emoTyps, EmoTyp, leaderboardSize } from "~/misc/constants"
 import { EmoBases } from "./types"
 import { groupBy } from "~/misc/utils"
 import { battleAll, selectBattleGhostIndex } from "~/wasm"
-import { get_upgrade_coin } from "~/wasm/raw"
 
 import emoNames from "~/misc/emo/names.json"
 
@@ -130,28 +129,26 @@ export interface ResultState {
   rank: number | null
 }
 
-const initialGhostState = { Active: { health: initialHealth } }
-
 export const buildInitialMtcState = (
   previousEp: number,
   seed: string,
   pool: Vec<mtc_Emo>,
   ghosts: Vec<mtc_Ghost>,
-  ghostAddresses: string[]
+  ghostAddresses: string[],
+  health: number,
+  upgradeCoin: number | null,
+  ghostStates: Vec<mtc_GhostState>,
+  battleGhostIndex: number
 ): MtcState => {
   return {
     previousEp,
     turn: 1,
     board: createType("mtc_Board", []),
     grade: 1,
-    upgradeCoin: get_upgrade_coin(2) || null,
-    health: initialHealth,
-    ghostStates: createType("Vec<mtc_GhostState>", [
-      initialGhostState,
-      initialGhostState,
-      initialGhostState,
-    ]),
-    battleGhostIndex: 0,
+    upgradeCoin,
+    health,
+    ghostStates,
+    battleGhostIndex,
     seed,
     pool,
     ghosts,
