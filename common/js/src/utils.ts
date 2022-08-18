@@ -78,3 +78,4 @@ export const getPowWasmBytes = () => decode(base64)
 export const getPowSolutionBNFromBytes = (solution: Uint8Array) => new BN(solution, undefined, "le")
 
 export const range = (n: number) => Array.from(new Array(n), (_, i) => i)
+export const uniqueArray = <T>(arr: T[]): T[] => Array.from(new Set(arr))

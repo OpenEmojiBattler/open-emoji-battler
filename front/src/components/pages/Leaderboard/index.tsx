@@ -4,6 +4,7 @@ import { web3Accounts } from "@polkadot/extension-dapp"
 import { Connection, ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
 import { web3EnableOEB, buildExtensionAccounts } from "~/misc/accountUtils"
 import { translateLeaderboardCodec } from "~/misc/mtcUtils"
+import { queryKusamaAddressNames } from "./tasks"
 
 export function Leaderboard() {
   return (
@@ -33,14 +34,20 @@ function Table(props: { connection: Connection }) {
   const [leaderboard, setLeaderboard] = React.useState<
     { rank: number; ep: number; address: string }[]
   >([])
+  const [addressNames, setAddressNames] = React.useState<Map<string, string>>(new Map())
   const [extensionAddresses, setExtensionAddresses] = React.useState<string[]>([])
 
   React.useEffect(() => {
     let isMounted = true
 
-    props.connection.query.leaderboard().then((l) => {
+    props.connection.query.leaderboard().then((_leaders) => {
       if (isMounted) {
-        setLeaderboard(translateLeaderboardCodec(l))
+        const leaders = translateLeaderboardCodec(_leaders)
+        setLeaderboard(leaders)
+        queryKusamaAddressNames(
+          props.connection,
+          leaders.map((l) => l.address)
+        ).then(setAddressNames)
       }
     })
 
@@ -80,7 +87,15 @@ function Table(props: { connection: Connection }) {
               style={extensionAddresses.includes(address) ? { backgroundColor: "#222" } : {}}
             >
               <td>{rank}</td>
-              <td>{address}</td>
+              <td>
+                {addressNames.has(address) ? (
+                  <>
+                    <strong>{addressNames.get(address)}</strong> ({address})
+                  </>
+                ) : (
+                  <>{address}</>
+                )}
+              </td>
               <td>{ep}</td>
             </tr>
           )
