@@ -8,6 +8,7 @@ import {
   mtc_GhostBoard,
   mtc_shop_PlayerOperation,
   createType,
+  uniqueArray,
 } from "common"
 
 import { boardSize, nextCatalogLineCoin } from "~/misc/constants"
@@ -97,9 +98,7 @@ export function Shop(props: {
       : { kind: "no-pow", fn: () => props.startBattle.fn(shopState.playerOperations) }
 
   const _ids = [
-    ...Array.from(
-      new Set(props.mtcState.board.map((e) => e.mtc_emo_ids.map((i) => i.toString())).flat())
-    ),
+    ...uniqueArray(props.mtcState.board.map((e) => e.mtc_emo_ids.map((i) => i.toString())).flat()),
     ...shopState.soldMtcEmoIds,
   ]
   const ids = React.useMemo(() => _ids, [JSON.stringify(_ids)])
