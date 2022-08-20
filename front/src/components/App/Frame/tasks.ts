@@ -33,5 +33,16 @@ export const useWaitingSetter = () => {
   return setter
 }
 
+export const ErrorModalMessageSetterContext = createContext<React.Dispatch<
+  React.SetStateAction<string | null>
+> | null>(null)
+export const useErrorModalMessageSetter = () => {
+  const setter = useContext(ErrorModalMessageSetterContext)
+  if (!setter) {
+    throw new Error("ErrorModalMessageSetterContext null")
+  }
+  return setter
+}
+
 export const IsWasmReadyContext = createContext(false)
 export const useIsWasmReady = () => useContext(IsWasmReadyContext)

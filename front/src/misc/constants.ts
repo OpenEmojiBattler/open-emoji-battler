@@ -15,7 +15,7 @@ export interface Route {
   params: Array<string>
 }
 
-export const initialHealth = 30
+export const initialPlayerHealth = 30
 export const maxCoin = 8
 export const boardSize = 7
 export const nextCatalogLineCoin = 1

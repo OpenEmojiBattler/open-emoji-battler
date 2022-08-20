@@ -1,7 +1,7 @@
 import * as React from "react"
 import BN from "bn.js"
 
-import { useIsWasmReady } from "~/components/App/Frame/tasks"
+import { useErrorModalMessageSetter, useIsWasmReady } from "~/components/App/Frame/tasks"
 import { Shop } from "../../common/Mtc/Shop"
 import { Battle } from "../../common/Mtc/Battle"
 import { Result } from "../../common/Mtc/Result"
@@ -23,6 +23,7 @@ type Phase = "setup" | "shop" | "battle" | "result"
 export function Mtc() {
   const setNav = useNavSetter()
   const setWaiting = useWaitingSetter()
+  const setErrorModalMessage = useErrorModalMessageSetter()
   const account = React.useContext(AccountContext)
   const updateAccount = useAccountUpdater()
   const connection = React.useContext(ConnectionContext)
@@ -45,7 +46,15 @@ export function Mtc() {
           throw new Error("account null")
         }
         setMtcState(
-          await start(connection, account, deckEmoBaseIds, setWaiting, previousEp, solution)
+          await start(
+            connection,
+            account,
+            deckEmoBaseIds,
+            setWaiting,
+            setErrorModalMessage,
+            previousEp,
+            solution
+          )
         )
         if (account.kind === "chain") {
           updateAccount((a) => {
@@ -68,7 +77,10 @@ export function Mtc() {
       }
       const startBattle = (ops: mtc_shop_PlayerOperation[], solution?: BN) => {
         withToggleAsync(setWaiting, async () => {
-          await connection.tx.finishMtcShop(ops, account, solution)
+          await connection.tx.finishMtcShop(ops, account, solution).catch((e) => {
+            setErrorModalMessage(e)
+            throw e
+          })
 
           const seed = await getSeed(connection, account.address)
           setMtcState({ ...mtcState, seed })

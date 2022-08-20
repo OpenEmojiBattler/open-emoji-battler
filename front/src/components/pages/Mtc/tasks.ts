@@ -19,6 +19,7 @@ export const start = (
   account: Account,
   deckEmoBaseIds: string[],
   setWaiting: (b: boolean) => void,
+  setErrorMessage: (m: string) => void,
   previousEp: number,
   solution?: BN
 ) => {
@@ -30,11 +31,15 @@ export const start = (
   }
 
   return withToggleAsync(setWaiting, async () => {
-    await connection.tx.startMtc(deckEmoBaseIds, account, solution)
+    await connection.tx.startMtc(deckEmoBaseIds, account, solution).catch((e) => {
+      setErrorMessage(e)
+      throw e
+    })
 
-    const [seed, immutable] = await Promise.all([
+    const [seed, immutable, _mutable] = await Promise.all([
       getSeed(connection, account.address),
       connection.query.playerMtcImmutable(account.address),
+      connection.query.playerMtcMutable(account.address),
     ])
 
     const [pool, _ghosts] = immutable.unwrap()
@@ -45,7 +50,19 @@ export const start = (
     )
     const ghostAddresses = _ghosts.map(([address, _e, _g]) => address.toString())
 
-    return buildInitialMtcState(previousEp, seed, pool, ghosts, ghostAddresses)
+    const mutable = _mutable.unwrap()
+
+    return buildInitialMtcState(
+      previousEp,
+      seed,
+      pool,
+      ghosts,
+      ghostAddresses,
+      mutable.health.toNumber(),
+      mutable.upgrade_coin.isSome ? mutable.upgrade_coin.unwrap().toNumber() : null,
+      mutable.ghost_states,
+      mutable.battle_ghost_index.toNumber()
+    )
   })
 }
 

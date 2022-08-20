@@ -4,7 +4,8 @@ import { buildInitialMtcState, getDefaultDeck } from "~/misc/mtcUtils"
 import { buildPool } from "~/wasm"
 import { sampleArray } from "~/misc/utils"
 import { Connection } from "~/components/App/ConnectionProvider/tasks"
-import { initialEp } from "~/misc/constants"
+import { initialEp, initialPlayerHealth } from "~/misc/constants"
+import { get_upgrade_coin } from "~/wasm/raw"
 
 export const buildMtcState = (connection: Connection) =>
   Promise.all([
@@ -23,14 +24,26 @@ export const buildMtcState = (connection: Connection) =>
       "Vec<mtc_Ghost>",
       _ghosts.map(([_a, _e, ghost]) => ghost)
     )
-    const addresses = _ghosts.map(([a, _e, _]) => a.toString())
+    const ghostAddresses = _ghosts.map(([a, _e, _]) => a.toString())
 
     const deckEmoBaseIds = getDefaultDeck(connection.emoBases, builtEmoBaseIds)
 
     const pool = buildPool(deckEmoBaseIds, connection.emoBases, fixedEmoBaseIds, builtEmoBaseIds)
     const seed = getSeed()
 
-    return buildInitialMtcState(initialEp, seed, pool, ghosts, addresses)
+    return buildInitialMtcState(
+      initialEp,
+      seed,
+      pool,
+      ghosts,
+      ghostAddresses,
+      initialPlayerHealth,
+      get_upgrade_coin(2) || null,
+      createType("Vec<mtc_GhostState>", [initialGhostState, initialGhostState, initialGhostState]),
+      0
+    )
   })
 
 export const getSeed = () => `${Math.round(Math.random() * 10000)}`
+
+const initialGhostState = { Active: { health: 20 } }

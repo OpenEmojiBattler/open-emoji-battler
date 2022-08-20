@@ -79,9 +79,11 @@ pub fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16
     if let Some(same_account_index) = same_account_index_opt {
         if let Some(new_place_index) = new_place_index_opt {
             leaderboard.swap(same_account_index, new_place_index);
+            leaderboard[new_place_index].0 = ep;
         } else {
-            let removed = leaderboard.remove(same_account_index);
+            let mut removed = leaderboard.remove(same_account_index);
             if leaderboard.len() < LEADERBOARD_REAL_SIZE.into() {
+                removed.0 = ep;
                 leaderboard.push(removed);
             }
         }
