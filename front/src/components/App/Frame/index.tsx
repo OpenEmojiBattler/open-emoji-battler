@@ -2,6 +2,7 @@ import * as React from "react"
 
 import {
   BlockMessageSetterContext,
+  ErrorModalMessageSetterContext,
   IsWasmReadyContext,
   NavSetterContext,
   WaitingSetterContext,
@@ -20,6 +21,7 @@ export function Frame(props: { route: Route }) {
   const [hasNav, setHasNav] = React.useState(true)
   const [blockMessage, setBlockMessage] = React.useState<string | null>(null)
   const [isWaiting, setIsWaiting] = React.useState(false)
+  const [errorModalMessage, setErrorModalMessage] = React.useState<string | null>(null)
   const [isWasmReady, setIsWasmReady] = React.useState(false)
 
   React.useEffect(() => {
@@ -37,17 +39,20 @@ export function Frame(props: { route: Route }) {
         <NavSetterContext.Provider value={setHasNav}>
           <BlockMessageSetterContext.Provider value={setBlockMessage}>
             <WaitingSetterContext.Provider value={setIsWaiting}>
-              <IsWasmReadyContext.Provider value={isWasmReady}>
-                <ConnectionProvider>
-                  <Router route={props.route} />
-                </ConnectionProvider>
-              </IsWasmReadyContext.Provider>
+              <ErrorModalMessageSetterContext.Provider value={setErrorModalMessage}>
+                <IsWasmReadyContext.Provider value={isWasmReady}>
+                  <ConnectionProvider>
+                    <Router route={props.route} />
+                  </ConnectionProvider>
+                </IsWasmReadyContext.Provider>
+              </ErrorModalMessageSetterContext.Provider>
             </WaitingSetterContext.Provider>
           </BlockMessageSetterContext.Provider>
         </NavSetterContext.Provider>
       )}
       <Footer />
       {isWaiting ? <WaitingModal /> : <></>}
+      {errorModalMessage ? <ErrorModal message={errorModalMessage} /> : <></>}
     </>
   )
 }
@@ -60,6 +65,18 @@ function WaitingModal() {
           Waiting...
           <br />
         </span>
+      </div>
+    </ModalWithoutClose>
+  )
+}
+
+function ErrorModal(props: { message: string }) {
+  return (
+    <ModalWithoutClose>
+      <div style={{ textAlign: "center" }}>
+        Error occurred:
+        <br />
+        {props.message}
       </div>
     </ModalWithoutClose>
   )

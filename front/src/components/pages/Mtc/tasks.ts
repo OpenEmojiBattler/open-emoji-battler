@@ -19,6 +19,7 @@ export const start = (
   account: Account,
   deckEmoBaseIds: string[],
   setWaiting: (b: boolean) => void,
+  setErrorMessage: (m: string) => void,
   previousEp: number,
   solution?: BN
 ) => {
@@ -30,7 +31,10 @@ export const start = (
   }
 
   return withToggleAsync(setWaiting, async () => {
-    await connection.tx.startMtc(deckEmoBaseIds, account, solution)
+    await connection.tx.startMtc(deckEmoBaseIds, account, solution).catch((e) => {
+      setErrorMessage(e)
+      throw e
+    })
 
     const [seed, immutable, _mutable] = await Promise.all([
       getSeed(connection, account.address),
