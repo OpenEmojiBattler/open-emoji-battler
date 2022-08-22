@@ -21,4 +21,6 @@ for (const [epBand, lastBoards] of Object.entries(data)) {
   console.log(countStrings(lastBoards.flatMap(({ board }) => board.map((e) => e.typ))))
 
   console.log(lastBoards.map(({ board }) => countStrings(board.map((e) => e.typ))))
+
+  console.log(lastBoards.map(({ grade }) => grade))
 }
