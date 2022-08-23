@@ -24,6 +24,13 @@ const main = async () => {
         "../../game/target/ink/game.contract",
         randomAsU8a()
       )
+      // const gameContract = new ContractPromise(
+      //   api,
+      //   readFileSync(path.resolve(__dirname, `../202109210_init/game.json`), "utf8"),
+      //   JSON.parse(
+      //     readFileSync(path.resolve(__dirname, "./instantiatedAddress.game.local.json"), "utf8")
+      //   )
+      // )
 
       await txContract(
         gameContract,
