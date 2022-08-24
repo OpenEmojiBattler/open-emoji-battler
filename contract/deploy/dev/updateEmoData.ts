@@ -1,26 +1,23 @@
 import { readFileSync } from "fs"
 import { resolve } from "path"
 
-import { randomAsU8a } from "@polkadot/util-crypto"
+import { ContractPromise } from "@polkadot/api-contract"
 import { txContract, connected } from "common"
 import { loadEmoBases } from "common/src/scriptUtils"
-import { instantiateContract, getEndpointAndPair } from "../utils"
+import { getEndpointAndPair } from "../utils"
 
 const main = async () => {
-  const { envName, endpoint, keyringPair } = await getEndpointAndPair()
+  const { endpoint, keyringPair } = await getEndpointAndPair()
 
   await connected(
     endpoint,
     async (api) => {
-      const gameContract = await instantiateContract(
+      const gameContract = new ContractPromise(
         api,
-        keyringPair,
-        "game",
-        [],
-        __dirname,
-        envName,
-        getPathFromFileRelativePath("../../game/target/ink/game.contract"),
-        randomAsU8a()
+        readFileSync(getPathFromFileRelativePath(`../202109210_init/game.json`), "utf8"),
+        JSON.parse(
+          readFileSync(getPathFromFileRelativePath("./instantiatedAddress.game.local.json"), "utf8")
+        )
       )
 
       const availableEmoBaseIds = JSON.parse(
