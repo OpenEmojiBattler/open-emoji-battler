@@ -2214,20 +2214,20 @@
   {
     "id": 73,
     "typ": "Object",
-    "codepoint": 127891,
-    "grade": 3,
-    "attack": 30,
-    "health": 30,
+    "codepoint": 129506,
+    "grade": 1,
+    "attack": 10,
+    "health": 40,
     "abilities": [
       {
         "shop": {
           "peri": {
             "asOneself": {
               "trigger": {
-                "set": null
+                "sell": null
               },
               "action": {
-                "increaseStatsByGrade": {
+                "increaseStats": {
                   "target": {
                     "others": {
                       "destination": "Left",
