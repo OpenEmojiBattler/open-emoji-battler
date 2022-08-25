@@ -1090,7 +1090,7 @@ fn build_triple_abilities(
 mod tests {
     use super::*;
 
-    fn setup_emo_bases() -> emo::Bases {
+    fn setup_sample_emo_bases() -> emo::Bases {
         let emo_base1 = emo::Base {
             id: 1,
             ..Default::default()
@@ -1109,9 +1109,25 @@ mod tests {
             ..Default::default()
         };
 
+        let emo_base3 = emo::Base {
+            id: 3,
+            abilities: vec![emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(
+                emo::ability::shop::Peri::AsAlly {
+                    trigger: emo::ability::shop::PeriAsAllyTrigger::AllySet {
+                        typ_and_triple: Default::default(),
+                    },
+                    action: emo::ability::shop::PeriAsAllyAction::Custom(
+                        emo::ability::shop::AsAllyAction::TriggerSetActions,
+                    ),
+                },
+            ))],
+            ..Default::default()
+        };
+
         let mut emo_bases = emo::Bases::new();
         emo_bases.add(emo_base1);
         emo_bases.add(emo_base2);
+        emo_bases.add(emo_base3);
 
         emo_bases
     }
@@ -1120,10 +1136,23 @@ mod tests {
     fn test_add_emo() {
         let mut board: ShopBoard = Default::default();
         let mut logs = mtc::shop::BoardLogs::new();
-        let emo_bases = setup_emo_bases();
+        let emo_bases = setup_sample_emo_bases();
 
         add_emo(&mut board, &mut logs, &[], 2, false, 0, &emo_bases).unwrap();
         add_emo(&mut board, &mut logs, &[], 2, false, 2, &emo_bases).unwrap();
+        let c = add_emo(&mut board, &mut logs, &[], 2, false, 4, &emo_bases).unwrap();
+
+        assert_eq!(c, 10);
+    }
+
+    #[test]
+    fn test_add_emo2() {
+        let mut board: ShopBoard = Default::default();
+        let mut logs = mtc::shop::BoardLogs::new();
+        let emo_bases = setup_sample_emo_bases();
+
+        add_emo(&mut board, &mut logs, &[], 3, false, 0, &emo_bases).unwrap();
+        add_emo(&mut board, &mut logs, &[], 2, false, 1, &emo_bases).unwrap();
         let c = add_emo(&mut board, &mut logs, &[], 2, false, 4, &emo_bases).unwrap();
 
         assert_eq!(c, 10);
