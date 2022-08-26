@@ -143,7 +143,7 @@ fn sell(
     emo_bases: &emo::Bases,
     sold_emo_index: u8,
 ) -> Result<()> {
-    sold_mtc_emo_ids.extend(board.get_emo(sold_emo_index)?.mtc_emo_ids.clone());
+    sold_mtc_emo_ids.extend(board.get_emo_by_index(sold_emo_index)?.mtc_emo_ids.clone());
     let c = sell_emo(board, logs, sold_emo_index, emo_bases)?;
     *coin = coin.saturating_add(c);
     Ok(())

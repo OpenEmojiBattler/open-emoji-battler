@@ -74,15 +74,19 @@ impl ShopBoardEmo {
     }
 
     pub fn get_peri_abilities(&self) -> Vec<emo::ability::shop::Peri> {
-        let mut v = vec![];
-        for ability in self.attributes.abilities.iter() {
-            if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(peri_ability)) =
-                ability
-            {
-                v.push(peri_ability.clone());
-            }
-        }
-        v
+        self.attributes
+            .abilities
+            .iter()
+            .filter_map(|ability| {
+                if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(peri_ability)) =
+                    ability
+                {
+                    Some(peri_ability.clone())
+                } else {
+                    None
+                }
+            })
+            .collect()
     }
 }
 
@@ -109,23 +113,57 @@ impl ShopBoard {
         mtc::Board(self.0.into_iter().map(|e| e.into_board_emo()).collect())
     }
 
-    pub fn get_emo_and_index_by_id(&self, shop_board_emo_id: u16) -> Result<(&ShopBoardEmo, u8)> {
+    pub fn get_emo_by_index(&self, emo_index: u8) -> Result<&ShopBoardEmo> {
+        self.0
+            .get(emo_index as usize)
+            .ok_or_else(|| format_err!("get_emo_by_index: emo not found (index {emo_index})"))
+    }
+
+    pub fn get_emo_by_id(&self, emo_id: u16) -> Result<&ShopBoardEmo> {
+        self.0
+            .iter()
+            .find(|e| e.id == emo_id)
+            .ok_or_else(|| format_err!("get_emo_by_id: emo not found (id {emo_id})"))
+    }
+
+    pub fn get_emo_mut_by_index(&mut self, emo_index: u8) -> Result<&mut ShopBoardEmo> {
+        self.0
+            .get_mut(emo_index as usize)
+            .ok_or_else(|| format_err!("get_emo_mut_by_index: emo not found (index {emo_index})"))
+    }
+
+    pub fn get_emo_mut_by_id(&mut self, emo_id: u16) -> Result<&mut ShopBoardEmo> {
+        self.0
+            .iter_mut()
+            .find(|e| e.id == emo_id)
+            .ok_or_else(|| format_err!("get_emo_mut_by_id: emo not found: id {emo_id}"))
+    }
+
+    pub fn has_emo_by_index(&self, emo_index: u8) -> bool {
+        self.0.get(emo_index as usize).is_some()
+    }
+
+    pub fn get_emo_and_index_by_id(&self, emo_id: u16) -> Result<(&ShopBoardEmo, u8)> {
         self.0
             .iter()
             .zip(0u8..)
-            .find(|(e, _)| e.id == shop_board_emo_id)
-            .ok_or_else(|| format_err!("emo not found: id {}", shop_board_emo_id))
+            .find(|(e, _)| e.id == emo_id)
+            .ok_or_else(|| format_err!("get_emo_and_index_by_id: emo not found (id {emo_id})"))
     }
 
-    pub fn get_emo_mut_and_index_by_id(
-        &mut self,
-        shop_board_emo_id: u16,
-    ) -> Result<(&mut ShopBoardEmo, u8)> {
+    pub fn get_emo_mut_and_index_by_id(&mut self, emo_id: u16) -> Result<(&mut ShopBoardEmo, u8)> {
         self.0
             .iter_mut()
             .zip(0u8..)
-            .find(|(e, _)| e.id == shop_board_emo_id)
-            .ok_or_else(|| format_err!("emo not found: id {}", shop_board_emo_id))
+            .find(|(e, _)| e.id == emo_id)
+            .ok_or_else(|| format_err!("get_emo_mut_and_index_by_id: emo not found (id {emo_id})"))
+    }
+
+    pub fn get_emo_id_by_index(&self, emo_index: u8) -> Result<u16> {
+        self.0
+            .get(emo_index as usize)
+            .map(|e| e.id)
+            .ok_or_else(|| format_err!("get_emo_by_index: emo not found (index {emo_index})"))
     }
 
     pub fn get_emo_index_by_id(&self, emo_id: u16) -> Result<u8> {
@@ -133,37 +171,7 @@ impl ShopBoard {
             .iter()
             .zip(0u8..)
             .find_map(|(e, index)| if e.id == emo_id { Some(index) } else { None })
-            .ok_or_else(|| format_err!("emo not found: id {}", emo_id))
-    }
-
-    pub fn get_emo(&self, emo_index: u8) -> Result<&ShopBoardEmo> {
-        self.0
-            .get(emo_index as usize)
-            .ok_or_else(|| format_err!("emo not found: index {}", emo_index))
-    }
-
-    pub fn get_emo_by_id(&self, emo_id: u16) -> Result<&ShopBoardEmo> {
-        self.0
-            .iter()
-            .find(|e| e.id == emo_id)
-            .ok_or_else(|| format_err!("emo not found: id {}", emo_id))
-    }
-
-    pub fn get_emo_mut(&mut self, emo_index: u8) -> Result<&mut ShopBoardEmo> {
-        self.0
-            .get_mut(emo_index as usize)
-            .ok_or_else(|| format_err!("emo for mut not found: index {}", emo_index))
-    }
-
-    pub fn get_emo_mut_by_id(&mut self, emo_id: u16) -> Result<&mut ShopBoardEmo> {
-        self.0
-            .iter_mut()
-            .find(|e| e.id == emo_id)
-            .ok_or_else(|| format_err!("emo for mut not found: id {}", emo_id))
-    }
-
-    pub fn has_emo_by_index(&self, emo_index: u8) -> bool {
-        self.0.get(emo_index as usize).is_some()
+            .ok_or_else(|| format_err!("get_emo_index_by_id: emo not found (id {emo_id})"))
     }
 
     pub fn emos(&self) -> Vec<&ShopBoardEmo> {
@@ -200,32 +208,39 @@ impl ShopBoard {
 
     // return (emo_id, ability)[]
     pub fn get_board_pre_abilities(&self) -> Vec<(u16, emo::ability::shop::Pre)> {
-        let mut v = vec![];
-        for emo in self.0.iter() {
-            for ability in emo.attributes.abilities.iter() {
-                if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Pre(pre_ability)) =
-                    ability
-                {
-                    v.push((emo.id, pre_ability.clone()));
-                }
-            }
-        }
-        v
+        self.0
+            .iter()
+            .flat_map(|emo| {
+                emo.attributes.abilities.iter().filter_map(|ability| {
+                    if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Pre(pre_ability)) =
+                        ability
+                    {
+                        Some((emo.id, pre_ability.clone()))
+                    } else {
+                        None
+                    }
+                })
+            })
+            .collect()
     }
 
     // return (emo_id, ability)[]
     pub fn get_board_peri_abilities(&self) -> Vec<(u16, emo::ability::shop::Peri)> {
-        let mut v = vec![];
-        for emo in self.0.iter() {
-            for ability in emo.attributes.abilities.iter() {
-                if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(peri_ability)) =
-                    ability
-                {
-                    v.push((emo.id, peri_ability.clone()));
-                }
-            }
-        }
-        v
+        self.0
+            .iter()
+            .flat_map(|emo| {
+                emo.attributes.abilities.iter().filter_map(|ability| {
+                    if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(
+                        peri_ability,
+                    )) = ability
+                    {
+                        Some((emo.id, peri_ability.clone()))
+                    } else {
+                        None
+                    }
+                })
+            })
+            .collect()
     }
 }
 
