@@ -754,7 +754,7 @@ fn increase_stats_of_menagerie(
 
         let emo = board.get_emo_mut_by_id(candidate_emo_id)?;
 
-        let typ = emo_bases.find(emo.base_id)?.typ.clone();
+        let typ = &emo_bases.find(emo.base_id)?.typ;
         if typs.contains(&typ) {
             continue;
         }
