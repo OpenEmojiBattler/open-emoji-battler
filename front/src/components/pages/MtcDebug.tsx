@@ -69,7 +69,10 @@ function Shop(props: {
       <div className={"block"}>
         <Bases
           selectBase={setSelectedBase}
-          disabled={isBoardOperating || props.board.length >= boardSize}
+          disabled={
+            isBoardOperating ||
+            (props.board.length >= boardSize && props.ghostBoard.length >= boardSize)
+          }
         />
       </div>
       <div className={"block"}>
@@ -87,7 +90,7 @@ function Shop(props: {
             props.setBoard(board)
           }}
           mtcEmoForSet={
-            selectedBase
+            selectedBase && props.board.length < boardSize
               ? createType("mtc_Emo", { id: `${mtcEmoIdGenerator++}`, base_id: selectedBase.id })
               : null
           }
@@ -107,7 +110,7 @@ function Shop(props: {
             props.setGhostBoard(boardToGhostBoard(board))
           }}
           mtcEmoForSet={
-            selectedBase
+            selectedBase && props.ghostBoard.length < boardSize
               ? createType("mtc_Emo", { id: `${mtcEmoIdGenerator++}`, base_id: selectedBase.id })
               : null
           }

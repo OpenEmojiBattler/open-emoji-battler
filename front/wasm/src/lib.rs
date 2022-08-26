@@ -1,3 +1,6 @@
+// see https://github.com/rustwasm/wasm-bindgen/issues/2882
+#![allow(non_upper_case_globals)]
+
 use anyhow::Result;
 use common::*;
 use parity_scale_codec::Encode;

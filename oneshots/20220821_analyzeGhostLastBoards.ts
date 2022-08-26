@@ -23,4 +23,12 @@ for (const [epBand, lastBoards] of Object.entries(data)) {
   console.log(lastBoards.map(({ board }) => countStrings(board.map((e) => e.typ))))
 
   console.log(lastBoards.map(({ grade }) => grade))
+
+  console.log(
+    lastBoards.flatMap(({ board }: any) =>
+      board
+        .filter((e: any) => e.attributes.attack >= 500 || e.attributes.health >= 500)
+        .map((e: any) => `${e.typ}:${e.baseId}:${e.attributes.attack}/${e.attributes.health}`)
+    )
+  )
 }
