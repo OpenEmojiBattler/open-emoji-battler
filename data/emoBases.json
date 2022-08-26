@@ -2448,7 +2448,7 @@
     "typ": "Human",
     "codepoint": 129315,
     "grade": 3,
-    "attack": 50,
+    "attack": 70,
     "health": 30,
     "abilities": [
       {
@@ -2461,7 +2461,7 @@
                     "typ_opt": null,
                     "is_triple_opt": null
                   },
-                  "excludes_same_base": false,
+                  "excludes_same_base": true,
                   "ability": {
                     "Special": "Shield"
                   }
