@@ -136,7 +136,7 @@ impl ShopBoard {
             .ok_or_else(|| format_err!("emo not found: id {}", emo_id))
     }
 
-    pub fn get_emo(&self, emo_index: u8) -> Result<&ShopBoardEmo> {
+    pub fn get_emo_by_index(&self, emo_index: u8) -> Result<&ShopBoardEmo> {
         self.0
             .get(emo_index as usize)
             .ok_or_else(|| format_err!("emo not found: index {}", emo_index))
@@ -149,7 +149,7 @@ impl ShopBoard {
             .ok_or_else(|| format_err!("emo not found: id {}", emo_id))
     }
 
-    pub fn get_emo_mut(&mut self, emo_index: u8) -> Result<&mut ShopBoardEmo> {
+    pub fn get_emo_mut_by_index(&mut self, emo_index: u8) -> Result<&mut ShopBoardEmo> {
         self.0
             .get_mut(emo_index as usize)
             .ok_or_else(|| format_err!("emo for mut not found: index {}", emo_index))

@@ -541,7 +541,7 @@ fn increase_stats_of_adjacent_menagerie(
 
     let left_typ_opt = if let Some(i) = get_left_emo_index(action_emo_pointer.get_emo_index(board)?)
     {
-        let e = board.get_emo(i)?;
+        let e = board.get_emo_by_index(i)?;
         let e_base_id = e.base_id;
         add_attack_and_health_to_emo(board, e.id, logs, attack, health)?;
         Some(&emo_bases.find(e_base_id)?.typ)
@@ -550,7 +550,7 @@ fn increase_stats_of_adjacent_menagerie(
     };
 
     if let Some(i) = get_right_emo_index(board, action_emo_pointer)? {
-        let e = board.get_emo(i)?;
+        let e = board.get_emo_by_index(i)?;
         if let Some(left_typ) = left_typ_opt {
             let right_typ = &emo_bases.find(e.base_id)?.typ;
             if left_typ != right_typ {
@@ -636,7 +636,7 @@ fn add_ability(
     );
 
     for index in get_emo_indexes_by_target(board, emo_pointer, target, emo_bases)?.into_iter() {
-        let board_emo = board.get_emo_mut(index)?;
+        let board_emo = board.get_emo_mut_by_index(index)?;
         if is_special && board_emo.attributes.abilities.contains(&ability) {
             continue;
         }
@@ -876,7 +876,7 @@ fn get_emo_indexes_by_target_others(
 
     let mut typ_filtered_emos_with_index = vec![];
     for i in emos_with_index.into_iter() {
-        let e = board.get_emo(i)?;
+        let e = board.get_emo_by_index(i)?;
         if is_matched_typ_and_triple_board_emo(&typ_and_triple, e, emo_bases)? {
             typ_filtered_emos_with_index.push(i);
         }
@@ -915,7 +915,7 @@ fn add_attack_and_health_to_emos(
     {
         add_attack_and_health_to_emo(
             board,
-            board.get_emo(board_emo_index)?.id,
+            board.get_emo_by_index(board_emo_index)?.id,
             logs,
             attack,
             health,
