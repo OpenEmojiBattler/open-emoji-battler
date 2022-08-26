@@ -200,32 +200,39 @@ impl ShopBoard {
 
     // return (emo_id, ability)[]
     pub fn get_board_pre_abilities(&self) -> Vec<(u16, emo::ability::shop::Pre)> {
-        let mut v = vec![];
-        for emo in self.0.iter() {
-            for ability in emo.attributes.abilities.iter() {
-                if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Pre(pre_ability)) =
-                    ability
-                {
-                    v.push((emo.id, pre_ability.clone()));
-                }
-            }
-        }
-        v
+        self.0
+            .iter()
+            .flat_map(|emo| {
+                emo.attributes.abilities.iter().filter_map(|ability| {
+                    if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Pre(pre_ability)) =
+                        ability
+                    {
+                        Some((emo.id, pre_ability.clone()))
+                    } else {
+                        None
+                    }
+                })
+            })
+            .collect()
     }
 
     // return (emo_id, ability)[]
     pub fn get_board_peri_abilities(&self) -> Vec<(u16, emo::ability::shop::Peri)> {
-        let mut v = vec![];
-        for emo in self.0.iter() {
-            for ability in emo.attributes.abilities.iter() {
-                if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(peri_ability)) =
-                    ability
-                {
-                    v.push((emo.id, peri_ability.clone()));
-                }
-            }
-        }
-        v
+        self.0
+            .iter()
+            .flat_map(|emo| {
+                emo.attributes.abilities.iter().filter_map(|ability| {
+                    if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(
+                        peri_ability,
+                    )) = ability
+                    {
+                        Some((emo.id, peri_ability.clone()))
+                    } else {
+                        None
+                    }
+                })
+            })
+            .collect()
     }
 }
 
