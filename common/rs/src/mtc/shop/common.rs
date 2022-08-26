@@ -155,6 +155,13 @@ impl ShopBoard {
             .ok_or_else(|| format_err!("get_emo_mut_and_index_by_id: emo not found (id {emo_id})"))
     }
 
+    pub fn get_emo_id_by_index(&self, emo_index: u8) -> Result<u16> {
+        self.0
+            .get(emo_index as usize)
+            .map(|e| e.id)
+            .ok_or_else(|| format_err!("get_emo_by_index: emo not found (index {emo_index})"))
+    }
+
     pub fn get_emo_index_by_id(&self, emo_id: u16) -> Result<u8> {
         self.0
             .iter()
