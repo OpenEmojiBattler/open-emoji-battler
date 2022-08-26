@@ -74,15 +74,19 @@ impl ShopBoardEmo {
     }
 
     pub fn get_peri_abilities(&self) -> Vec<emo::ability::shop::Peri> {
-        let mut v = vec![];
-        for ability in self.attributes.abilities.iter() {
-            if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(peri_ability)) =
-                ability
-            {
-                v.push(peri_ability.clone());
-            }
-        }
-        v
+        self.attributes
+            .abilities
+            .iter()
+            .filter_map(|ability| {
+                if let emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(peri_ability)) =
+                    ability
+                {
+                    Some(peri_ability.clone())
+                } else {
+                    None
+                }
+            })
+            .collect()
     }
 }
 

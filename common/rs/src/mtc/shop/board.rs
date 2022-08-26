@@ -541,9 +541,9 @@ fn increase_stats_of_adjacent_menagerie(
 
     let left_typ_opt = if let Some(id) = get_left_emo_id(board, action_emo_pointer)? {
         let e = board.get_emo_by_id(id)?;
-        let e_base_id = e.base_id;
+        let typ = &emo_bases.find(e.base_id)?.typ;
         add_attack_and_health_to_emo(board, e.id, logs, attack, health)?;
-        Some(&emo_bases.find(e_base_id)?.typ)
+        Some(typ)
     } else {
         None
     };
@@ -792,8 +792,9 @@ fn count_emos_by_typ_and_triple(
     emo_bases: &emo::Bases,
 ) -> Result<u8> {
     let mut count = 0u8;
+    let pointer_emo_id = emo_pointer.get_emo_id();
     for e in board.emos().into_iter() {
-        if e.id == emo_pointer.get_emo_id() {
+        if e.id == pointer_emo_id {
             continue;
         }
         if !is_matched_typ_and_triple_board_emo(typ_and_triple, e, emo_bases)? {
@@ -865,8 +866,11 @@ fn get_emo_ids_by_target_others(
 
     let mut filtered_ids = vec![];
     for id in ids.into_iter() {
-        let e = board.get_emo_by_id(id)?;
-        if is_matched_typ_and_triple_board_emo(&typ_and_triple, e, emo_bases)? {
+        if is_matched_typ_and_triple_board_emo(
+            &typ_and_triple,
+            board.get_emo_by_id(id)?,
+            emo_bases,
+        )? {
             filtered_ids.push(id);
         }
     }
@@ -1201,6 +1205,81 @@ mod tests {
         assert_eq!(
             removed,
             vec![shop_board_emo_1, shop_board_emo_3, shop_board_emo_4]
+        );
+    }
+
+    #[test]
+    fn test_get_right_emo_id() {
+        let mut board: ShopBoard = Default::default();
+        let mut logs = mtc::shop::BoardLogs::new();
+        let emo_bases = setup_sample_emo_bases();
+
+        add_emo(&mut board, &mut logs, &[], 1, false, 0, &emo_bases).unwrap();
+        add_emo(&mut board, &mut logs, &[], 1, false, 1, &emo_bases).unwrap();
+        let emo_id1 = board.0[0].id;
+        let emo_id2 = board.0[1].id;
+
+        assert_eq!(
+            get_right_emo_id(&board, &EmoPointer::OnBoard { emo_id: emo_id1 }).unwrap(),
+            Some(emo_id2)
+        );
+        assert_eq!(
+            get_right_emo_id(&board, &EmoPointer::OnBoard { emo_id: emo_id2 }).unwrap(),
+            None
+        );
+        assert_eq!(
+            get_right_emo_id(
+                &board,
+                &EmoPointer::Removed {
+                    emo: Default::default(),
+                    prev_emo_index: 1
+                },
+            )
+            .unwrap(),
+            Some(emo_id2)
+        );
+        assert_eq!(
+            get_right_emo_id(
+                &board,
+                &EmoPointer::Removed {
+                    emo: Default::default(),
+                    prev_emo_index: 2
+                },
+            )
+            .unwrap(),
+            None
+        );
+    }
+
+    #[test]
+    fn test_get_left_emo_id() {
+        let mut board: ShopBoard = Default::default();
+        let mut logs = mtc::shop::BoardLogs::new();
+        let emo_bases = setup_sample_emo_bases();
+
+        add_emo(&mut board, &mut logs, &[], 1, false, 0, &emo_bases).unwrap();
+        add_emo(&mut board, &mut logs, &[], 1, false, 1, &emo_bases).unwrap();
+        let emo_id1 = board.0[0].id;
+        let emo_id2 = board.0[1].id;
+
+        assert_eq!(
+            get_left_emo_id(&board, &EmoPointer::OnBoard { emo_id: emo_id1 }).unwrap(),
+            None
+        );
+        assert_eq!(
+            get_left_emo_id(&board, &EmoPointer::OnBoard { emo_id: emo_id2 }).unwrap(),
+            Some(emo_id1)
+        );
+        assert_eq!(
+            get_left_emo_id(
+                &board,
+                &EmoPointer::Removed {
+                    emo: Default::default(),
+                    prev_emo_index: 1
+                },
+            )
+            .unwrap(),
+            Some(emo_id1)
         );
     }
 }
