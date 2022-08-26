@@ -112,50 +112,47 @@ impl ShopBoard {
     pub fn get_emo_by_index(&self, emo_index: u8) -> Result<&ShopBoardEmo> {
         self.0
             .get(emo_index as usize)
-            .ok_or_else(|| format_err!("emo not found: index {}", emo_index))
+            .ok_or_else(|| format_err!("get_emo_by_index: emo not found (index {emo_index})"))
     }
 
     pub fn get_emo_by_id(&self, emo_id: u16) -> Result<&ShopBoardEmo> {
         self.0
             .iter()
             .find(|e| e.id == emo_id)
-            .ok_or_else(|| format_err!("emo not found: id {}", emo_id))
+            .ok_or_else(|| format_err!("get_emo_by_id: emo not found (id {emo_id})"))
     }
 
     pub fn get_emo_mut_by_index(&mut self, emo_index: u8) -> Result<&mut ShopBoardEmo> {
         self.0
             .get_mut(emo_index as usize)
-            .ok_or_else(|| format_err!("emo for mut not found: index {}", emo_index))
+            .ok_or_else(|| format_err!("get_emo_mut_by_index: emo not found (index {emo_index})"))
     }
 
     pub fn get_emo_mut_by_id(&mut self, emo_id: u16) -> Result<&mut ShopBoardEmo> {
         self.0
             .iter_mut()
             .find(|e| e.id == emo_id)
-            .ok_or_else(|| format_err!("emo for mut not found: id {}", emo_id))
+            .ok_or_else(|| format_err!("get_emo_mut_by_id: emo not found: id {emo_id}"))
     }
 
     pub fn has_emo_by_index(&self, emo_index: u8) -> bool {
         self.0.get(emo_index as usize).is_some()
     }
 
-    pub fn get_emo_and_index_by_id(&self, shop_board_emo_id: u16) -> Result<(&ShopBoardEmo, u8)> {
+    pub fn get_emo_and_index_by_id(&self, emo_id: u16) -> Result<(&ShopBoardEmo, u8)> {
         self.0
             .iter()
             .zip(0u8..)
-            .find(|(e, _)| e.id == shop_board_emo_id)
-            .ok_or_else(|| format_err!("emo not found: id {}", shop_board_emo_id))
+            .find(|(e, _)| e.id == emo_id)
+            .ok_or_else(|| format_err!("get_emo_and_index_by_id: emo not found (id {emo_id})"))
     }
 
-    pub fn get_emo_mut_and_index_by_id(
-        &mut self,
-        shop_board_emo_id: u16,
-    ) -> Result<(&mut ShopBoardEmo, u8)> {
+    pub fn get_emo_mut_and_index_by_id(&mut self, emo_id: u16) -> Result<(&mut ShopBoardEmo, u8)> {
         self.0
             .iter_mut()
             .zip(0u8..)
-            .find(|(e, _)| e.id == shop_board_emo_id)
-            .ok_or_else(|| format_err!("emo not found: id {}", shop_board_emo_id))
+            .find(|(e, _)| e.id == emo_id)
+            .ok_or_else(|| format_err!("get_emo_mut_and_index_by_id: emo not found (id {emo_id})"))
     }
 
     pub fn get_emo_index_by_id(&self, emo_id: u16) -> Result<u8> {
@@ -163,7 +160,7 @@ impl ShopBoard {
             .iter()
             .zip(0u8..)
             .find_map(|(e, index)| if e.id == emo_id { Some(index) } else { None })
-            .ok_or_else(|| format_err!("emo not found: id {}", emo_id))
+            .ok_or_else(|| format_err!("get_emo_index_by_id: emo not found (id {emo_id})"))
     }
 
     pub fn emos(&self) -> Vec<&ShopBoardEmo> {
