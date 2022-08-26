@@ -17,6 +17,40 @@ use sp_std::prelude::*;
 const EMO_TRIPLE_REWARD_COIN: u8 = 5;
 const EMO_SELL_COIN: u8 = 1;
 
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Debug)]
+enum EmoPointer {
+    OnBoard {
+        emo_id: u16,
+    },
+    Removed {
+        emo: ShopBoardEmo,
+        prev_emo_index: u8,
+    },
+}
+
+impl EmoPointer {
+    fn get_emo<'a>(&'a self, board: &'a ShopBoard) -> Result<&ShopBoardEmo> {
+        match self {
+            Self::OnBoard { emo_id } => board.get_emo_by_id(*emo_id),
+            Self::Removed { emo, .. } => Ok(emo),
+        }
+    }
+
+    fn get_emo_id(&self) -> u16 {
+        match self {
+            Self::OnBoard { emo_id } => *emo_id,
+            Self::Removed { emo, .. } => emo.id,
+        }
+    }
+
+    fn get_emo_index(&self, board: &ShopBoard) -> Result<u8> {
+        match self {
+            Self::OnBoard { emo_id } => board.get_emo_index_by_id(*emo_id),
+            Self::Removed { prev_emo_index, .. } => Ok(*prev_emo_index),
+        }
+    }
+}
+
 // return coin
 pub fn start_shop(
     board: &mut ShopBoard,
@@ -55,11 +89,15 @@ pub fn sell_emo(
     logs.add(&|| mtc::shop::BoardLog::Remove { index: emo_index });
 
     let sold = board.remove_emo(emo_index);
+    let abilities = sold.get_peri_abilities();
+    let emo_pointer = EmoPointer::Removed {
+        emo: sold,
+        prev_emo_index: emo_index,
+    };
 
-    let emo_id = board.get_emo(emo_index)?.id;
     let mut gotten_coin = EMO_SELL_COIN;
 
-    for ability in sold.get_peri_abilities().into_iter() {
+    for ability in abilities.into_iter() {
         if let emo::ability::shop::Peri::AsOneself {
             trigger: emo::ability::shop::PeriAsOneselfTrigger::Sell,
             action,
@@ -70,8 +108,7 @@ pub fn sell_emo(
                 &mut gotten_coin,
                 logs,
                 action,
-                emo_id,
-                Some(&sold),
+                &emo_pointer,
                 emo_bases,
             )?;
         }
@@ -171,6 +208,7 @@ fn call_emo_addition_abilities(
     let new_emo = board.get_emo_by_id(new_emo_id)?;
     let is_new_emo_triple = new_emo.attributes.is_triple;
     let new_emo_typ = &emo_bases.find(new_emo.base_id)?.typ;
+    let new_emo_pointer = EmoPointer::OnBoard { emo_id: new_emo_id };
 
     for ability in new_emo.get_peri_abilities().into_iter() {
         if let emo::ability::shop::Peri::AsOneself {
@@ -183,8 +221,7 @@ fn call_emo_addition_abilities(
                 gotten_coin,
                 logs,
                 action,
-                new_emo_id,
-                None,
+                &new_emo_pointer,
                 emo_bases,
             )?;
         }
@@ -206,8 +243,7 @@ fn call_emo_addition_abilities(
                         logs,
                         action,
                         ability_emo_id,
-                        new_emo_id,
-                        None,
+                        &new_emo_pointer,
                         emo_bases,
                     )?;
                 }
@@ -222,8 +258,9 @@ fn call_emo_addition_abilities(
                         gotten_coin,
                         logs,
                         action,
-                        ability_emo_id,
-                        None,
+                        &EmoPointer::OnBoard {
+                            emo_id: ability_emo_id,
+                        },
                         emo_bases,
                     )?;
                 }
@@ -241,8 +278,7 @@ fn call_ability_action_as_ally(
     logs: &mut mtc::shop::BoardLogs,
     action: emo::ability::shop::PeriAsAllyAction,
     oneself_emo_id: u16,
-    ally_emo_id: u16,
-    removed_ally_emo: Option<&ShopBoardEmo>,
+    ally_emo_pointer: &EmoPointer,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
     let is_oneself_emo_triple = board.get_emo_by_id(oneself_emo_id)?.attributes.is_triple;
@@ -254,8 +290,7 @@ fn call_ability_action_as_ally(
                 gotten_coin,
                 logs,
                 normal_action,
-                ally_emo_id,
-                removed_ally_emo,
+                ally_emo_pointer,
                 is_oneself_emo_triple,
                 emo_bases,
             )?;
@@ -266,8 +301,7 @@ fn call_ability_action_as_ally(
                     board,
                     gotten_coin,
                     logs,
-                    ally_emo_id,
-                    removed_ally_emo,
+                    ally_emo_pointer,
                     is_oneself_emo_triple,
                     emo_bases,
                 )?;
@@ -281,16 +315,11 @@ fn trigger_set_actions(
     board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
-    ally_emo_id: u16,
-    removed_ally_emo: Option<&ShopBoardEmo>,
+    ally_emo_pointer: &EmoPointer,
     is_oneself_emo_triple: bool,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
-    let ally_emo = if let Some(e) = removed_ally_emo {
-        e
-    } else {
-        board.get_emo_by_id(ally_emo_id)?
-    };
+    let ally_emo = ally_emo_pointer.get_emo(board)?;
 
     let is_ally_emo_triple = ally_emo.attributes.is_triple;
 
@@ -306,8 +335,7 @@ fn trigger_set_actions(
                     gotten_coin,
                     logs,
                     a,
-                    ally_emo_id,
-                    removed_ally_emo,
+                    ally_emo_pointer,
                     is_ally_emo_triple,
                     emo_bases,
                 )
@@ -327,23 +355,17 @@ fn call_ability_action_as_oneself(
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     action: emo::ability::shop::NormalAction,
-    action_emo_id: u16,
-    removed_action_emo: Option<&ShopBoardEmo>,
+    action_emo_pointer: &EmoPointer,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
-    let is_triple_action = if let Some(e) = removed_action_emo {
-        e.attributes.is_triple
-    } else {
-        board.get_emo_by_id(action_emo_id)?.attributes.is_triple
-    };
+    let is_triple_action = action_emo_pointer.get_emo(board)?.attributes.is_triple;
 
     call_ability_action(
         board,
         gotten_coin,
         logs,
         action,
-        action_emo_id,
-        removed_action_emo,
+        action_emo_pointer,
         is_triple_action,
         emo_bases,
     )
@@ -354,26 +376,18 @@ fn call_ability_action(
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
     action: emo::ability::shop::NormalAction,
-    action_emo_id: u16,
-    removed_action_emo: Option<&ShopBoardEmo>,
+    action_emo_pointer: &EmoPointer,
     is_triple_action: bool,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
-    let (is_action_emo_removed, action_emo) = if let Some(e) = removed_action_emo {
-        (true, e)
-    } else {
-        (false, board.get_emo_by_id(action_emo_id)?)
-    };
-
     match action {
         emo::ability::shop::NormalAction::SetEmo { base_id } => {
             set_emo(
                 board,
                 gotten_coin,
                 logs,
-                action_emo_id,
+                action_emo_pointer,
                 is_triple_action,
-                is_action_emo_removed,
                 emo_bases,
                 base_id,
             )?;
@@ -386,9 +400,8 @@ fn call_ability_action(
             increase_stats(
                 board,
                 logs,
-                action_emo_id,
+                action_emo_pointer,
                 is_triple_action,
-                is_action_emo_removed,
                 emo_bases,
                 target,
                 attack,
@@ -399,9 +412,8 @@ fn call_ability_action(
             increase_stats_of_adjacent_menagerie(
                 board,
                 logs,
-                action_emo_id,
+                action_emo_pointer,
                 is_triple_action,
-                is_action_emo_removed,
                 emo_bases,
                 attack,
                 health,
@@ -412,15 +424,12 @@ fn call_ability_action(
             attack,
             health,
         } => {
-            let base_id = action_emo.base_id;
             increase_stats_by_grade(
                 board,
                 logs,
-                action_emo_id,
+                action_emo_pointer,
                 is_triple_action,
-                is_action_emo_removed,
                 emo_bases,
-                base_id,
                 target,
                 attack,
                 health,
@@ -435,9 +444,8 @@ fn call_ability_action(
             increase_stats_by_emo_count(
                 board,
                 logs,
-                action_emo_id,
+                action_emo_pointer,
                 is_triple_action,
-                is_action_emo_removed,
                 emo_bases,
                 target,
                 count_condition,
@@ -446,15 +454,7 @@ fn call_ability_action(
             )?;
         }
         emo::ability::shop::NormalAction::AddAbility { target, ability } => {
-            add_ability(
-                board,
-                logs,
-                action_emo_id,
-                is_action_emo_removed,
-                emo_bases,
-                target,
-                *ability,
-            )?;
+            add_ability(board, logs, action_emo_pointer, emo_bases, target, *ability)?;
         }
         emo::ability::shop::NormalAction::GetCoin { coin } => {
             get_coin(gotten_coin, is_triple_action, coin);
@@ -465,8 +465,7 @@ fn call_ability_action(
         } => {
             get_coin_by_emo_count_div(
                 board,
-                action_emo_id,
-                is_action_emo_removed,
+                action_emo_pointer,
                 emo_bases,
                 gotten_coin,
                 is_triple_action,
@@ -483,18 +482,15 @@ fn set_emo(
     board: &mut ShopBoard,
     gotten_coin: &mut u8,
     logs: &mut mtc::shop::BoardLogs,
-    action_emo_id: u16,
+    action_emo_pointer: &EmoPointer,
     is_triple_action: bool,
-    is_action_emo_removed: bool,
     emo_bases: &emo::Bases,
     base_id: u16,
 ) -> Result<()> {
     if board.count_emos() < BOARD_EMO_MAX_COUNT {
-        let action_emo_index = board.get_emo_index_by_id(action_emo_id)?;
-        let index = if is_action_emo_removed {
-            action_emo_index
-        } else {
-            action_emo_index + 1
+        let index = match action_emo_pointer {
+            EmoPointer::OnBoard { emo_id } => board.get_emo_index_by_id(*emo_id)? + 1,
+            EmoPointer::Removed { prev_emo_index, .. } => *prev_emo_index,
         };
         *gotten_coin = gotten_coin.saturating_add(add_emo(
             board,
@@ -513,9 +509,8 @@ fn set_emo(
 fn increase_stats(
     board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
-    action_emo_id: u16,
+    action_emo_pointer: &EmoPointer,
     is_triple_action: bool,
-    is_action_emo_removed: bool,
     emo_bases: &emo::Bases,
     target: emo::ability::Target,
     attack: u16,
@@ -525,8 +520,7 @@ fn increase_stats(
     add_attack_and_health_to_emos(
         board,
         logs,
-        action_emo_id,
-        is_action_emo_removed,
+        action_emo_pointer,
         target,
         attack,
         health,
@@ -537,17 +531,16 @@ fn increase_stats(
 fn increase_stats_of_adjacent_menagerie(
     board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
-    action_emo_id: u16,
+    action_emo_pointer: &EmoPointer,
     is_triple_action: bool,
-    is_action_emo_removed: bool,
     emo_bases: &emo::Bases,
     attack: u16,
     health: u16,
 ) -> Result<()> {
-    let action_emo_index = board.get_emo_index_by_id(action_emo_id)?;
     let (attack, health) = double_attack_and_health_if(is_triple_action, attack, health);
 
-    let left_typ_opt = if let Some(i) = get_left_emo_index(action_emo_index) {
+    let left_typ_opt = if let Some(i) = get_left_emo_index(action_emo_pointer.get_emo_index(board)?)
+    {
         let e = board.get_emo(i)?;
         let e_base_id = e.base_id;
         add_attack_and_health_to_emo(board, e.id, logs, attack, health)?;
@@ -556,7 +549,7 @@ fn increase_stats_of_adjacent_menagerie(
         None
     };
 
-    if let Some(i) = get_right_emo_index(board, action_emo_index, is_action_emo_removed) {
+    if let Some(i) = get_right_emo_index(board, action_emo_pointer)? {
         let e = board.get_emo(i)?;
         if let Some(left_typ) = left_typ_opt {
             let right_typ = &emo_bases.find(e.base_id)?.typ;
@@ -574,25 +567,25 @@ fn increase_stats_of_adjacent_menagerie(
 fn increase_stats_by_grade(
     board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
-    action_emo_id: u16,
+    action_emo_pointer: &EmoPointer,
     is_triple_action: bool,
-    is_action_emo_removed: bool,
     emo_bases: &emo::Bases,
-    base_id: u16,
     target: emo::ability::Target,
     attack: u16,
     health: u16,
 ) -> Result<()> {
     let (mut attack, mut health) = double_attack_and_health_if(is_triple_action, attack, health);
-    let grade: u16 = emo_bases.find(base_id)?.grade.into();
+    let grade: u16 = emo_bases
+        .find(action_emo_pointer.get_emo(board)?.base_id)?
+        .grade
+        .into();
     attack = attack.saturating_mul(grade);
     health = health.saturating_mul(grade);
 
     add_attack_and_health_to_emos(
         board,
         logs,
-        action_emo_id,
-        is_action_emo_removed,
+        action_emo_pointer,
         target,
         attack,
         health,
@@ -603,9 +596,8 @@ fn increase_stats_by_grade(
 fn increase_stats_by_emo_count(
     board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
-    action_emo_id: u16,
+    action_emo_pointer: &EmoPointer,
     is_triple_action: bool,
-    is_action_emo_removed: bool,
     emo_bases: &emo::Bases,
     target: emo::ability::Target,
     count_condition: emo::ability::TypOptAndIsTripleOpt,
@@ -613,22 +605,16 @@ fn increase_stats_by_emo_count(
     health: u16,
 ) -> Result<()> {
     let (mut attack, mut health) = double_attack_and_health_if(is_triple_action, attack, health);
-    let count: u16 = count_emos_by_typ_and_triple(
-        board,
-        action_emo_id,
-        is_action_emo_removed,
-        &count_condition,
-        emo_bases,
-    )?
-    .into();
+    let count: u16 =
+        count_emos_by_typ_and_triple(board, action_emo_pointer, &count_condition, emo_bases)?
+            .into();
     attack = attack.saturating_mul(count);
     health = health.saturating_mul(count);
 
     add_attack_and_health_to_emos(
         board,
         logs,
-        action_emo_id,
-        is_action_emo_removed,
+        action_emo_pointer,
         target,
         attack,
         health,
@@ -639,8 +625,7 @@ fn increase_stats_by_emo_count(
 fn add_ability(
     board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
-    emo_id: u16,
-    is_emo_removed: bool,
+    emo_pointer: &EmoPointer,
     emo_bases: &emo::Bases,
     target: emo::ability::Target,
     ability: emo::ability::Ability,
@@ -650,9 +635,7 @@ fn add_ability(
         emo::ability::Ability::Battle(emo::ability::battle::Battle::Special(_))
     );
 
-    for index in
-        get_emo_indexes_by_target(board, emo_id, is_emo_removed, target, emo_bases)?.into_iter()
-    {
+    for index in get_emo_indexes_by_target(board, emo_pointer, target, emo_bases)?.into_iter() {
         let board_emo = board.get_emo_mut(index)?;
         if is_special && board_emo.attributes.abilities.contains(&ability) {
             continue;
@@ -680,21 +663,15 @@ fn get_coin(gotten_coin: &mut u8, is_triple_action: bool, coin: u8) {
 
 fn get_coin_by_emo_count_div(
     board: &mut ShopBoard,
-    action_emo_id: u16,
-    is_action_emo_removed: bool,
+    action_emo_pointer: &EmoPointer,
     emo_bases: &emo::Bases,
     gotten_coin: &mut u8,
     is_triple_action: bool,
     count_condition: emo::ability::TypOptAndIsTripleOpt,
     divisor: u8,
 ) -> Result<()> {
-    let count = count_emos_by_typ_and_triple(
-        board,
-        action_emo_id,
-        is_action_emo_removed,
-        &count_condition,
-        emo_bases,
-    )?;
+    let count =
+        count_emos_by_typ_and_triple(board, action_emo_pointer, &count_condition, emo_bases)?;
     let base = count / divisor;
     *gotten_coin = gotten_coin.saturating_add(if is_triple_action {
         base.saturating_mul(2)
@@ -721,8 +698,9 @@ fn call_pre_ability(
                 gotten_coin,
                 logs,
                 normal_action,
-                action_emo_id,
-                None,
+                &EmoPointer::OnBoard {
+                    emo_id: action_emo_id,
+                },
                 emo_bases,
             )?;
         }
@@ -810,14 +788,13 @@ fn is_matched_typ_and_triple_board_emo(
 
 fn count_emos_by_typ_and_triple(
     board: &ShopBoard,
-    emo_id: u16,
-    is_emo_removed: bool,
+    emo_pointer: &EmoPointer,
     typ_and_triple: &emo::ability::TypOptAndIsTripleOpt,
     emo_bases: &emo::Bases,
 ) -> Result<u8> {
     let mut count = 0u8;
     for e in board.emos().into_iter() {
-        if !is_emo_removed && e.id == emo_id {
+        if e.id == emo_pointer.get_emo_id() {
             continue;
         }
         if !is_matched_typ_and_triple_board_emo(typ_and_triple, e, emo_bases)? {
@@ -830,17 +807,16 @@ fn count_emos_by_typ_and_triple(
 
 fn get_emo_indexes_by_target(
     board: &ShopBoard,
-    emo_id: u16,
-    is_emo_removed: bool,
+    emo_pointer: &EmoPointer,
     target: emo::ability::Target,
     emo_bases: &emo::Bases,
 ) -> Result<Vec<u8>> {
     Ok(match target {
         emo::ability::Target::Oneself => {
-            if is_emo_removed {
-                vec![]
+            if let EmoPointer::OnBoard { emo_id } = emo_pointer {
+                vec![board.get_emo_index_by_id(*emo_id)?]
             } else {
-                vec![board.get_emo_index_by_id(emo_id)?]
+                vec![]
             }
         }
         emo::ability::Target::Others {
@@ -848,8 +824,7 @@ fn get_emo_indexes_by_target(
             typ_and_triple,
         } => get_emo_indexes_by_target_others(
             board,
-            emo_id,
-            is_emo_removed,
+            emo_pointer,
             destination,
             typ_and_triple,
             emo_bases,
@@ -859,33 +834,44 @@ fn get_emo_indexes_by_target(
 
 fn get_emo_indexes_by_target_others(
     board: &ShopBoard,
-    emo_id: u16,
-    is_emo_removed: bool,
+    emo_pointer: &EmoPointer,
     destination: emo::ability::Destination,
     typ_and_triple: emo::ability::TypOptAndIsTripleOpt,
     emo_bases: &emo::Bases,
 ) -> Result<Vec<u8>> {
-    let emo_index = board.get_emo_index_by_id(emo_id)?;
     let emos_with_index = match destination {
         emo::ability::Destination::Right => {
-            if let Some(t) = get_right_emo_index(board, emo_index, is_emo_removed) {
+            if let Some(t) = get_right_emo_index(board, emo_pointer)? {
                 vec![t]
             } else {
                 vec![]
             }
         }
         emo::ability::Destination::Left => {
-            if let Some(t) = get_left_emo_index(emo_index) {
+            if let Some(t) = get_left_emo_index(emo_pointer.get_emo_index(board)?) {
                 vec![t]
             } else {
                 vec![]
             }
         }
-        emo::ability::Destination::All => board
-            .emo_indexes()
-            .into_iter()
-            .filter(|i| is_emo_removed || *i != emo_index)
-            .collect(),
+        emo::ability::Destination::All => {
+            let idx_opt = if let EmoPointer::OnBoard { emo_id } = emo_pointer {
+                Some(board.get_emo_index_by_id(*emo_id)?)
+            } else {
+                None
+            };
+            board
+                .emo_indexes()
+                .into_iter()
+                .filter(|i| {
+                    if let Some(idx) = idx_opt {
+                        *i != idx
+                    } else {
+                        true
+                    }
+                })
+                .collect()
+        }
     };
 
     let mut typ_filtered_emos_with_index = vec![];
@@ -899,17 +885,16 @@ fn get_emo_indexes_by_target_others(
     Ok(typ_filtered_emos_with_index)
 }
 
-fn get_right_emo_index(board: &ShopBoard, origin_index: u8, is_removed: bool) -> Option<u8> {
-    let target_index = if is_removed {
-        origin_index
-    } else {
-        origin_index + 1
+fn get_right_emo_index(board: &ShopBoard, origin_emo_pointer: &EmoPointer) -> Result<Option<u8>> {
+    let target_index = match origin_emo_pointer {
+        EmoPointer::OnBoard { emo_id } => board.get_emo_index_by_id(*emo_id)? + 1,
+        EmoPointer::Removed { prev_emo_index, .. } => *prev_emo_index,
     };
-    if board.has_emo_by_index(target_index) {
+    Ok(if board.has_emo_by_index(target_index) {
         Some(target_index)
     } else {
         None
-    }
+    })
 }
 
 fn get_left_emo_index(origin_index: u8) -> Option<u8> {
@@ -919,15 +904,14 @@ fn get_left_emo_index(origin_index: u8) -> Option<u8> {
 fn add_attack_and_health_to_emos(
     board: &mut ShopBoard,
     logs: &mut mtc::shop::BoardLogs,
-    emo_id: u16,
-    is_emo_removed: bool,
+    emo_pointer: &EmoPointer,
     target: emo::ability::Target,
     attack: u16,
     health: u16,
     emo_bases: &emo::Bases,
 ) -> Result<()> {
     for board_emo_index in
-        get_emo_indexes_by_target(board, emo_id, is_emo_removed, target, emo_bases)?.into_iter()
+        get_emo_indexes_by_target(board, emo_pointer, target, emo_bases)?.into_iter()
     {
         add_attack_and_health_to_emo(
             board,
@@ -1130,10 +1114,24 @@ mod tests {
             ..Default::default()
         };
 
+        let emo_base4 = emo::Base {
+            id: 4,
+            abilities: vec![emo::ability::Ability::Shop(emo::ability::shop::Shop::Peri(
+                emo::ability::shop::Peri::AsOneself {
+                    trigger: emo::ability::shop::PeriAsOneselfTrigger::Sell,
+                    action: emo::ability::shop::NormalAction::SetEmo {
+                        base_id: emo_base1.id,
+                    },
+                },
+            ))],
+            ..Default::default()
+        };
+
         let mut emo_bases = emo::Bases::new();
         emo_bases.add(emo_base1);
         emo_bases.add(emo_base2);
         emo_bases.add(emo_base3);
+        emo_bases.add(emo_base4);
 
         emo_bases
     }
@@ -1162,6 +1160,32 @@ mod tests {
         let c = add_emo(&mut board, &mut logs, &[], 2, false, 4, &emo_bases).unwrap();
 
         assert_eq!(c, 5);
+    }
+
+    #[test]
+    fn test_add_and_sell_emo() {
+        let mut board: ShopBoard = Default::default();
+        let mut logs = mtc::shop::BoardLogs::new();
+        let emo_bases = setup_sample_emo_bases();
+
+        add_emo(&mut board, &mut logs, &[], 1, false, 0, &emo_bases).unwrap();
+        let c = sell_emo(&mut board, &mut logs, 0, &emo_bases).unwrap();
+
+        assert_eq!(board, Default::default());
+        assert_eq!(c, 1);
+    }
+
+    #[test]
+    fn test_add_and_sell_emo2() {
+        let mut board: ShopBoard = Default::default();
+        let mut logs = mtc::shop::BoardLogs::new();
+        let emo_bases = setup_sample_emo_bases();
+
+        add_emo(&mut board, &mut logs, &[], 4, false, 0, &emo_bases).unwrap();
+        let c = sell_emo(&mut board, &mut logs, 0, &emo_bases).unwrap();
+
+        assert_eq!(board.count_emos(), 1);
+        assert_eq!(c, 1);
     }
 
     #[test]
