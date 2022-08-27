@@ -1,8 +1,8 @@
 {
   "source": {
-    "hash": "0xd4a53b85ad453c81ba34207e400aaa01a95403cf6df63107792ac09468a8f770",
+    "hash": "0x7b17767bfd446ae3deebd803e54f3dad9552bf61479ed07dab7966bfbc2ed4fa",
     "language": "ink! 3.3.1",
-    "compiler": "rustc 1.64.0-nightly"
+    "compiler": "rustc 1.65.0-nightly"
   },
   "contract": {
     "name": "game",
