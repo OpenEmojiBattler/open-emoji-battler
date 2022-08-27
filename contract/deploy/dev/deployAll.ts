@@ -19,7 +19,7 @@ const main = async () => {
         [],
         __dirname,
         envName,
-        getPathFromFileRelativePath("../../game/target/ink/game.contract"),
+        "../../game/target/ink/game.contract",
         randomAsU8a()
       )
 

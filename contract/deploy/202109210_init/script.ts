@@ -1,7 +1,6 @@
 import { readFileSync } from "fs"
 import { resolve } from "path"
 
-import { randomAsU8a } from "@polkadot/util-crypto"
 import { txContract, connected } from "common"
 import { loadEmoBases } from "common/src/scriptUtils"
 import { instantiateContract, getEndpointAndPair } from "../utils"
@@ -19,24 +18,18 @@ const main = async () => {
         [],
         __dirname,
         envName,
-        getPathFromFileRelativePath("../../game/target/ink/game.contract"),
-        randomAsU8a()
+        "../../game/target/ink/game.contract" // remove this later
       )
 
       const availableEmoBaseIds = JSON.parse(
-        readFileSync(
-          getPathFromFileRelativePath("../202109210_init/availableEmoBaseIds.json"),
-          "utf8"
-        )
+        readFileFromFileRelativePath("./availableEmoBaseIds.json")
       )
 
       await txContract(
         gameContract,
         "updateEmoBases",
         [
-          loadEmoBases(
-            readFileSync(getPathFromFileRelativePath("../202109210_init/emoBases.json"), "utf8")
-          ).toU8a(),
+          loadEmoBases(readFileFromFileRelativePath("./emoBases.json")).toU8a(),
           availableEmoBaseIds.fixed,
           availableEmoBaseIds.built,
           true,
@@ -48,6 +41,7 @@ const main = async () => {
   )
 }
 
-const getPathFromFileRelativePath = (path: string) => resolve(__dirname, path)
+const readFileFromFileRelativePath = (path: string) =>
+  readFileSync(resolve(__dirname, path), "utf8")
 
 main().catch(console.error).finally(process.exit)
