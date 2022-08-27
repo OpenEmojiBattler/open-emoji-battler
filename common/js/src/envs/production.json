@@ -2,8 +2,8 @@
   "name": "PrototypeNet",
   "chainEndpoint": "wss://proto0.open-emoji-battler.community/",
   "contract": {
-    "name": "Shibuya Testnet",
-    "endpoint": "wss://rpc.shibuya.astar.network/",
+    "name": "Shiden",
+    "endpoint": "wss://rpc.shiden.astar.network/",
     "gameAddress": ""
   }
 }
