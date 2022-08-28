@@ -22,7 +22,7 @@ export const queryContract = async (
   const { result, output } = await contract.query[fnName](caller, { value: 0 }, ...fnArgs)
 
   if (!result.isOk) {
-    throw new Error(`query error: ${fnName}, error: ${result.asErr.toHuman()}`)
+    throw new Error(`query error: ${fnName}, error: ${result.asErr.toString()}`)
   }
   if (!output) {
     throw new Error(`query output null: ${fnName}}`)
