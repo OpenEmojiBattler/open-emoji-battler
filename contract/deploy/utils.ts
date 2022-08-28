@@ -9,6 +9,20 @@ import type { IKeyringPair } from "@polkadot/types/types"
 
 import { getContractEnvAndKeyringPair } from "common/src/scriptUtils"
 
+export const newCode = (
+  api: ApiPromise,
+  contractName: string,
+  dirname: string,
+  contractFilePath?: string
+) =>
+  contractFilePath
+    ? new CodePromise(api, readFileSync(path.resolve(dirname, contractFilePath), "utf8"), null)
+    : new CodePromise(
+        api,
+        readFileSync(path.resolve(dirname, `./${contractName}.json`), "utf8"),
+        readFileSync(path.resolve(dirname, `./${contractName}.wasm`))
+      )
+
 export const instantiateContract = async (
   api: ApiPromise,
   pair: IKeyringPair,
@@ -19,13 +33,7 @@ export const instantiateContract = async (
   contractFilePath?: string,
   salt = new Uint8Array()
 ) => {
-  const code = contractFilePath
-    ? new CodePromise(api, readFileSync(path.resolve(dirname, contractFilePath), "utf8"), null)
-    : new CodePromise(
-        api,
-        readFileSync(path.resolve(dirname, `./${contractName}.json`), "utf8"),
-        readFileSync(path.resolve(dirname, `./${contractName}.wasm`))
-      )
+  const code = newCode(api, contractName, dirname, contractFilePath)
 
   const contract = (
     (await tx(
