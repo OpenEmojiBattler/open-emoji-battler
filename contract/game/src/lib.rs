@@ -8,12 +8,11 @@ use ink_lang as ink;
 pub mod contract {
     use crate::functions::*;
     use common::{codec_types::*, mtc::*};
-    use ink_prelude::vec::Vec;
+    use ink_prelude::{vec, vec::Vec};
     use ink_storage::{traits::SpreadAllocate, Mapping};
     use scale::Decode;
 
-    type Ghosts = Vec<(AccountId, mtc::Ghost)>;
-    type PlayerImmutable = (Vec<mtc::Emo>, Ghosts); // (pool, ghosts)
+    type PlayerImmutable = (Vec<mtc::Emo>, Vec<(AccountId, mtc::Ghost)>); // (pool, ghosts)
 
     #[ink(storage)]
     #[derive(SpreadAllocate)]
@@ -24,7 +23,9 @@ pub mod contract {
         deck_fixed_emo_base_ids: Option<Vec<u16>>,
         deck_built_emo_base_ids: Option<Vec<u16>>,
 
-        matchmaking_ghosts: Mapping<u16, Ghosts>,
+        matchmaking_ghosts_info: Mapping<u16, Vec<(BlockNumber, AccountId)>>,
+        matchmaking_ghost_by_index: Mapping<(u16, u8), mtc::Ghost>,
+
         leaderboard: Vec<(u16, AccountId)>,
 
         player_ep: Mapping<AccountId, u16>,
@@ -88,8 +89,20 @@ pub mod contract {
         }
 
         #[ink(message)]
-        pub fn get_matchmaking_ghosts(&self, ep_band: u16) -> Option<Ghosts> {
-            self.matchmaking_ghosts.get(ep_band)
+        pub fn get_matchmaking_ghosts_info(
+            &self,
+            ep_band: u16,
+        ) -> Option<Vec<(BlockNumber, AccountId)>> {
+            self.matchmaking_ghosts_info.get(ep_band)
+        }
+
+        #[ink(message)]
+        pub fn get_matchmaking_ghost_by_index(
+            &self,
+            ep_band: u16,
+            index: u8,
+        ) -> Option<mtc::Ghost> {
+            self.matchmaking_ghost_by_index.get((ep_band, index))
         }
 
         #[ink(message)]
@@ -167,7 +180,16 @@ pub mod contract {
                             .expect("deck_built_emo_base_ids none"),
                     )
                     .expect("failed to build player pool"),
-                    ghost::choose_ghosts(ep, seed, &|ep_band| self.matchmaking_ghosts.get(ep_band)),
+                    ghost::choose_ghosts(
+                        ep,
+                        seed,
+                        &|ep_band| {
+                            self.matchmaking_ghosts_info
+                                .get(ep_band)
+                                .map(|v| v.into_iter().map(|(_, a)| a).collect())
+                        },
+                        &|t| self.matchmaking_ghost_by_index.get(t),
+                    ),
                 ),
             );
 
@@ -321,17 +343,44 @@ pub mod contract {
             self.player_ep.insert(player, &new_ep);
 
             if !grade_and_board_history.last().unwrap().board.0.is_empty() {
-                let (ep_band, g) = ghost::build_matchmaking_ghosts(
-                    &player,
-                    old_ep,
-                    grade_and_board_history,
-                    &|ep_band| self.matchmaking_ghosts.get(ep_band),
-                );
-                self.matchmaking_ghosts.insert(ep_band, &g);
+                self.add_matchmaking_ghost(player, old_ep, grade_and_board_history);
             }
 
             self.player_mtc_immutable.remove(&player);
             self.player_mtc_mutable.remove(&player);
+        }
+
+        fn add_matchmaking_ghost(
+            &mut self,
+            player: AccountId,
+            ep: u16,
+            grade_and_board_history: &[mtc::GradeAndBoard],
+        ) {
+            let ep_band = ep::get_ep_band(ep);
+            let ghost = ghost::build_ghost_from_history(grade_and_board_history);
+            let current_block_number = self.env().block_number();
+
+            if let Some(mut info) = self.matchmaking_ghosts_info.get(ep_band) {
+                if let Some(index) = info.iter().position(|(_, a)| a == &player) {
+                    info[index].0 = current_block_number;
+                    self.matchmaking_ghost_by_index
+                        .insert((ep_band, index as u8), &ghost);
+                } else {
+                    if info.len() < 20 {
+                        info.push((current_block_number, player));
+                    } else {
+                        info.sort_by_key(|k| k.0);
+                        info[0] = (current_block_number, player);
+                    }
+                    self.matchmaking_ghost_by_index
+                        .insert((ep_band, info.len() as u8), &ghost);
+                }
+                self.matchmaking_ghosts_info.insert(ep_band, &info);
+            } else {
+                self.matchmaking_ghosts_info
+                    .insert(ep_band, &vec![(current_block_number, player)]);
+                self.matchmaking_ghost_by_index.insert((ep_band, 0), &ghost);
+            }
         }
 
         fn finish_mtc_turn(

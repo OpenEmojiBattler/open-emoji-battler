@@ -6,42 +6,60 @@ use rand::{
 use rand_pcg::Pcg64Mcg;
 use sp_std::prelude::*;
 
-pub const GHOST_COUNT: usize = 3;
+const GHOST_COUNT: u8 = 3;
 
-pub fn choose_ghosts<A, F>(ep: u16, seed: u64, get_ghosts: &F) -> Vec<(A, mtc::Ghost)>
+pub fn choose_ghosts<A, F0, F1>(
+    ep: u16,
+    seed: u64,
+    get_ghosts_info: &F0,
+    get_ghost: &F1,
+) -> Vec<(A, mtc::Ghost)>
 where
     A: Default,
-    F: Fn(u16) -> Option<Vec<(A, mtc::Ghost)>>,
+    F0: Fn(u16) -> Option<Vec<A>>,
+    F1: Fn((u16, u8)) -> Option<mtc::Ghost>,
 {
     let mut rng = Pcg64Mcg::seed_from_u64(seed);
 
     let mut ep_band = get_ep_band(ep);
-    let mut selected = Vec::with_capacity(GHOST_COUNT);
-    let mut n = GHOST_COUNT;
-    let mut circuitbreaker = 0u8;
+    let mut ghosts_infos = Vec::new();
 
     loop {
-        let ghosts = get_ghosts(ep_band)
-            .unwrap_or_default()
+        if let Some(v) = get_ghosts_info(ep_band) {
+            ghosts_infos.push((ep_band, v.len() as u8, v));
+        } else {
+            continue;
+        }
+
+        if ghosts_infos.iter().map(|(_, len, _)| len).sum::<u8>() >= GHOST_COUNT || ep_band < 1 {
+            break;
+        }
+
+        ep_band -= 1;
+    }
+
+    let mut selected = Vec::with_capacity(GHOST_COUNT.into());
+    let mut n: usize = GHOST_COUNT.into();
+
+    for (band, _, v) in ghosts_infos.into_iter() {
+        let ghosts = v
             .into_iter()
-            .choose_multiple(&mut rng, n);
+            .zip(0u8..)
+            .choose_multiple(&mut rng, n)
+            .into_iter()
+            .map(|(a, index)| (a, get_ghost((band, index)).unwrap()))
+            .collect::<Vec<_>>();
+
         selected.extend(ghosts);
 
-        if selected.len() >= GHOST_COUNT || ep_band < 1 {
-            break;
-        }
-        n = GHOST_COUNT - selected.len();
-        ep_band -= 1;
-
-        circuitbreaker += 1;
-        if circuitbreaker > 100 {
-            break;
-        }
+        n = (GHOST_COUNT as usize) - selected.len();
     }
+
     selected.shuffle(&mut rng);
 
-    if selected.len() < GHOST_COUNT {
-        for _ in 0..(GHOST_COUNT - selected.len()) {
+    let selected_len = selected.len() as u8;
+    if selected_len < GHOST_COUNT {
+        for _ in 0..(GHOST_COUNT - selected_len) {
             selected.push((Default::default(), mtc::Ghost { history: vec![] }));
         }
     }
@@ -95,7 +113,7 @@ where
     (ep_band, ghosts_with_data)
 }
 
-fn build_ghost_from_history(grade_and_board_history: &[mtc::GradeAndBoard]) -> mtc::Ghost {
+pub fn build_ghost_from_history(grade_and_board_history: &[mtc::GradeAndBoard]) -> mtc::Ghost {
     let history = grade_and_board_history
         .iter()
         .map(|h| mtc::GradeAndGhostBoard {
