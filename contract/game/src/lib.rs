@@ -357,30 +357,40 @@ pub mod contract {
             grade_and_board_history: &[mtc::GradeAndBoard],
         ) {
             let ep_band = ep::get_ep_band(ep);
-            let ghost = ghost::build_ghost_from_history(grade_and_board_history);
             let current_block_number = self.env().block_number();
 
-            if let Some(mut info) = self.matchmaking_ghosts_info.get(ep_band) {
-                if let Some(index) = info.iter().position(|(_, a)| a == &player) {
-                    info[index].0 = current_block_number;
-                    self.matchmaking_ghost_by_index
-                        .insert((ep_band, index as u8), &ghost);
+            let (info, index) = if let Some(mut info) = self.matchmaking_ghosts_info.get(ep_band) {
+                let index = if let Some(idx) = info.iter().position(|(_, a)| a == &player) {
+                    info[idx].0 = current_block_number;
+                    idx
                 } else {
                     if info.len() < 20 {
                         info.push((current_block_number, player));
+                        info.len() - 1
                     } else {
-                        info.sort_by_key(|k| k.0);
-                        info[0] = (current_block_number, player);
+                        let mut iter = info.iter().enumerate();
+                        let (mut oldest_idx, (mut oldest_num, _)) = iter.next().unwrap();
+                        for (idx, &(num, _)) in iter {
+                            if num < oldest_num {
+                                oldest_num = num;
+                                oldest_idx = idx;
+                            }
+                        }
+                        info[oldest_idx] = (current_block_number, player);
+                        oldest_idx
                     }
-                    self.matchmaking_ghost_by_index
-                        .insert((ep_band, info.len() as u8), &ghost);
-                }
-                self.matchmaking_ghosts_info.insert(ep_band, &info);
+                };
+
+                (info, index as u8)
             } else {
-                self.matchmaking_ghosts_info
-                    .insert(ep_band, &vec![(current_block_number, player)]);
-                self.matchmaking_ghost_by_index.insert((ep_band, 0), &ghost);
-            }
+                (vec![(current_block_number, player)], 0)
+            };
+
+            self.matchmaking_ghosts_info.insert(ep_band, &info);
+            self.matchmaking_ghost_by_index.insert(
+                (ep_band, index),
+                &ghost::build_ghost_from_history(grade_and_board_history),
+            );
         }
 
         fn finish_mtc_turn(

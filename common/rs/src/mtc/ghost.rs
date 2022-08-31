@@ -7,6 +7,7 @@ use rand_pcg::Pcg64Mcg;
 use sp_std::prelude::*;
 
 const GHOST_COUNT: u8 = 3;
+const GHOST_COUNT_USIZE: usize = GHOST_COUNT as usize;
 
 pub fn choose_ghosts<A, F0, F1>(
     ep: u16,
@@ -26,45 +27,39 @@ where
 
     loop {
         if let Some(v) = get_ghosts_info(ep_band) {
-            ghosts_infos.push((ep_band, v.len() as u8, v));
+            ghosts_infos.push((ep_band, v));
         } else {
             continue;
         }
 
-        if ghosts_infos.iter().map(|(_, len, _)| len).sum::<u8>() >= GHOST_COUNT || ep_band < 1 {
+        if ghosts_infos.iter().map(|(_, v)| v.len()).sum::<usize>() >= GHOST_COUNT_USIZE
+            || ep_band < 1
+        {
             break;
         }
 
         ep_band -= 1;
     }
 
-    let mut selected = Vec::with_capacity(GHOST_COUNT.into());
-    let mut n: usize = GHOST_COUNT.into();
+    let mut choosen_ghosts = Vec::with_capacity(GHOST_COUNT_USIZE);
 
-    for (band, _, v) in ghosts_infos.into_iter() {
-        let ghosts = v
-            .into_iter()
-            .zip(0u8..)
-            .choose_multiple(&mut rng, n)
-            .into_iter()
-            .map(|(a, index)| (a, get_ghost((band, index)).unwrap()))
-            .collect::<Vec<_>>();
-
-        selected.extend(ghosts);
-
-        n = (GHOST_COUNT as usize) - selected.len();
+    for (band, v) in ghosts_infos.into_iter() {
+        choosen_ghosts.extend(
+            v.into_iter()
+                .zip(0u8..)
+                .choose_multiple(&mut rng, GHOST_COUNT_USIZE - choosen_ghosts.len())
+                .into_iter()
+                .map(|(a, index)| (a, get_ghost((band, index)).unwrap())),
+        );
     }
 
-    selected.shuffle(&mut rng);
+    choosen_ghosts.shuffle(&mut rng);
 
-    let selected_len = selected.len() as u8;
-    if selected_len < GHOST_COUNT {
-        for _ in 0..(GHOST_COUNT - selected_len) {
-            selected.push((Default::default(), mtc::Ghost { history: vec![] }));
-        }
+    for _ in 0..(GHOST_COUNT_USIZE - choosen_ghosts.len()) {
+        choosen_ghosts.push((Default::default(), mtc::Ghost { history: vec![] }));
     }
 
-    selected
+    choosen_ghosts
 }
 
 pub fn separate_player_ghosts<T>(
