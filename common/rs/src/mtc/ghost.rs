@@ -28,13 +28,13 @@ where
     loop {
         if let Some(v) = get_ghosts_info(ep_band) {
             ghosts_infos.push((ep_band, v));
-        } else {
-            continue;
+
+            if ghosts_infos.iter().map(|(_, v)| v.len()).sum::<usize>() >= GHOST_COUNT_USIZE {
+                break;
+            }
         }
 
-        if ghosts_infos.iter().map(|(_, v)| v.len()).sum::<usize>() >= GHOST_COUNT_USIZE
-            || ep_band < 1
-        {
+        if ep_band < 1 {
             break;
         }
 
