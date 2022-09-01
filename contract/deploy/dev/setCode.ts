@@ -13,16 +13,14 @@ const main = async () => {
     async (api) => {
       const gameContract = new ContractPromise(
         api,
-        readFileFromFileRelativePath(`../202109210_init/game.json`),
-        JSON.parse(
-          readFileFromFileRelativePath("../202109210_init/instantiatedAddress.game.production.json")
-        )
+        readFileFromFileRelativePath("../../game/target/ink/metadata.json"),
+        JSON.parse(readFileFromFileRelativePath("./instantiatedAddress.game.production.json"))
       )
 
       await txContract(
         gameContract,
         "setCode",
-        ["0xa1abd350d2fc6df5bda314404d5f9c2e91c2660b7b10a577434b620fa9b1408c"],
+        ["0xd58d432a8f520344536db2a63d8e41902b482d2df800763ed1ec531925d3aa32"],
         keyringPair
       )
     },
