@@ -36,17 +36,5 @@ export const withToggleAsync = async <T>(toggle: (b: boolean) => void, main: () 
   return result
 }
 
-export const shuffleArray = <T>(array: T[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
-  }
-}
-
-export const sampleArray = <T>(array: T[], count: number) => {
-  shuffleArray(array)
-  return array.slice(0, count)
-}
-
 export const buildDateString = (date: Date) =>
   `${date.toLocaleString([], { timeZoneName: "long" })} (${date.toUTCString()})`

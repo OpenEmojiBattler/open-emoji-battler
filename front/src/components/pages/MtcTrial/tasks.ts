@@ -1,8 +1,7 @@
-import { createType } from "common"
+import { sampleArray, createType } from "common"
 
 import { buildInitialMtcState, getDefaultDeck } from "~/misc/mtcUtils"
 import { buildPool } from "~/wasm"
-import { sampleArray } from "~/misc/utils"
 import { Connection } from "~/components/App/ConnectionProvider/tasks"
 import { initialEp, initialPlayerHealth } from "~/misc/constants"
 import { get_upgrade_coin } from "~/wasm/raw"
