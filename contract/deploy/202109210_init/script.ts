@@ -1,11 +1,9 @@
 import { readFileSync } from "fs"
-import path from "path"
+import { resolve } from "path"
 
 import { txContract, connected } from "common"
 import { loadEmoBases } from "common/src/scriptUtils"
 import { instantiateContract, getEndpointAndPair } from "../utils"
-
-import availableEmoBaseIds from "./availableEmoBaseIds.json"
 
 const main = async () => {
   const { envName, endpoint, keyringPair } = await getEndpointAndPair()
@@ -13,56 +11,37 @@ const main = async () => {
   await connected(
     endpoint,
     async (api) => {
-      const storageContract = await instantiateContract(
+      const gameContract = await instantiateContract(
         api,
         keyringPair,
-        "storage",
+        "game",
         [],
         __dirname,
-        envName
+        envName,
+        "../../game/target/ink/game.contract" // remove this later
       )
 
-      const logicContract = await instantiateContract(
-        api,
-        keyringPair,
-        "logic",
-        [storageContract.address.toString()],
-        __dirname,
-        envName
-      )
-
-      const forwarderContract = await instantiateContract(
-        api,
-        keyringPair,
-        "forwarder",
-        [logicContract.address.toString()],
-        __dirname,
-        envName
+      const availableEmoBaseIds = JSON.parse(
+        readFileFromFileRelativePath("./availableEmoBaseIds.json")
       )
 
       await txContract(
-        storageContract,
-        "allowAccount",
-        [logicContract.address.toString()],
-        keyringPair
-      )
-      await txContract(
-        logicContract,
-        "allowAccount",
-        [forwarderContract.address.toString()],
-        keyringPair
-      )
-
-      const bases = loadEmoBases(readFileSync(path.resolve(__dirname, "./emoBases.json"), "utf8"))
-      await txContract(
-        logicContract,
+        gameContract,
         "updateEmoBases",
-        [bases.toU8a(), availableEmoBaseIds.fixed, availableEmoBaseIds.built, true],
+        [
+          loadEmoBases(readFileFromFileRelativePath("./emoBases.json")).toU8a(),
+          availableEmoBaseIds.fixed,
+          availableEmoBaseIds.built,
+          true,
+        ],
         keyringPair
       )
     },
     false
   )
 }
+
+const readFileFromFileRelativePath = (path: string) =>
+  readFileSync(resolve(__dirname, path), "utf8")
 
 main().catch(console.error).finally(process.exit)

@@ -1,4 +1,5 @@
 import type { ApiPromise } from "@polkadot/api"
+import type { SignerOptions } from "@polkadot/api/submittable/types"
 import { ContractPromise } from "@polkadot/api-contract"
 
 import { tx } from "./api"
@@ -22,7 +23,7 @@ export const queryContract = async (
   const { result, output } = await contract.query[fnName](caller, { value: 0 }, ...fnArgs)
 
   if (!result.isOk) {
-    throw new Error(`query error: ${fnName}, error: ${result.asErr.toHuman()}`)
+    throw new Error(`query error: ${fnName}, error: ${result.asErr.toString()}`)
   }
   if (!output) {
     throw new Error(`query output null: ${fnName}}`)
@@ -35,11 +36,18 @@ export const txContract = (
   contract: ContractPromise,
   fnName: string,
   fnArgs: any[],
-  account: KeyringPairOrAddressAndSigner
+  account: KeyringPairOrAddressAndSigner,
+  overrideOptions?: Partial<SignerOptions>
 ) => {
   if (!contract.tx[fnName]) {
     throw new Error(`tx fn not found: ${fnName}`)
   }
 
-  return tx(contract.api as ApiPromise, () => contract.tx[fnName]({ value: 0 }, ...fnArgs), account)
+  return tx(
+    contract.api as ApiPromise,
+    () => contract.tx[fnName]({ value: 0 }, ...fnArgs),
+    account,
+    undefined,
+    overrideOptions
+  )
 }

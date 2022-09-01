@@ -6,47 +6,60 @@ use rand::{
 use rand_pcg::Pcg64Mcg;
 use sp_std::prelude::*;
 
-pub const GHOST_COUNT: usize = 3;
+const GHOST_COUNT: u8 = 3;
+const GHOST_COUNT_USIZE: usize = GHOST_COUNT as usize;
 
-pub fn choose_ghosts<A, F>(ep: u16, seed: u64, get_ghosts: &F) -> Vec<(A, mtc::Ghost)>
+pub fn choose_ghosts<A, F0, F1>(
+    ep: u16,
+    seed: u64,
+    get_ghosts_info: &F0,
+    get_ghost: &F1,
+) -> Vec<(A, mtc::Ghost)>
 where
     A: Default,
-    F: Fn(u16) -> Option<Vec<(A, mtc::Ghost)>>,
+    F0: Fn(u16) -> Option<Vec<A>>,
+    F1: Fn((u16, u8)) -> Option<mtc::Ghost>,
 {
     let mut rng = Pcg64Mcg::seed_from_u64(seed);
 
     let mut ep_band = get_ep_band(ep);
-    let mut selected = Vec::with_capacity(GHOST_COUNT);
-    let mut n = GHOST_COUNT;
-    let mut circuitbreaker = 0u8;
+    let mut ghosts_infos = Vec::new();
 
     loop {
-        let ghosts = get_ghosts(ep_band)
-            .unwrap_or_default()
-            .into_iter()
-            .choose_multiple(&mut rng, n);
-        selected.extend(ghosts);
+        if let Some(v) = get_ghosts_info(ep_band) {
+            ghosts_infos.push((ep_band, v));
 
-        if selected.len() >= GHOST_COUNT || ep_band < 1 {
+            if ghosts_infos.iter().map(|(_, v)| v.len()).sum::<usize>() >= GHOST_COUNT_USIZE {
+                break;
+            }
+        }
+
+        if ep_band < 1 {
             break;
         }
-        n = GHOST_COUNT - selected.len();
+
         ep_band -= 1;
-
-        circuitbreaker += 1;
-        if circuitbreaker > 100 {
-            break;
-        }
-    }
-    selected.shuffle(&mut rng);
-
-    if selected.len() < GHOST_COUNT {
-        for _ in 0..(GHOST_COUNT - selected.len()) {
-            selected.push((Default::default(), mtc::Ghost { history: vec![] }));
-        }
     }
 
-    selected
+    let mut choosen_ghosts = Vec::with_capacity(GHOST_COUNT_USIZE);
+
+    for (band, v) in ghosts_infos.into_iter() {
+        choosen_ghosts.extend(
+            v.into_iter()
+                .zip(0u8..)
+                .choose_multiple(&mut rng, GHOST_COUNT_USIZE - choosen_ghosts.len())
+                .into_iter()
+                .map(|(a, index)| (a, get_ghost((band, index)).unwrap())),
+        );
+    }
+
+    choosen_ghosts.shuffle(&mut rng);
+
+    for _ in 0..(GHOST_COUNT_USIZE - choosen_ghosts.len()) {
+        choosen_ghosts.push((Default::default(), mtc::Ghost { history: vec![] }));
+    }
+
+    choosen_ghosts
 }
 
 pub fn separate_player_ghosts<T>(
@@ -95,7 +108,7 @@ where
     (ep_band, ghosts_with_data)
 }
 
-fn build_ghost_from_history(grade_and_board_history: &[mtc::GradeAndBoard]) -> mtc::Ghost {
+pub fn build_ghost_from_history(grade_and_board_history: &[mtc::GradeAndBoard]) -> mtc::Ghost {
     let history = grade_and_board_history
         .iter()
         .map(|h| mtc::GradeAndGhostBoard {

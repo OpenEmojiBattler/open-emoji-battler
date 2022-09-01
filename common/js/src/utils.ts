@@ -79,3 +79,15 @@ export const getPowSolutionBNFromBytes = (solution: Uint8Array) => new BN(soluti
 
 export const range = (n: number) => Array.from(new Array(n), (_, i) => i)
 export const uniqueArray = <T>(arr: T[]): T[] => Array.from(new Set(arr))
+
+export const shuffleArray = <T>(array: T[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+}
+
+export const sampleArray = <T>(array: T[], count: number) => {
+  shuffleArray(array)
+  return array.slice(0, count)
+}
