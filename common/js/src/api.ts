@@ -4,6 +4,7 @@ import { TypeRegistry } from "@polkadot/types"
 
 import type { SubmittableExtrinsic } from "@polkadot/api/types"
 import type { SubmittableResult } from "@polkadot/api/submittable"
+import type { SignerOptions } from "@polkadot/api/submittable/types"
 import type { IKeyringPair, Codec, DetectCodec } from "@polkadot/types/types"
 import type { DispatchErrorModule } from "@polkadot/types/interfaces"
 
@@ -50,47 +51,52 @@ export const tx = async (
   api: ApiPromise,
   f: (tx: ApiPromise["tx"]) => SubmittableExtrinsic<"promise">,
   account: KeyringPairOrAddressAndSigner,
-  powSolution?: BN
+  powSolution?: BN,
+  overrideOptions?: Partial<SignerOptions>
 ) => {
   const [pairOrAddress, options] = extractTxArgs(account, powSolution)
 
   const result = await new Promise<SubmittableResult>(async (resolve, reject) => {
     const unsub = await f(api.tx)
-      .signAndSend(pairOrAddress, options, (result: SubmittableResult) => {
-        if (!result.isCompleted) {
-          return
-        }
-        if (unsub) {
-          unsub()
-        }
-        if (result.isError) {
-          reject("tx: result.isError")
-          return
-        }
-        if (result.findRecord("system", "ExtrinsicSuccess")) {
-          const sudid = result.findRecord("sudo", "Sudid")
-          if (sudid) {
-            const d = sudid.event.data[0] as any
-            if (d && d.isError) {
-              reject(`sudo: ${buildErrorText(api, d.asError.asModule)}`)
+      .signAndSend(
+        pairOrAddress,
+        { ...options, ...overrideOptions },
+        (result: SubmittableResult) => {
+          if (!result.isCompleted) {
+            return
+          }
+          if (unsub) {
+            unsub()
+          }
+          if (result.isError) {
+            reject("tx: result.isError")
+            return
+          }
+          if (result.findRecord("system", "ExtrinsicSuccess")) {
+            const sudid = result.findRecord("sudo", "Sudid")
+            if (sudid) {
+              const d = sudid.event.data[0] as any
+              if (d && d.isError) {
+                reject(`sudo: ${buildErrorText(api, d.asError.asModule)}`)
+                return
+              }
+            }
+            resolve(result)
+            return
+          }
+          if (result.dispatchError) {
+            if (result.dispatchError.isModule) {
+              reject(buildErrorText(api, result.dispatchError.asModule))
+              return
+            } else {
+              reject(`tx: ${result.dispatchError.toString()}`)
               return
             }
           }
-          resolve(result)
+          reject("tx: unknown state")
           return
         }
-        if (result.dispatchError) {
-          if (result.dispatchError.isModule) {
-            reject(buildErrorText(api, result.dispatchError.asModule))
-            return
-          } else {
-            reject(`tx: ${result.dispatchError.toString()}`)
-            return
-          }
-        }
-        reject("tx: unknown state")
-        return
-      })
+      )
       .catch((r) => {
         reject(`tx: failed: ${r}`)
         return

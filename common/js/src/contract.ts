@@ -1,4 +1,5 @@
 import type { ApiPromise } from "@polkadot/api"
+import type { SignerOptions } from "@polkadot/api/submittable/types"
 import { ContractPromise } from "@polkadot/api-contract"
 
 import { tx } from "./api"
@@ -35,11 +36,18 @@ export const txContract = (
   contract: ContractPromise,
   fnName: string,
   fnArgs: any[],
-  account: KeyringPairOrAddressAndSigner
+  account: KeyringPairOrAddressAndSigner,
+  overrideOptions?: Partial<SignerOptions>
 ) => {
   if (!contract.tx[fnName]) {
     throw new Error(`tx fn not found: ${fnName}`)
   }
 
-  return tx(contract.api as ApiPromise, () => contract.tx[fnName]({ value: 0 }, ...fnArgs), account)
+  return tx(
+    contract.api as ApiPromise,
+    () => contract.tx[fnName]({ value: 0 }, ...fnArgs),
+    account,
+    undefined,
+    overrideOptions
+  )
 }
