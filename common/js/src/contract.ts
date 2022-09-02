@@ -2,7 +2,7 @@ import type { ApiPromise } from "@polkadot/api"
 import type { SignerOptions } from "@polkadot/api/submittable/types"
 import { ContractPromise } from "@polkadot/api-contract"
 
-import { tx } from "./api"
+import { tx, buildErrorText } from "./api"
 import type { KeyringPairOrAddressAndSigner } from "./utils"
 
 import gameAbi from "../../../contract/deploy/202109210_init/game.json"
@@ -23,7 +23,9 @@ export const queryContract = async (
   const { result, output } = await contract.query[fnName](caller, { value: 0 }, ...fnArgs)
 
   if (!result.isOk) {
-    throw new Error(`query error: ${fnName}, error: ${result.asErr.toString()}`)
+    throw new Error(
+      `query error: ${fnName}, error: ${buildErrorText(contract.api as ApiPromise, result.asErr)}`
+    )
   }
   if (!output) {
     throw new Error(`query output null: ${fnName}}`)
