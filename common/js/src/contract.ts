@@ -48,6 +48,6 @@ export const txContract = (
     () => contract.tx[fnName]({ value: 0 }, ...fnArgs),
     account,
     undefined,
-    overrideOptions
+    { tip: 1, ...overrideOptions }
   )
 }
