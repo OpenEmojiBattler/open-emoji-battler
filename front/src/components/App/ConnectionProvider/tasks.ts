@@ -2,7 +2,7 @@ import { createContext, useContext } from "react"
 import type BN from "bn.js"
 import type { Vec, Option, u16, u64 } from "@polkadot/types-codec"
 import type { ITuple } from "@polkadot/types-codec/types"
-import type { AccountId } from "@polkadot/types/interfaces/runtime"
+import type { AccountId, BlockNumber } from "@polkadot/types/interfaces/runtime"
 import type { ApiPromise } from "@polkadot/api"
 import type { Signer } from "@polkadot/api/types"
 
@@ -21,7 +21,8 @@ export interface Connection {
   query: {
     deckFixedEmoBaseIds: () => Promise<Vec<u16>>
     deckBuiltEmoBaseIds: () => Promise<Vec<u16>>
-    matchmakingGhosts: (band: number) => Promise<Option<Vec<ITuple<[AccountId, mtc_Ghost]>>>>
+    matchmakingGhostsInfo: (band: number) => Promise<Option<Vec<ITuple<[BlockNumber, AccountId]>>>>
+    matchmakingGhostByIndex: (band: number, index: number) => Promise<Option<mtc_Ghost>>
     leaderboard: () => Promise<Vec<ITuple<[u16, AccountId]>>>
     playerEp: (address: string) => Promise<Option<u16>>
     playerSeed: (address: string) => Promise<Option<u64>>
