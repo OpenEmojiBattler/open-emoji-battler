@@ -9,10 +9,31 @@ pub mod contract {
     use crate::functions::*;
     use common::{codec_types::*, mtc::*};
     use ink_prelude::{vec, vec::Vec};
-    use ink_storage::{traits::SpreadAllocate, Mapping};
-    use scale::Decode;
+    use ink_storage::{
+        traits::{PackedLayout, SpreadAllocate, SpreadLayout},
+        Mapping,
+    };
+    use scale::{Decode, Encode};
 
     type PlayerImmutable = (Vec<mtc::Emo>, Vec<(AccountId, mtc::Ghost)>); // (pool, ghosts)
+
+    #[derive(PartialEq, Eq, Clone, Debug, Encode, Decode, PackedLayout, SpreadLayout)]
+    #[cfg_attr(
+        feature = "std",
+        derive(scale_info::TypeInfo, ink_storage::traits::StorageLayout)
+    )]
+    enum LazyStorageKey {
+        Leaderboard,
+    }
+
+    #[derive(PartialEq, Eq, Clone, Debug, Encode, Decode, PackedLayout, SpreadLayout)]
+    #[cfg_attr(
+        feature = "std",
+        derive(scale_info::TypeInfo, ink_storage::traits::StorageLayout)
+    )]
+    enum LazyStorageValue {
+        Leaderboard(Vec<(u16, AccountId)>),
+    }
 
     #[ink(storage)]
     #[derive(SpreadAllocate)]
@@ -26,7 +47,7 @@ pub mod contract {
         matchmaking_ghosts_info: Mapping<u16, Vec<(BlockNumber, AccountId)>>,
         matchmaking_ghost_by_index: Mapping<(u16, u8), mtc::Ghost>,
 
-        leaderboard: Vec<(u16, AccountId)>,
+        lazy: Mapping<LazyStorageKey, LazyStorageValue>,
 
         player_ep: Mapping<AccountId, u16>,
         player_seed: Mapping<AccountId, u64>,
@@ -107,7 +128,11 @@ pub mod contract {
 
         #[ink(message)]
         pub fn get_leaderboard(&self) -> Vec<(u16, AccountId)> {
-            self.leaderboard.clone()
+            if let Some(value) = self.lazy.get(LazyStorageKey::Leaderboard) {
+                let LazyStorageValue::Leaderboard(leaderboard) = value;
+                return leaderboard;
+            }
+            vec![]
         }
 
         #[ink(message)]
@@ -274,7 +299,12 @@ pub mod contract {
             );
             caller
         }
-
+        fn _set_leaderboard(&mut self, x: Vec<(u16, AccountId)>) {
+            self.lazy.insert(
+                LazyStorageKey::Leaderboard,
+                &LazyStorageValue::Leaderboard(x),
+            );
+        }
         // enough for this game
         fn get_insecure_random_seed(&self, account_id: AccountId, subject: &[u8]) -> u64 {
             assert!(
@@ -339,7 +369,11 @@ pub mod contract {
         ) {
             let old_ep = self.player_ep.get(player).expect("player_ep none");
             let new_ep = calc_new_ep(place, old_ep);
-            update_leaderboard(&mut self.leaderboard, new_ep, &player);
+
+            let mut leaderboard = self.get_leaderboard();
+            update_leaderboard(&mut leaderboard, new_ep, &player);
+            self._set_leaderboard(leaderboard);
+
             self.player_ep.insert(player, &new_ep);
 
             if !grade_and_board_history.last().unwrap().board.0.is_empty() {

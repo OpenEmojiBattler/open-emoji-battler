@@ -4,7 +4,7 @@ import { ApiPromise, WsProvider } from "@polkadot/api"
 import { uniqueArray } from "common"
 import type { Connection } from "~/components/App/ConnectionProvider/tasks"
 
-const kusamaEndpoint = "wss://kusama.api.onfinality.io/public-ws"
+const kusamaEndpoint = "wss://kusama-rpc.polkadot.io"
 
 export const queryKusamaAddressNames = async (
   contractConnection: Connection,

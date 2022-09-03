@@ -3,7 +3,7 @@ import { resolve } from "path"
 
 import { ContractPromise } from "@polkadot/api-contract"
 import type { IKeyringPair } from "@polkadot/types/types"
-import { createType, connected, range, txContract, sampleArray } from "common"
+import { createType, connect, range, txContract, sampleArray } from "common"
 import { getEndpointAndPair } from "../utils"
 
 const randomAddress = "5Hasqa9swLcoKGyFikR1su9bdrqkRhtitSNb3iNKEwgk5UGf"
@@ -12,22 +12,17 @@ const main = async () => {
   const { endpoint, keyringPair } = await getEndpointAndPair()
   const playerAddress = keyringPair.address
 
-  await connected(
-    endpoint,
-    async (api) => {
-      const contract = new ContractPromise(
-        api,
-        readFileFromFileRelativePath("../../game/target/ink/metadata.json"),
-        JSON.parse(readFileFromFileRelativePath("./instantiatedAddress.game.production.json"))
-      )
-
-      await setup(contract, keyringPair, playerAddress)
-      await start(contract, keyringPair)
-      // console.log((await queryContract(contract, "getPlayerMtcImmutable", [playerAddress])).encodedLength)
-      await finish(contract, keyringPair, playerAddress)
-    },
-    false
+  const api = await connect(endpoint, false)
+  const contract = new ContractPromise(
+    api,
+    readFileFromFileRelativePath("../../game/target/ink/metadata.json"),
+    JSON.parse(readFileFromFileRelativePath("./instantiatedAddress.game.production.json"))
   )
+
+  await setup(contract, keyringPair, playerAddress)
+  await start(contract, keyringPair)
+  // console.log((await queryContract(contract, "getPlayerMtcImmutable", [playerAddress])).encodedLength)
+  await finish(contract, keyringPair, playerAddress)
 }
 
 const setup = async (
@@ -281,4 +276,9 @@ const e2Attribute = {
 const readFileFromFileRelativePath = (path: string) =>
   readFileSync(resolve(__dirname, path), "utf8")
 
-main().catch(console.error).finally(process.exit)
+main()
+  .then(() => process.exit())
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })

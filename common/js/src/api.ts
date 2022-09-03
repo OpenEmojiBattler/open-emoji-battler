@@ -6,7 +6,7 @@ import type { SubmittableExtrinsic } from "@polkadot/api/types"
 import type { SubmittableResult } from "@polkadot/api/submittable"
 import type { SignerOptions } from "@polkadot/api/submittable/types"
 import type { IKeyringPair, Codec, DetectCodec } from "@polkadot/types/types"
-import type { DispatchErrorModule } from "@polkadot/types/interfaces"
+import type { DispatchError } from "@polkadot/types/interfaces"
 
 import { buildTypes, KeyringPairOrAddressAndSigner, extractTxArgs } from "./utils"
 
@@ -62,49 +62,45 @@ export const tx = async (
         pairOrAddress,
         { ...options, ...overrideOptions },
         (result: SubmittableResult) => {
-          if (!result.isCompleted) {
-            return
-          }
-          if (unsub) {
-            unsub()
-          }
-          if (result.isError) {
-            reject("tx: result.isError")
-            return
-          }
-          if (result.findRecord("system", "ExtrinsicSuccess")) {
-            const sudid = result.findRecord("sudo", "Sudid")
-            if (sudid) {
-              const d = sudid.event.data[0] as any
-              if (d && d.isError) {
-                reject(`sudo: ${buildErrorText(api, d.asError.asModule)}`)
-                return
+          try {
+            if (!result.isCompleted) {
+              return
+            }
+            if (unsub) {
+              unsub()
+            }
+            if (result.isError) {
+              throw new Error("result.isError")
+            }
+            if (result.findRecord("system", "ExtrinsicSuccess")) {
+              const sudid = result.findRecord("sudo", "Sudid")
+              if (sudid) {
+                const d = sudid.event.data[0] as any
+                if (d && d.isError) {
+                  throw new Error(`sudo: ${buildErrorText(api, d.asError)}`)
+                }
               }
+              resolve(result)
+              return
             }
-            resolve(result)
+            if (result.dispatchError) {
+              throw new Error(`${buildErrorText(api, result.dispatchError)}`)
+            }
+            throw new Error("unknown state")
+          } catch (e) {
+            reject(`tx error: ${e}`)
             return
           }
-          if (result.dispatchError) {
-            if (result.dispatchError.isModule) {
-              reject(buildErrorText(api, result.dispatchError.asModule))
-              return
-            } else {
-              reject(`tx: ${result.dispatchError.toString()}`)
-              return
-            }
-          }
-          reject("tx: unknown state")
-          return
         }
       )
       .catch((r) => {
-        reject(`tx: failed: ${r}`)
+        reject(`tx failed: ${r}`)
         return
       })
   })
 
   console.log(
-    `tx: ${(result.status.isInBlock
+    `tx is in block: ${(result.status.isInBlock
       ? result.status.asInBlock
       : result.status.asFinalized
     ).toString()}`
@@ -119,9 +115,13 @@ export const sudo = (
   account: IKeyringPair
 ) => tx(api, (tx) => api.tx.sudo.sudo(f(tx)), account)
 
-const buildErrorText = (api: ApiPromise, mod: DispatchErrorModule) => {
-  const { docs, index, name, section } = api.registry.findMetaError(mod)
-  return `tx: ${section}.${name}: (${index}) ${docs.join(" ")}`
+export const buildErrorText = (api: ApiPromise, dispatchError: DispatchError) => {
+  if (dispatchError.isModule) {
+    const { docs, index, name, section } = api.registry.findMetaError(dispatchError.asModule)
+    return `${section}.${name}: (${index}) ${docs.join(" ")}`
+  } else {
+    return dispatchError.toString()
+  }
 }
 
 export const createType = <T extends Codec = Codec, K extends string = string>(
