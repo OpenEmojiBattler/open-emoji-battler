@@ -9,47 +9,24 @@ pub mod contract {
     use crate::functions::*;
     use common::{codec_types::*, mtc::*};
     use ink_prelude::{vec, vec::Vec};
-    use ink_storage::{
-        traits::{PackedLayout, SpreadAllocate, SpreadLayout},
-        Mapping,
-    };
-    use scale::{Decode, Encode};
-
-    #[derive(PartialEq, Eq, Clone, Debug, Encode, Decode, PackedLayout, SpreadLayout)]
-    #[cfg_attr(
-        feature = "std",
-        derive(scale_info::TypeInfo, ink_storage::traits::StorageLayout)
-    )]
-    enum LazyStorageKey {
-        Admins,
-        DeckFixedEmoBaseIds,
-        DeckBuiltEmoBaseIds,
-        Leaderboard,
-    }
-
-    #[derive(PartialEq, Eq, Clone, Debug, Encode, Decode, PackedLayout, SpreadLayout)]
-    #[cfg_attr(
-        feature = "std",
-        derive(scale_info::TypeInfo, ink_storage::traits::StorageLayout)
-    )]
-    enum LazyStorageValue {
-        Admins(Vec<AccountId>),
-        DeckFixedEmoBaseIds(Option<Vec<u16>>),
-        DeckBuiltEmoBaseIds(Option<Vec<u16>>),
-        Leaderboard(Vec<(u16, AccountId)>),
-    }
+    use ink_storage::{traits::SpreadAllocate, Mapping};
+    use scale::Decode;
 
     type PlayerImmutable = (Vec<mtc::Emo>, Vec<(AccountId, mtc::Ghost)>); // (pool, ghosts)
 
     #[ink(storage)]
     #[derive(SpreadAllocate)]
     pub struct Contract {
+        admins: Vec<AccountId>,
+
         emo_bases: Option<emo::Bases>,
+        deck_fixed_emo_base_ids: Option<Vec<u16>>,
+        deck_built_emo_base_ids: Option<Vec<u16>>,
 
         matchmaking_ghosts_info: Mapping<u16, Vec<(BlockNumber, AccountId)>>,
         matchmaking_ghost_by_index: Mapping<(u16, u8), mtc::Ghost>,
 
-        lazy: Mapping<LazyStorageKey, LazyStorageValue>,
+        leaderboard: Vec<(u16, AccountId)>,
 
         player_ep: Mapping<AccountId, u16>,
         player_seed: Mapping<AccountId, u64>,
@@ -63,37 +40,25 @@ pub mod contract {
         #[ink(constructor)]
         pub fn new() -> Self {
             ink_lang::utils::initialize_contract(|contract: &mut Self| {
-                contract._set_admins(vec![Self::env().caller()]);
-                contract._set_deck_fixed_emo_base_ids(None);
-                contract._set_deck_built_emo_base_ids(None);
-                contract._set_leaderboard(vec![]);
+                contract.admins.push(Self::env().caller());
             })
         }
 
         #[ink(message)]
         pub fn get_admins(&self) -> Vec<AccountId> {
-            match self.lazy.get(LazyStorageKey::Admins) {
-                Some(LazyStorageValue::Admins(x)) => x,
-                _ => panic!("invalid lazy"),
-            }
+            self.admins.clone()
         }
 
         #[ink(message)]
         pub fn add_admin(&mut self, account_id: AccountId) {
             self.assert_admin();
-
-            let mut admins = self.get_admins();
-            admins.push(account_id);
-            self._set_admins(admins);
+            self.admins.push(account_id);
         }
 
         #[ink(message)]
         pub fn remove_admin(&mut self, account_id: AccountId) {
             self.assert_admin();
-
-            let mut admins = self.get_admins();
-            admins.retain(|a| a != &account_id);
-            self._set_admins(admins);
+            self.admins.retain(|a| a != &account_id);
         }
 
         #[ink(message)]
@@ -115,18 +80,12 @@ pub mod contract {
 
         #[ink(message)]
         pub fn get_deck_fixed_emo_base_ids(&self) -> Option<Vec<u16>> {
-            match self.lazy.get(LazyStorageKey::DeckFixedEmoBaseIds) {
-                Some(LazyStorageValue::DeckFixedEmoBaseIds(x)) => x,
-                _ => panic!("invalid lazy"),
-            }
+            self.deck_fixed_emo_base_ids.clone()
         }
 
         #[ink(message)]
         pub fn get_deck_built_emo_base_ids(&self) -> Option<Vec<u16>> {
-            match self.lazy.get(LazyStorageKey::DeckBuiltEmoBaseIds) {
-                Some(LazyStorageValue::DeckBuiltEmoBaseIds(x)) => x,
-                _ => panic!("invalid lazy"),
-            }
+            self.deck_built_emo_base_ids.clone()
         }
 
         #[ink(message)]
@@ -148,10 +107,7 @@ pub mod contract {
 
         #[ink(message)]
         pub fn get_leaderboard(&self) -> Vec<(u16, AccountId)> {
-            match self.lazy.get(LazyStorageKey::Leaderboard) {
-                Some(LazyStorageValue::Leaderboard(x)) => x,
-                _ => panic!("invalid lazy"),
-            }
+            self.leaderboard.clone()
         }
 
         #[ink(message)]
@@ -197,8 +153,8 @@ pub mod contract {
             .expect("update_emo_bases: invalig arg");
 
             self.emo_bases = Some(bases);
-            self._set_deck_fixed_emo_base_ids(Some(fixed_base_ids));
-            self._set_deck_built_emo_base_ids(Some(built_base_ids));
+            self.deck_fixed_emo_base_ids = Some(fixed_base_ids);
+            self.deck_built_emo_base_ids = Some(built_base_ids);
         }
 
         #[ink(message)]
@@ -216,10 +172,10 @@ pub mod contract {
                     setup::build_pool(
                         &deck_emo_base_ids,
                         self.emo_bases.as_ref().expect("emo_bases none"),
-                        self.get_deck_fixed_emo_base_ids()
+                        self.deck_fixed_emo_base_ids
                             .as_ref()
                             .expect("deck_fixed_emo_base_ids none"),
-                        self.get_deck_built_emo_base_ids()
+                        self.deck_built_emo_base_ids
                             .as_ref()
                             .expect("deck_built_emo_base_ids none"),
                     )
@@ -310,36 +266,10 @@ pub mod contract {
 
     #[ink(impl)]
     impl Contract {
-        fn _set_admins(&mut self, x: Vec<AccountId>) {
-            self.lazy
-                .insert(LazyStorageKey::Admins, &LazyStorageValue::Admins(x));
-        }
-
-        fn _set_deck_fixed_emo_base_ids(&mut self, x: Option<Vec<u16>>) {
-            self.lazy.insert(
-                LazyStorageKey::DeckFixedEmoBaseIds,
-                &LazyStorageValue::DeckFixedEmoBaseIds(x),
-            );
-        }
-
-        fn _set_deck_built_emo_base_ids(&mut self, x: Option<Vec<u16>>) {
-            self.lazy.insert(
-                LazyStorageKey::DeckBuiltEmoBaseIds,
-                &LazyStorageValue::DeckBuiltEmoBaseIds(x),
-            );
-        }
-
-        fn _set_leaderboard(&mut self, x: Vec<(u16, AccountId)>) {
-            self.lazy.insert(
-                LazyStorageKey::Leaderboard,
-                &LazyStorageValue::Leaderboard(x),
-            );
-        }
-
         fn assert_admin(&self) -> AccountId {
             let caller = self.env().caller();
             assert!(
-                self.get_admins().contains(&caller),
+                self.admins.contains(&caller),
                 "assert_admin: caller is not admin",
             );
             caller
@@ -409,9 +339,7 @@ pub mod contract {
         ) {
             let old_ep = self.player_ep.get(player).expect("player_ep none");
             let new_ep = calc_new_ep(place, old_ep);
-            let mut leaderboard = self.get_leaderboard();
-            update_leaderboard(&mut leaderboard, new_ep, &player);
-            self._set_leaderboard(leaderboard);
+            update_leaderboard(&mut self.leaderboard, new_ep, &player);
             self.player_ep.insert(player, &new_ep);
 
             if !grade_and_board_history.last().unwrap().board.0.is_empty() {
