@@ -62,44 +62,45 @@ export const tx = async (
         pairOrAddress,
         { ...options, ...overrideOptions },
         (result: SubmittableResult) => {
-          if (!result.isCompleted) {
-            return
-          }
-          if (unsub) {
-            unsub()
-          }
-          if (result.isError) {
-            reject("tx: result.isError")
-            return
-          }
-          if (result.findRecord("system", "ExtrinsicSuccess")) {
-            const sudid = result.findRecord("sudo", "Sudid")
-            if (sudid) {
-              const d = sudid.event.data[0] as any
-              if (d && d.isError) {
-                reject(`sudo: ${buildErrorText(api, d.asError)}`)
-                return
-              }
+          try {
+            if (!result.isCompleted) {
+              return
             }
-            resolve(result)
+            if (unsub) {
+              unsub()
+            }
+            if (result.isError) {
+              throw new Error("result.isError")
+            }
+            if (result.findRecord("system", "ExtrinsicSuccess")) {
+              const sudid = result.findRecord("sudo", "Sudid")
+              if (sudid) {
+                const d = sudid.event.data[0] as any
+                if (d && d.isError) {
+                  throw new Error(`sudo: ${buildErrorText(api, d.asError)}`)
+                }
+              }
+              resolve(result)
+              return
+            }
+            if (result.dispatchError) {
+              throw new Error(`${buildErrorText(api, result.dispatchError)}`)
+            }
+            throw new Error("unknown state")
+          } catch (e) {
+            reject(`tx error: ${e}`)
             return
           }
-          if (result.dispatchError) {
-            reject(`tx: ${buildErrorText(api, result.dispatchError)}`)
-            return
-          }
-          reject("tx: unknown state")
-          return
         }
       )
       .catch((r) => {
-        reject(`tx: failed: ${r}`)
+        reject(`tx failed: ${r}`)
         return
       })
   })
 
   console.log(
-    `tx: ${(result.status.isInBlock
+    `tx is in block: ${(result.status.isInBlock
       ? result.status.asInBlock
       : result.status.asFinalized
     ).toString()}`
