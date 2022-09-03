@@ -397,22 +397,20 @@ pub mod contract {
                 let index = if let Some(idx) = info.iter().position(|(_, a)| a == &player) {
                     info[idx].0 = current_block_number;
                     idx
+                } else if info.len() < 20 {
+                    info.push((current_block_number, player));
+                    info.len() - 1
                 } else {
-                    if info.len() < 20 {
-                        info.push((current_block_number, player));
-                        info.len() - 1
-                    } else {
-                        let mut iter = info.iter().enumerate();
-                        let (mut oldest_idx, (mut oldest_num, _)) = iter.next().unwrap();
-                        for (idx, &(num, _)) in iter {
-                            if num < oldest_num {
-                                oldest_num = num;
-                                oldest_idx = idx;
-                            }
+                    let mut iter = info.iter().enumerate();
+                    let (mut oldest_idx, (mut oldest_num, _)) = iter.next().unwrap();
+                    for (idx, &(num, _)) in iter {
+                        if num < oldest_num {
+                            oldest_num = num;
+                            oldest_idx = idx;
                         }
-                        info[oldest_idx] = (current_block_number, player);
-                        oldest_idx
                     }
+                    info[oldest_idx] = (current_block_number, player);
+                    oldest_idx
                 };
 
                 (info, index as u8)

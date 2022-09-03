@@ -37,10 +37,15 @@ const buildConnectionQuery = (gameContract: ContractPromise): Connection["query"
       "Option<Vec<u16>>",
       (await queryContract(gameContract, "getDeckBuiltEmoBaseIds")).toU8a()
     ).unwrap(),
-  matchmakingGhosts: async (band) =>
+  matchmakingGhostsInfo: async (band) =>
     createType(
-      "Option<Vec<(AccountId, mtc_Ghost)>>",
-      (await queryContract(gameContract, "getMatchmakingGhosts", [band])).toU8a()
+      "Option<Vec<(BlockNumber, AccountId)>>",
+      (await queryContract(gameContract, "getMatchmakingGhostsInfo", [band])).toU8a()
+    ),
+  matchmakingGhostByIndex: async (band, index) =>
+    createType(
+      "Option<mtc_Ghost>",
+      (await queryContract(gameContract, "getMatchmakingGhostByIndex", [band, index])).toU8a()
     ),
   leaderboard: async () =>
     createType(

@@ -139,10 +139,6 @@ impl ShopBoard {
             .ok_or_else(|| format_err!("get_emo_mut_by_id: emo not found: id {emo_id}"))
     }
 
-    pub fn has_emo_by_index(&self, emo_index: u8) -> bool {
-        self.0.get(emo_index as usize).is_some()
-    }
-
     pub fn get_emo_and_index_by_id(&self, emo_id: u16) -> Result<(&ShopBoardEmo, u8)> {
         self.0
             .iter()

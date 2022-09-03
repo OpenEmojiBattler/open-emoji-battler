@@ -6,7 +6,7 @@ import type { Connection } from "../tasks"
 import { buildEmoBases } from "~/misc/mtcUtils"
 import { getOebEnv } from "~/misc/env"
 
-const endpointStorageKey = "endpointV4"
+const endpointStorageKey = "endpointV5"
 
 export const getEndpoint = () => {
   const endpoint = localStorage.getItem(endpointStorageKey)
@@ -37,7 +37,10 @@ export const buildConnection = async (api: ApiPromise): Promise<Connection> => {
 const buildConnectionQuery = (api: ApiPromise): Connection["query"] => ({
   deckFixedEmoBaseIds: async () => (await api.query.game.deckFixedEmoBaseIds()).unwrap(),
   deckBuiltEmoBaseIds: async () => (await api.query.game.deckBuiltEmoBaseIds()).unwrap(),
-  matchmakingGhosts: (_band) => {
+  matchmakingGhostsInfo: () => {
+    throw new Error("unimplemented")
+  },
+  matchmakingGhostByIndex: () => {
     throw new Error("unimplemented")
   },
   leaderboard: () => {
