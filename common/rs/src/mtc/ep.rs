@@ -44,3 +44,16 @@ pub fn calculate_new_ep(player_ep: u16, player_place: u8, sorted_ghost_eps: &[u1
 fn calculate_expected(a: f32, b: f32) -> f32 {
     1.0 / (1.0 + (libm::powf(10f32, (b - a) / 400.0)))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_reduce_ep() {
+        assert_eq!(reduce_ep(10, 0), 10);
+        assert_eq!(reduce_ep(10, 5), 5);
+        assert_eq!(reduce_ep(10, 10), 1);
+        assert_eq!(reduce_ep(10, 11), 1);
+    }
+}
