@@ -6,7 +6,7 @@ import type { Connection } from "../tasks"
 import { buildEmoBases } from "~/misc/mtcUtils"
 import { getOebEnv } from "~/misc/env"
 
-const endpointStorageKey = "endpointV4"
+const endpointStorageKey = "endpointV5"
 
 export const getEndpoint = () => {
   const endpoint = localStorage.getItem(endpointStorageKey)
