@@ -56,8 +56,6 @@ pub fn calc_new_ep(place: u8, old_ep: u16) -> u16 {
 }
 
 const LEADERBOARD_SIZE: u8 = 100;
-const LEADERBOARD_SURPLUS_SIZE: u8 = 30;
-const LEADERBOARD_REAL_SIZE: u8 = LEADERBOARD_SIZE + LEADERBOARD_SURPLUS_SIZE;
 
 pub fn update_leaderboard<A: Eq + Copy>(
     mut leaderboard: Vec<(u16, A)>,
@@ -65,39 +63,46 @@ pub fn update_leaderboard<A: Eq + Copy>(
     account: &A,
 ) -> Option<Vec<(u16, A)>> {
     let mut same_account_index_opt = None;
-    let mut new_place_index_opt = None;
+    let mut new_pos_index_opt = None;
 
     for (index, (iter_ep, iter_account)) in leaderboard.iter().enumerate() {
         if iter_account == account {
             same_account_index_opt = Some(index);
         }
-        if new_place_index_opt.is_none() && iter_ep <= &ep {
-            new_place_index_opt = Some(index);
+        if new_pos_index_opt.is_none() && iter_ep <= &ep {
+            new_pos_index_opt = Some(index);
         }
 
-        if same_account_index_opt.is_some() && new_place_index_opt.is_some() {
+        if same_account_index_opt.is_some() && new_pos_index_opt.is_some() {
             break;
         }
     }
 
     if let Some(same_account_index) = same_account_index_opt {
-        if let Some(new_place_index) = new_place_index_opt {
-            leaderboard.swap(same_account_index, new_place_index);
-            leaderboard[new_place_index].0 = ep;
+        if let Some(new_pos_index) = new_pos_index_opt {
+            if same_account_index < new_pos_index {
+                return None;
+            }
+            if same_account_index == new_pos_index && leaderboard[same_account_index].0 < ep {
+                leaderboard[same_account_index].0 = ep;
+            } else {
+                leaderboard[new_pos_index..=same_account_index].rotate_right(1);
+                leaderboard[new_pos_index].0 = ep;
+            }
         } else {
-            let mut removed = leaderboard.remove(same_account_index);
-            if leaderboard.len() < LEADERBOARD_REAL_SIZE.into() {
-                removed.0 = ep;
-                leaderboard.push(removed);
+            return None;
+        }
+    } else {
+        if let Some(new_pos_index) = new_pos_index_opt {
+            leaderboard.insert(new_pos_index, (ep, *account));
+            leaderboard.truncate(LEADERBOARD_SIZE.into());
+        } else {
+            if leaderboard.len() < LEADERBOARD_SIZE.into() {
+                leaderboard.push((ep, *account));
+            } else {
+                return None;
             }
         }
-    } else if let Some(new_place_index) = new_place_index_opt {
-        leaderboard.insert(new_place_index, (ep, *account));
-        leaderboard.truncate(LEADERBOARD_REAL_SIZE.into());
-    } else if leaderboard.len() < LEADERBOARD_REAL_SIZE.into() {
-        leaderboard.push((ep, *account));
-    } else {
-        return None;
     }
 
     Some(leaderboard)
