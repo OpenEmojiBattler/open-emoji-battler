@@ -116,6 +116,17 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_calc_new_ep() {
+        assert_eq!(calc_new_ep(1, 50), 120);
+        assert_eq!(calc_new_ep(2, 50), 100);
+        assert_eq!(calc_new_ep(3, 50), 20);
+        assert_eq!(calc_new_ep(4, 50), 1);
+
+        assert_eq!(calc_new_ep(1, 500), 565);
+        assert_eq!(calc_new_ep(2, 2700), 2701);
+    }
+
+    #[test]
     fn test_build_initial_ghost_states() {
         assert_eq!(
             build_initial_ghost_states(1),
