@@ -92,17 +92,13 @@ pub fn update_leaderboard<A: Eq + Copy>(
         } else {
             return None;
         }
+    } else if let Some(new_pos_index) = new_pos_index_opt {
+        leaderboard.insert(new_pos_index, (ep, *account));
+        leaderboard.truncate(LEADERBOARD_SIZE.into());
+    } else if leaderboard.len() < LEADERBOARD_SIZE.into() {
+        leaderboard.push((ep, *account));
     } else {
-        if let Some(new_pos_index) = new_pos_index_opt {
-            leaderboard.insert(new_pos_index, (ep, *account));
-            leaderboard.truncate(LEADERBOARD_SIZE.into());
-        } else {
-            if leaderboard.len() < LEADERBOARD_SIZE.into() {
-                leaderboard.push((ep, *account));
-            } else {
-                return None;
-            }
-        }
+        return None;
     }
 
     Some(leaderboard)
