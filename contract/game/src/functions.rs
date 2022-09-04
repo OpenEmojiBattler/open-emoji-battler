@@ -110,3 +110,40 @@ pub fn build_initial_ghost_states(ep: u16) -> Vec<mtc::GhostState> {
 
     vec![mtc::GhostState::Active { health }; 3]
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_build_initial_ghost_states() {
+        assert_eq!(
+            build_initial_ghost_states(1),
+            vec![
+                mtc::GhostState::Active { health: 14 },
+                mtc::GhostState::Active { health: 14 },
+                mtc::GhostState::Active { health: 14 }
+            ]
+        );
+
+        assert_eq!(
+            build_initial_ghost_states(299)[0],
+            mtc::GhostState::Active { health: 18 }
+        );
+
+        assert_eq!(
+            build_initial_ghost_states(300)[0],
+            mtc::GhostState::Active { health: 20 }
+        );
+
+        assert_eq!(
+            build_initial_ghost_states(800)[0],
+            mtc::GhostState::Active { health: 30 }
+        );
+
+        assert_eq!(
+            build_initial_ghost_states(1234)[0],
+            mtc::GhostState::Active { health: 30 }
+        );
+    }
+}
