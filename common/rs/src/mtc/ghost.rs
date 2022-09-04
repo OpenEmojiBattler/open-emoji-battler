@@ -83,10 +83,10 @@ pub fn build_matchmaking_ghosts<A, F>(
     ep: u16,
     grade_and_board_history: &[mtc::GradeAndBoard],
     get_matchmaking_ghosts: &F,
-) -> (u16, Vec<(A, mtc::Ghost)>)
+) -> (u16, Vec<(A, u16, mtc::Ghost)>)
 where
     A: Eq + Clone,
-    F: Fn(u16) -> Option<Vec<(A, mtc::Ghost)>>,
+    F: Fn(u16) -> Option<Vec<(A, u16, mtc::Ghost)>>,
 {
     let ep_band = get_ep_band(ep);
     let ghost = build_ghost_from_history(grade_and_board_history);
@@ -95,14 +95,15 @@ where
 
     if let Some(ghost_with_data) = ghosts_with_data
         .iter_mut()
-        .find(|(aid, _)| aid == account_id)
+        .find(|(aid, _, _)| aid == account_id)
     {
-        ghost_with_data.1 = ghost;
+        ghost_with_data.1 = ep;
+        ghost_with_data.2 = ghost;
     } else if ghosts_with_data.len() < 20 {
-        ghosts_with_data.push((account_id.clone(), ghost));
+        ghosts_with_data.push((account_id.clone(), ep, ghost));
     } else {
         ghosts_with_data.remove(0);
-        ghosts_with_data.push((account_id.clone(), ghost));
+        ghosts_with_data.push((account_id.clone(), ep, ghost));
     }
 
     (ep_band, ghosts_with_data)
