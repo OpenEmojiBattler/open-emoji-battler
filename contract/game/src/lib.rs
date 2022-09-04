@@ -370,9 +370,9 @@ pub mod contract {
             let old_ep = self.player_ep.get(player).expect("player_ep none");
             let new_ep = calc_new_ep(place, old_ep);
 
-            let mut leaderboard = self.get_leaderboard();
-            update_leaderboard(&mut leaderboard, new_ep, &player);
-            self._set_leaderboard(leaderboard);
+            if let Some(leaderboard) = update_leaderboard(self.get_leaderboard(), new_ep, &player) {
+                self._set_leaderboard(leaderboard);
+            }
 
             self.player_ep.insert(player, &new_ep);
 

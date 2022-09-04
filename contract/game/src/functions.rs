@@ -59,7 +59,11 @@ const LEADERBOARD_SIZE: u8 = 100;
 const LEADERBOARD_SURPLUS_SIZE: u8 = 30;
 const LEADERBOARD_REAL_SIZE: u8 = LEADERBOARD_SIZE + LEADERBOARD_SURPLUS_SIZE;
 
-pub fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16, account: &A) {
+pub fn update_leaderboard<A: Eq + Copy>(
+    mut leaderboard: Vec<(u16, A)>,
+    ep: u16,
+    account: &A,
+) -> Option<Vec<(u16, A)>> {
     let mut same_account_index_opt = None;
     let mut new_place_index_opt = None;
 
@@ -92,7 +96,11 @@ pub fn update_leaderboard<A: Eq + Copy>(leaderboard: &mut Vec<(u16, A)>, ep: u16
         leaderboard.truncate(LEADERBOARD_REAL_SIZE.into());
     } else if leaderboard.len() < LEADERBOARD_REAL_SIZE.into() {
         leaderboard.push((ep, *account));
+    } else {
+        return None;
     }
+
+    Some(leaderboard)
 }
 
 pub fn build_initial_ghost_states(ep: u16) -> Vec<mtc::GhostState> {
