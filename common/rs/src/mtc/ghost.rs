@@ -132,3 +132,141 @@ fn build_ghost_board_from_board(board: &mtc::Board) -> mtc::GhostBoard {
             .collect(),
     )
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_choose_ghosts() {
+        let seed = 0;
+        type A = u8;
+        let a_vec_none: Option<Vec<A>> = None;
+        let panic_closure = |_| panic!("should not reached");
+        let empty_a_and_ghost: (A, mtc::Ghost) = (0, mtc::Ghost { history: vec![] });
+
+        fn create_ghost(grade: u8) -> mtc::Ghost {
+            mtc::Ghost {
+                history: vec![mtc::GradeAndGhostBoard {
+                    grade,
+                    board: mtc::GhostBoard(vec![]),
+                }],
+            }
+        }
+
+        assert_eq!(
+            choose_ghosts(300, seed, &|_| a_vec_none.clone(), &panic_closure),
+            vec![
+                empty_a_and_ghost.clone(),
+                empty_a_and_ghost.clone(),
+                empty_a_and_ghost.clone()
+            ]
+        );
+
+        assert_eq!(
+            choose_ghosts(1, seed, &|_| a_vec_none.clone(), &panic_closure),
+            vec![
+                empty_a_and_ghost.clone(),
+                empty_a_and_ghost.clone(),
+                empty_a_and_ghost.clone()
+            ]
+        );
+
+        assert_eq!(
+            choose_ghosts(
+                300,
+                seed,
+                &|b| if b == 3 {
+                    Some(vec![1])
+                } else {
+                    a_vec_none.clone()
+                },
+                &|(b, i)| if b == 3 && i == 0 {
+                    Some(create_ghost(1))
+                } else {
+                    panic!("should not reached")
+                }
+            ),
+            vec![
+                (1, create_ghost(1)),
+                empty_a_and_ghost.clone(),
+                empty_a_and_ghost
+            ]
+        );
+
+        assert_eq!(
+            choose_ghosts(
+                300,
+                seed,
+                &|b| match b {
+                    2 => Some(vec![3]),
+                    1 => Some(vec![2]),
+                    0 => Some(vec![1]),
+                    _ => a_vec_none.clone(),
+                },
+                &|(b, i)| {
+                    if i != 0 {
+                        panic!("should not reached");
+                    }
+                    match b {
+                        0..=2 => Some(create_ghost(b as u8 + 1)),
+                        _ => panic!("should not reached"),
+                    }
+                }
+            ),
+            vec![
+                (2, create_ghost(2)),
+                (3, create_ghost(3)),
+                (1, create_ghost(1)),
+            ]
+        );
+
+        assert_eq!(
+            choose_ghosts(
+                300,
+                seed,
+                &|b| if b == 3 {
+                    Some(vec![1, 2, 3])
+                } else {
+                    panic!("should not reached")
+                },
+                &|t| {
+                    match t {
+                        (3, 0) => Some(create_ghost(1)),
+                        (3, 1) => Some(create_ghost(2)),
+                        (3, 2) => Some(create_ghost(3)),
+                        _ => panic!("should not reached"),
+                    }
+                }
+            ),
+            vec![
+                (2, create_ghost(2)),
+                (1, create_ghost(1)),
+                (3, create_ghost(3)),
+            ]
+        );
+
+        assert_eq!(
+            choose_ghosts(
+                300,
+                seed,
+                &|b| if b == 3 {
+                    Some((1..=20).collect())
+                } else {
+                    panic!("should not reached")
+                },
+                &|(b, i)| {
+                    if b != 3 {
+                        panic!("should not reached");
+                    }
+                    Some(create_ghost(i as u8 + 1))
+                }
+            ),
+            vec![
+                (8, create_ghost(8)),
+                (4, create_ghost(4)),
+                (9, create_ghost(9)),
+            ]
+        );
+    }
+}
