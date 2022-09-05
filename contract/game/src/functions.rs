@@ -67,8 +67,12 @@ pub fn update_leaderboard<A: Eq + Copy>(
 
     for (index, (iter_ep, iter_account)) in leaderboard.iter().enumerate() {
         if iter_account == account {
+            if iter_ep >= &ep {
+                return None;
+            }
             same_account_index_opt = Some(index);
         }
+
         if new_pos_index_opt.is_none() && iter_ep <= &ep {
             new_pos_index_opt = Some(index);
         }
@@ -79,18 +83,12 @@ pub fn update_leaderboard<A: Eq + Copy>(
     }
 
     if let Some(same_account_index) = same_account_index_opt {
-        if let Some(new_pos_index) = new_pos_index_opt {
-            if same_account_index < new_pos_index {
-                return None;
-            }
-            if same_account_index == new_pos_index && leaderboard[same_account_index].0 < ep {
-                leaderboard[same_account_index].0 = ep;
-            } else {
-                leaderboard[new_pos_index..=same_account_index].rotate_right(1);
-                leaderboard[new_pos_index].0 = ep;
-            }
-        } else {
-            return None;
+        let new_pos_index = new_pos_index_opt.unwrap();
+
+        leaderboard[same_account_index].0 = ep;
+
+        if same_account_index > new_pos_index {
+            leaderboard[new_pos_index..=same_account_index].rotate_right(1);
         }
     } else if let Some(new_pos_index) = new_pos_index_opt {
         leaderboard.insert(new_pos_index, (ep, *account));
