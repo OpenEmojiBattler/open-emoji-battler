@@ -67,7 +67,7 @@ pub fn update_leaderboard<A: Eq + Copy>(
 
     for (index, (iter_ep, iter_account)) in leaderboard.iter().enumerate() {
         if iter_account == account {
-            if iter_ep >= &ep {
+            if iter_ep > &ep {
                 return None;
             }
             same_account_index_opt = Some(index);
@@ -84,6 +84,10 @@ pub fn update_leaderboard<A: Eq + Copy>(
 
     if let Some(same_account_index) = same_account_index_opt {
         let new_pos_index = new_pos_index_opt.unwrap();
+
+        if same_account_index == new_pos_index && leaderboard[same_account_index].0 == ep {
+            return None;
+        }
 
         leaderboard[same_account_index].0 = ep;
 
@@ -131,6 +135,171 @@ mod tests {
 
         assert_eq!(calc_new_ep(1, 500), 565);
         assert_eq!(calc_new_ep(2, 2700), 2701);
+    }
+
+    #[test]
+    fn test_update_leaderboard_0() {
+        assert_eq!(update_leaderboard(vec![], 123, &0), Some(vec![(123, 0)]));
+    }
+
+    #[test]
+    fn test_update_leaderboard_1() {
+        assert_eq!(
+            update_leaderboard(vec![(100, 0)], 101, &0),
+            Some(vec![(101, 0)])
+        );
+        assert_eq!(update_leaderboard(vec![(100, 0)], 100, &0), None);
+        assert_eq!(update_leaderboard(vec![(100, 0)], 99, &0), None);
+
+        assert_eq!(
+            update_leaderboard(vec![(100, 1)], 101, &0),
+            Some(vec![(101, 0), (100, 1)])
+        );
+        assert_eq!(
+            update_leaderboard(vec![(100, 1)], 100, &0),
+            Some(vec![(100, 0), (100, 1)])
+        );
+        assert_eq!(
+            update_leaderboard(vec![(100, 1)], 99, &0),
+            Some(vec![(100, 1), (99, 0)])
+        );
+    }
+
+    #[test]
+    fn test_update_leaderboard_99() {
+        let board = (1u8..100)
+            .rev()
+            .map(|n| ((n as u16) * 2, n))
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            update_leaderboard(board.clone(), 102, &50),
+            Some({
+                let mut b = board.clone();
+                b[49].0 = 102;
+                b.swap(49, 48);
+                b
+            })
+        );
+        assert_eq!(
+            update_leaderboard(board.clone(), 101, &50),
+            Some({
+                let mut b = board.clone();
+                b[49].0 = 101;
+                b
+            })
+        );
+        assert_eq!(update_leaderboard(board.clone(), 100, &50), None);
+        assert_eq!(update_leaderboard(board.clone(), 99, &50), None);
+
+        assert_eq!(
+            update_leaderboard(board.clone(), 100, &0),
+            Some({
+                let mut b = board.clone();
+                b.insert(49, (100, 0));
+                b
+            })
+        );
+        assert_eq!(
+            update_leaderboard(board.clone(), 101, &0),
+            Some({
+                let mut b = board.clone();
+                b.insert(49, (101, 0));
+                b
+            })
+        );
+        assert_eq!(
+            update_leaderboard(board.clone(), 2, &0),
+            Some({
+                let mut b = board.clone();
+                b.insert(98, (2, 0));
+                b
+            })
+        );
+        assert_eq!(
+            update_leaderboard(board.clone(), 1, &0),
+            Some({
+                let mut b = board.clone();
+                b.push((1, 0));
+                b
+            })
+        );
+    }
+
+    #[test]
+    fn test_update_leaderboard_100() {
+        let board = (1u8..101)
+            .rev()
+            .map(|n| ((n as u16) * 2, n))
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            update_leaderboard(board.clone(), 210, &100),
+            Some({
+                let mut b = board.clone();
+                b[0].0 = 210;
+                b
+            })
+        );
+        assert_eq!(update_leaderboard(board.clone(), 200, &100), None);
+        assert_eq!(update_leaderboard(board.clone(), 190, &100), None);
+
+        assert_eq!(
+            update_leaderboard(board.clone(), 50, &1),
+            Some({
+                let mut b = board.clone();
+                b.pop();
+                b.insert(75, (50, 1));
+                b
+            })
+        );
+        assert_eq!(
+            update_leaderboard(board.clone(), 51, &1),
+            Some({
+                let mut b = board.clone();
+                b.pop();
+                b.insert(75, (51, 1));
+                b
+            })
+        );
+        assert_eq!(
+            update_leaderboard(board.clone(), 300, &1),
+            Some({
+                let mut b = board.clone();
+                b.pop();
+                b.insert(0, (300, 1));
+                b
+            })
+        );
+        assert_eq!(
+            update_leaderboard(board.clone(), 3, &1),
+            Some({
+                let mut b = board.clone();
+                b[99].0 = 3;
+                b
+            })
+        );
+        assert_eq!(update_leaderboard(board.clone(), 2, &1), None);
+        assert_eq!(update_leaderboard(board.clone(), 1, &1), None);
+
+        assert_eq!(
+            update_leaderboard(board.clone(), 2, &0),
+            Some({
+                let mut b = board.clone();
+                b.pop();
+                b.push((2, 0));
+                b
+            })
+        );
+        assert_eq!(update_leaderboard(board.clone(), 1, &0), None);
+    }
+
+    #[test]
+    fn test_update_leaderboard_others() {
+        assert_eq!(
+            update_leaderboard(vec![(100, 0), (100, 1), (100, 2)], 100, &2),
+            Some(vec![(100, 2), (100, 0), (100, 1)])
+        );
     }
 
     #[test]
