@@ -25,7 +25,7 @@ pub fn verify_player_operations_and_update(
     turn: u8,
     emo_bases: &emo::Bases,
 ) -> Result<mtc::Board> {
-    ensure!(ops.len() < 150, "too big ops");
+    ensure!(ops.len() < 200, "too big ops");
 
     let mut coin = get_initial_coin_by_turn(turn);
     let mut catalog_line_index = 0u8;

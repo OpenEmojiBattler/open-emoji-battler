@@ -299,13 +299,14 @@ pub mod contract {
             );
             caller
         }
-        fn _set_leaderboard(&mut self, x: Vec<(u16, AccountId)>) {
+
+        fn set_leaderboard(&mut self, x: Vec<(u16, AccountId)>) {
             self.lazy.insert(
                 LazyStorageKey::Leaderboard,
                 &LazyStorageValue::Leaderboard(x),
             );
         }
-        // enough for this game
+
         fn get_insecure_random_seed(&self, account_id: AccountId, subject: &[u8]) -> u64 {
             assert!(
                 self.env().caller_is_origin(),
@@ -371,7 +372,7 @@ pub mod contract {
             let new_ep = calc_new_ep(place, old_ep);
 
             if let Some(leaderboard) = update_leaderboard(self.get_leaderboard(), new_ep, &player) {
-                self._set_leaderboard(leaderboard);
+                self.set_leaderboard(leaderboard);
             }
 
             self.player_ep.insert(player, &new_ep);
@@ -391,14 +392,14 @@ pub mod contract {
             grade_and_board_history: &[mtc::GradeAndBoard],
         ) {
             let ep_band = ep::get_ep_band(ep);
-            let current_block_number = self.env().block_number();
+            let player_info_element = (self.env().block_number(), player);
 
             let (info, index) = if let Some(mut info) = self.matchmaking_ghosts_info.get(ep_band) {
                 let index = if let Some(idx) = info.iter().position(|(_, a)| a == &player) {
-                    info[idx].0 = current_block_number;
+                    info[idx] = player_info_element;
                     idx
                 } else if info.len() < 20 {
-                    info.push((current_block_number, player));
+                    info.push(player_info_element);
                     info.len() - 1
                 } else {
                     let mut iter = info.iter().enumerate();
@@ -409,13 +410,13 @@ pub mod contract {
                             oldest_idx = idx;
                         }
                     }
-                    info[oldest_idx] = (current_block_number, player);
+                    info[oldest_idx] = player_info_element;
                     oldest_idx
                 };
 
                 (info, index as u8)
             } else {
-                (vec![(current_block_number, player)], 0)
+                (vec![player_info_element], 0)
             };
 
             self.matchmaking_ghosts_info.insert(ep_band, &info);
@@ -433,6 +434,238 @@ pub mod contract {
         ) {
             update_player_mtc_mutable_after_battle(&mut player_mtc_mutable, new_seed);
             self.player_mtc_mutable.insert(player, &player_mtc_mutable);
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        use ink_lang as ink;
+
+        fn set_caller(caller: AccountId) {
+            ink_env::test::set_caller::<Environment>(caller);
+        }
+
+        fn get_default_accounts() -> ink_env::test::DefaultAccounts<Environment> {
+            ink_env::test::default_accounts::<Environment>()
+        }
+
+        fn get_account(n: u8) -> AccountId {
+            assert!(n < 255, "not supported");
+            let mut arr = [0xff; 32];
+            arr[0] -= n + 1;
+            AccountId::from(arr)
+        }
+
+        struct AccountIdForDebug(AccountId);
+        impl std::fmt::Debug for AccountIdForDebug {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                let a: &[u8; 32] = self.0.as_ref();
+                write!(f, "a:{}", 254 - a[0])
+            }
+        }
+
+        fn get_current_block_number() -> BlockNumber {
+            ink_env::block_number::<Environment>()
+        }
+
+        fn advance_block() -> BlockNumber {
+            ink_env::test::advance_block::<Environment>();
+            get_current_block_number()
+        }
+
+        fn init_contract() -> Contract {
+            set_caller(get_default_accounts().alice);
+            Contract::new()
+        }
+
+        #[ink::test]
+        fn new() {
+            assert_eq!(init_contract().admins, vec![get_default_accounts().alice]);
+        }
+
+        #[ink::test]
+        fn create_or_update_player_ep() {
+            let mut contract = init_contract();
+
+            let account0 = get_account(0);
+            assert_eq!(contract.player_ep.get(account0), None);
+            assert_eq!(contract.create_or_update_player_ep(account0), 300);
+            assert_eq!(contract.player_ep.get(account0), Some(300));
+
+            let account1 = get_account(1);
+            contract.player_ep.insert(account1, &400);
+            assert_eq!(contract.create_or_update_player_ep(account1), 400);
+            assert_eq!(contract.player_ep.get(account1), Some(400));
+
+            let account2 = get_account(2);
+            contract.player_ep.insert(account2, &500);
+            let m: mtc::storage::PlayerMutable = Default::default();
+            contract.player_mtc_mutable.insert(account2, &m);
+            assert_eq!(contract.create_or_update_player_ep(account2), 440);
+            assert_eq!(contract.player_ep.get(account2), Some(440));
+        }
+
+        #[ink::test]
+        fn add_matchmaking_ghost() {
+            let mut contract = init_contract();
+            let ep = 300;
+            let ep_band = ep::get_ep_band(ep);
+            let mut current_block = get_current_block_number();
+
+            assert_eq!(contract.matchmaking_ghosts_info.get(ep_band), None);
+            assert_eq!(contract.matchmaking_ghost_by_index.get((ep_band, 0)), None);
+
+            fn build_grade_and_board_vec(grade: u8) -> Vec<mtc::GradeAndBoard> {
+                vec![mtc::GradeAndBoard {
+                    grade,
+                    board: Default::default(),
+                }]
+            }
+
+            fn build_ghost(grade: u8) -> mtc::Ghost {
+                mtc::Ghost {
+                    history: vec![mtc::GradeAndGhostBoard {
+                        grade,
+                        board: Default::default(),
+                    }],
+                }
+            }
+
+            contract.add_matchmaking_ghost(get_account(0), ep, &build_grade_and_board_vec(0));
+            assert_eq!(
+                contract.matchmaking_ghosts_info.get(ep_band).unwrap(),
+                vec![(current_block, get_account(0))]
+            );
+            assert_eq!(
+                contract
+                    .matchmaking_ghost_by_index
+                    .get((ep_band, 0))
+                    .unwrap(),
+                build_ghost(0)
+            );
+
+            contract.add_matchmaking_ghost(get_account(1), ep, &build_grade_and_board_vec(1));
+            assert_eq!(
+                contract.matchmaking_ghosts_info.get(ep_band).unwrap(),
+                vec![
+                    (current_block, get_account(0)),
+                    (current_block, get_account(1))
+                ]
+            );
+            assert_eq!(
+                contract
+                    .matchmaking_ghost_by_index
+                    .get((ep_band, 0))
+                    .unwrap(),
+                build_ghost(0)
+            );
+            assert_eq!(
+                contract
+                    .matchmaking_ghost_by_index
+                    .get((ep_band, 1))
+                    .unwrap(),
+                build_ghost(1)
+            );
+
+            current_block = advance_block();
+
+            contract.add_matchmaking_ghost(get_account(0), ep, &build_grade_and_board_vec(2));
+            assert_eq!(
+                contract.matchmaking_ghosts_info.get(ep_band).unwrap(),
+                vec![
+                    (current_block, get_account(0)),
+                    (current_block - 1, get_account(1))
+                ]
+            );
+            assert_eq!(
+                contract
+                    .matchmaking_ghost_by_index
+                    .get((ep_band, 0))
+                    .unwrap(),
+                build_ghost(2)
+            );
+
+            advance_block();
+
+            for n in 2u8..19 {
+                contract.add_matchmaking_ghost(get_account(n), ep, &build_grade_and_board_vec(3));
+            }
+            assert_eq!(
+                contract.matchmaking_ghosts_info.get(ep_band).unwrap().len(),
+                19
+            );
+
+            current_block = advance_block();
+
+            contract.add_matchmaking_ghost(get_account(19), ep, &build_grade_and_board_vec(4));
+            let result = contract.matchmaking_ghosts_info.get(ep_band).unwrap();
+            assert_eq!(result.len(), 20);
+            assert_eq!(result.last().unwrap(), &(current_block, get_account(19)));
+            assert_eq!(
+                contract
+                    .matchmaking_ghost_by_index
+                    .get((ep_band, 19))
+                    .unwrap(),
+                build_ghost(4)
+            );
+
+            let mut before = contract.matchmaking_ghosts_info.get(ep_band).unwrap();
+            // println!("{:?}", before.clone().into_iter().map(|(b, a)| (b, AccountIdForDebug(a))).collect::<Vec<_>>());
+            assert_eq!(
+                contract
+                    .matchmaking_ghost_by_index
+                    .get((ep_band, 1))
+                    .unwrap(),
+                build_ghost(1)
+            );
+            contract.add_matchmaking_ghost(get_account(20), ep, &build_grade_and_board_vec(5));
+            let after = contract.matchmaking_ghosts_info.get(ep_band).unwrap();
+            // println!("{:?}", after.clone().into_iter().map(|(b, a)| (b, AccountIdForDebug(a))).collect::<Vec<_>>());
+            assert_eq!(after.len(), 20);
+            before[1] = (current_block, get_account(20));
+            assert_eq!(after, before);
+            assert_eq!(
+                contract
+                    .matchmaking_ghost_by_index
+                    .get((ep_band, 1))
+                    .unwrap(),
+                build_ghost(5)
+            );
+
+            current_block = advance_block();
+
+            assert_eq!(
+                contract.matchmaking_ghosts_info.get(ep_band).unwrap()[10],
+                (2, get_account(10))
+            );
+            assert_eq!(
+                contract
+                    .matchmaking_ghost_by_index
+                    .get((ep_band, 10))
+                    .unwrap()
+                    .history
+                    .last()
+                    .unwrap()
+                    .grade,
+                3
+            );
+            contract.add_matchmaking_ghost(get_account(10), ep, &build_grade_and_board_vec(6));
+            assert_eq!(
+                contract.matchmaking_ghosts_info.get(ep_band).unwrap()[10],
+                (current_block, get_account(10))
+            );
+            assert_eq!(
+                contract
+                    .matchmaking_ghost_by_index
+                    .get((ep_band, 10))
+                    .unwrap()
+                    .history
+                    .last()
+                    .unwrap()
+                    .grade,
+                6
+            );
         }
     }
 }

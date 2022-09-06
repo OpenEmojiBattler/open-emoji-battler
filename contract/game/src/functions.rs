@@ -219,7 +219,7 @@ mod tests {
         assert_eq!(
             update_leaderboard(board.clone(), 1, &0),
             Some({
-                let mut b = board.clone();
+                let mut b = board;
                 b.push((1, 0));
                 b
             })
@@ -291,7 +291,7 @@ mod tests {
                 b
             })
         );
-        assert_eq!(update_leaderboard(board.clone(), 1, &0), None);
+        assert_eq!(update_leaderboard(board, 1, &0), None);
     }
 
     #[test]
