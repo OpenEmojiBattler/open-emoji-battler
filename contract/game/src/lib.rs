@@ -436,4 +436,55 @@ pub mod contract {
             self.player_mtc_mutable.insert(player, &player_mtc_mutable);
         }
     }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        use ink_lang as ink;
+
+
+        fn set_caller(caller: AccountId) {
+            ink_env::test::set_caller::<Environment>(caller);
+        }
+
+        fn default_accounts() -> ink_env::test::DefaultAccounts<Environment> {
+            ink_env::test::default_accounts::<Environment>()
+        }
+
+        fn account_id(n: u8) -> AccountId {
+            AccountId::from([0xf0 | n; 32])
+        }
+
+        fn init() -> Contract {
+            set_caller(default_accounts().alice);
+            Contract::new()
+        }
+
+        #[ink::test]
+        fn new() {
+            assert_eq!(init().admins, vec![default_accounts().alice]);
+        }
+
+        #[ink::test]
+        fn create_or_update_player_ep() {
+            let mut contract = init();
+
+            let account0 = account_id(0);
+            assert_eq!(contract.player_ep.get(account0), None);
+            assert_eq!(contract.create_or_update_player_ep(account0), 300);
+            assert_eq!(contract.player_ep.get(account0), Some(300));
+
+            let account1 = account_id(1);
+            contract.player_ep.insert(account1, &400);
+            assert_eq!(contract.create_or_update_player_ep(account1), 400);
+            assert_eq!(contract.player_ep.get(account1), Some(400));
+
+            let account2 = account_id(2);
+            contract.player_ep.insert(account2, &500);
+            let m: mtc::storage::PlayerMutable = Default::default();
+            contract.player_mtc_mutable.insert(account2, &m);
+            assert_eq!(contract.create_or_update_player_ep(account2), 440);
+            assert_eq!(contract.player_ep.get(account2), Some(440));
+        }
+    }
 }
