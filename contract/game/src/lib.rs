@@ -299,13 +299,14 @@ pub mod contract {
             );
             caller
         }
-        fn _set_leaderboard(&mut self, x: Vec<(u16, AccountId)>) {
+
+        fn set_leaderboard(&mut self, x: Vec<(u16, AccountId)>) {
             self.lazy.insert(
                 LazyStorageKey::Leaderboard,
                 &LazyStorageValue::Leaderboard(x),
             );
         }
-        // enough for this game
+
         fn get_insecure_random_seed(&self, account_id: AccountId, subject: &[u8]) -> u64 {
             assert!(
                 self.env().caller_is_origin(),
@@ -371,7 +372,7 @@ pub mod contract {
             let new_ep = calc_new_ep(place, old_ep);
 
             if let Some(leaderboard) = update_leaderboard(self.get_leaderboard(), new_ep, &player) {
-                self._set_leaderboard(leaderboard);
+                self.set_leaderboard(leaderboard);
             }
 
             self.player_ep.insert(player, &new_ep);
@@ -391,14 +392,14 @@ pub mod contract {
             grade_and_board_history: &[mtc::GradeAndBoard],
         ) {
             let ep_band = ep::get_ep_band(ep);
-            let current_block_number = self.env().block_number();
+            let player_info_element = (self.env().block_number(), player);
 
             let (info, index) = if let Some(mut info) = self.matchmaking_ghosts_info.get(ep_band) {
                 let index = if let Some(idx) = info.iter().position(|(_, a)| a == &player) {
-                    info[idx].0 = current_block_number;
+                    info[idx] = player_info_element;
                     idx
                 } else if info.len() < 20 {
-                    info.push((current_block_number, player));
+                    info.push(player_info_element);
                     info.len() - 1
                 } else {
                     let mut iter = info.iter().enumerate();
@@ -409,13 +410,13 @@ pub mod contract {
                             oldest_idx = idx;
                         }
                     }
-                    info[oldest_idx] = (current_block_number, player);
+                    info[oldest_idx] = player_info_element;
                     oldest_idx
                 };
 
                 (info, index as u8)
             } else {
-                (vec![(current_block_number, player)], 0)
+                (vec![player_info_element], 0)
             };
 
             self.matchmaking_ghosts_info.insert(ep_band, &info);
