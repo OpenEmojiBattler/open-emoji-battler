@@ -46,9 +46,9 @@ export const start = (
 
     const ghosts = createType(
       "Vec<mtc_Ghost>",
-      _ghosts.map(([_a, ghost]) => ghost)
+      _ghosts.map(([_account, ghost]) => ghost)
     )
-    const ghostAddresses = _ghosts.map(([address, _e, _g]) => address.toString())
+    const ghostAddresses = _ghosts.map(([account, _ghost]) => account.toString())
 
     const mutable = _mutable.unwrap()
 
