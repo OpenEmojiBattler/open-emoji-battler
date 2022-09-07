@@ -13,7 +13,7 @@ import {
   createType,
 } from "common"
 
-import { emoTyps, EmoTyp, leaderboardSize } from "~/misc/constants"
+import { emoTyps, EmoTyp } from "~/misc/constants"
 import { EmoBases } from "./types"
 import { groupBy } from "~/misc/utils"
 import { battleAll, selectBattleGhostIndex } from "~/wasm"
@@ -126,7 +126,6 @@ export interface MtcState {
 export interface ResultState {
   place: number
   ep: number
-  rank: number | null
 }
 
 export const buildInitialMtcState = (
@@ -196,14 +195,12 @@ export const finishBattle = (
 export const translateLeaderboardCodec = (leaderboard: Vec<ITuple<[u16, AccountId]>>) =>
   leaderboard
     .toArray()
-    .slice(0, leaderboardSize)
     .map(([e, a], i) => ({ rank: i + 1, ep: e.toNumber(), address: a.toString() }))
 
-export const getRankFromLeaderboardCodec = (
+export const getPlayerFromLeaderboardCodec = (
   leaderboard: Vec<ITuple<[u16, AccountId]>>,
   address: string
 ) => {
-  const l = translateLeaderboardCodec(leaderboard)
-  const o = l.find((o) => o.address === address)
-  return o ? o.rank : null
+  const o = translateLeaderboardCodec(leaderboard).find((o) => o.address === address)
+  return o ? { rank: o.rank, ep: o.ep } : null
 }

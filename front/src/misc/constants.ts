@@ -16,15 +16,11 @@ export interface Route {
 }
 
 export const initialPlayerHealth = 30
-export const maxCoin = 8
 export const boardSize = 7
 export const nextCatalogLineCoin = 1
 export const emoBuyCoin = 3
-export const emoSellCoin = 1
-export const lastGrade = 6
 export const initialEp = 300
 export const mulliganCount = 2
-export const leaderboardSize = 100
 
 export const emoTyps = ["Food", "Nature", "Human", "Object"] as const
 export type EmoTyp = typeof emoTyps[number]

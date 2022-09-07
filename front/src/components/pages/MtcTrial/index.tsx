@@ -72,7 +72,7 @@ function Inner(props: { connection: Connection }) {
         const r = finishBattle(mtcState, props.connection.emoBases)
         setMtcState(r.mtcState)
         if (r.finalPlace) {
-          setResultState({ place: r.finalPlace, ep: 1100, rank: null })
+          setResultState({ place: r.finalPlace, ep: 1100 })
           setNav(true)
           setPhase("result")
         } else {

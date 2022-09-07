@@ -13,7 +13,6 @@ export function Setup(props: {
   builtEmoBaseIds: string[]
   startMtc: (deckEmoBaseIds: string[], solution?: BN) => void
   ep: number
-  rank: number | null
   message: string
 }) {
   const account = useAccount()
@@ -80,7 +79,7 @@ export function Setup(props: {
           </div>
         </nav>
         <h1 className={"title"}>Account</h1>
-        <Accounts ep={props.ep} rank={props.rank} extensionAccounts={props.extensionAccounts} />
+        <Accounts ep={props.ep} extensionAccounts={props.extensionAccounts} />
         <div className={"block"}>
           <small>{props.message}</small>
         </div>
