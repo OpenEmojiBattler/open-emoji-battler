@@ -197,11 +197,10 @@ export const translateLeaderboardCodec = (leaderboard: Vec<ITuple<[u16, AccountI
     .toArray()
     .map(([e, a], i) => ({ rank: i + 1, ep: e.toNumber(), address: a.toString() }))
 
-export const getRankFromLeaderboardCodec = (
+export const getPlayerFromLeaderboardCodec = (
   leaderboard: Vec<ITuple<[u16, AccountId]>>,
   address: string
 ) => {
-  const l = translateLeaderboardCodec(leaderboard)
-  const o = l.find((o) => o.address === address)
-  return o ? o.rank : null
+  const o = translateLeaderboardCodec(leaderboard).find((o) => o.address === address)
+  return o ? { rank: o.rank, ep: o.ep } : null
 }

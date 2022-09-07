@@ -11,7 +11,6 @@ import {
   useAccountSetter,
 } from "~/components/App/ConnectionProvider/tasks"
 import { Loading } from "../../../common/Loading"
-import { getRankFromLeaderboardCodec } from "~/misc/mtcUtils"
 import { ExtensionAccount } from "~/misc/accountUtils"
 
 export function SetupWrapper(props: {
@@ -26,7 +25,6 @@ export function SetupWrapper(props: {
   const [extensionAccounts, setExtensionAccounts] = React.useState<ExtensionAccount[]>([])
   const [builtEmoBaseIds, setBuiltEmoBaseIds] = React.useState<string[]>([])
   const [ep, setEp] = React.useState<number | null>(null)
-  const [rank, setRank] = React.useState<number | null>(null)
   const [message, setMessage] = React.useState("")
 
   React.useEffect(() => {
@@ -52,9 +50,6 @@ export function SetupWrapper(props: {
         setEp(ep)
       }
     })
-    connection.query.leaderboard().then((l) => {
-      setRank(getRankFromLeaderboardCodec(l, account.address))
-    })
     connection.query.playerMtcMutable(account.address).then((p) => {
       if (isMounted && p.isSome) {
         setMessage(
@@ -75,7 +70,6 @@ export function SetupWrapper(props: {
       builtEmoBaseIds={builtEmoBaseIds}
       startMtc={(ids, s) => props.startMtc(ids, ep, s)}
       ep={ep}
-      rank={rank}
       message={message}
     />
   ) : (
