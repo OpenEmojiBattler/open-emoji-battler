@@ -9,15 +9,7 @@ const main = async () => {
   const { envName, endpoint, keyringPair } = await getEndpointAndPair()
 
   const api = await connect(endpoint, false)
-  const gameContract = await instantiateContract(
-    api,
-    keyringPair,
-    "game",
-    [],
-    __dirname,
-    envName,
-    "../../game/target/ink/game.contract" // remove this later
-  )
+  const gameContract = await instantiateContract(api, keyringPair, "game", [], __dirname, envName)
 
   const availableEmoBaseIds = JSON.parse(readFileFromFileRelativePath("./availableEmoBaseIds.json"))
 
