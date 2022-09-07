@@ -126,7 +126,6 @@ export interface MtcState {
 export interface ResultState {
   place: number
   ep: number
-  rank: number | null
 }
 
 export const buildInitialMtcState = (
