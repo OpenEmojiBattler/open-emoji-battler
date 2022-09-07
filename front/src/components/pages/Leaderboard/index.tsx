@@ -76,7 +76,7 @@ function Table(props: { connection: Connection }) {
         <tr>
           <th>Rank</th>
           <th>Account</th>
-          <th>EP</th>
+          <th>Best EP</th>
         </tr>
       </thead>
       <tbody>
