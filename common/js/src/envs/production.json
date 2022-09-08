@@ -2,7 +2,7 @@
   "name": "PrototypeNet",
   "chainEndpoint": "wss://proto0.open-emoji-battler.community/",
   "contract": {
-    "name": "Shiden",
+    "name": "Shiden Network",
     "endpoint": "wss://shiden.api.onfinality.io/public-ws",
     "gameAddress": "aqKyycw2w5gKXPzN7K3Y3DUJxS5kQAMrTknBjfGkTNC3CqP"
   }
