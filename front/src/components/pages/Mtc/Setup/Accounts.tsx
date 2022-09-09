@@ -1,6 +1,10 @@
 import * as React from "react"
 
-import { getPlayerFromLeaderboardCodec } from "~/misc/mtcUtils"
+import {
+  getPlayerFromLeaderboard,
+  LeaderboardElement,
+  translateLeaderboardCodec,
+} from "~/misc/mtcUtils"
 import { useConnection } from "~/components/App/ConnectionProvider/tasks"
 import { Identicon } from "~/components/common/Identicon"
 import { AccountsDropdown } from "~/components/common/AccountsDropdown"
@@ -12,19 +16,22 @@ type BestEpAndRank = { bestEp: number; rank: number }
 export function Accounts(props: { ep: number; extensionAccounts: ExtensionAccount[] }) {
   const connection = useConnection()
   const playerAddress = useAccount().address
-  const [bestEpAndRank, setBestEpAndRank] = React.useState<BestEpAndRank | null>(null)
+
+  const [leaderboard, setLeaderboard] = React.useState<LeaderboardElement[] | null>(null)
+  const playerOnLeaderboard = leaderboard
+    ? getPlayerFromLeaderboard(leaderboard, playerAddress)
+    : null
 
   React.useEffect(() => {
     let isMounted = true
+
     connection.query.leaderboard().then((l) => {
       if (!isMounted) {
         return
       }
-      const playerOnLeaderboard = getPlayerFromLeaderboardCodec(l, playerAddress)
-      if (playerOnLeaderboard) {
-        setBestEpAndRank({ bestEp: playerOnLeaderboard.ep, rank: playerOnLeaderboard.rank })
-      }
+      setLeaderboard(translateLeaderboardCodec(l))
     })
+
     return () => {
       isMounted = false
     }
@@ -43,10 +50,11 @@ export function Accounts(props: { ep: number; extensionAccounts: ExtensionAccoun
             </div>
             <div>
               <strong>EP (Emoji Power)</strong>: {props.ep}
-              {bestEpAndRank ? (
+              {playerOnLeaderboard ? (
                 <>
                   <br />
-                  <strong>Best EP</strong>: {bestEpAndRank.bestEp} (Rank: {bestEpAndRank.rank})
+                  <strong>Best EP</strong>: {playerOnLeaderboard.ep} (Rank:{" "}
+                  {playerOnLeaderboard.rank})
                 </>
               ) : (
                 <></>

@@ -192,15 +192,20 @@ export const finishBattle = (
   }
 }
 
+export interface LeaderboardElement {
+  rank: number
+  ep: number
+  address: string
+}
+
 export const translateLeaderboardCodec = (leaderboard: Vec<ITuple<[u16, AccountId]>>) =>
   leaderboard
     .toArray()
-    .map(([e, a], i) => ({ rank: i + 1, ep: e.toNumber(), address: a.toString() }))
+    .map(
+      ([e, a], i): LeaderboardElement => ({ rank: i + 1, ep: e.toNumber(), address: a.toString() })
+    )
 
-export const getPlayerFromLeaderboardCodec = (
-  leaderboard: Vec<ITuple<[u16, AccountId]>>,
-  address: string
-) => {
-  const o = translateLeaderboardCodec(leaderboard).find((o) => o.address === address)
+export const getPlayerFromLeaderboard = (leaderboard: LeaderboardElement[], address: string) => {
+  const o = leaderboard.find((o) => o.address === address)
   return o ? { rank: o.rank, ep: o.ep } : null
 }
