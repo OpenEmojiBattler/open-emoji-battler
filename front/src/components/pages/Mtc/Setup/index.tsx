@@ -3,7 +3,7 @@ import BN from "bn.js"
 
 import { Decks } from "./Decks"
 import { PowButton } from "~/components/common/PowButton"
-import { ExternalLink } from "~/components/common/ExternalLink"
+import { InternalLink } from "~/components/common/InternalLink"
 import { useAccount } from "~/components/App/ConnectionProvider/tasks"
 import { Accounts } from "./Accounts"
 import { ExtensionAccount } from "~/misc/accountUtils"
@@ -34,11 +34,8 @@ export function Setup(props: {
             ) : (
               <div className={"level-item"}>
                 <div>
-                  This is a smart-contract MVP on a testnet. See{" "}
-                  <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/55">
-                    this post
-                  </ExternalLink>{" "}
-                  for detail.
+                  <strong>Event Round</strong> (
+                  <InternalLink to="/leaderboard">Leaderboard</InternalLink>)
                 </div>
               </div>
             )}
@@ -51,7 +48,7 @@ export function Setup(props: {
                     <>No fee is required. The popup will show the PoW solution on the tip field.</>
                   ) : (
                     <>
-                      Make sure that the account has a small amount of SDN to cover transaction
+                      Make sure that your account has a small amount of SDN to cover transaction
                       fees.
                     </>
                   )}

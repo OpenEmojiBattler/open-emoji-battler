@@ -51,8 +51,14 @@ export function Top() {
           </div>
         </div>
       </section>
-      <section style={{ padding: "4rem 1.5rem 0rem" }}>
+      <section style={{ padding: "3rem 1.5rem 0rem" }}>
         <div className={"top-container"}>
+          <div className="content" style={{ textAlign: "center" }}>
+            The first event round is happening now!{" "}
+            <ExternalLink href="https://game.open-emoji-battler.community/">
+              Know more on this post.
+            </ExternalLink>
+          </div>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
             <div className={"buttons"}>
               <InternalLink className={"button is-medium is-strong mx-3"} to={"/match"}>

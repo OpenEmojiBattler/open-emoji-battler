@@ -5,13 +5,23 @@ import { Connection, ConnectionContext } from "~/components/App/ConnectionProvid
 import { web3EnableOEB, buildExtensionAccounts } from "~/misc/accountUtils"
 import { translateLeaderboardCodec } from "~/misc/mtcUtils"
 import { queryKusamaAddressNames } from "./tasks"
+import { ExternalLink } from "~/components/common/ExternalLink"
 
 export function Leaderboard() {
   return (
     <section className="section">
       <div className="container">
         <h1 className="title">Leaderboard</h1>
-        <div className="block">TODO: text.</div>
+        <div className="block">
+          The players featured below are top 100 in the best EP. Only players who complete matches
+          at least once are counted.
+          <br />
+          See{" "}
+          <ExternalLink href="https://game.open-emoji-battler.community/">
+            this post
+          </ExternalLink>{" "}
+          for details about this event round.
+        </div>
         <div className="block">
           <ConnectionComponent />
         </div>
