@@ -17,7 +17,7 @@ export function Leaderboard() {
           at least once are counted.
           <br />
           See{" "}
-          <ExternalLink href="https://game.open-emoji-battler.community/">
+          <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/63">
             this post
           </ExternalLink>{" "}
           for details about this event round.

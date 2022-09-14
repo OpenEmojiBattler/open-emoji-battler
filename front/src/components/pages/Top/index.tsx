@@ -39,10 +39,6 @@ export function Top() {
                 <ExternalLink href="https://github.com/OpenEmojiBattler/open-emoji-battler">
                   GitHub
                 </ExternalLink>
-                <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/18">
-                  Japanese 遊び方
-                </ExternalLink>
               </div>
             </div>
             <div style={{ width: "550px" }}>
@@ -55,7 +51,7 @@ export function Top() {
         <div className={"top-container"}>
           <div className="content" style={{ textAlign: "center" }}>
             The first event round is happening now!{" "}
-            <ExternalLink href="https://game.open-emoji-battler.community/">
+            <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/63">
               Know more on this post.
             </ExternalLink>
           </div>
@@ -94,11 +90,6 @@ export function Top() {
                 emoji units. 😎
               </li>
             </ul>
-            <p>
-              <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/60">
-                Learn more.
-              </ExternalLink>
-            </p>
           </div>
           <h1 className={"title"}>Plan</h1>
           <div className={"content"}>
