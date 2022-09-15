@@ -26,12 +26,13 @@ let cachedTextDecoder = new lTextDecoder('utf-8', { ignoreBOM: true, fatal: true
 
 cachedTextDecoder.decode();
 
-let cachegetUint8Memory0 = null;
+let cachedUint8Memory0 = new Uint8Array();
+
 function getUint8Memory0() {
-    if (cachegetUint8Memory0 === null || cachegetUint8Memory0.buffer !== wasm.memory.buffer) {
-        cachegetUint8Memory0 = new Uint8Array(wasm.memory.buffer);
+    if (cachedUint8Memory0.byteLength === 0) {
+        cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
     }
-    return cachegetUint8Memory0;
+    return cachedUint8Memory0;
 }
 
 function getStringFromWasm0(ptr, len) {
@@ -107,12 +108,13 @@ function passStringToWasm0(arg, malloc, realloc) {
     return ptr;
 }
 
-let cachegetInt32Memory0 = null;
+let cachedInt32Memory0 = new Int32Array();
+
 function getInt32Memory0() {
-    if (cachegetInt32Memory0 === null || cachegetInt32Memory0.buffer !== wasm.memory.buffer) {
-        cachegetInt32Memory0 = new Int32Array(wasm.memory.buffer);
+    if (cachedInt32Memory0.byteLength === 0) {
+        cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
     }
-    return cachegetInt32Memory0;
+    return cachedInt32Memory0;
 }
 
 function getArrayU8FromWasm0(ptr, len) {
@@ -127,12 +129,12 @@ function getArrayU8FromWasm0(ptr, len) {
 export function get_catalog(pool, board, seed) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        var ptr0 = passArray8ToWasm0(pool, wasm.__wbindgen_malloc);
-        var len0 = WASM_VECTOR_LEN;
-        var ptr1 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
-        var len1 = WASM_VECTOR_LEN;
-        var ptr2 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        var len2 = WASM_VECTOR_LEN;
+        const ptr0 = passArray8ToWasm0(pool, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len2 = WASM_VECTOR_LEN;
         wasm.get_catalog(retptr, ptr0, len0, ptr1, len1, ptr2, len2);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
@@ -144,12 +146,13 @@ export function get_catalog(pool, board, seed) {
     }
 }
 
-let cachegetUint16Memory0 = null;
+let cachedUint16Memory0 = new Uint16Array();
+
 function getUint16Memory0() {
-    if (cachegetUint16Memory0 === null || cachegetUint16Memory0.buffer !== wasm.memory.buffer) {
-        cachegetUint16Memory0 = new Uint16Array(wasm.memory.buffer);
+    if (cachedUint16Memory0.byteLength === 0) {
+        cachedUint16Memory0 = new Uint16Array(wasm.memory.buffer);
     }
-    return cachegetUint16Memory0;
+    return cachedUint16Memory0;
 }
 
 function passArray16ToWasm0(arg, malloc) {
@@ -168,14 +171,14 @@ function passArray16ToWasm0(arg, malloc) {
 export function build_pool(selected_built_base_ids, emo_bases, fixed_base_ids, built_base_ids) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        var ptr0 = passArray16ToWasm0(selected_built_base_ids, wasm.__wbindgen_malloc);
-        var len0 = WASM_VECTOR_LEN;
-        var ptr1 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
-        var len1 = WASM_VECTOR_LEN;
-        var ptr2 = passArray16ToWasm0(fixed_base_ids, wasm.__wbindgen_malloc);
-        var len2 = WASM_VECTOR_LEN;
-        var ptr3 = passArray16ToWasm0(built_base_ids, wasm.__wbindgen_malloc);
-        var len3 = WASM_VECTOR_LEN;
+        const ptr0 = passArray16ToWasm0(selected_built_base_ids, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passArray16ToWasm0(fixed_base_ids, wasm.__wbindgen_malloc);
+        const len2 = WASM_VECTOR_LEN;
+        const ptr3 = passArray16ToWasm0(built_base_ids, wasm.__wbindgen_malloc);
+        const len3 = WASM_VECTOR_LEN;
         wasm.build_pool(retptr, ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
@@ -196,12 +199,12 @@ export function build_pool(selected_built_base_ids, emo_bases, fixed_base_ids, b
 export function start_shop(board, seed, emo_bases) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        var ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
-        var len0 = WASM_VECTOR_LEN;
-        var ptr1 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        var len1 = WASM_VECTOR_LEN;
-        var ptr2 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
-        var len2 = WASM_VECTOR_LEN;
+        const ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
+        const len2 = WASM_VECTOR_LEN;
         wasm.start_shop(retptr, ptr0, len0, ptr1, len1, ptr2, len2);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
@@ -225,12 +228,12 @@ export function start_shop(board, seed, emo_bases) {
 export function add_emo(board, mtc_emo_ids, base_id, is_triple, emo_index, emo_bases) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        var ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
-        var len0 = WASM_VECTOR_LEN;
-        var ptr1 = passArray16ToWasm0(mtc_emo_ids, wasm.__wbindgen_malloc);
-        var len1 = WASM_VECTOR_LEN;
-        var ptr2 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
-        var len2 = WASM_VECTOR_LEN;
+        const ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray16ToWasm0(mtc_emo_ids, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
+        const len2 = WASM_VECTOR_LEN;
         wasm.add_emo(retptr, ptr0, len0, ptr1, len1, base_id, is_triple, emo_index, ptr2, len2);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
@@ -251,10 +254,10 @@ export function add_emo(board, mtc_emo_ids, base_id, is_triple, emo_index, emo_b
 export function sell_emo(board, emo_index, emo_bases) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        var ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
-        var len0 = WASM_VECTOR_LEN;
-        var ptr1 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
-        var len1 = WASM_VECTOR_LEN;
+        const ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
         wasm.sell_emo(retptr, ptr0, len0, emo_index, ptr1, len1);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
@@ -275,8 +278,8 @@ export function sell_emo(board, emo_index, emo_bases) {
 export function move_emo(board, emo_index, is_right) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        var ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
-        var len0 = WASM_VECTOR_LEN;
+        const ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
         wasm.move_emo(retptr, ptr0, len0, emo_index, is_right);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
@@ -293,7 +296,7 @@ export function move_emo(board, emo_index, is_right) {
 * @returns {number}
 */
 export function get_initial_coin_by_turn(turn) {
-    var ret = wasm.get_initial_coin_by_turn(turn);
+    const ret = wasm.get_initial_coin_by_turn(turn);
     return ret;
 }
 
@@ -302,7 +305,7 @@ export function get_initial_coin_by_turn(turn) {
 * @returns {number | undefined}
 */
 export function get_upgrade_coin(grade) {
-    var ret = wasm.get_upgrade_coin(grade);
+    const ret = wasm.get_upgrade_coin(grade);
     return ret === 0xFFFFFF ? undefined : ret;
 }
 
@@ -313,11 +316,11 @@ export function get_upgrade_coin(grade) {
 * @returns {number}
 */
 export function select_battle_ghost_index(states, previous_index, seed) {
-    var ptr0 = passArray8ToWasm0(states, wasm.__wbindgen_malloc);
-    var len0 = WASM_VECTOR_LEN;
-    var ptr1 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    var len1 = WASM_VECTOR_LEN;
-    var ret = wasm.select_battle_ghost_index(ptr0, len0, previous_index, ptr1, len1);
+    const ptr0 = passArray8ToWasm0(states, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ret = wasm.select_battle_ghost_index(ptr0, len0, previous_index, ptr1, len1);
     return ret;
 }
 
@@ -331,14 +334,14 @@ export function select_battle_ghost_index(states, previous_index, seed) {
 export function march_pvg(board, ghost_board, seed, emo_bases) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        var ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
-        var len0 = WASM_VECTOR_LEN;
-        var ptr1 = passArray8ToWasm0(ghost_board, wasm.__wbindgen_malloc);
-        var len1 = WASM_VECTOR_LEN;
-        var ptr2 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        var len2 = WASM_VECTOR_LEN;
-        var ptr3 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
-        var len3 = WASM_VECTOR_LEN;
+        const ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray8ToWasm0(ghost_board, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len2 = WASM_VECTOR_LEN;
+        const ptr3 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
+        const len3 = WASM_VECTOR_LEN;
         wasm.march_pvg(retptr, ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
@@ -365,16 +368,16 @@ export function march_pvg(board, ghost_board, seed, emo_bases) {
 export function battle_all(board, grade, health, ghosts, ghost_states, battle_ghost_index, turn, seed, emo_bases) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        var ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
-        var len0 = WASM_VECTOR_LEN;
-        var ptr1 = passArray8ToWasm0(ghosts, wasm.__wbindgen_malloc);
-        var len1 = WASM_VECTOR_LEN;
-        var ptr2 = passArray8ToWasm0(ghost_states, wasm.__wbindgen_malloc);
-        var len2 = WASM_VECTOR_LEN;
-        var ptr3 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        var len3 = WASM_VECTOR_LEN;
-        var ptr4 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
-        var len4 = WASM_VECTOR_LEN;
+        const ptr0 = passArray8ToWasm0(board, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray8ToWasm0(ghosts, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passArray8ToWasm0(ghost_states, wasm.__wbindgen_malloc);
+        const len2 = WASM_VECTOR_LEN;
+        const ptr3 = passStringToWasm0(seed, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len3 = WASM_VECTOR_LEN;
+        const ptr4 = passArray8ToWasm0(emo_bases, wasm.__wbindgen_malloc);
+        const len4 = WASM_VECTOR_LEN;
         wasm.battle_all(retptr, ptr0, len0, grade, health, ptr1, len1, ptr2, len2, battle_ghost_index, turn, ptr3, len3, ptr4, len4);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
@@ -395,10 +398,10 @@ export function battle_all(board, grade, health, ghosts, ghost_states, battle_gh
 export function get_grade_and_ghost_board(grade_and_ghost_boards, ghost_state, turn) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        var ptr0 = passArray8ToWasm0(grade_and_ghost_boards, wasm.__wbindgen_malloc);
-        var len0 = WASM_VECTOR_LEN;
-        var ptr1 = passArray8ToWasm0(ghost_state, wasm.__wbindgen_malloc);
-        var len1 = WASM_VECTOR_LEN;
+        const ptr0 = passArray8ToWasm0(grade_and_ghost_boards, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray8ToWasm0(ghost_state, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
         wasm.get_grade_and_ghost_board(retptr, ptr0, len0, ptr1, len1, turn);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
@@ -415,7 +418,7 @@ export function get_grade_and_ghost_board(grade_and_ghost_boards, ghost_state, t
 * @returns {number}
 */
 export function get_pool_emo_count_by_grade(grade) {
-    var ret = wasm.get_pool_emo_count_by_grade(grade);
+    const ret = wasm.get_pool_emo_count_by_grade(grade);
     return ret;
 }
 
@@ -433,14 +436,14 @@ export function __wbg_log_682923c8ea4d4d53(arg0, arg1) {
 };
 
 export function __wbg_new_693216e109162396() {
-    var ret = new Error();
+    const ret = new Error();
     return addHeapObject(ret);
 };
 
 export function __wbg_stack_0ddaca5d1abfb52f(arg0, arg1) {
-    var ret = getObject(arg1).stack;
-    var ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    var len0 = WASM_VECTOR_LEN;
+    const ret = getObject(arg1).stack;
+    const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
     getInt32Memory0()[arg0 / 4 + 1] = len0;
     getInt32Memory0()[arg0 / 4 + 0] = ptr0;
 };

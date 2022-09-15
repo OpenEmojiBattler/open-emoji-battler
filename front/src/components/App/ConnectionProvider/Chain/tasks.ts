@@ -1,11 +1,12 @@
 import type { ApiPromise } from "@polkadot/api"
+import { encodeAddress } from "@polkadot/util-crypto"
 
 import { tx, createType, buildKeyringPair } from "common"
 import type { Connection } from "../tasks"
 import { buildEmoBases } from "~/misc/mtcUtils"
 import { getOebEnv } from "~/misc/env"
 
-const endpointStorageKey = "endpointV4"
+const endpointStorageKey = "endpointV5"
 
 export const getEndpoint = () => {
   const endpoint = localStorage.getItem(endpointStorageKey)
@@ -29,19 +30,30 @@ export const buildConnection = async (api: ApiPromise): Promise<Connection> => {
     tx: buildConnectionTx(api),
     emoBases,
     api: () => api,
+    transformAddress: (a) => encodeAddress(a, api.registry.chainSS58),
   }
 }
 
 const buildConnectionQuery = (api: ApiPromise): Connection["query"] => ({
   deckFixedEmoBaseIds: async () => (await api.query.game.deckFixedEmoBaseIds()).unwrap(),
   deckBuiltEmoBaseIds: async () => (await api.query.game.deckBuiltEmoBaseIds()).unwrap(),
-  matchmakingGhosts: (band) => api.query.game.matchmakingGhosts(band),
+  matchmakingGhostsInfo: () => {
+    throw new Error("unimplemented")
+  },
+  matchmakingGhostByIndex: () => {
+    throw new Error("unimplemented")
+  },
+  leaderboard: () => {
+    throw new Error("unimplemented")
+  },
   playerEp: (address) => api.query.game.playerEp(address),
   playerSeed: (address) => api.query.game.playerSeed(address),
-  playerPool: (address) => api.query.game.playerPool(address),
-  playerHealth: (address) => api.query.game.playerHealth(address),
-  playerGradeAndBoardHistory: (address) => api.query.game.playerGradeAndBoardHistory(address),
-  playerGhosts: (address) => api.query.game.playerGhosts(address),
+  playerMtcImmutable: (_address) => {
+    throw new Error("unimplemented")
+  },
+  playerMtcMutable: (_address) => {
+    throw new Error("unimplemented")
+  },
 })
 
 const buildConnectionTx = (api: ApiPromise): Connection["tx"] => ({

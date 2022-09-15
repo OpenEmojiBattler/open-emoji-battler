@@ -4,7 +4,6 @@
   "contract": {
     "name": "local contract",
     "endpoint": "ws://127.0.0.1:9988",
-    "storageAddress": "",
-    "forwarderAddress": ""
+    "gameAddress": ""
   }
 }

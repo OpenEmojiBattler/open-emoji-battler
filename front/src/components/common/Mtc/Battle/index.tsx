@@ -20,7 +20,7 @@ export function Battle(props: { mtcState: MtcState; finish: () => void }) {
     props.mtcState.turn
   )
 
-  const rivalAddress = props.mtcState.ghostAddressesAndEps[props.mtcState.battleGhostIndex].address
+  const rivalAddress = props.mtcState.ghostAddresses[props.mtcState.battleGhostIndex]
   const rivalHealth = getHealthFromState(
     props.mtcState.ghostStates[props.mtcState.battleGhostIndex]
   )

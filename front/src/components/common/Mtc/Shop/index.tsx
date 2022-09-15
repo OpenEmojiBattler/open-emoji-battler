@@ -8,6 +8,7 @@ import {
   mtc_GhostBoard,
   mtc_shop_PlayerOperation,
   createType,
+  uniqueArray,
 } from "common"
 
 import { boardSize, nextCatalogLineCoin } from "~/misc/constants"
@@ -18,7 +19,6 @@ import {
   getEmoBaseEmoji,
   findEmoBase,
   MtcState,
-  GhostAddressAndEp,
 } from "~/misc/mtcUtils"
 import { get_initial_coin_by_turn, get_upgrade_coin } from "~/wasm/raw"
 import { getCatalog, getGradeAndGhostBoard } from "~/wasm"
@@ -98,9 +98,7 @@ export function Shop(props: {
       : { kind: "no-pow", fn: () => props.startBattle.fn(shopState.playerOperations) }
 
   const _ids = [
-    ...Array.from(
-      new Set(props.mtcState.board.map((e) => e.mtc_emo_ids.map((i) => i.toString())).flat())
-    ),
+    ...uniqueArray(props.mtcState.board.map((e) => e.mtc_emo_ids.map((i) => i.toString())).flat()),
     ...shopState.soldMtcEmoIds,
   ]
   const ids = React.useMemo(() => _ids, [JSON.stringify(_ids)])
@@ -206,7 +204,7 @@ export function Shop(props: {
             <div className={"block"}>
               <RivalsToggle
                 ghosts={props.mtcState.ghosts}
-                ghostAddressesAndEps={props.mtcState.ghostAddressesAndEps}
+                ghostAddresses={props.mtcState.ghostAddresses}
                 ghostStates={props.mtcState.ghostStates}
                 battleGhostIndex={props.mtcState.battleGhostIndex}
                 selectedGhostIndex={selectedRivalIndex}
@@ -245,7 +243,7 @@ export function Shop(props: {
 
 function RivalsToggle(props: {
   ghosts: mtc_Ghost[]
-  ghostAddressesAndEps: GhostAddressAndEp[]
+  ghostAddresses: string[]
   ghostStates: mtc_GhostState[]
   battleGhostIndex: number
   selectedGhostIndex: number
@@ -258,7 +256,7 @@ function RivalsToggle(props: {
     const grade = getGradeAndGhostBoard(ghost.history, state, props.turn).grade.toString()
 
     const health = getHealthFromState(state)
-    const addr = props.ghostAddressesAndEps[i].address
+    const addr = props.ghostAddresses[i]
 
     return (
       <div

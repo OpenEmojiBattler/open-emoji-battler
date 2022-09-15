@@ -1,4 +1,6 @@
 import type { Vec, u16 } from "@polkadot/types"
+import type { ITuple } from "@polkadot/types-codec/types"
+import type { AccountId } from "@polkadot/types/interfaces/runtime"
 
 import {
   mtc_Emo,
@@ -11,11 +13,11 @@ import {
   createType,
 } from "common"
 
-import { initialHealth, emoTyps, EmoTyp } from "~/misc/constants"
+import { emoTyps, EmoTyp } from "~/misc/constants"
 import { EmoBases } from "./types"
 import { groupBy } from "~/misc/utils"
 import { battleAll, selectBattleGhostIndex } from "~/wasm"
-import { get_upgrade_coin } from "~/wasm/raw"
+import { Connection } from "~/components/App/ConnectionProvider/tasks"
 
 import emoNames from "~/misc/emo/names.json"
 
@@ -118,13 +120,8 @@ export interface MtcState {
   health: number
   ghosts: Vec<mtc_Ghost>
   ghostStates: Vec<mtc_GhostState>
-  ghostAddressesAndEps: GhostAddressAndEp[]
+  ghostAddresses: string[]
   battleGhostIndex: number
-}
-
-export interface GhostAddressAndEp {
-  address: string
-  ep: number
 }
 
 export interface ResultState {
@@ -132,32 +129,30 @@ export interface ResultState {
   ep: number
 }
 
-const initialGhostState = { Active: { health: initialHealth } }
-
 export const buildInitialMtcState = (
   previousEp: number,
   seed: string,
   pool: Vec<mtc_Emo>,
   ghosts: Vec<mtc_Ghost>,
-  ghostAddressesAndEps: GhostAddressAndEp[]
+  ghostAddresses: string[],
+  health: number,
+  upgradeCoin: number | null,
+  ghostStates: Vec<mtc_GhostState>,
+  battleGhostIndex: number
 ): MtcState => {
   return {
     previousEp,
     turn: 1,
     board: createType("mtc_Board", []),
     grade: 1,
-    upgradeCoin: get_upgrade_coin(2) || null,
-    health: initialHealth,
-    ghostStates: createType("Vec<mtc_GhostState>", [
-      initialGhostState,
-      initialGhostState,
-      initialGhostState,
-    ]),
-    battleGhostIndex: 0,
+    upgradeCoin,
+    health,
+    ghostStates,
+    battleGhostIndex,
     seed,
     pool,
     ghosts,
-    ghostAddressesAndEps,
+    ghostAddresses,
   }
 }
 
@@ -196,4 +191,27 @@ export const finishBattle = (
     mtcState: { ...mtcState, ...state, turn: mtcState.turn + 1, upgradeCoin, battleGhostIndex },
     finalPlace: null,
   }
+}
+
+export interface LeaderboardElement {
+  rank: number
+  ep: number
+  address: string
+}
+
+export const translateLeaderboardCodec = (
+  leaderboard: Vec<ITuple<[u16, AccountId]>>,
+  connection: Connection
+) =>
+  leaderboard.toArray().map(
+    ([e, a], i): LeaderboardElement => ({
+      rank: i + 1,
+      ep: e.toNumber(),
+      address: connection.transformAddress(a.toString()),
+    })
+  )
+
+export const getPlayerFromLeaderboard = (leaderboard: LeaderboardElement[], address: string) => {
+  const o = leaderboard.find((o) => o.address === address)
+  return o ? { rank: o.rank, ep: o.ep } : null
 }

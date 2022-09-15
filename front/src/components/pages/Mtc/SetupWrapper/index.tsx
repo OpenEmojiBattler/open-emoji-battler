@@ -1,6 +1,5 @@
 import * as React from "react"
 import BN from "bn.js"
-import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { initialEp } from "~/misc/constants"
 import { Setup } from "../Setup"
@@ -12,6 +11,7 @@ import {
   useAccountSetter,
 } from "~/components/App/ConnectionProvider/tasks"
 import { Loading } from "../../../common/Loading"
+import { ExtensionAccount } from "~/misc/accountUtils"
 
 export function SetupWrapper(props: {
   startMtc: (deckEmoBaseIds: string[], previousEp: number, solution?: BN) => void
@@ -22,7 +22,7 @@ export function SetupWrapper(props: {
   const setBlockMessage = useBlockMessageSetter()
   const connection = useConnection()
 
-  const [injectedAccounts, setInjectedAccounts] = React.useState<InjectedAccountWithMeta[]>([])
+  const [extensionAccounts, setExtensionAccounts] = React.useState<ExtensionAccount[]>([])
   const [builtEmoBaseIds, setBuiltEmoBaseIds] = React.useState<string[]>([])
   const [ep, setEp] = React.useState<number | null>(null)
   const [message, setMessage] = React.useState("")
@@ -31,7 +31,7 @@ export function SetupWrapper(props: {
     setup(connection, setWaiting, account).then((r) => {
       if (r.kind === "ok") {
         setAccount(r.account)
-        setInjectedAccounts(r.injectedAccounts)
+        setExtensionAccounts(r.extensionAccounts)
         setBuiltEmoBaseIds(r.builtEmoBaseIds)
       } else {
         setBlockMessage(r.message)
@@ -50,10 +50,10 @@ export function SetupWrapper(props: {
         setEp(ep)
       }
     })
-    connection.query.playerPool(account.address).then((p) => {
+    connection.query.playerMtcMutable(account.address).then((p) => {
       if (isMounted && p.isSome) {
         setMessage(
-          "The previous match didn't normally finish, so the EP might decrease a little next time."
+          "The previous match didn't finish successfully. Your EP might decrease a little at the next match."
         )
       } else {
         setMessage("")
@@ -64,9 +64,9 @@ export function SetupWrapper(props: {
     }
   }, [account && account.address])
 
-  return injectedAccounts.length > 0 && builtEmoBaseIds.length > 0 && account && ep ? (
+  return extensionAccounts.length > 0 && builtEmoBaseIds.length > 0 && account && ep ? (
     <Setup
-      injectedAccounts={injectedAccounts}
+      extensionAccounts={extensionAccounts}
       builtEmoBaseIds={builtEmoBaseIds}
       startMtc={(ids, s) => props.startMtc(ids, ep, s)}
       ep={ep}

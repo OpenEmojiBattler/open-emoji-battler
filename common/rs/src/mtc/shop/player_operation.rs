@@ -25,7 +25,7 @@ pub fn verify_player_operations_and_update(
     turn: u8,
     emo_bases: &emo::Bases,
 ) -> Result<mtc::Board> {
-    ensure!(ops.len() < 150, "too big ops");
+    ensure!(ops.len() < 200, "too big ops");
 
     let mut coin = get_initial_coin_by_turn(turn);
     let mut catalog_line_index = 0u8;
@@ -143,7 +143,7 @@ fn sell(
     emo_bases: &emo::Bases,
     sold_emo_index: u8,
 ) -> Result<()> {
-    sold_mtc_emo_ids.extend(board.get_emo(sold_emo_index)?.mtc_emo_ids.clone());
+    sold_mtc_emo_ids.extend(board.get_emo_by_index(sold_emo_index)?.mtc_emo_ids.clone());
     let c = sell_emo(board, logs, sold_emo_index, emo_bases)?;
     *coin = coin.saturating_add(c);
     Ok(())

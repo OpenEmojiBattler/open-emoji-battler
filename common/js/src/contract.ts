@@ -1,17 +1,14 @@
 import type { ApiPromise } from "@polkadot/api"
+import type { SignerOptions } from "@polkadot/api/submittable/types"
 import { ContractPromise } from "@polkadot/api-contract"
 
-import { tx } from "./api"
+import { tx, buildErrorText } from "./api"
 import type { KeyringPairOrAddressAndSigner } from "./utils"
 
-import storageAbi from "../../../contract/deploy/202109210_init/storage.json"
-import forwarderAbi from "../../../contract/deploy/202109210_init/forwarder.json"
+import gameAbi from "../../../contract/deploy/202109210_init/game.json"
 
-export const getStorageContract = (api: ApiPromise, address: string) =>
-  new ContractPromise(api, storageAbi, address)
-
-export const getForwarderContract = (api: ApiPromise, address: string) =>
-  new ContractPromise(api, forwarderAbi, address)
+export const getGameContract = (api: ApiPromise, address: string) =>
+  new ContractPromise(api, gameAbi, address)
 
 export const queryContract = async (
   contract: ContractPromise,
@@ -26,7 +23,9 @@ export const queryContract = async (
   const { result, output } = await contract.query[fnName](caller, { value: 0 }, ...fnArgs)
 
   if (!result.isOk) {
-    throw new Error(`query error: ${fnName}, error: ${result.asErr.toHuman()}`)
+    throw new Error(
+      `query error: ${fnName}, error: ${buildErrorText(contract.api as ApiPromise, result.asErr)}`
+    )
   }
   if (!output) {
     throw new Error(`query output null: ${fnName}}`)
@@ -39,7 +38,8 @@ export const txContract = (
   contract: ContractPromise,
   fnName: string,
   fnArgs: any[],
-  account: KeyringPairOrAddressAndSigner
+  account: KeyringPairOrAddressAndSigner,
+  overrideOptions?: Partial<SignerOptions>
 ) => {
   if (!contract.tx[fnName]) {
     throw new Error(`tx fn not found: ${fnName}`)
@@ -47,8 +47,9 @@ export const txContract = (
 
   return tx(
     contract.api as ApiPromise,
-    // should have gasLimit?
     () => contract.tx[fnName]({ value: 0 }, ...fnArgs),
-    account
+    account,
+    undefined,
+    { tip: 1, ...overrideOptions }
   )
 }

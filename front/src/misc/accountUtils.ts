@@ -12,10 +12,23 @@ import type {
   AccountChainSession,
 } from "~/components/App/ConnectionProvider/tasks"
 
-export const setupExtension = async (): Promise<
+export type ExtensionAccount = { address: string; name: string | null }
+
+export const web3EnableOEB = () => web3Enable("Open Emoji Battler")
+
+export const buildExtensionAccounts = (
+  injectedAccounts: InjectedAccountWithMeta[],
+  connection: Connection
+): ExtensionAccount[] =>
+  injectedAccounts.map((a) => ({
+    address: connection.transformAddress(a.address),
+    name: a.meta.name || null,
+  }))
+
+const setupExtension = async (): Promise<
   { kind: "ok"; injectedAccounts: InjectedAccountWithMeta[] } | { kind: "ng"; message: string }
 > => {
-  const extensions = await web3Enable("Open Emoji Battler")
+  const extensions = await web3EnableOEB()
 
   if (extensions.length === 0) {
     return {
@@ -46,20 +59,20 @@ export const setupAccounts = async (connection: Connection, account: Account | n
   if (ext.kind === "ng") {
     return ext
   }
-  const injectedAccounts = ext.injectedAccounts
+  const extensionAccounts = buildExtensionAccounts(ext.injectedAccounts, connection)
 
   let newAccount: Account
 
-  if (account && injectedAccounts.map((a) => a.address).includes(account.address)) {
+  if (account && extensionAccounts.map((a) => a.address).includes(account.address)) {
     newAccount = { ...account }
   } else {
-    newAccount = await generateAccount(connection, injectedAccounts[0].address)
+    newAccount = await generateAccount(connection, extensionAccounts[0].address)
   }
 
   return {
     kind: "ok" as const,
     account: newAccount,
-    injectedAccounts,
+    extensionAccounts,
   }
 }
 

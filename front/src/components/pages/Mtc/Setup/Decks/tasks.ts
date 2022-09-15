@@ -1,8 +1,8 @@
 import type { EmoBases } from "~/misc/types"
 import { getDefaultDeck } from "~/misc/mtcUtils"
 
-const customDecksStoragePrefix = "mtcSetupCustomDecksV1:"
-const selectedDeckIndexStoragePrefix = "mtcSetupSelectedDeckIndexV1:"
+const customDecksStoragePrefix = "mtcSetupCustomDecksV2:"
+const selectedDeckIndexStoragePrefix = "mtcSetupSelectedDeckIndexV2:"
 
 const getCustomDecksStorageKey = (address: string) => `${customDecksStoragePrefix}:${address}`
 const getSelectedDeckIndexStorageKey = (address: string) =>

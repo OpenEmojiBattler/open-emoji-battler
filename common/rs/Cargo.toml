@@ -5,13 +5,13 @@ edition = "2021"
 license = "Apache-2.0"
 
 [dependencies]
-rand = { version = "=0.8.4", default-features = false, features=["alloc"] }
+rand = { version = "=0.8.5", default-features = false, features=["alloc"] }
 rand_pcg = { version = "=0.3.1", default-features = false }
-sp-std = { version = "=3.0.0", default-features = false }
+sp-std = { version = "=4.0.0", default-features = false }
 parity-scale-codec = { version = "< 4", default-features = false, features = ["derive"] }
 
 # option
-anyhow = { version = "=1.0.53", default-features = false, optional = true }
+anyhow = { version = "=1.0.59", default-features = false, optional = true }
 
 # chain
 blake2-rfc = { version = "0.2.18", default-features = false, optional = true }
@@ -19,14 +19,14 @@ libm = { version = "0.2.1", default-features = false, optional = true }
 
 # contract
 scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
-ink_storage = { version = "3.0.0-rc9", default-features = false, optional = true }
-ink_primitives = { version = "3.0.0-rc9", default-features = false, optional = true }
-ink_metadata = { version = "3.0.0-rc9", default-features = false, optional = true }
+ink_storage = { version = "3.3.1", default-features = false, optional = true }
+ink_primitives = { version = "3.3.1", default-features = false, optional = true }
+ink_metadata = { version = "3.3.1", default-features = false, optional = true }
 codec_types_derive = { path = "./codec_types_derive", optional = true }
 
 [dev-dependencies]
-hex = { version = "0.4.2" }
-criterion = "0.3.3"
+hex = { version = "0.4.3" }
+criterion = "0.3.6"
 
 [features]
 default = ["std", "chain", "front", "contract-std"]

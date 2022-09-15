@@ -1,15 +1,15 @@
 import * as React from "react"
 import BN from "bn.js"
-import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
 
 import { Decks } from "./Decks"
 import { PowButton } from "~/components/common/PowButton"
-import { ExternalLink } from "~/components/common/ExternalLink"
+import { InternalLink } from "~/components/common/InternalLink"
 import { useAccount } from "~/components/App/ConnectionProvider/tasks"
 import { Accounts } from "./Accounts"
+import { ExtensionAccount } from "~/misc/accountUtils"
 
 export function Setup(props: {
-  injectedAccounts: InjectedAccountWithMeta[]
+  extensionAccounts: ExtensionAccount[]
   builtEmoBaseIds: string[]
   startMtc: (deckEmoBaseIds: string[], solution?: BN) => void
   ep: number
@@ -34,26 +34,26 @@ export function Setup(props: {
             ) : (
               <div className={"level-item"}>
                 <div>
-                  This is a smart-contract MVP on a testnet. See{" "}
-                  <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/55">
-                    this post
-                  </ExternalLink>{" "}
-                  for detail.
+                  <strong>Event Round</strong> (
+                  <InternalLink to="/leaderboard">Leaderboard</InternalLink>)
                 </div>
               </div>
             )}
           </div>
           <div className={"level-right"}>
             <div className={"level-item"}>
-              {account.kind === "chain" ? (
-                <div style={{ width: "270px", marginRight: "8px" }}>
-                  <small>
-                    No fee is required. The popup will show the PoW solution on the tip field.
-                  </small>
-                </div>
-              ) : (
-                <></>
-              )}
+              <div style={{ width: "270px", marginRight: "8px" }}>
+                <small>
+                  {account.kind === "chain" ? (
+                    <>No fee is required. The popup will show the PoW solution on the tip field.</>
+                  ) : (
+                    <>
+                      Make sure that your account has a small amount of SDN to cover transaction
+                      fees.
+                    </>
+                  )}
+                </small>
+              </div>
               <div>
                 {hasPowButton ? (
                   account.kind === "chain" ? (
@@ -76,7 +76,7 @@ export function Setup(props: {
           </div>
         </nav>
         <h1 className={"title"}>Account</h1>
-        <Accounts ep={props.ep} injectedAccounts={props.injectedAccounts} />
+        <Accounts ep={props.ep} extensionAccounts={props.extensionAccounts} />
         <div className={"block"}>
           <small>{props.message}</small>
         </div>

@@ -1,26 +1,35 @@
 import { createContext, useContext } from "react"
 import type BN from "bn.js"
-import type { Vec, Option, u8, u16, u64 } from "@polkadot/types-codec"
+import type { Vec, Option, u16, u64 } from "@polkadot/types-codec"
 import type { ITuple } from "@polkadot/types-codec/types"
-import type { AccountId } from "@polkadot/types/interfaces/runtime"
+import type { AccountId, BlockNumber } from "@polkadot/types/interfaces/runtime"
 import type { ApiPromise } from "@polkadot/api"
 import type { Signer } from "@polkadot/api/types"
 
-import type { mtc_Emo, mtc_Ghost, mtc_GradeAndBoard, mtc_shop_PlayerOperation } from "common"
+import type {
+  mtc_Emo,
+  mtc_Ghost,
+  mtc_shop_PlayerOperation,
+  mtc_storage_PlayerMutable,
+} from "common"
 import type { EmoBases } from "~/misc/types"
 
+import type { ConnectionKind } from "~/misc/constants"
+
 export interface Connection {
-  kind: "chain" | "contract"
+  kind: ConnectionKind
   query: {
     deckFixedEmoBaseIds: () => Promise<Vec<u16>>
     deckBuiltEmoBaseIds: () => Promise<Vec<u16>>
-    matchmakingGhosts: (band: number) => Promise<Option<Vec<ITuple<[AccountId, u16, mtc_Ghost]>>>>
+    matchmakingGhostsInfo: (band: number) => Promise<Option<Vec<ITuple<[BlockNumber, AccountId]>>>>
+    matchmakingGhostByIndex: (band: number, index: number) => Promise<Option<mtc_Ghost>>
+    leaderboard: () => Promise<Vec<ITuple<[u16, AccountId]>>>
     playerEp: (address: string) => Promise<Option<u16>>
     playerSeed: (address: string) => Promise<Option<u64>>
-    playerPool: (address: string) => Promise<Option<Vec<mtc_Emo>>>
-    playerHealth: (address: string) => Promise<Option<u8>>
-    playerGradeAndBoardHistory: (address: string) => Promise<Option<Vec<mtc_GradeAndBoard>>>
-    playerGhosts: (address: string) => Promise<Option<Vec<ITuple<[AccountId, u16, mtc_Ghost]>>>>
+    playerMtcImmutable: (
+      address: string
+    ) => Promise<Option<ITuple<[Vec<mtc_Emo>, Vec<ITuple<[AccountId, mtc_Ghost]>>]>>>
+    playerMtcMutable: (address: string) => Promise<Option<mtc_storage_PlayerMutable>>
   }
   tx: {
     startMtc: (deckEmoBaseIds: string[], account: Account, powSolution?: BN) => Promise<void>
@@ -31,7 +40,8 @@ export interface Connection {
     ) => Promise<void>
   }
   emoBases: EmoBases
-  api: () => ApiPromise // only avaiable for chain
+  api: () => ApiPromise
+  transformAddress: (address: string) => string
 }
 
 export type Account =

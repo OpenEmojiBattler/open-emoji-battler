@@ -1,11 +1,10 @@
-import { createType, mtc_Board, mtc_GhostBoard } from "common"
+import { shuffleArray, createType, mtc_Board, mtc_GhostBoard } from "common"
 import * as React from "react"
 
 import { useIsWasmReady } from "~/components/App/Frame/tasks"
 import { Connection, ConnectionContext } from "~/components/App/ConnectionProvider/tasks"
 import { MtcBattleBoards } from "~/components/common/MtcBattleBoards"
 import { buildEmoAttributesWithBase, findEmoBase } from "~/misc/mtcUtils"
-import { shuffleArray } from "~/misc/utils"
 
 export function DemoMtcBattle() {
   const isWasmReady = useIsWasmReady()

@@ -679,4 +679,13 @@ export interface mtc_shop_PlayerOperation_Sell extends Struct {
   readonly index: u8;
 }
 
+/** @name mtc_storage_PlayerMutable */
+export interface mtc_storage_PlayerMutable extends Struct {
+  readonly health: u8;
+  readonly grade_and_board_history: Vec<mtc_GradeAndBoard>;
+  readonly upgrade_coin: Option<u8>;
+  readonly ghost_states: Vec<mtc_GhostState>;
+  readonly battle_ghost_index: u8;
+}
+
 export type PHANTOM_ALL = 'all';

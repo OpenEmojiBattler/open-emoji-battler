@@ -48,19 +48,19 @@ type ConnectionKind = "chain" | "contract" | "none"
 export const getRouteConnectionKind = (routeId: RouteId): ConnectionKind => {
   switch (routeId) {
     case "/":
-      return "chain"
+      return "contract"
     case "/match":
-      return "chain"
+      return "contract"
     case "/emo_bases":
-      return "chain"
+      return "contract"
     case "/match_trial":
-      return "chain"
-    case "/match_contract":
+      return "contract"
+    case "/leaderboard":
       return "contract"
     case "/dev":
-      return "chain"
+      return "contract"
     case "/match_debug":
-      return "chain"
+      return "contract"
     case "/emo_ability_builder":
       return "none"
     case "/not_found":

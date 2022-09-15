@@ -1,11 +1,11 @@
 {
   "source": {
-    "hash": "0xeda40de151d378102d5bd918dacb2c21e7e648d688a71858faa2ad318c098710",
-    "language": "ink! 3.0.0-rc9",
-    "compiler": "rustc 1.60.0-nightly"
+    "hash": "0xf7c893627558a779f476714784fe2494c6da8ef5052fcc0f628a5783551cce92",
+    "language": "ink! 3.3.1",
+    "compiler": "rustc 1.65.0-nightly"
   },
   "contract": {
-    "name": "storage",
+    "name": "game",
     "version": "0.1.0",
     "authors": [
       "Open Emoji Battler"
@@ -29,6 +29,75 @@
         {
           "args": [],
           "docs": [],
+          "label": "get_admins",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "Vec"
+            ],
+            "type": 0
+          },
+          "selector": "0x4c736237"
+        },
+        {
+          "args": [
+            {
+              "label": "account_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [],
+          "label": "add_admin",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x561367c2"
+        },
+        {
+          "args": [
+            {
+              "label": "account_id",
+              "type": {
+                "displayName": [
+                  "AccountId"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [],
+          "label": "remove_admin",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0xc0f5e751"
+        },
+        {
+          "args": [
+            {
+              "label": "code_hash",
+              "type": {
+                "displayName": [],
+                "type": 2
+              }
+            }
+          ],
+          "docs": [],
+          "label": "set_code",
+          "mutates": true,
+          "payable": false,
+          "returnType": null,
+          "selector": "0x694fb50f"
+        },
+        {
+          "args": [],
+          "docs": [],
           "label": "get_emo_bases",
           "mutates": false,
           "payable": false,
@@ -36,28 +105,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 70
+            "type": 77
           },
           "selector": "0x7864382a"
-        },
-        {
-          "args": [
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 70
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_emo_bases",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x7a393350"
         },
         {
           "args": [],
@@ -69,28 +119,9 @@
             "displayName": [
               "Option"
             ],
-            "type": 72
+            "type": 79
           },
           "selector": "0x3e89cbad"
-        },
-        {
-          "args": [
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 72
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_deck_fixed_emo_base_ids",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x838a1328"
         },
         {
           "args": [],
@@ -102,52 +133,33 @@
             "displayName": [
               "Option"
             ],
-            "type": 72
+            "type": 79
           },
           "selector": "0x5604c526"
         },
         {
           "args": [
             {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 72
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_deck_built_emo_base_ids",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x25cde072"
-        },
-        {
-          "args": [
-            {
               "label": "ep_band",
               "type": {
                 "displayName": [
                   "u16"
                 ],
-                "type": 1
+                "type": 5
               }
             }
           ],
           "docs": [],
-          "label": "get_matchmaking_ghosts",
+          "label": "get_matchmaking_ghosts_info",
           "mutates": false,
           "payable": false,
           "returnType": {
             "displayName": [
               "Option"
             ],
-            "type": 73
+            "type": 80
           },
-          "selector": "0x5d04aced"
+          "selector": "0xd345353e"
         },
         {
           "args": [
@@ -157,44 +169,44 @@
                 "displayName": [
                   "u16"
                 ],
-                "type": 1
+                "type": 5
               }
             },
             {
-              "label": "value",
+              "label": "index",
               "type": {
                 "displayName": [
-                  "Vec"
+                  "u8"
                 ],
-                "type": 38
+                "type": 3
               }
             }
           ],
           "docs": [],
-          "label": "set_matchmaking_ghosts",
-          "mutates": true,
+          "label": "get_matchmaking_ghost_by_index",
+          "mutates": false,
           "payable": false,
-          "returnType": null,
-          "selector": "0xc9f45dd6"
+          "returnType": {
+            "displayName": [
+              "Option"
+            ],
+            "type": 81
+          },
+          "selector": "0x2be97705"
         },
         {
-          "args": [
-            {
-              "label": "ep_band",
-              "type": {
-                "displayName": [
-                  "u16"
-                ],
-                "type": 1
-              }
-            }
-          ],
+          "args": [],
           "docs": [],
-          "label": "remove_matchmaking_ghosts",
-          "mutates": true,
+          "label": "get_leaderboard",
+          "mutates": false,
           "payable": false,
-          "returnType": null,
-          "selector": "0x3597d231"
+          "returnType": {
+            "displayName": [
+              "Vec"
+            ],
+            "type": 56
+          },
+          "selector": "0x091a420a"
         },
         {
           "args": [
@@ -204,7 +216,7 @@
                 "displayName": [
                   "AccountId"
                 ],
-                "type": 40
+                "type": 1
               }
             }
           ],
@@ -216,7 +228,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 74
+            "type": 82
           },
           "selector": "0xa7a3db39"
         },
@@ -228,54 +240,7 @@
                 "displayName": [
                   "AccountId"
                 ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "u16"
-                ],
                 "type": 1
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_ep",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x5ac44f3e"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_ep",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xa7147181"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
               }
             }
           ],
@@ -287,7 +252,7 @@
             "displayName": [
               "Option"
             ],
-            "type": 75
+            "type": 83
           },
           "selector": "0x09425436"
         },
@@ -299,68 +264,21 @@
                 "displayName": [
                   "AccountId"
                 ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "u64"
-                ],
-                "type": 52
+                "type": 1
               }
             }
           ],
           "docs": [],
-          "label": "set_player_seed",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xb49918c7"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_seed",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xde5a1632"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_pool",
+          "label": "get_player_mtc_immutable",
           "mutates": false,
           "payable": false,
           "returnType": {
             "displayName": [
               "Option"
             ],
-            "type": 76
+            "type": 84
           },
-          "selector": "0x83e00bfa"
+          "selector": "0x811a50ac"
         },
         {
           "args": [
@@ -370,817 +288,104 @@
                 "displayName": [
                   "AccountId"
                 ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 54
+                "type": 1
               }
             }
           ],
           "docs": [],
-          "label": "set_player_pool",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xf200ee58"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_pool",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xa8ed1dc9"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_health",
+          "label": "get_player_mtc_mutable",
           "mutates": false,
           "payable": false,
           "returnType": {
             "displayName": [
               "Option"
             ],
-            "type": 64
+            "type": 85
           },
-          "selector": "0x7560bd82"
+          "selector": "0x35e55717"
         },
         {
           "args": [
             {
-              "label": "account",
+              "label": "new_bases",
               "type": {
                 "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "u8"
-                ],
-                "type": 5
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_health",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xd2bf1525"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_health",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xa7269337"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_grade_and_board_history",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 77
-          },
-          "selector": "0x4dd1791b"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 58
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_grade_and_board_history",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xe842181b"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_grade_and_board_history",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x343ac42e"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_upgrade_coin",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 78
-          },
-          "selector": "0xdf1f8165"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 64
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_upgrade_coin",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x9ccfabad"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_upgrade_coin",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x1d8e9ab3"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_ghosts",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 73
-          },
-          "selector": "0xb12c7ae3"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 38
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_ghosts",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x313fe40f"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_ghosts",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x3b727975"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_ghost_states",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 79
-          },
-          "selector": "0x2235eb1c"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "Vec"
-                ],
-                "type": 67
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_ghost_states",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x3018fabc"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_ghost_states",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x5d679eca"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_battle_ghost_index",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Option"
-            ],
-            "type": 64
-          },
-          "selector": "0x5cbf6203"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "value",
-              "type": {
-                "displayName": [
-                  "u8"
-                ],
-                "type": 5
-              }
-            }
-          ],
-          "docs": [],
-          "label": "set_player_battle_ghost_index",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x5028205d"
-        },
-        {
-          "args": [
-            {
-              "label": "account",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "remove_player_battle_ghost_index",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x3ce4d740"
-        },
-        {
-          "args": [
-            {
-              "label": "player_id",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "emo_bases",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "deck_fixed_emo_base_ids",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "deck_built_emo_base_ids",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_ep",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_seed",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_pool",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_health",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_grade_and_board_history",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_upgrade_coin",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_ghosts",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_ghost_states",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            },
-            {
-              "label": "player_battle_ghost_index",
-              "type": {
-                "displayName": [
-                  "bool"
-                ],
-                "type": 16
-              }
-            }
-          ],
-          "docs": [],
-          "label": "get_player_batch",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [],
-            "type": 80
-          },
-          "selector": "0x13f473a4"
-        },
-        {
-          "args": [
-            {
-              "label": "player_id",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            },
-            {
-              "label": "player_ep",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 74
-              }
-            },
-            {
-              "label": "player_seed",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 75
-              }
-            },
-            {
-              "label": "player_pool",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 76
-              }
-            },
-            {
-              "label": "player_health",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 64
-              }
-            },
-            {
-              "label": "player_grade_and_board_history",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 77
-              }
-            },
-            {
-              "label": "player_upgrade_coin",
-              "type": {
-                "displayName": [
-                  "Option"
+                  "emo",
+                  "Bases"
                 ],
                 "type": 78
               }
             },
             {
-              "label": "player_ghosts",
+              "label": "fixed_base_ids",
               "type": {
                 "displayName": [
-                  "Option"
+                  "Vec"
                 ],
-                "type": 73
+                "type": 39
               }
             },
             {
-              "label": "player_ghost_states",
+              "label": "built_base_ids",
               "type": {
                 "displayName": [
-                  "Option"
+                  "Vec"
                 ],
-                "type": 79
+                "type": 39
               }
             },
             {
-              "label": "player_battle_ghost_index",
+              "label": "force_bases_update",
               "type": {
                 "displayName": [
-                  "Option"
+                  "bool"
                 ],
-                "type": 64
+                "type": 19
               }
             }
           ],
           "docs": [],
-          "label": "set_player_batch",
+          "label": "update_emo_bases",
           "mutates": true,
           "payable": false,
           "returnType": null,
-          "selector": "0x241717f7"
+          "selector": "0xd1bd8ea7"
         },
         {
           "args": [
             {
-              "label": "account",
+              "label": "deck_emo_base_ids",
               "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
+                "displayName": [],
+                "type": 86
               }
             }
           ],
           "docs": [],
-          "label": "remove_player_mtc",
+          "label": "start_mtc",
           "mutates": true,
           "payable": false,
           "returnType": null,
-          "selector": "0x4f9a0e50"
+          "selector": "0x04bfdb29"
         },
         {
           "args": [
             {
-              "label": "account",
+              "label": "player_operations",
               "type": {
                 "displayName": [
-                  "AccountId"
+                  "Vec"
                 ],
-                "type": 40
-              }
-            },
-            {
-              "label": "player_ep",
-              "type": {
-                "displayName": [
-                  "u16"
-                ],
-                "type": 1
-              }
-            },
-            {
-              "label": "player_seed",
-              "type": {
-                "displayName": [
-                  "u64"
-                ],
-                "type": 52
-              }
-            },
-            {
-              "label": "matchmaking_ghosts",
-              "type": {
-                "displayName": [
-                  "Option"
-                ],
-                "type": 81
+                "type": 87
               }
             }
           ],
           "docs": [],
-          "label": "update_for_logic_finish_mtc_shop_finish_mtc",
+          "label": "finish_mtc_shop",
           "mutates": true,
           "payable": false,
           "returnType": null,
-          "selector": "0x1044b977"
-        },
-        {
-          "args": [],
-          "docs": [],
-          "label": "get_allowed_accounts",
-          "mutates": false,
-          "payable": false,
-          "returnType": {
-            "displayName": [
-              "Vec"
-            ],
-            "type": 69
-          },
-          "selector": "0xc35cfacd"
-        },
-        {
-          "args": [
-            {
-              "label": "account_id",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "allow_account",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0x815c22c2"
-        },
-        {
-          "args": [
-            {
-              "label": "account_id",
-              "type": {
-                "displayName": [
-                  "AccountId"
-                ],
-                "type": 40
-              }
-            }
-          ],
-          "docs": [],
-          "label": "disallow_account",
-          "mutates": true,
-          "payable": false,
-          "returnType": null,
-          "selector": "0xbb8bad9e"
+          "selector": "0xfbd3f532"
         }
       ]
     },
@@ -1189,8 +394,17 @@
         "fields": [
           {
             "layout": {
+              "cell": {
+                "key": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                "ty": 0
+              }
+            },
+            "name": "admins"
+          },
+          {
+            "layout": {
               "enum": {
-                "dispatchKey": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                "dispatchKey": "0x0100000000000000000000000000000000000000000000000000000000000000",
                 "variants": {
                   "0": {
                     "fields": [
@@ -1201,8 +415,8 @@
                               {
                                 "layout": {
                                   "cell": {
-                                    "key": "0x0100000000000000000000000000000000000000000000000000000000000000",
-                                    "ty": 0
+                                    "key": "0x0200000000000000000000000000000000000000000000000000000000000000",
+                                    "ty": 4
                                   }
                                 },
                                 "name": null
@@ -1225,15 +439,15 @@
           {
             "layout": {
               "enum": {
-                "dispatchKey": "0x0100000000000000000000000000000000000000000000000000000000000000",
+                "dispatchKey": "0x0200000000000000000000000000000000000000000000000000000000000000",
                 "variants": {
                   "0": {
                     "fields": [
                       {
                         "layout": {
                           "cell": {
-                            "key": "0x0200000000000000000000000000000000000000000000000000000000000000",
-                            "ty": 36
+                            "key": "0x0300000000000000000000000000000000000000000000000000000000000000",
+                            "ty": 39
                           }
                         },
                         "name": null
@@ -1251,15 +465,15 @@
           {
             "layout": {
               "enum": {
-                "dispatchKey": "0x0200000000000000000000000000000000000000000000000000000000000000",
+                "dispatchKey": "0x0300000000000000000000000000000000000000000000000000000000000000",
                 "variants": {
                   "0": {
                     "fields": [
                       {
                         "layout": {
                           "cell": {
-                            "key": "0x0300000000000000000000000000000000000000000000000000000000000000",
-                            "ty": 36
+                            "key": "0x0400000000000000000000000000000000000000000000000000000000000000",
+                            "ty": 39
                           }
                         },
                         "name": null
@@ -1277,29 +491,20 @@
           {
             "layout": {
               "cell": {
-                "key": "0x0300000000000000000000000000000000000000000000000000000000000000",
-                "ty": 37
-              }
-            },
-            "name": "matchmaking_ghosts"
-          },
-          {
-            "layout": {
-              "cell": {
                 "key": "0x0400000000000000000000000000000000000000000000000000000000000000",
-                "ty": 50
+                "ty": 40
               }
             },
-            "name": "player_ep"
+            "name": "matchmaking_ghosts_info"
           },
           {
             "layout": {
               "cell": {
                 "key": "0x0500000000000000000000000000000000000000000000000000000000000000",
-                "ty": 51
+                "ty": 44
               }
             },
-            "name": "player_seed"
+            "name": "matchmaking_ghost_by_index"
           },
           {
             "layout": {
@@ -1308,70 +513,43 @@
                 "ty": 53
               }
             },
-            "name": "player_pool"
+            "name": "lazy"
           },
           {
             "layout": {
               "cell": {
                 "key": "0x0700000000000000000000000000000000000000000000000000000000000000",
-                "ty": 56
+                "ty": 58
               }
             },
-            "name": "player_health"
+            "name": "player_ep"
           },
           {
             "layout": {
               "cell": {
                 "key": "0x0800000000000000000000000000000000000000000000000000000000000000",
-                "ty": 57
+                "ty": 59
               }
             },
-            "name": "player_grade_and_board_history"
+            "name": "player_seed"
           },
           {
             "layout": {
               "cell": {
                 "key": "0x0900000000000000000000000000000000000000000000000000000000000000",
-                "ty": 63
+                "ty": 61
               }
             },
-            "name": "player_upgrade_coin"
+            "name": "player_mtc_immutable"
           },
           {
             "layout": {
               "cell": {
                 "key": "0x0a00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 65
+                "ty": 67
               }
             },
-            "name": "player_ghosts"
-          },
-          {
-            "layout": {
-              "cell": {
-                "key": "0x0b00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 66
-              }
-            },
-            "name": "player_ghost_states"
-          },
-          {
-            "layout": {
-              "cell": {
-                "key": "0x0c00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 56
-              }
-            },
-            "name": "player_battle_ghost_index"
-          },
-          {
-            "layout": {
-              "cell": {
-                "key": "0x0d00000000000000000000000000000000000000000000000000000000000000",
-                "ty": 69
-              }
-            },
-            "name": "allowed_accounts"
+            "name": "player_mtc_mutable"
           }
         ]
       }
@@ -1381,10 +559,59 @@
         "id": 0,
         "type": {
           "def": {
+            "sequence": {
+              "type": 1
+            }
+          }
+        }
+      },
+      {
+        "id": 1,
+        "type": {
+          "def": {
             "composite": {
               "fields": [
                 {
-                  "type": 34
+                  "type": 2,
+                  "typeName": "[u8; 32]"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_env",
+            "types",
+            "AccountId"
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "type": {
+          "def": {
+            "array": {
+              "len": 32,
+              "type": 3
+            }
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": {
+          "def": {
+            "primitive": "u8"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 37
                 }
               ]
             }
@@ -1392,11 +619,11 @@
           "params": [
             {
               "name": "K",
-              "type": 1
+              "type": 5
             },
             {
               "name": "V",
-              "type": 2
+              "type": 6
             }
           ],
           "path": [
@@ -1405,7 +632,7 @@
         }
       },
       {
-        "id": 1,
+        "id": 5,
         "type": {
           "def": {
             "primitive": "u16"
@@ -1413,44 +640,44 @@
         }
       },
       {
-        "id": 2,
+        "id": 6,
         "type": {
           "def": {
             "composite": {
               "fields": [
                 {
                   "name": "id",
-                  "type": 1,
+                  "type": 5,
                   "typeName": "u16"
                 },
                 {
                   "name": "typ",
-                  "type": 3,
+                  "type": 7,
                   "typeName": "emo::Typ"
                 },
                 {
                   "name": "codepoint",
-                  "type": 4,
+                  "type": 8,
                   "typeName": "u32"
                 },
                 {
                   "name": "grade",
-                  "type": 5,
+                  "type": 3,
                   "typeName": "u8"
                 },
                 {
                   "name": "attack",
-                  "type": 1,
+                  "type": 5,
                   "typeName": "u16"
                 },
                 {
                   "name": "health",
-                  "type": 1,
+                  "type": 5,
                   "typeName": "u16"
                 },
                 {
                   "name": "abilities",
-                  "type": 6,
+                  "type": 9,
                   "typeName": "Vec<emo::ability::Ability>"
                 }
               ]
@@ -1465,7 +692,7 @@
         }
       },
       {
-        "id": 3,
+        "id": 7,
         "type": {
           "def": {
             "variant": {
@@ -1498,7 +725,7 @@
         }
       },
       {
-        "id": 4,
+        "id": 8,
         "type": {
           "def": {
             "primitive": "u32"
@@ -1506,25 +733,17 @@
         }
       },
       {
-        "id": 5,
-        "type": {
-          "def": {
-            "primitive": "u8"
-          }
-        }
-      },
-      {
-        "id": 6,
+        "id": 9,
         "type": {
           "def": {
             "sequence": {
-              "type": 7
+              "type": 10
             }
           }
         }
       },
       {
-        "id": 7,
+        "id": 10,
         "type": {
           "def": {
             "variant": {
@@ -1532,7 +751,7 @@
                 {
                   "fields": [
                     {
-                      "type": 8,
+                      "type": 11,
                       "typeName": "emo::ability::shop::Shop"
                     }
                   ],
@@ -1542,7 +761,7 @@
                 {
                   "fields": [
                     {
-                      "type": 24,
+                      "type": 27,
                       "typeName": "emo::ability::battle::Battle"
                     }
                   ],
@@ -1562,7 +781,7 @@
         }
       },
       {
-        "id": 8,
+        "id": 11,
         "type": {
           "def": {
             "variant": {
@@ -1570,7 +789,7 @@
                 {
                   "fields": [
                     {
-                      "type": 9,
+                      "type": 12,
                       "typeName": "emo::ability::shop::Pre"
                     }
                   ],
@@ -1580,7 +799,7 @@
                 {
                   "fields": [
                     {
-                      "type": 18,
+                      "type": 21,
                       "typeName": "emo::ability::shop::Peri"
                     }
                   ],
@@ -1590,7 +809,7 @@
                 {
                   "fields": [
                     {
-                      "type": 23,
+                      "type": 26,
                       "typeName": "emo::ability::shop::Special"
                     }
                   ],
@@ -1611,7 +830,7 @@
         }
       },
       {
-        "id": 9,
+        "id": 12,
         "type": {
           "def": {
             "variant": {
@@ -1619,7 +838,7 @@
                 {
                   "fields": [
                     {
-                      "type": 10,
+                      "type": 13,
                       "typeName": "emo::ability::shop::NormalAction"
                     }
                   ],
@@ -1629,7 +848,7 @@
                 {
                   "fields": [
                     {
-                      "type": 17,
+                      "type": 20,
                       "typeName": "emo::ability::shop::RandomAction"
                     }
                   ],
@@ -1650,7 +869,7 @@
         }
       },
       {
-        "id": 10,
+        "id": 13,
         "type": {
           "def": {
             "variant": {
@@ -1659,7 +878,7 @@
                   "fields": [
                     {
                       "name": "base_id",
-                      "type": 1,
+                      "type": 5,
                       "typeName": "u16"
                     }
                   ],
@@ -1670,17 +889,17 @@
                   "fields": [
                     {
                       "name": "target",
-                      "type": 11,
+                      "type": 14,
                       "typeName": "emo::ability::Target"
                     },
                     {
                       "name": "attack",
-                      "type": 1,
+                      "type": 5,
                       "typeName": "u16"
                     },
                     {
                       "name": "health",
-                      "type": 1,
+                      "type": 5,
                       "typeName": "u16"
                     }
                   ],
@@ -1691,22 +910,22 @@
                   "fields": [
                     {
                       "name": "target",
-                      "type": 11,
+                      "type": 14,
                       "typeName": "emo::ability::Target"
                     },
                     {
                       "name": "count_condition",
-                      "type": 13,
+                      "type": 16,
                       "typeName": "emo::ability::TypOptAndIsTripleOpt"
                     },
                     {
                       "name": "attack",
-                      "type": 1,
+                      "type": 5,
                       "typeName": "u16"
                     },
                     {
                       "name": "health",
-                      "type": 1,
+                      "type": 5,
                       "typeName": "u16"
                     }
                   ],
@@ -1717,17 +936,17 @@
                   "fields": [
                     {
                       "name": "target",
-                      "type": 11,
+                      "type": 14,
                       "typeName": "emo::ability::Target"
                     },
                     {
                       "name": "attack",
-                      "type": 1,
+                      "type": 5,
                       "typeName": "u16"
                     },
                     {
                       "name": "health",
-                      "type": 1,
+                      "type": 5,
                       "typeName": "u16"
                     }
                   ],
@@ -1738,12 +957,12 @@
                   "fields": [
                     {
                       "name": "attack",
-                      "type": 1,
+                      "type": 5,
                       "typeName": "u16"
                     },
                     {
                       "name": "health",
-                      "type": 1,
+                      "type": 5,
                       "typeName": "u16"
                     }
                   ],
@@ -1754,12 +973,12 @@
                   "fields": [
                     {
                       "name": "target",
-                      "type": 11,
+                      "type": 14,
                       "typeName": "emo::ability::Target"
                     },
                     {
                       "name": "ability",
-                      "type": 7,
+                      "type": 10,
                       "typeName": "Box<emo::ability::Ability>"
                     }
                   ],
@@ -1770,7 +989,7 @@
                   "fields": [
                     {
                       "name": "coin",
-                      "type": 5,
+                      "type": 3,
                       "typeName": "u8"
                     }
                   ],
@@ -1781,12 +1000,12 @@
                   "fields": [
                     {
                       "name": "count_condition",
-                      "type": 13,
+                      "type": 16,
                       "typeName": "emo::ability::TypOptAndIsTripleOpt"
                     },
                     {
                       "name": "divisor",
-                      "type": 5,
+                      "type": 3,
                       "typeName": "u8"
                     }
                   ],
@@ -1807,7 +1026,7 @@
         }
       },
       {
-        "id": 11,
+        "id": 14,
         "type": {
           "def": {
             "variant": {
@@ -1820,12 +1039,12 @@
                   "fields": [
                     {
                       "name": "destination",
-                      "type": 12,
+                      "type": 15,
                       "typeName": "emo::ability::Destination"
                     },
                     {
                       "name": "typ_and_triple",
-                      "type": 13,
+                      "type": 16,
                       "typeName": "emo::ability::TypOptAndIsTripleOpt"
                     }
                   ],
@@ -1845,7 +1064,7 @@
         }
       },
       {
-        "id": 12,
+        "id": 15,
         "type": {
           "def": {
             "variant": {
@@ -1875,19 +1094,19 @@
         }
       },
       {
-        "id": 13,
+        "id": 16,
         "type": {
           "def": {
             "composite": {
               "fields": [
                 {
                   "name": "typ_opt",
-                  "type": 14,
+                  "type": 17,
                   "typeName": "Option<emo::Typ>"
                 },
                 {
                   "name": "is_triple_opt",
-                  "type": 15,
+                  "type": 18,
                   "typeName": "Option<bool>"
                 }
               ]
@@ -1903,7 +1122,1597 @@
         }
       },
       {
-        "id": 14,
+        "id": 17,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 7
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 7
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 18,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 19
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 19
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 19,
+        "type": {
+          "def": {
+            "primitive": "bool"
+          }
+        }
+      },
+      {
+        "id": 20,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "name": "typ_count",
+                      "type": 3,
+                      "typeName": "u8"
+                    },
+                    {
+                      "name": "attack",
+                      "type": 5,
+                      "typeName": "u16"
+                    },
+                    {
+                      "name": "health",
+                      "type": 5,
+                      "typeName": "u16"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "IncreaseStatsOfMenagerie"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "shop",
+            "RandomAction"
+          ]
+        }
+      },
+      {
+        "id": 21,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "name": "trigger",
+                      "type": 22,
+                      "typeName": "emo::ability::shop::PeriAsOneselfTrigger"
+                    },
+                    {
+                      "name": "action",
+                      "type": 13,
+                      "typeName": "emo::ability::shop::NormalAction"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "AsOneself"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "trigger",
+                      "type": 23,
+                      "typeName": "emo::ability::shop::PeriAsAllyTrigger"
+                    },
+                    {
+                      "name": "action",
+                      "type": 24,
+                      "typeName": "emo::ability::shop::PeriAsAllyAction"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "AsAlly"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "shop",
+            "Peri"
+          ]
+        }
+      },
+      {
+        "id": 22,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "Set"
+                },
+                {
+                  "index": 1,
+                  "name": "Sell"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "typ_and_triple",
+                      "type": 16,
+                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
+                    }
+                  ],
+                  "index": 2,
+                  "name": "AllySet"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "shop",
+            "PeriAsOneselfTrigger"
+          ]
+        }
+      },
+      {
+        "id": 23,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "name": "typ_and_triple",
+                      "type": 16,
+                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "AllySet"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "shop",
+            "PeriAsAllyTrigger"
+          ]
+        }
+      },
+      {
+        "id": 24,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 13,
+                      "typeName": "emo::ability::shop::NormalAction"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "OneselfTripleNormal"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 25,
+                      "typeName": "emo::ability::shop::AsAllyAction"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Custom"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "shop",
+            "PeriAsAllyAction"
+          ]
+        }
+      },
+      {
+        "id": 25,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "TriggerSetActions"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "shop",
+            "AsAllyAction"
+          ]
+        }
+      },
+      {
+        "id": 26,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "Placeholder"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "shop",
+            "Special"
+          ]
+        }
+      },
+      {
+        "id": 27,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 28,
+                      "typeName": "emo::ability::battle::General"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "General"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 36,
+                      "typeName": "emo::ability::battle::Special"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Special"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "battle",
+            "Battle"
+          ]
+        }
+      },
+      {
+        "id": 28,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "name": "trigger",
+                      "type": 29,
+                      "typeName": "emo::ability::battle::GeneralAsOneselfTrigger"
+                    },
+                    {
+                      "name": "action",
+                      "type": 30,
+                      "typeName": "emo::ability::battle::NormalAction"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "AsOneself"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "trigger",
+                      "type": 33,
+                      "typeName": "emo::ability::battle::GeneralAsAllyTrigger"
+                    },
+                    {
+                      "name": "action",
+                      "type": 34,
+                      "typeName": "emo::ability::battle::GeneralAsAllyAction"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "AsAlly"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "battle",
+            "General"
+          ]
+        }
+      },
+      {
+        "id": 29,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "Pre"
+                },
+                {
+                  "index": 1,
+                  "name": "Retire"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "typ_and_triple",
+                      "type": 16,
+                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
+                    }
+                  ],
+                  "index": 2,
+                  "name": "AllyRetire"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "typ_and_triple",
+                      "type": 16,
+                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
+                    }
+                  ],
+                  "index": 3,
+                  "name": "RivalRetire"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "typ_and_triple",
+                      "type": 16,
+                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
+                    },
+                    {
+                      "name": "excludes_same_base",
+                      "type": 19,
+                      "typeName": "bool"
+                    },
+                    {
+                      "name": "ability",
+                      "type": 27,
+                      "typeName": "Box<emo::ability::battle::Battle>"
+                    }
+                  ],
+                  "index": 4,
+                  "name": "AllyBattleAbilityRemoved"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "battle",
+            "GeneralAsOneselfTrigger"
+          ]
+        }
+      },
+      {
+        "id": 30,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "name": "side",
+                      "type": 31,
+                      "typeName": "emo::ability::Side"
+                    },
+                    {
+                      "name": "base_id",
+                      "type": 5,
+                      "typeName": "u16"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "SetEmo"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "side",
+                      "type": 31,
+                      "typeName": "emo::ability::Side"
+                    },
+                    {
+                      "name": "base_id",
+                      "type": 5,
+                      "typeName": "u16"
+                    },
+                    {
+                      "name": "divisor",
+                      "type": 3,
+                      "typeName": "u8"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "SetEmosByAttackDiv"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "target_or_random",
+                      "type": 32,
+                      "typeName": "emo::ability::TargetOrRandom"
+                    },
+                    {
+                      "name": "attack",
+                      "type": 5,
+                      "typeName": "u16"
+                    },
+                    {
+                      "name": "health",
+                      "type": 5,
+                      "typeName": "u16"
+                    }
+                  ],
+                  "index": 2,
+                  "name": "IncreaseStats"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "target_or_random",
+                      "type": 32,
+                      "typeName": "emo::ability::TargetOrRandom"
+                    },
+                    {
+                      "name": "attack",
+                      "type": 5,
+                      "typeName": "u16"
+                    },
+                    {
+                      "name": "health",
+                      "type": 5,
+                      "typeName": "u16"
+                    }
+                  ],
+                  "index": 3,
+                  "name": "DecreaseStats"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "side",
+                      "type": 31,
+                      "typeName": "emo::ability::Side"
+                    },
+                    {
+                      "name": "target_or_random",
+                      "type": 32,
+                      "typeName": "emo::ability::TargetOrRandom"
+                    },
+                    {
+                      "name": "count_condition",
+                      "type": 16,
+                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
+                    },
+                    {
+                      "name": "attack",
+                      "type": 5,
+                      "typeName": "u16"
+                    },
+                    {
+                      "name": "health",
+                      "type": 5,
+                      "typeName": "u16"
+                    }
+                  ],
+                  "index": 4,
+                  "name": "IncreaseStatsByEmoCount"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "target_or_random",
+                      "type": 32,
+                      "typeName": "emo::ability::TargetOrRandom"
+                    },
+                    {
+                      "name": "ability",
+                      "type": 27,
+                      "typeName": "Box<emo::ability::battle::Battle>"
+                    }
+                  ],
+                  "index": 5,
+                  "name": "AddBattleAbility"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "side",
+                      "type": 31,
+                      "typeName": "emo::ability::Side"
+                    },
+                    {
+                      "name": "damage",
+                      "type": 5,
+                      "typeName": "u16"
+                    }
+                  ],
+                  "index": 6,
+                  "name": "DamageAll"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "battle",
+            "NormalAction"
+          ]
+        }
+      },
+      {
+        "id": 31,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "Ally"
+                },
+                {
+                  "index": 1,
+                  "name": "Rival"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "Side"
+          ]
+        }
+      },
+      {
+        "id": 32,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 14,
+                      "typeName": "emo::ability::Target"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Target"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "typ_and_triple",
+                      "type": 16,
+                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
+                    },
+                    {
+                      "name": "count",
+                      "type": 3,
+                      "typeName": "u8"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Random"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "TargetOrRandom"
+          ]
+        }
+      },
+      {
+        "id": 33,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "name": "typ_and_triple",
+                      "type": 16,
+                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "AllySet"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "typ_and_triple",
+                      "type": 16,
+                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "AllyRetire"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "battle",
+            "GeneralAsAllyTrigger"
+          ]
+        }
+      },
+      {
+        "id": 34,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 30,
+                      "typeName": "emo::ability::battle::NormalAction"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "OneselfTripleNormal"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 35,
+                      "typeName": "emo::ability::battle::AsAllyAction"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Custom"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "battle",
+            "GeneralAsAllyAction"
+          ]
+        }
+      },
+      {
+        "id": 35,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "TriggerRetireActions"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "battle",
+            "AsAllyAction"
+          ]
+        }
+      },
+      {
+        "id": 36,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "Shield"
+                },
+                {
+                  "index": 1,
+                  "name": "Attractive"
+                },
+                {
+                  "index": 2,
+                  "name": "AttackLowestAttack"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "ability",
+            "battle",
+            "Special"
+          ]
+        }
+      },
+      {
+        "id": 37,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 38
+            }
+          }
+        }
+      },
+      {
+        "id": 38,
+        "type": {
+          "def": {
+            "tuple": [
+              5,
+              6
+            ]
+          }
+        }
+      },
+      {
+        "id": 39,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 5
+            }
+          }
+        }
+      },
+      {
+        "id": 40,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 43,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 5
+            },
+            {
+              "name": "V",
+              "type": 41
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 41,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 42
+            }
+          }
+        }
+      },
+      {
+        "id": 42,
+        "type": {
+          "def": {
+            "tuple": [
+              8,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "id": 43,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 2,
+                  "typeName": "[u8; 32]"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_primitives",
+            "Key"
+          ]
+        }
+      },
+      {
+        "id": 44,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 43,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 45
+            },
+            {
+              "name": "V",
+              "type": 46
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 45,
+        "type": {
+          "def": {
+            "tuple": [
+              5,
+              3
+            ]
+          }
+        }
+      },
+      {
+        "id": 46,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "history",
+                  "type": 47,
+                  "typeName": "Vec<mtc::GradeAndGhostBoard>"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "Ghost"
+          ]
+        }
+      },
+      {
+        "id": 47,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 48
+            }
+          }
+        }
+      },
+      {
+        "id": 48,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "grade",
+                  "type": 3,
+                  "typeName": "u8"
+                },
+                {
+                  "name": "board",
+                  "type": 49,
+                  "typeName": "mtc::GhostBoard"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "GradeAndGhostBoard"
+          ]
+        }
+      },
+      {
+        "id": 49,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 50,
+                  "typeName": "Vec<mtc::GhostBoardEmo>"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "GhostBoard"
+          ]
+        }
+      },
+      {
+        "id": 50,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 51
+            }
+          }
+        }
+      },
+      {
+        "id": 51,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "base_id",
+                  "type": 5,
+                  "typeName": "u16"
+                },
+                {
+                  "name": "attributes",
+                  "type": 52,
+                  "typeName": "emo::Attributes"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "GhostBoardEmo"
+          ]
+        }
+      },
+      {
+        "id": 52,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "attack",
+                  "type": 5,
+                  "typeName": "u16"
+                },
+                {
+                  "name": "health",
+                  "type": 5,
+                  "typeName": "u16"
+                },
+                {
+                  "name": "abilities",
+                  "type": 9,
+                  "typeName": "Vec<emo::ability::Ability>"
+                },
+                {
+                  "name": "is_triple",
+                  "type": 19,
+                  "typeName": "bool"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "Attributes"
+          ]
+        }
+      },
+      {
+        "id": 53,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 43,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 54
+            },
+            {
+              "name": "V",
+              "type": 55
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 54,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "Leaderboard"
+                }
+              ]
+            }
+          },
+          "path": [
+            "game",
+            "contract",
+            "LazyStorageKey"
+          ]
+        }
+      },
+      {
+        "id": 55,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 56,
+                      "typeName": "Vec<(u16, AccountId)>"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Leaderboard"
+                }
+              ]
+            }
+          },
+          "path": [
+            "game",
+            "contract",
+            "LazyStorageValue"
+          ]
+        }
+      },
+      {
+        "id": 56,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 57
+            }
+          }
+        }
+      },
+      {
+        "id": 57,
+        "type": {
+          "def": {
+            "tuple": [
+              5,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "id": 58,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 43,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 1
+            },
+            {
+              "name": "V",
+              "type": 5
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 59,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 43,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 1
+            },
+            {
+              "name": "V",
+              "type": 60
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 60,
+        "type": {
+          "def": {
+            "primitive": "u64"
+          }
+        }
+      },
+      {
+        "id": 61,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 43,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 1
+            },
+            {
+              "name": "V",
+              "type": 62
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 62,
+        "type": {
+          "def": {
+            "tuple": [
+              63,
+              65
+            ]
+          }
+        }
+      },
+      {
+        "id": 63,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 64
+            }
+          }
+        }
+      },
+      {
+        "id": 64,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "id",
+                  "type": 5,
+                  "typeName": "u16"
+                },
+                {
+                  "name": "base_id",
+                  "type": 5,
+                  "typeName": "u16"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "Emo"
+          ]
+        }
+      },
+      {
+        "id": 65,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 66
+            }
+          }
+        }
+      },
+      {
+        "id": 66,
+        "type": {
+          "def": {
+            "tuple": [
+              1,
+              46
+            ]
+          }
+        }
+      },
+      {
+        "id": 67,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "offset_key",
+                  "type": 43,
+                  "typeName": "Key"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "K",
+              "type": 1
+            },
+            {
+              "name": "V",
+              "type": 68
+            }
+          ],
+          "path": [
+            "ink_storage",
+            "lazy",
+            "mapping",
+            "Mapping"
+          ]
+        }
+      },
+      {
+        "id": 68,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "health",
+                  "type": 3,
+                  "typeName": "u8"
+                },
+                {
+                  "name": "grade_and_board_history",
+                  "type": 69,
+                  "typeName": "Vec<mtc::GradeAndBoard>"
+                },
+                {
+                  "name": "upgrade_coin",
+                  "type": 74,
+                  "typeName": "Option<u8>"
+                },
+                {
+                  "name": "ghost_states",
+                  "type": 75,
+                  "typeName": "Vec<mtc::GhostState>"
+                },
+                {
+                  "name": "battle_ghost_index",
+                  "type": 3,
+                  "typeName": "u8"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "storage",
+            "PlayerMutable"
+          ]
+        }
+      },
+      {
+        "id": 69,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 70
+            }
+          }
+        }
+      },
+      {
+        "id": 70,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "grade",
+                  "type": 3,
+                  "typeName": "u8"
+                },
+                {
+                  "name": "board",
+                  "type": 71,
+                  "typeName": "mtc::Board"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "GradeAndBoard"
+          ]
+        }
+      },
+      {
+        "id": 71,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 72,
+                  "typeName": "Vec<mtc::BoardEmo>"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "Board"
+          ]
+        }
+      },
+      {
+        "id": 72,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 73
+            }
+          }
+        }
+      },
+      {
+        "id": 73,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "name": "mtc_emo_ids",
+                  "type": 39,
+                  "typeName": "Vec<u16>"
+                },
+                {
+                  "name": "base_id",
+                  "type": 5,
+                  "typeName": "u16"
+                },
+                {
+                  "name": "attributes",
+                  "type": 52,
+                  "typeName": "emo::Attributes"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "BoardEmo"
+          ]
+        }
+      },
+      {
+        "id": 74,
         "type": {
           "def": {
             "variant": {
@@ -1936,7 +2745,56 @@
         }
       },
       {
-        "id": 15,
+        "id": 75,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 76
+            }
+          }
+        }
+      },
+      {
+        "id": 76,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "name": "health",
+                      "type": 3,
+                      "typeName": "u8"
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Active"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "final_turn",
+                      "type": 3,
+                      "typeName": "u8"
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Retired"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "mtc",
+            "GhostState"
+          ]
+        }
+      },
+      {
+        "id": 77,
         "type": {
           "def": {
             "variant": {
@@ -1948,7 +2806,7 @@
                 {
                   "fields": [
                     {
-                      "type": 16
+                      "type": 78
                     }
                   ],
                   "index": 1,
@@ -1960,7 +2818,7 @@
           "params": [
             {
               "name": "T",
-              "type": 16
+              "type": 78
             }
           ],
           "path": [
@@ -1969,1410 +2827,127 @@
         }
       },
       {
-        "id": 16,
-        "type": {
-          "def": {
-            "primitive": "bool"
-          }
-        }
-      },
-      {
-        "id": 17,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "name": "typ_count",
-                      "type": 5,
-                      "typeName": "u8"
-                    },
-                    {
-                      "name": "attack",
-                      "type": 1,
-                      "typeName": "u16"
-                    },
-                    {
-                      "name": "health",
-                      "type": 1,
-                      "typeName": "u16"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "IncreaseStatsOfMenagerie"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "shop",
-            "RandomAction"
-          ]
-        }
-      },
-      {
-        "id": 18,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "name": "trigger",
-                      "type": 19,
-                      "typeName": "emo::ability::shop::PeriAsOneselfTrigger"
-                    },
-                    {
-                      "name": "action",
-                      "type": 10,
-                      "typeName": "emo::ability::shop::NormalAction"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "AsOneself"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "trigger",
-                      "type": 20,
-                      "typeName": "emo::ability::shop::PeriAsAllyTrigger"
-                    },
-                    {
-                      "name": "action",
-                      "type": 21,
-                      "typeName": "emo::ability::shop::PeriAsAllyAction"
-                    }
-                  ],
-                  "index": 1,
-                  "name": "AsAlly"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "shop",
-            "Peri"
-          ]
-        }
-      },
-      {
-        "id": 19,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "Set"
-                },
-                {
-                  "index": 1,
-                  "name": "Sell"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "typ_and_triple",
-                      "type": 13,
-                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
-                    }
-                  ],
-                  "index": 2,
-                  "name": "AllySet"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "shop",
-            "PeriAsOneselfTrigger"
-          ]
-        }
-      },
-      {
-        "id": 20,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "name": "typ_and_triple",
-                      "type": 13,
-                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "AllySet"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "shop",
-            "PeriAsAllyTrigger"
-          ]
-        }
-      },
-      {
-        "id": 21,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "type": 10,
-                      "typeName": "emo::ability::shop::NormalAction"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "OneselfTripleNormal"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 22,
-                      "typeName": "emo::ability::shop::AsAllyAction"
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Custom"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "shop",
-            "PeriAsAllyAction"
-          ]
-        }
-      },
-      {
-        "id": 22,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "TriggerSetActions"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "shop",
-            "AsAllyAction"
-          ]
-        }
-      },
-      {
-        "id": 23,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "Placeholder"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "shop",
-            "Special"
-          ]
-        }
-      },
-      {
-        "id": 24,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "type": 25,
-                      "typeName": "emo::ability::battle::General"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "General"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 33,
-                      "typeName": "emo::ability::battle::Special"
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Special"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "battle",
-            "Battle"
-          ]
-        }
-      },
-      {
-        "id": 25,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "name": "trigger",
-                      "type": 26,
-                      "typeName": "emo::ability::battle::GeneralAsOneselfTrigger"
-                    },
-                    {
-                      "name": "action",
-                      "type": 27,
-                      "typeName": "emo::ability::battle::NormalAction"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "AsOneself"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "trigger",
-                      "type": 30,
-                      "typeName": "emo::ability::battle::GeneralAsAllyTrigger"
-                    },
-                    {
-                      "name": "action",
-                      "type": 31,
-                      "typeName": "emo::ability::battle::GeneralAsAllyAction"
-                    }
-                  ],
-                  "index": 1,
-                  "name": "AsAlly"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "battle",
-            "General"
-          ]
-        }
-      },
-      {
-        "id": 26,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "Pre"
-                },
-                {
-                  "index": 1,
-                  "name": "Retire"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "typ_and_triple",
-                      "type": 13,
-                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
-                    }
-                  ],
-                  "index": 2,
-                  "name": "AllyRetire"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "typ_and_triple",
-                      "type": 13,
-                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
-                    }
-                  ],
-                  "index": 3,
-                  "name": "RivalRetire"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "typ_and_triple",
-                      "type": 13,
-                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
-                    },
-                    {
-                      "name": "excludes_same_base",
-                      "type": 16,
-                      "typeName": "bool"
-                    },
-                    {
-                      "name": "ability",
-                      "type": 24,
-                      "typeName": "Box<emo::ability::battle::Battle>"
-                    }
-                  ],
-                  "index": 4,
-                  "name": "AllyBattleAbilityRemoved"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "battle",
-            "GeneralAsOneselfTrigger"
-          ]
-        }
-      },
-      {
-        "id": 27,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "name": "side",
-                      "type": 28,
-                      "typeName": "emo::ability::Side"
-                    },
-                    {
-                      "name": "base_id",
-                      "type": 1,
-                      "typeName": "u16"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "SetEmo"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "side",
-                      "type": 28,
-                      "typeName": "emo::ability::Side"
-                    },
-                    {
-                      "name": "base_id",
-                      "type": 1,
-                      "typeName": "u16"
-                    },
-                    {
-                      "name": "divisor",
-                      "type": 5,
-                      "typeName": "u8"
-                    }
-                  ],
-                  "index": 1,
-                  "name": "SetEmosByAttackDiv"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "target_or_random",
-                      "type": 29,
-                      "typeName": "emo::ability::TargetOrRandom"
-                    },
-                    {
-                      "name": "attack",
-                      "type": 1,
-                      "typeName": "u16"
-                    },
-                    {
-                      "name": "health",
-                      "type": 1,
-                      "typeName": "u16"
-                    }
-                  ],
-                  "index": 2,
-                  "name": "IncreaseStats"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "target_or_random",
-                      "type": 29,
-                      "typeName": "emo::ability::TargetOrRandom"
-                    },
-                    {
-                      "name": "attack",
-                      "type": 1,
-                      "typeName": "u16"
-                    },
-                    {
-                      "name": "health",
-                      "type": 1,
-                      "typeName": "u16"
-                    }
-                  ],
-                  "index": 3,
-                  "name": "DecreaseStats"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "side",
-                      "type": 28,
-                      "typeName": "emo::ability::Side"
-                    },
-                    {
-                      "name": "target_or_random",
-                      "type": 29,
-                      "typeName": "emo::ability::TargetOrRandom"
-                    },
-                    {
-                      "name": "count_condition",
-                      "type": 13,
-                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
-                    },
-                    {
-                      "name": "attack",
-                      "type": 1,
-                      "typeName": "u16"
-                    },
-                    {
-                      "name": "health",
-                      "type": 1,
-                      "typeName": "u16"
-                    }
-                  ],
-                  "index": 4,
-                  "name": "IncreaseStatsByEmoCount"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "target_or_random",
-                      "type": 29,
-                      "typeName": "emo::ability::TargetOrRandom"
-                    },
-                    {
-                      "name": "ability",
-                      "type": 24,
-                      "typeName": "Box<emo::ability::battle::Battle>"
-                    }
-                  ],
-                  "index": 5,
-                  "name": "AddBattleAbility"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "side",
-                      "type": 28,
-                      "typeName": "emo::ability::Side"
-                    },
-                    {
-                      "name": "damage",
-                      "type": 1,
-                      "typeName": "u16"
-                    }
-                  ],
-                  "index": 6,
-                  "name": "DamageAll"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "battle",
-            "NormalAction"
-          ]
-        }
-      },
-      {
-        "id": 28,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "Ally"
-                },
-                {
-                  "index": 1,
-                  "name": "Rival"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "Side"
-          ]
-        }
-      },
-      {
-        "id": 29,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "type": 11,
-                      "typeName": "emo::ability::Target"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "Target"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "typ_and_triple",
-                      "type": 13,
-                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
-                    },
-                    {
-                      "name": "count",
-                      "type": 5,
-                      "typeName": "u8"
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Random"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "TargetOrRandom"
-          ]
-        }
-      },
-      {
-        "id": 30,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "name": "typ_and_triple",
-                      "type": 13,
-                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "AllySet"
-                },
-                {
-                  "fields": [
-                    {
-                      "name": "typ_and_triple",
-                      "type": 13,
-                      "typeName": "emo::ability::TypOptAndIsTripleOpt"
-                    }
-                  ],
-                  "index": 1,
-                  "name": "AllyRetire"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "battle",
-            "GeneralAsAllyTrigger"
-          ]
-        }
-      },
-      {
-        "id": 31,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "fields": [
-                    {
-                      "type": 27,
-                      "typeName": "emo::ability::battle::NormalAction"
-                    }
-                  ],
-                  "index": 0,
-                  "name": "OneselfTripleNormal"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 32,
-                      "typeName": "emo::ability::battle::AsAllyAction"
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Custom"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "battle",
-            "GeneralAsAllyAction"
-          ]
-        }
-      },
-      {
-        "id": 32,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "TriggerRetireActions"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "battle",
-            "AsAllyAction"
-          ]
-        }
-      },
-      {
-        "id": 33,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "Shield"
-                },
-                {
-                  "index": 1,
-                  "name": "Attractive"
-                },
-                {
-                  "index": 2,
-                  "name": "AttackLowestAttack"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "ability",
-            "battle",
-            "Special"
-          ]
-        }
-      },
-      {
-        "id": 34,
-        "type": {
-          "def": {
-            "sequence": {
-              "type": 35
-            }
-          }
-        }
-      },
-      {
-        "id": 35,
-        "type": {
-          "def": {
-            "tuple": [
-              1,
-              2
-            ]
-          }
-        }
-      },
-      {
-        "id": 36,
-        "type": {
-          "def": {
-            "sequence": {
-              "type": 1
-            }
-          }
-        }
-      },
-      {
-        "id": 37,
+        "id": 78,
         "type": {
           "def": {
             "composite": {
               "fields": [
                 {
-                  "name": "offset_key",
-                  "type": 49,
-                  "typeName": "Key"
+                  "type": 4,
+                  "typeName": "BTreeMap<u16, emo::Base>"
+                }
+              ]
+            }
+          },
+          "path": [
+            "common",
+            "codec_types",
+            "emo",
+            "Bases"
+          ]
+        }
+      },
+      {
+        "id": 79,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 39
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
                 }
               ]
             }
           },
           "params": [
             {
-              "name": "K",
-              "type": 1
-            },
-            {
-              "name": "V",
-              "type": 38
-            }
-          ],
-          "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
-          ]
-        }
-      },
-      {
-        "id": 38,
-        "type": {
-          "def": {
-            "sequence": {
+              "name": "T",
               "type": 39
             }
-          }
-        }
-      },
-      {
-        "id": 39,
-        "type": {
-          "def": {
-            "tuple": [
-              40,
-              1,
-              42
-            ]
-          }
-        }
-      },
-      {
-        "id": 40,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "type": 41,
-                  "typeName": "[u8; 32]"
-                }
-              ]
-            }
-          },
+          ],
           "path": [
-            "ink_env",
-            "types",
-            "AccountId"
+            "Option"
           ]
         }
       },
       {
-        "id": 41,
+        "id": 80,
         "type": {
           "def": {
-            "array": {
-              "len": 32,
-              "type": 5
-            }
-          }
-        }
-      },
-      {
-        "id": 42,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
+            "variant": {
+              "variants": [
                 {
-                  "name": "history",
-                  "type": 43,
-                  "typeName": "Vec<mtc::GradeAndGhostBoard>"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "mtc",
-            "Ghost"
-          ]
-        }
-      },
-      {
-        "id": 43,
-        "type": {
-          "def": {
-            "sequence": {
-              "type": 44
-            }
-          }
-        }
-      },
-      {
-        "id": 44,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "grade",
-                  "type": 5,
-                  "typeName": "u8"
+                  "index": 0,
+                  "name": "None"
                 },
                 {
-                  "name": "board",
-                  "type": 45,
-                  "typeName": "mtc::GhostBoard"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "mtc",
-            "GradeAndGhostBoard"
-          ]
-        }
-      },
-      {
-        "id": 45,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "type": 46,
-                  "typeName": "Vec<mtc::GhostBoardEmo>"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "mtc",
-            "GhostBoard"
-          ]
-        }
-      },
-      {
-        "id": 46,
-        "type": {
-          "def": {
-            "sequence": {
-              "type": 47
-            }
-          }
-        }
-      },
-      {
-        "id": 47,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "base_id",
-                  "type": 1,
-                  "typeName": "u16"
-                },
-                {
-                  "name": "attributes",
-                  "type": 48,
-                  "typeName": "emo::Attributes"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "mtc",
-            "GhostBoardEmo"
-          ]
-        }
-      },
-      {
-        "id": 48,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "attack",
-                  "type": 1,
-                  "typeName": "u16"
-                },
-                {
-                  "name": "health",
-                  "type": 1,
-                  "typeName": "u16"
-                },
-                {
-                  "name": "abilities",
-                  "type": 6,
-                  "typeName": "Vec<emo::ability::Ability>"
-                },
-                {
-                  "name": "is_triple",
-                  "type": 16,
-                  "typeName": "bool"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "Attributes"
-          ]
-        }
-      },
-      {
-        "id": 49,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "type": 41,
-                  "typeName": "[u8; 32]"
-                }
-              ]
-            }
-          },
-          "path": [
-            "ink_primitives",
-            "Key"
-          ]
-        }
-      },
-      {
-        "id": 50,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "offset_key",
-                  "type": 49,
-                  "typeName": "Key"
+                  "fields": [
+                    {
+                      "type": 41
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
                 }
               ]
             }
           },
           "params": [
             {
-              "name": "K",
-              "type": 40
-            },
-            {
-              "name": "V",
-              "type": 1
+              "name": "T",
+              "type": 41
             }
           ],
           "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
+            "Option"
           ]
         }
       },
       {
-        "id": 51,
+        "id": 81,
         "type": {
           "def": {
-            "composite": {
-              "fields": [
+            "variant": {
+              "variants": [
                 {
-                  "name": "offset_key",
-                  "type": 49,
-                  "typeName": "Key"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "K",
-              "type": 40
-            },
-            {
-              "name": "V",
-              "type": 52
-            }
-          ],
-          "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
-          ]
-        }
-      },
-      {
-        "id": 52,
-        "type": {
-          "def": {
-            "primitive": "u64"
-          }
-        }
-      },
-      {
-        "id": 53,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "offset_key",
-                  "type": 49,
-                  "typeName": "Key"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "K",
-              "type": 40
-            },
-            {
-              "name": "V",
-              "type": 54
-            }
-          ],
-          "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
-          ]
-        }
-      },
-      {
-        "id": 54,
-        "type": {
-          "def": {
-            "sequence": {
-              "type": 55
-            }
-          }
-        }
-      },
-      {
-        "id": 55,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "id",
-                  "type": 1,
-                  "typeName": "u16"
+                  "index": 0,
+                  "name": "None"
                 },
                 {
-                  "name": "base_id",
-                  "type": 1,
-                  "typeName": "u16"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "mtc",
-            "Emo"
-          ]
-        }
-      },
-      {
-        "id": 56,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "offset_key",
-                  "type": 49,
-                  "typeName": "Key"
+                  "fields": [
+                    {
+                      "type": 46
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
                 }
               ]
             }
           },
           "params": [
             {
-              "name": "K",
-              "type": 40
-            },
-            {
-              "name": "V",
-              "type": 5
+              "name": "T",
+              "type": 46
             }
           ],
           "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
+            "Option"
           ]
         }
       },
       {
-        "id": 57,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "offset_key",
-                  "type": 49,
-                  "typeName": "Key"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "K",
-              "type": 40
-            },
-            {
-              "name": "V",
-              "type": 58
-            }
-          ],
-          "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
-          ]
-        }
-      },
-      {
-        "id": 58,
-        "type": {
-          "def": {
-            "sequence": {
-              "type": 59
-            }
-          }
-        }
-      },
-      {
-        "id": 59,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "grade",
-                  "type": 5,
-                  "typeName": "u8"
-                },
-                {
-                  "name": "board",
-                  "type": 60,
-                  "typeName": "mtc::Board"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "mtc",
-            "GradeAndBoard"
-          ]
-        }
-      },
-      {
-        "id": 60,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "type": 61,
-                  "typeName": "Vec<mtc::BoardEmo>"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "mtc",
-            "Board"
-          ]
-        }
-      },
-      {
-        "id": 61,
-        "type": {
-          "def": {
-            "sequence": {
-              "type": 62
-            }
-          }
-        }
-      },
-      {
-        "id": 62,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "mtc_emo_ids",
-                  "type": 36,
-                  "typeName": "Vec<u16>"
-                },
-                {
-                  "name": "base_id",
-                  "type": 1,
-                  "typeName": "u16"
-                },
-                {
-                  "name": "attributes",
-                  "type": 48,
-                  "typeName": "emo::Attributes"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "mtc",
-            "BoardEmo"
-          ]
-        }
-      },
-      {
-        "id": 63,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "name": "offset_key",
-                  "type": 49,
-                  "typeName": "Key"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "K",
-              "type": 40
-            },
-            {
-              "name": "V",
-              "type": 64
-            }
-          ],
-          "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
-          ]
-        }
-      },
-      {
-        "id": 64,
+        "id": 82,
         "type": {
           "def": {
             "variant": {
@@ -3405,81 +2980,127 @@
         }
       },
       {
-        "id": 65,
+        "id": 83,
         "type": {
           "def": {
-            "composite": {
-              "fields": [
+            "variant": {
+              "variants": [
                 {
-                  "name": "offset_key",
-                  "type": 49,
-                  "typeName": "Key"
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 60
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
                 }
               ]
             }
           },
           "params": [
             {
-              "name": "K",
-              "type": 40
-            },
-            {
-              "name": "V",
-              "type": 38
+              "name": "T",
+              "type": 60
             }
           ],
           "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
+            "Option"
           ]
         }
       },
       {
-        "id": 66,
+        "id": 84,
         "type": {
           "def": {
-            "composite": {
-              "fields": [
+            "variant": {
+              "variants": [
                 {
-                  "name": "offset_key",
-                  "type": 49,
-                  "typeName": "Key"
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 62
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
                 }
               ]
             }
           },
           "params": [
             {
-              "name": "K",
-              "type": 40
-            },
-            {
-              "name": "V",
-              "type": 67
+              "name": "T",
+              "type": 62
             }
           ],
           "path": [
-            "ink_storage",
-            "lazy",
-            "mapping",
-            "Mapping"
+            "Option"
           ]
         }
       },
       {
-        "id": 67,
+        "id": 85,
         "type": {
           "def": {
-            "sequence": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 68
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
               "type": 68
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 86,
+        "type": {
+          "def": {
+            "array": {
+              "len": 6,
+              "type": 5
             }
           }
         }
       },
       {
-        "id": 68,
+        "id": 87,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 88
+            }
+          }
+        }
+      },
+      {
+        "id": 88,
         "type": {
           "def": {
             "variant": {
@@ -3487,24 +3108,48 @@
                 {
                   "fields": [
                     {
-                      "name": "health",
+                      "name": "mtc_emo_id",
                       "type": 5,
+                      "typeName": "u16"
+                    },
+                    {
+                      "name": "index",
+                      "type": 3,
                       "typeName": "u8"
                     }
                   ],
                   "index": 0,
-                  "name": "Active"
+                  "name": "Buy"
                 },
                 {
                   "fields": [
                     {
-                      "name": "final_turn",
-                      "type": 5,
+                      "name": "index",
+                      "type": 3,
                       "typeName": "u8"
                     }
                   ],
                   "index": 1,
-                  "name": "Retired"
+                  "name": "Sell"
+                },
+                {
+                  "fields": [
+                    {
+                      "name": "indexes",
+                      "type": 89,
+                      "typeName": "Vec<u8>"
+                    }
+                  ],
+                  "index": 2,
+                  "name": "Move"
+                },
+                {
+                  "index": 3,
+                  "name": "NextCatalogLine"
+                },
+                {
+                  "index": 4,
+                  "name": "Upgrade"
                 }
               ]
             }
@@ -3513,400 +3158,18 @@
             "common",
             "codec_types",
             "mtc",
-            "GhostState"
+            "shop",
+            "PlayerOperation"
           ]
         }
       },
       {
-        "id": 69,
+        "id": 89,
         "type": {
           "def": {
             "sequence": {
-              "type": 40
+              "type": 3
             }
-          }
-        }
-      },
-      {
-        "id": 70,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 71
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 71
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 71,
-        "type": {
-          "def": {
-            "composite": {
-              "fields": [
-                {
-                  "type": 0,
-                  "typeName": "BTreeMap<u16, emo::Base>"
-                }
-              ]
-            }
-          },
-          "path": [
-            "common",
-            "codec_types",
-            "emo",
-            "Bases"
-          ]
-        }
-      },
-      {
-        "id": 72,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 36
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 36
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 73,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 38
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 38
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 74,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 1
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 1
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 75,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 52
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 52
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 76,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 54
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 54
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 77,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 58
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 58
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 78,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 64
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 64
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 79,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 67
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 67
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 80,
-        "type": {
-          "def": {
-            "tuple": [
-              70,
-              72,
-              72,
-              74,
-              75,
-              76,
-              64,
-              77,
-              78,
-              73,
-              79,
-              64
-            ]
-          }
-        }
-      },
-      {
-        "id": 81,
-        "type": {
-          "def": {
-            "variant": {
-              "variants": [
-                {
-                  "index": 0,
-                  "name": "None"
-                },
-                {
-                  "fields": [
-                    {
-                      "type": 82
-                    }
-                  ],
-                  "index": 1,
-                  "name": "Some"
-                }
-              ]
-            }
-          },
-          "params": [
-            {
-              "name": "T",
-              "type": 82
-            }
-          ],
-          "path": [
-            "Option"
-          ]
-        }
-      },
-      {
-        "id": 82,
-        "type": {
-          "def": {
-            "tuple": [
-              1,
-              38
-            ]
           }
         }
       }
