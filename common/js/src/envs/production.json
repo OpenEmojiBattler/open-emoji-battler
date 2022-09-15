@@ -3,7 +3,7 @@
   "chainEndpoint": "wss://proto0.open-emoji-battler.community/",
   "contract": {
     "name": "Shiden Network",
-    "endpoint": "wss://shiden.api.onfinality.io/public-ws",
+    "endpoint": "wss://rpc.shiden.astar.network/",
     "gameAddress": "ZzTNHqvMncxcBJs9P2wQrTWoqGVTNumRtBBLZTekKnsWnS6"
   }
 }
