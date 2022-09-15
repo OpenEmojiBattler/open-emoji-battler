@@ -17,6 +17,7 @@ import { emoTyps, EmoTyp } from "~/misc/constants"
 import { EmoBases } from "./types"
 import { groupBy } from "~/misc/utils"
 import { battleAll, selectBattleGhostIndex } from "~/wasm"
+import { Connection } from "~/components/App/ConnectionProvider/tasks"
 
 import emoNames from "~/misc/emo/names.json"
 
@@ -198,12 +199,17 @@ export interface LeaderboardElement {
   address: string
 }
 
-export const translateLeaderboardCodec = (leaderboard: Vec<ITuple<[u16, AccountId]>>) =>
-  leaderboard
-    .toArray()
-    .map(
-      ([e, a], i): LeaderboardElement => ({ rank: i + 1, ep: e.toNumber(), address: a.toString() })
-    )
+export const translateLeaderboardCodec = (
+  leaderboard: Vec<ITuple<[u16, AccountId]>>,
+  connection: Connection
+) =>
+  leaderboard.toArray().map(
+    ([e, a], i): LeaderboardElement => ({
+      rank: i + 1,
+      ep: e.toNumber(),
+      address: connection.transformAddress(a.toString()),
+    })
+  )
 
 export const getPlayerFromLeaderboard = (leaderboard: LeaderboardElement[], address: string) => {
   const o = leaderboard.find((o) => o.address === address)

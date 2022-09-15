@@ -11,8 +11,6 @@ import { AccountsDropdown } from "~/components/common/AccountsDropdown"
 import { useAccount } from "~/components/App/ConnectionProvider/tasks"
 import { ExtensionAccount } from "~/misc/accountUtils"
 
-type BestEpAndRank = { bestEp: number; rank: number }
-
 export function Accounts(props: { ep: number; extensionAccounts: ExtensionAccount[] }) {
   const connection = useConnection()
   const playerAddress = useAccount().address
@@ -29,7 +27,7 @@ export function Accounts(props: { ep: number; extensionAccounts: ExtensionAccoun
       if (!isMounted) {
         return
       }
-      setLeaderboard(translateLeaderboardCodec(l))
+      setLeaderboard(translateLeaderboardCodec(l, connection))
     })
 
     return () => {

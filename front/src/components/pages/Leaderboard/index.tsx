@@ -52,7 +52,7 @@ function Table(props: { connection: Connection }) {
 
     props.connection.query.leaderboard().then((_leaders) => {
       if (isMounted) {
-        const leaders = translateLeaderboardCodec(_leaders)
+        const leaders = translateLeaderboardCodec(_leaders, props.connection)
         setLeaderboard(leaders)
         queryKusamaAddressNames(
           props.connection,
