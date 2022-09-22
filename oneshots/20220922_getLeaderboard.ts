@@ -3,7 +3,7 @@ import { encodeAddress } from "@polkadot/util-crypto"
 
 import { getEnv, connect, getGameContract, queryContract } from "common"
 
-const contractEnv = getEnv("production").contract
+const contractEnv = getEnv(process.argv[2]).contract
 
 const main = async () => {
   const api = await connect(contractEnv.endpoint, false)
