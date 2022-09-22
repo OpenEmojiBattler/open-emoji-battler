@@ -9,15 +9,22 @@ const main = async () => {
   const api = await connect(contractEnv.endpoint, false)
 
   const contract = getGameContract(api, contractEnv.gameAddress)
-  const leaderboardCodec = (await queryContract(contract, "getLeaderboard")) as unknown as any[]
+  const [header, leaderboardCodec] = await Promise.all([
+    api.rpc.chain.getHeader(),
+    queryContract(contract, "getLeaderboard"),
+  ])
 
-  const leaderboard = leaderboardCodec.map(([ep, account], i) => ({
+  const estimateBlockNumber = header.number.unwrap().toNumber()
+  const leaderboard = (leaderboardCodec as unknown as any[]).map(([ep, account], i) => ({
     rank: i + 1,
     ep: ep.toNumber(),
     address: encodeAddress(account.toString(), 5),
   }))
 
-  writeFileSync("./20220922_getLeaderboard.json", `${JSON.stringify(leaderboard, null, 2)}\n`)
+  writeFileSync(
+    "./20220922_getLeaderboard.json",
+    `${JSON.stringify({ block: estimateBlockNumber, leaderboard }, null, 2)}\n`
+  )
 }
 
 main()
