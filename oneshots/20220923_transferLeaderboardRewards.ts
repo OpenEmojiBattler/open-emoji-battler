@@ -1,7 +1,7 @@
 import { readFileSync } from "fs"
 
-// import { getEnv, connect, getGameContract } from "common"
-// import { getKeyringPair } from "common/src/scriptUtils"
+import { getEnv, connect } from "common"
+import { getKeyringPair } from "common/src/scriptUtils"
 
 const SDN = 1_000_000_000_000_000_000n
 
@@ -22,9 +22,34 @@ const beneficiaries = leaderboard.map((l) => {
 })
 
 const main = async () => {
-  console.log(beneficiaries)
-  // const sender = await getKeyringPair(process.argv[3])
-  // const api = await connect(getEnv(process.argv[2]).contract.endpoint, false)
+  const totalReward = beneficiaries.reduce((a, b) => a + b[1], 0n)
+
+  if (process.argv[2] === "dryrun") {
+    console.log(totalReward)
+    console.log(beneficiaries.map(([a, r]) => `${a}:${r}`))
+    return
+  }
+  if (process.argv[2] !== "wetrun") {
+    throw new Error()
+  }
+
+  const api = await connect(getEnv(process.argv[3]).contract.endpoint, false)
+  const sender = await getKeyringPair(process.argv[4])
+
+  const {
+    data: { free },
+  } = await api.query.system.account(sender.address)
+  const senderBalance = free.toBigInt()
+
+  if (senderBalance < totalReward || senderBalance > totalReward * 2n) {
+    throw new Error(`invalid sender balance: ${senderBalance}`)
+  }
+
+  const txHash = await api.tx.utility
+    .batchAll(beneficiaries.map(([a, r]) => api.tx.balances.transfer(a, r)))
+    .signAndSend(sender)
+
+  console.log(txHash.toString())
 }
 
 main()
