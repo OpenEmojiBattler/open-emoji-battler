@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs"
 import { encodeAddress } from "@polkadot/util-crypto"
 
-import { getEnv, connect, getGameContract, queryContract } from "common"
+import { getEnv, connect, getGameContract, queryContract, queryAddressNames } from "common"
 
 const contractEnv = getEnv(process.argv[2]).contract
 
@@ -21,9 +21,22 @@ const main = async () => {
     address: encodeAddress(account.toString(), 5),
   }))
 
+  const names = await queryAddressNames(
+    leaderboard.map((l) => l.address),
+    (a: string) => encodeAddress(a, 5)
+  )
+  const leaderboardWithNames = leaderboard.map((l) => ({
+    ...l,
+    name: names.get(l.address) || null,
+  }))
+
   writeFileSync(
     "./20220922_getLeaderboard.json",
-    `${JSON.stringify({ block: estimateBlockNumber, leaderboard }, null, 2)}\n`
+    `${JSON.stringify(
+      { block: estimateBlockNumber, leaderboard: leaderboardWithNames },
+      null,
+      2
+    )}\n`
   )
 }
 
