@@ -1,0 +1,402 @@
+[
+  {
+    "rank": 1,
+    "reward": 600
+  },
+  {
+    "rank": 2,
+    "reward": 564
+  },
+  {
+    "rank": 3,
+    "reward": 530
+  },
+  {
+    "rank": 4,
+    "reward": 499
+  },
+  {
+    "rank": 5,
+    "reward": 469
+  },
+  {
+    "rank": 6,
+    "reward": 441
+  },
+  {
+    "rank": 7,
+    "reward": 414
+  },
+  {
+    "rank": 8,
+    "reward": 390
+  },
+  {
+    "rank": 9,
+    "reward": 366
+  },
+  {
+    "rank": 10,
+    "reward": 344
+  },
+  {
+    "rank": 11,
+    "reward": 324
+  },
+  {
+    "rank": 12,
+    "reward": 304
+  },
+  {
+    "rank": 13,
+    "reward": 286
+  },
+  {
+    "rank": 14,
+    "reward": 269
+  },
+  {
+    "rank": 15,
+    "reward": 253
+  },
+  {
+    "rank": 16,
+    "reward": 238
+  },
+  {
+    "rank": 17,
+    "reward": 224
+  },
+  {
+    "rank": 18,
+    "reward": 210
+  },
+  {
+    "rank": 19,
+    "reward": 198
+  },
+  {
+    "rank": 20,
+    "reward": 186
+  },
+  {
+    "rank": 21,
+    "reward": 175
+  },
+  {
+    "rank": 22,
+    "reward": 164
+  },
+  {
+    "rank": 23,
+    "reward": 155
+  },
+  {
+    "rank": 24,
+    "reward": 145
+  },
+  {
+    "rank": 25,
+    "reward": 137
+  },
+  {
+    "rank": 26,
+    "reward": 129
+  },
+  {
+    "rank": 27,
+    "reward": 121
+  },
+  {
+    "rank": 28,
+    "reward": 114
+  },
+  {
+    "rank": 29,
+    "reward": 107
+  },
+  {
+    "rank": 30,
+    "reward": 101
+  },
+  {
+    "rank": 31,
+    "reward": 95
+  },
+  {
+    "rank": 32,
+    "reward": 89
+  },
+  {
+    "rank": 33,
+    "reward": 84
+  },
+  {
+    "rank": 34,
+    "reward": 79
+  },
+  {
+    "rank": 35,
+    "reward": 74
+  },
+  {
+    "rank": 36,
+    "reward": 70
+  },
+  {
+    "rank": 37,
+    "reward": 66
+  },
+  {
+    "rank": 38,
+    "reward": 62
+  },
+  {
+    "rank": 39,
+    "reward": 58
+  },
+  {
+    "rank": 40,
+    "reward": 55
+  },
+  {
+    "rank": 41,
+    "reward": 52
+  },
+  {
+    "rank": 42,
+    "reward": 49
+  },
+  {
+    "rank": 43,
+    "reward": 46
+  },
+  {
+    "rank": 44,
+    "reward": 43
+  },
+  {
+    "rank": 45,
+    "reward": 41
+  },
+  {
+    "rank": 46,
+    "reward": 38
+  },
+  {
+    "rank": 47,
+    "reward": 36
+  },
+  {
+    "rank": 48,
+    "reward": 34
+  },
+  {
+    "rank": 49,
+    "reward": 32
+  },
+  {
+    "rank": 50,
+    "reward": 30
+  },
+  {
+    "rank": 51,
+    "reward": 28
+  },
+  {
+    "rank": 52,
+    "reward": 27
+  },
+  {
+    "rank": 53,
+    "reward": 25
+  },
+  {
+    "rank": 54,
+    "reward": 24
+  },
+  {
+    "rank": 55,
+    "reward": 22
+  },
+  {
+    "rank": 56,
+    "reward": 21
+  },
+  {
+    "rank": 57,
+    "reward": 20
+  },
+  {
+    "rank": 58,
+    "reward": 19
+  },
+  {
+    "rank": 59,
+    "reward": 18
+  },
+  {
+    "rank": 60,
+    "reward": 17
+  },
+  {
+    "rank": 61,
+    "reward": 16
+  },
+  {
+    "rank": 62,
+    "reward": 15
+  },
+  {
+    "rank": 63,
+    "reward": 14
+  },
+  {
+    "rank": 64,
+    "reward": 13
+  },
+  {
+    "rank": 65,
+    "reward": 13
+  },
+  {
+    "rank": 66,
+    "reward": 12
+  },
+  {
+    "rank": 67,
+    "reward": 11
+  },
+  {
+    "rank": 68,
+    "reward": 11
+  },
+  {
+    "rank": 69,
+    "reward": 10
+  },
+  {
+    "rank": 70,
+    "reward": 10
+  },
+  {
+    "rank": 71,
+    "reward": 9
+  },
+  {
+    "rank": 72,
+    "reward": 9
+  },
+  {
+    "rank": 73,
+    "reward": 8
+  },
+  {
+    "rank": 74,
+    "reward": 8
+  },
+  {
+    "rank": 75,
+    "reward": 7
+  },
+  {
+    "rank": 76,
+    "reward": 7
+  },
+  {
+    "rank": 77,
+    "reward": 7
+  },
+  {
+    "rank": 78,
+    "reward": 6
+  },
+  {
+    "rank": 79,
+    "reward": 6
+  },
+  {
+    "rank": 80,
+    "reward": 6
+  },
+  {
+    "rank": 81,
+    "reward": 5
+  },
+  {
+    "rank": 82,
+    "reward": 5
+  },
+  {
+    "rank": 83,
+    "reward": 5
+  },
+  {
+    "rank": 84,
+    "reward": 5
+  },
+  {
+    "rank": 85,
+    "reward": 5
+  },
+  {
+    "rank": 86,
+    "reward": 4
+  },
+  {
+    "rank": 87,
+    "reward": 4
+  },
+  {
+    "rank": 88,
+    "reward": 4
+  },
+  {
+    "rank": 89,
+    "reward": 4
+  },
+  {
+    "rank": 90,
+    "reward": 4
+  },
+  {
+    "rank": 91,
+    "reward": 3
+  },
+  {
+    "rank": 92,
+    "reward": 3
+  },
+  {
+    "rank": 93,
+    "reward": 3
+  },
+  {
+    "rank": 94,
+    "reward": 3
+  },
+  {
+    "rank": 95,
+    "reward": 3
+  },
+  {
+    "rank": 96,
+    "reward": 3
+  },
+  {
+    "rank": 97,
+    "reward": 3
+  },
+  {
+    "rank": 98,
+    "reward": 3
+  },
+  {
+    "rank": 99,
+    "reward": 3
+  },
+  {
+    "rank": 100,
+    "reward": 3
+  }
+]
