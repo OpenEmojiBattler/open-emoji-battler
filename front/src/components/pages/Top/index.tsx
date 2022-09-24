@@ -39,6 +39,10 @@ export function Top() {
                 <ExternalLink href="https://github.com/OpenEmojiBattler/open-emoji-battler">
                   GitHub
                 </ExternalLink>
+                <span className={"mx-3"}>•</span>
+                <ExternalLink href="https://news.blockchaingame.jp/1895">
+                  Japanese 遊び方 (BlockchainGame Info)
+                </ExternalLink>
               </div>
             </div>
             <div style={{ width: "550px" }}>
@@ -47,14 +51,8 @@ export function Top() {
           </div>
         </div>
       </section>
-      <section style={{ padding: "3rem 1.5rem 0rem" }}>
+      <section style={{ padding: "4rem 1.5rem 0rem" }}>
         <div className={"top-container"}>
-          <div className="content" style={{ textAlign: "center" }}>
-            The first event round is happening now!{" "}
-            <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/63">
-              Know more on this post.
-            </ExternalLink>
-          </div>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
             <div className={"buttons"}>
               <InternalLink className={"button is-medium is-strong mx-3"} to={"/match"}>
@@ -103,15 +101,6 @@ export function Top() {
               <li>Graphics/UI/UX upgrade</li>
               <li>Growth</li>
               <li>and more...</li>
-            </ul>
-          </div>
-          <h1 className={"title"}>Partnerships</h1>
-          <div className={"content"}>
-            <ul>
-              <li>
-                Media partner (Japan):{" "}
-                <ExternalLink href="https://blockchaingame.jp/">BlockchainGame Info</ExternalLink>
-              </li>
             </ul>
           </div>
         </div>
