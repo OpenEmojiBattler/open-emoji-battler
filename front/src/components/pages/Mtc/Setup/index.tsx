@@ -34,22 +34,21 @@ export function Setup(props: {
             ) : (
               <div className={"level-item"}>
                 <div>
-                  <strong>Event Round</strong> (
-                  <InternalLink to="/leaderboard">Leaderboard</InternalLink>)
+                  See the <InternalLink to="/leaderboard">leaderboard</InternalLink>.
                 </div>
               </div>
             )}
           </div>
           <div className={"level-right"}>
             <div className={"level-item"}>
-              <div style={{ width: "270px", marginRight: "8px" }}>
+              <div style={{ marginRight: "8px" }}>
                 <small>
                   {account.kind === "chain" ? (
                     <>No fee is required. The popup will show the PoW solution on the tip field.</>
                   ) : (
                     <>
-                      Make sure that your account has a small amount of SDN to cover transaction
-                      fees.
+                      Your account needs a small amount of SDN to cover transaction fees.
+                      <br />1 SDN is enough for dozens of matches.
                     </>
                   )}
                 </small>
