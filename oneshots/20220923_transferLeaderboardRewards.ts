@@ -3,6 +3,8 @@ import { readFileSync } from "fs"
 import { getEnv, connect } from "common"
 import { getKeyringPair } from "common/src/scriptUtils"
 
+// result: https://shiden.subscan.io/extrinsic/2391698-2
+
 const SDN = 1_000_000_000_000_000_000n
 
 const leaderboard: { rank: number; address: string }[] = JSON.parse(
