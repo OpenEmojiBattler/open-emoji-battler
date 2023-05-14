@@ -76,7 +76,7 @@ export const query = async (
   )
   if (result.isOk) {
     console.log(
-      `query success: ${fnName} (gasRequired: ${gasRequired.toBigInt()}, storageDeposit: ${storageDeposit.toHuman()}), returned: ${
+      `query success: ${fnName} (weight: (refTime: ${gasRequired.refTime.toBigInt()}, proofSize: ${gasRequired.proofSize.toBigInt()}), storageDeposit: ${storageDeposit.toHuman()}), returned: ${
         output ? output.toHuman() : ""
       }`
     )
