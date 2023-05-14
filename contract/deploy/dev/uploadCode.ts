@@ -9,7 +9,11 @@ const main = async () => {
   const api = await connect(endpoint, false)
   const code = newCode(api, "game", __dirname, "../../game/target/ink/game.contract")
 
-  await tx(api, (t) => t.contracts.uploadCode(compactAddLength(code.code), null), keyringPair)
+  await tx(
+    api,
+    (t) => t.contracts.uploadCode(compactAddLength(code.code), null, "Enforced"),
+    keyringPair
+  )
 }
 
 main()

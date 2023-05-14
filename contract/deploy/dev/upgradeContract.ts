@@ -17,7 +17,8 @@ const main = async () => {
         compactAddLength(
           newCode(api, "game", __dirname, "../../game/target/ink/game.contract").code
         ),
-        null
+        null,
+        "Enforced"
       ),
     keyringPair
   )
