@@ -7,8 +7,8 @@
   "main": "./src/index.ts",
   "scripts": {
     "build": "yarn generate:defs && yarn generate:meta",
-    "generate:defs": "ts-node node_modules/.bin/polkadot-types-from-defs --package '.' --input './src/interfaces'",
-    "generate:meta": "ts-node node_modules/.bin/polkadot-types-from-chain --package '.' --endpoint 'ws://127.0.0.1:9944' --output './src/interfaces'",
+    "generate:defs": "ts-node --project './tsconfig.base.json' --esm node_modules/.bin/polkadot-types-from-defs --package '.' --input './src/interfaces'",
+    "generate:meta": "ts-node --project './tsconfig.base.json' --esm node_modules/.bin/polkadot-types-from-chain --package '.' --endpoint 'ws://127.0.0.1:9988' --output './src/interfaces'",
     "lint": "prettier --write '{src,scripts}/**/*'",
     "check-ts": "tsc -p . --noEmit"
   },

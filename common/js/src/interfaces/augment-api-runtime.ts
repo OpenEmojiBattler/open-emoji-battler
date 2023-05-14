@@ -7,17 +7,16 @@ import '@polkadot/api-base/types/calls';
 
 import type { ApiTypes, AugmentedCall, DecoratedCallBase } from '@polkadot/api-base/types';
 import type { Bytes, Null, Option, Vec, u32 } from '@polkadot/types-codec';
-import type { AnyNumber, ITuple } from '@polkadot/types-codec/types';
-import type { OpaqueKeyOwnershipProof } from '@polkadot/types/interfaces/babe';
+import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
 import type { CheckInherentsResult, InherentData } from '@polkadot/types/interfaces/blockbuilder';
-import type { AuthorityId } from '@polkadot/types/interfaces/consensus';
+import type { BlockHash } from '@polkadot/types/interfaces/chain';
+import type { CodeSource, CodeUploadResult, ContractExecResult, ContractInstantiateResult } from '@polkadot/types/interfaces/contracts';
 import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
-import type { AuthorityList, GrandpaEquivocationProof, SetId } from '@polkadot/types/interfaces/grandpa';
 import type { OpaqueMetadata } from '@polkadot/types/interfaces/metadata';
 import type { FeeDetails, RuntimeDispatchInfo } from '@polkadot/types/interfaces/payment';
-import type { AccountId, Block, Hash, Header, Index, KeyTypeId, SlotDuration } from '@polkadot/types/interfaces/runtime';
-import type { RuntimeVersionPre4 } from '@polkadot/types/interfaces/state';
-import type { ApplyExtrinsicResultPre6 } from '@polkadot/types/interfaces/system';
+import type { AccountId, Balance, Block, Call, Header, Index, KeyTypeId, Weight, WeightV2 } from '@polkadot/types/interfaces/runtime';
+import type { RuntimeVersion } from '@polkadot/types/interfaces/state';
+import type { ApplyExtrinsicResult } from '@polkadot/types/interfaces/system';
 import type { TransactionSource, TransactionValidity } from '@polkadot/types/interfaces/txqueue';
 import type { IExtrinsic, Observable } from '@polkadot/types/types';
 
@@ -37,27 +36,12 @@ declare module '@polkadot/api-base/types/calls' {
        **/
       [key: string]: DecoratedCallBase<ApiType>;
     };
-    /** 0xdd718d5cc53262d4/1 */
-    auraApi: {
-      /**
-       * Return the current set of authorities.
-       **/
-      authorities: AugmentedCall<ApiType, () => Observable<Vec<AuthorityId>>>;
-      /**
-       * Returns the slot duration for Aura.
-       **/
-      slotDuration: AugmentedCall<ApiType, () => Observable<SlotDuration>>;
-      /**
-       * Generic call
-       **/
-      [key: string]: DecoratedCallBase<ApiType>;
-    };
-    /** 0x40fe3ad401f8959a/4 */
+    /** 0x40fe3ad401f8959a/6 */
     blockBuilder: {
       /**
        * Apply the given extrinsic.
        **/
-      applyExtrinsic: AugmentedCall<ApiType, (extrinsic: Extrinsic | IExtrinsic | string | Uint8Array) => Observable<ApplyExtrinsicResultPre6>>;
+      applyExtrinsic: AugmentedCall<ApiType, (extrinsic: Extrinsic | IExtrinsic | string | Uint8Array) => Observable<ApplyExtrinsicResult>>;
       /**
        * Check that the inherents are valid.
        **/
@@ -71,15 +55,34 @@ declare module '@polkadot/api-base/types/calls' {
        **/
       inherentExtrinsics: AugmentedCall<ApiType, (inherent: InherentData | { data?: any } | string | Uint8Array) => Observable<Vec<Extrinsic>>>;
       /**
-       * Generate a random seed.
+       * Generic call
        **/
-      randomSeed: AugmentedCall<ApiType, () => Observable<Hash>>;
+      [key: string]: DecoratedCallBase<ApiType>;
+    };
+    /** 0x68b66ba122c93fa7/2 */
+    contractsApi: {
+      /**
+       * Perform a call from a specified account to a given contract.
+       **/
+      call: AugmentedCall<ApiType, (origin: AccountId | string | Uint8Array, dest: AccountId | string | Uint8Array, value: Balance | AnyNumber | Uint8Array, gasLimit: Option<WeightV2> | null | Uint8Array | WeightV2 | { refTime?: any; proofSize?: any } | string, storageDepositLimit: Option<Balance> | null | Uint8Array | Balance | AnyNumber, inputData: Bytes | string | Uint8Array) => Observable<ContractExecResult>>;
+      /**
+       * Query a given storage key in a given contract.
+       **/
+      getStorage: AugmentedCall<ApiType, (address: AccountId | string | Uint8Array, key: Bytes | string | Uint8Array) => Observable<Option<Bytes>>>;
+      /**
+       * Instantiate a new contract.
+       **/
+      instantiate: AugmentedCall<ApiType, (origin: AccountId | string | Uint8Array, value: Balance | AnyNumber | Uint8Array, gasLimit: Option<WeightV2> | null | Uint8Array | WeightV2 | { refTime?: any; proofSize?: any } | string, storageDepositLimit: Option<Balance> | null | Uint8Array | Balance | AnyNumber, code: CodeSource | { Upload: any } | { Existing: any } | string | Uint8Array, data: Bytes | string | Uint8Array, salt: Bytes | string | Uint8Array) => Observable<ContractInstantiateResult>>;
+      /**
+       * Upload new code without instantiating a contract from it.
+       **/
+      uploadCode: AugmentedCall<ApiType, (origin: AccountId | string | Uint8Array, code: Bytes | string | Uint8Array, storageDepositLimit: Option<Balance> | null | Uint8Array | Balance | AnyNumber) => Observable<CodeUploadResult>>;
       /**
        * Generic call
        **/
       [key: string]: DecoratedCallBase<ApiType>;
     };
-    /** 0xdf6acb689907609b/3 */
+    /** 0xdf6acb689907609b/4 */
     core: {
       /**
        * Execute the given block.
@@ -92,37 +95,26 @@ declare module '@polkadot/api-base/types/calls' {
       /**
        * Returns the version of the runtime.
        **/
-      version: AugmentedCall<ApiType, () => Observable<RuntimeVersionPre4>>;
+      version: AugmentedCall<ApiType, () => Observable<RuntimeVersion>>;
       /**
        * Generic call
        **/
       [key: string]: DecoratedCallBase<ApiType>;
     };
-    /** 0xed99c5acb25eedf5/2 */
-    grandpaApi: {
-      /**
-       * Generates a proof of key ownership for the given authority in the given set.
-       **/
-      generateKeyOwnershipProof: AugmentedCall<ApiType, (setId: SetId | AnyNumber | Uint8Array, authorityId: AuthorityId | string | Uint8Array) => Observable<Option<OpaqueKeyOwnershipProof>>>;
-      /**
-       * Get the current GRANDPA authorities and weights. This should not change except for when changes are scheduled and the corresponding delay has passed.
-       **/
-      grandpaAuthorities: AugmentedCall<ApiType, () => Observable<AuthorityList>>;
-      /**
-       * Submits an unsigned extrinsic to report an equivocation.
-       **/
-      submitReportEquivocationUnsignedExtrinsic: AugmentedCall<ApiType, (equivocationProof: GrandpaEquivocationProof | { setId?: any; equivocation?: any } | string | Uint8Array, keyOwnerProof: OpaqueKeyOwnershipProof | string | Uint8Array) => Observable<Option<Null>>>;
-      /**
-       * Generic call
-       **/
-      [key: string]: DecoratedCallBase<ApiType>;
-    };
-    /** 0x37e397fc7c91f5e4/1 */
+    /** 0x37e397fc7c91f5e4/2 */
     metadata: {
       /**
        * Returns the metadata of a runtime
        **/
       metadata: AugmentedCall<ApiType, () => Observable<OpaqueMetadata>>;
+      /**
+       * Returns the metadata at a given version.
+       **/
+      metadataAtVersion: AugmentedCall<ApiType, (version: u32 | AnyNumber | Uint8Array) => Observable<Option<OpaqueMetadata>>>;
+      /**
+       * Returns the supported metadata versions.
+       **/
+      metadataVersions: AugmentedCall<ApiType, () => Observable<Vec<u32>>>;
       /**
        * Generic call
        **/
@@ -154,18 +146,18 @@ declare module '@polkadot/api-base/types/calls' {
        **/
       [key: string]: DecoratedCallBase<ApiType>;
     };
-    /** 0xd2bc9897eed08f15/2 */
+    /** 0xd2bc9897eed08f15/3 */
     taggedTransactionQueue: {
       /**
        * Validate the transaction.
        **/
-      validateTransaction: AugmentedCall<ApiType, (source: TransactionSource | 'InBlock' | 'Local' | 'External' | number | Uint8Array, tx: Extrinsic | IExtrinsic | string | Uint8Array) => Observable<TransactionValidity>>;
+      validateTransaction: AugmentedCall<ApiType, (source: TransactionSource | 'InBlock' | 'Local' | 'External' | number | Uint8Array, tx: Extrinsic | IExtrinsic | string | Uint8Array, blockHash: BlockHash | string | Uint8Array) => Observable<TransactionValidity>>;
       /**
        * Generic call
        **/
       [key: string]: DecoratedCallBase<ApiType>;
     };
-    /** 0x37c8bb1350a9a2a8/1 */
+    /** 0x37c8bb1350a9a2a8/4 */
     transactionPaymentApi: {
       /**
        * The transaction fee details
@@ -175,6 +167,37 @@ declare module '@polkadot/api-base/types/calls' {
        * The transaction info
        **/
       queryInfo: AugmentedCall<ApiType, (uxt: Extrinsic | IExtrinsic | string | Uint8Array, len: u32 | AnyNumber | Uint8Array) => Observable<RuntimeDispatchInfo>>;
+      /**
+       * Query the output of the current LengthToFee given some input
+       **/
+      queryLengthToFee: AugmentedCall<ApiType, (length: u32 | AnyNumber | Uint8Array) => Observable<Balance>>;
+      /**
+       * Query the output of the current WeightToFee given some input
+       **/
+      queryWeightToFee: AugmentedCall<ApiType, (weight: Weight | { refTime?: any; proofSize?: any } | string | Uint8Array) => Observable<Balance>>;
+      /**
+       * Generic call
+       **/
+      [key: string]: DecoratedCallBase<ApiType>;
+    };
+    /** 0xf3ff14d5ab527059/3 */
+    transactionPaymentCallApi: {
+      /**
+       * The call fee details
+       **/
+      queryCallFeeDetails: AugmentedCall<ApiType, (call: Call | IMethod | string | Uint8Array, len: u32 | AnyNumber | Uint8Array) => Observable<FeeDetails>>;
+      /**
+       * The call info
+       **/
+      queryCallInfo: AugmentedCall<ApiType, (call: Call | IMethod | string | Uint8Array, len: u32 | AnyNumber | Uint8Array) => Observable<RuntimeDispatchInfo>>;
+      /**
+       * Query the output of the current LengthToFee given some input
+       **/
+      queryLengthToFee: AugmentedCall<ApiType, (length: u32 | AnyNumber | Uint8Array) => Observable<Balance>>;
+      /**
+       * Query the output of the current WeightToFee given some input
+       **/
+      queryWeightToFee: AugmentedCall<ApiType, (weight: Weight | { refTime?: any; proofSize?: any } | string | Uint8Array) => Observable<Balance>>;
       /**
        * Generic call
        **/
