@@ -1,5 +1,6 @@
-import "./interfaces/augment-api"
-import "./interfaces/augment-types"
+import "./interfaces/augment-api.js"
+import "./interfaces/augment-types.js"
+import "./interfaces/types-lookup.js"
 
 export * from "./api"
 export * from "./pow"
