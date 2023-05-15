@@ -9,7 +9,7 @@ export const routeIds = [
   "/emo_ability_builder",
   "/not_found",
 ] as const
-export type RouteId = typeof routeIds[number]
+export type RouteId = (typeof routeIds)[number]
 export interface Route {
   id: RouteId
   params: Array<string>
@@ -23,10 +23,10 @@ export const initialEp = 300
 export const mulliganCount = 2
 
 export const emoTyps = ["Food", "Nature", "Human", "Object"] as const
-export type EmoTyp = typeof emoTyps[number]
+export type EmoTyp = (typeof emoTyps)[number]
 
 export const emoTypsWithAll = ["All", "Food", "Nature", "Human", "Object"] as const
-export type EmoTypWithAll = typeof emoTypsWithAll[number]
+export type EmoTypWithAll = (typeof emoTypsWithAll)[number]
 
 export const shieldText = "▣"
 export const attractiveText = "✪"
@@ -34,4 +34,4 @@ export const attractiveText = "✪"
 export const zeroAddress = "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"
 
 export const connectionKind = ["chain", "contract"] as const
-export type ConnectionKind = typeof connectionKind[number]
+export type ConnectionKind = (typeof connectionKind)[number]

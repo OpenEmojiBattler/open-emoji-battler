@@ -7,7 +7,7 @@ import { AllEmos } from "./AllEmos"
 import { AvailableEmosByGrades } from "./AvailableEmosByGrades"
 
 const tabs = ["All EMOs", "Available EMOs By Grades"] as const
-type Tab = typeof tabs[number]
+type Tab = (typeof tabs)[number]
 
 export function EmoBases() {
   const connection = React.useContext(ConnectionContext)

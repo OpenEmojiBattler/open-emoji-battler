@@ -5,7 +5,7 @@ import { tx, createType, buildKeyringPair, type emo_Bases } from "common"
 import type { Connection } from "../tasks"
 import { buildEmoBases } from "~/misc/mtcUtils"
 import { getOebEnv } from "~/misc/env"
-import type { Option, Vec, u16, u64 } from '@polkadot/types-codec'
+import type { Option, Vec, u16, u64 } from "@polkadot/types-codec"
 
 const endpointStorageKey = "endpointV5"
 
@@ -36,8 +36,10 @@ export const buildConnection = async (api: ApiPromise): Promise<Connection> => {
 }
 
 const buildConnectionQuery = (api: ApiPromise): Connection["query"] => ({
-  deckFixedEmoBaseIds: async () => ((await api.query.game.deckFixedEmoBaseIds()) as Option<Vec<u16>>).unwrap(),
-  deckBuiltEmoBaseIds: async () => ((await api.query.game.deckBuiltEmoBaseIds()) as Option<Vec<u16>>).unwrap(),
+  deckFixedEmoBaseIds: async () =>
+    ((await api.query.game.deckFixedEmoBaseIds()) as Option<Vec<u16>>).unwrap(),
+  deckBuiltEmoBaseIds: async () =>
+    ((await api.query.game.deckBuiltEmoBaseIds()) as Option<Vec<u16>>).unwrap(),
   matchmakingGhostsInfo: () => {
     throw new Error("unimplemented")
   },

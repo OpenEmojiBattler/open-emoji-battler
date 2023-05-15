@@ -2,9 +2,9 @@ import { web3Accounts, web3Enable } from "@polkadot/extension-dapp"
 import { mnemonicGenerate } from "@polkadot/util-crypto"
 import { web3FromAddress } from "@polkadot/extension-dapp"
 import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types"
-import type { Option } from '@polkadot/types-codec';
-import type { ITuple } from '@polkadot/types-codec/types';
-import type { BlockNumber, Index} from '@polkadot/types/interfaces/runtime'
+import type { Option } from "@polkadot/types-codec"
+import type { ITuple } from "@polkadot/types-codec/types"
+import type { BlockNumber, Index } from "@polkadot/types/interfaces/runtime"
 
 import { buildKeyringPair } from "common"
 
@@ -88,7 +88,9 @@ export const generateAccount = async (
   if (connection.kind === "chain") {
     const accountData = (await connection
       .api()
-      .query.transactionPaymentPow.accountData(playerAddress)) as Option<ITuple<[BlockNumber, Index]>>
+      .query.transactionPaymentPow.accountData(playerAddress)) as Option<
+      ITuple<[BlockNumber, Index]>
+    >
     const playerPowCount = accountData.isSome ? accountData.unwrap()[1].toNumber() : 0
 
     const playerAccount: AccountChainPlayer = {

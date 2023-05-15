@@ -27,7 +27,7 @@ self.onmessage = async (evt) => {
 }
 
 declare interface WorkerLoaderWorker extends Worker {
-  new(): Worker
+  new (): Worker
 }
 declare var self: WorkerLoaderWorker
 export default self
