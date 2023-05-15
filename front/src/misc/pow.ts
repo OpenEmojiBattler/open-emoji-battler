@@ -3,7 +3,7 @@ import { decodeAddress } from "@polkadot/util-crypto"
 
 import { getPowWasmBytes, getPowSolutionBNFromBytes } from "common"
 
-import PowWorker from "./pow.worker.ts"
+import PowWorker from "./pow.worker"
 
 const wasmBytes = getPowWasmBytes()
 

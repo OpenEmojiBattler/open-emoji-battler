@@ -1,10 +1,11 @@
 import type { ApiPromise } from "@polkadot/api"
 import { encodeAddress } from "@polkadot/util-crypto"
 
-import { tx, createType, buildKeyringPair } from "common"
+import { tx, createType, buildKeyringPair, type emo_Bases } from "common"
 import type { Connection } from "../tasks"
 import { buildEmoBases } from "~/misc/mtcUtils"
 import { getOebEnv } from "~/misc/env"
+import type { Option, Vec, u16, u64 } from '@polkadot/types-codec'
 
 const endpointStorageKey = "endpointV5"
 
@@ -21,7 +22,7 @@ export const setEndpoint = (endpoint: string) => {
 }
 
 export const buildConnection = async (api: ApiPromise): Promise<Connection> => {
-  const codec = (await api.query.game.emoBases()).unwrap()
+  const codec = ((await api.query.game.emoBases()) as Option<emo_Bases>).unwrap()
   const emoBases = buildEmoBases(codec)
 
   return {
@@ -35,8 +36,8 @@ export const buildConnection = async (api: ApiPromise): Promise<Connection> => {
 }
 
 const buildConnectionQuery = (api: ApiPromise): Connection["query"] => ({
-  deckFixedEmoBaseIds: async () => (await api.query.game.deckFixedEmoBaseIds()).unwrap(),
-  deckBuiltEmoBaseIds: async () => (await api.query.game.deckBuiltEmoBaseIds()).unwrap(),
+  deckFixedEmoBaseIds: async () => ((await api.query.game.deckFixedEmoBaseIds()) as Option<Vec<u16>>).unwrap(),
+  deckBuiltEmoBaseIds: async () => ((await api.query.game.deckBuiltEmoBaseIds()) as Option<Vec<u16>>).unwrap(),
   matchmakingGhostsInfo: () => {
     throw new Error("unimplemented")
   },
@@ -46,8 +47,8 @@ const buildConnectionQuery = (api: ApiPromise): Connection["query"] => ({
   leaderboard: () => {
     throw new Error("unimplemented")
   },
-  playerEp: (address) => api.query.game.playerEp(address),
-  playerSeed: (address) => api.query.game.playerSeed(address),
+  playerEp: (address) => api.query.game.playerEp(address) as Promise<Option<u16>>,
+  playerSeed: (address) => api.query.game.playerSeed(address) as Promise<Option<u64>>,
   playerMtcImmutable: (_address) => {
     throw new Error("unimplemented")
   },

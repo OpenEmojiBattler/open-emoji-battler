@@ -1,7 +1,5 @@
 import { solvePowByBytes } from "common"
 
-declare var self: Worker
-
 self.onerror = (evt) => {
   self.postMessage({
     type: "error",
@@ -27,3 +25,9 @@ self.onmessage = async (evt) => {
     })
   }
 }
+
+declare interface WorkerLoaderWorker extends Worker {
+  new(): Worker
+}
+declare var self: WorkerLoaderWorker
+export default self
