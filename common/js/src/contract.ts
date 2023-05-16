@@ -23,7 +23,7 @@ export const queryContract = async (
   const { result, output } = await contract.query[fnName](
     caller,
     {
-      gasLimit: createType("WeightV2", { proofSize: 1_000_000, refTime: 4_999_999_999_999 }),
+      gasLimit: bigWeight,
       value: 0,
     },
     ...fnArgs
@@ -54,9 +54,11 @@ export const txContract = (
 
   return tx(
     contract.api as ApiPromise,
-    () => contract.tx[fnName]({ value: 0 }, ...fnArgs),
+    () => contract.tx[fnName]({ gasLimit: bigWeight, value: 0 }, ...fnArgs),
     account,
     undefined,
     { tip: 1, ...overrideOptions }
   )
 }
+
+const bigWeight = createType("WeightV2", { proofSize: 3_000_000, refTime: 300_000_000_000 })
