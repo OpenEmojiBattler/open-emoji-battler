@@ -2,7 +2,7 @@ import type { ApiPromise } from "@polkadot/api"
 import type { SignerOptions } from "@polkadot/api/submittable/types"
 import { ContractPromise } from "@polkadot/api-contract"
 
-import { tx, buildErrorText } from "./api"
+import { tx, buildErrorText, createType } from "./api"
 import type { KeyringPairOrAddressAndSigner } from "./utils"
 
 import gameAbi from "../../../contract/deploy/202109210_init/game.json"
@@ -20,7 +20,14 @@ export const queryContract = async (
     throw new Error(`query fn not found: ${fnName}`)
   }
 
-  const { result, output } = await contract.query[fnName](caller, { value: 0 }, ...fnArgs)
+  const { result, output } = await contract.query[fnName](
+    caller,
+    {
+      gasLimit: bigWeight,
+      value: 0,
+    },
+    ...fnArgs
+  )
 
   if (!result.isOk) {
     throw new Error(
@@ -47,9 +54,11 @@ export const txContract = (
 
   return tx(
     contract.api as ApiPromise,
-    () => contract.tx[fnName]({ value: 0 }, ...fnArgs),
+    () => contract.tx[fnName]({ gasLimit: bigWeight, value: 0 }, ...fnArgs),
     account,
     undefined,
     { tip: 1, ...overrideOptions }
   )
 }
+
+const bigWeight = createType("WeightV2", { proofSize: 3_000_000, refTime: 300_000_000_000 })

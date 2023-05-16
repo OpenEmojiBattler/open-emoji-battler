@@ -1,5 +1,6 @@
 import "./interfaces/augment-api"
 import "./interfaces/augment-types"
+import "./interfaces/types-lookup"
 
 export * from "./api"
 export * from "./pow"
