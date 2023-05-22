@@ -19,9 +19,7 @@ libm = { version = "0.2.1", default-features = false, optional = true }
 
 # contract
 scale-info = { version = "2.7.0", default-features = false, features = ["derive"], optional = true }
-ink_storage = { version = "3.3.1", default-features = false, optional = true }
-ink_primitives = { version = "3.3.1", default-features = false, optional = true }
-ink_metadata = { version = "3.3.1", default-features = false, optional = true }
+ink = { version = "4.2.0", default-features = false, optional = true }
 
 [dev-dependencies]
 hex = { version = "0.4.3" }
@@ -39,8 +37,8 @@ std = [
 error = ["anyhow"]
 view-logs = []
 
-contract = ["ink_storage", "ink_primitives"]
-contract-std = ["std", "contract", "scale-info/std", "ink_storage/std", "ink_primitives/std", "ink_metadata/std"]
+contract = ["ink"]
+contract-std = ["std", "contract", "scale-info/std", "ink/std"]
 
 chain = ["blake2-rfc", "libm", "error"]
 front = ["view-logs", "error"]
