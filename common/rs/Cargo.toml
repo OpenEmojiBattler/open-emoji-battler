@@ -8,7 +8,7 @@ license = "Apache-2.0"
 rand = { version = "=0.8.5", default-features = false, features=["alloc"] }
 rand_pcg = { version = "=0.3.1", default-features = false }
 sp-std = { version = "=4.0.0", default-features = false }
-parity-scale-codec = { version = "< 4", default-features = false, features = ["derive"] }
+parity-scale-codec = { version = "3.5.0", default-features = false, features = ["derive"] }
 
 # option
 anyhow = { version = "=1.0.59", default-features = false, optional = true }
@@ -18,7 +18,7 @@ blake2-rfc = { version = "0.2.18", default-features = false, optional = true }
 libm = { version = "0.2.1", default-features = false, optional = true }
 
 # contract
-scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
+scale-info = { version = "2.7.0", default-features = false, features = ["derive"], optional = true }
 ink_storage = { version = "3.3.1", default-features = false, optional = true }
 ink_primitives = { version = "3.3.1", default-features = false, optional = true }
 ink_metadata = { version = "3.3.1", default-features = false, optional = true }
