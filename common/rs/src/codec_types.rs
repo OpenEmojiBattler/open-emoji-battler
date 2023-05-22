@@ -2,13 +2,8 @@
 use parity_scale_codec::{Decode, Encode};
 use sp_std::{collections::btree_map::BTreeMap, prelude::*};
 
-#[cfg(feature = "contract")]
-use codec_types_derive::SpreadLayoutOneStorageCell;
-#[cfg(feature = "contract")]
-use ink_storage::traits::PackedLayout;
-
 #[cfg(feature = "contract-std")]
-use ink_storage::traits::StorageLayout;
+use ink::storage::traits::StorageLayout;
 #[cfg(feature = "contract-std")]
 use scale_info::TypeInfo;
 
@@ -16,7 +11,6 @@ pub mod mtc {
     use super::*;
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct Emo {
         pub id: u16,
@@ -24,7 +18,6 @@ pub mod mtc {
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct GradeAndBoard {
         pub grade: u8,
@@ -32,12 +25,10 @@ pub mod mtc {
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct Board(pub Vec<mtc::BoardEmo>);
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct BoardEmo {
         pub mtc_emo_ids: Vec<u16>,
@@ -46,14 +37,12 @@ pub mod mtc {
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct Ghost {
         pub history: Vec<mtc::GradeAndGhostBoard>,
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct GradeAndGhostBoard {
         pub grade: u8,
@@ -61,12 +50,10 @@ pub mod mtc {
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct GhostBoard(pub Vec<mtc::GhostBoardEmo>);
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct GhostBoardEmo {
         pub base_id: u16,
@@ -74,7 +61,6 @@ pub mod mtc {
     }
 
     #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub enum GhostState {
         Active { health: u8 },
@@ -92,17 +78,14 @@ pub mod mtc {
         use super::*;
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub struct Catalog(pub Vec<mtc::shop::CatalogLine>);
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub struct CatalogLine(pub Vec<mtc::Emo>);
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub enum PlayerOperation {
             Buy { mtc_emo_id: u16, index: u8 },
@@ -121,12 +104,10 @@ pub mod mtc {
         }
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub struct BoardLogs(pub Vec<mtc::shop::BoardLog>);
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub enum BoardLog {
             Add {
@@ -170,12 +151,10 @@ pub mod mtc {
         use super::*;
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub struct Logs(pub Vec<mtc::battle::Log>);
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub enum Log {
             Attack {
@@ -243,7 +222,6 @@ pub mod mtc {
         use super::*;
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub struct PlayerMutable {
             pub health: u8,
@@ -259,12 +237,10 @@ pub mod emo {
     use super::*;
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct Bases(pub BTreeMap<u16, emo::Base>);
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct Base {
         pub id: u16,
@@ -277,7 +253,6 @@ pub mod emo {
     }
 
     #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub enum Typ {
         Human,
@@ -292,7 +267,6 @@ pub mod emo {
     }
 
     #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-    #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
     #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
     pub struct Attributes {
         pub attack: u16,
@@ -305,7 +279,6 @@ pub mod emo {
         use super::*;
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub enum Ability {
             Shop(emo::ability::shop::Shop),
@@ -321,7 +294,6 @@ pub mod emo {
             use super::*;
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum Shop {
                 Pre(emo::ability::shop::Pre),
@@ -335,7 +307,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum Pre {
                 Normal(emo::ability::shop::NormalAction),
@@ -348,7 +319,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum Peri {
                 AsOneself {
@@ -370,7 +340,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum Special {
                 Placeholder,
@@ -382,7 +351,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum PeriAsOneselfTrigger {
                 Set,
@@ -398,7 +366,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum PeriAsAllyTrigger {
                 AllySet {
@@ -414,7 +381,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum PeriAsAllyAction {
                 OneselfTripleNormal(emo::ability::shop::NormalAction),
@@ -427,7 +393,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum NormalAction {
                 SetEmo {
@@ -474,7 +439,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum RandomAction {
                 IncreaseStatsOfMenagerie {
@@ -494,7 +458,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum AsAllyAction {
                 TriggerSetActions,
@@ -510,7 +473,6 @@ pub mod emo {
             use super::*;
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum Battle {
                 General(emo::ability::battle::General),
@@ -523,7 +485,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum General {
                 AsOneself {
@@ -545,7 +506,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum Special {
                 Shield,
@@ -559,7 +519,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum GeneralAsOneselfTrigger {
                 Pre,
@@ -583,7 +542,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum GeneralAsAllyTrigger {
                 AllySet {
@@ -602,7 +560,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum GeneralAsAllyAction {
                 OneselfTripleNormal(emo::ability::battle::NormalAction),
@@ -615,7 +572,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum NormalAction {
                 SetEmo {
@@ -663,7 +619,6 @@ pub mod emo {
             }
 
             #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-            #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
             #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
             pub enum AsAllyAction {
                 TriggerRetireActions,
@@ -676,7 +631,6 @@ pub mod emo {
         }
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub enum TargetOrRandom {
             Target(emo::ability::Target),
@@ -692,7 +646,6 @@ pub mod emo {
         }
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub enum Target {
             Oneself,
@@ -708,7 +661,6 @@ pub mod emo {
         }
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub enum Destination {
             Left,
@@ -722,7 +674,6 @@ pub mod emo {
         }
 
         #[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub struct TypOptAndIsTripleOpt {
             pub typ_opt: Option<emo::Typ>,
@@ -730,7 +681,6 @@ pub mod emo {
         }
 
         #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]
-        #[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]
         #[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]
         pub enum Side {
             Ally,

@@ -13,10 +13,7 @@ const writeRsFile = () => {
   lines.push("use parity_scale_codec::{Decode, Encode};")
   lines.push("use sp_std::{collections::btree_map::BTreeMap, prelude::*};\n")
 
-  lines.push('#[cfg(feature = "contract")]\nuse codec_types_derive::SpreadLayoutOneStorageCell;')
-  lines.push('#[cfg(feature = "contract")]\nuse ink_storage::traits::PackedLayout;\n')
-
-  lines.push('#[cfg(feature = "contract-std")]\nuse ink_storage::traits::StorageLayout;')
+  lines.push('#[cfg(feature = "contract-std")]\nuse ink::storage::traits::StorageLayout;')
   lines.push('#[cfg(feature = "contract-std")]\nuse scale_info::TypeInfo;')
 
   genRsLines(defs, lines)
@@ -26,9 +23,9 @@ const writeRsFile = () => {
 }
 
 const rsDeriveStatement =
-  '#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]\n#[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]'
+  '#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]'
 const rsDeriveDefaultStatement =
-  '#[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "contract", derive(PackedLayout, SpreadLayoutOneStorageCell))]\n#[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]'
+  '#[derive(Default, PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug, Encode, Decode)]\n#[cfg_attr(feature = "contract-std", derive(TypeInfo, StorageLayout))]'
 
 const genRsLines = (defs: AnyDef[], lines: string[]) => {
   for (const def of defs) {
