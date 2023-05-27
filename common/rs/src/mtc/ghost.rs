@@ -154,20 +154,12 @@ mod tests {
 
         assert_eq!(
             choose_ghosts(300, seed, &|_| a_vec_none.clone(), &panic_closure),
-            vec![
-                None,
-                None,
-                None
-            ]
+            vec![None, None, None]
         );
 
         assert_eq!(
             choose_ghosts(1, seed, &|_| a_vec_none.clone(), &panic_closure),
-            vec![
-                None,
-                None,
-                None
-            ]
+            vec![None, None, None]
         );
 
         assert_eq!(
@@ -185,11 +177,7 @@ mod tests {
                     panic!("should not reached")
                 }
             ),
-            vec![
-                Some((1, create_ghost(1))),
-                None,
-                None
-            ]
+            vec![Some((1, create_ghost(1))), None, None]
         );
 
         assert_eq!(
