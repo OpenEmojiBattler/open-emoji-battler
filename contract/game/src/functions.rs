@@ -1,5 +1,5 @@
 use common::{codec_types::*, mtc::*};
-use ink_prelude::{vec, vec::Vec};
+use ink::prelude::{vec, vec::Vec};
 
 pub fn get_turn_and_previous_grade_and_board(
     history: &[mtc::GradeAndBoard],
