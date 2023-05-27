@@ -308,12 +308,11 @@ pub mod contract {
                 "contracts aren't supported yet"
             );
 
-            let seed =
-                    &self.env().hash_encoded::<ink::env::hash::Blake2x128, _>(&(
-                        subject,
-                        account_id,
-                        self.env().block_timestamp(),
-                    ));
+            let seed = &self.env().hash_encoded::<ink::env::hash::Blake2x128, _>(&(
+                subject,
+                account_id,
+                self.env().block_timestamp(),
+            ));
 
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
