@@ -7,18 +7,15 @@ import { buildEmoBases } from "~/misc/mtcUtils"
 import type { Connection } from "../tasks"
 
 export const buildConnection = async (api: ApiPromise, env: EnvContract): Promise<Connection> => {
-  const gameContract = getGameContract(api, env.gameAddress)
+  const gameContract = getGameContract(api, env.gameAddress, env.ink)
 
-  const codec = createType(
-    "Option<emo_Bases>",
-    (await queryContract(gameContract, "getEmoBases")).toU8a()
-  ).unwrap()
-
-  const emoBases = buildEmoBases(codec)
+  const emoBases = buildEmoBases(
+    (await query(gameContract, env.ink, "Option<emo_Bases>", "getEmoBases")).unwrap()
+  )
 
   return {
     kind: "contract",
-    query: buildConnectionQuery(gameContract),
+    query: buildConnectionQuery(gameContract, env.ink),
     tx: buildConnectionTx(gameContract),
     emoBases,
     api: () => api,
@@ -26,52 +23,62 @@ export const buildConnection = async (api: ApiPromise, env: EnvContract): Promis
   }
 }
 
-const buildConnectionQuery = (gameContract: ContractPromise): Connection["query"] => ({
+const query = async (
+  contract: ContractPromise,
+  inkVersion: number,
+  type: string,
+  fnName: string,
+  fnArgs: any[] = []
+) => {
+  const response = (await queryContract(contract, fnName, fnArgs)).toU8a()
+
+  switch (inkVersion) {
+    case 3:
+      return createType(type, response)
+    case 4:
+      return (createType(`Result<${type}, ()>`, response) as any).asOk
+    default:
+      throw new Error(`undefined ink version: ${inkVersion}`)
+  }
+}
+
+const buildConnectionQuery = (
+  gameContract: ContractPromise,
+  inkVersion: number
+): Connection["query"] => ({
   deckFixedEmoBaseIds: async () =>
-    createType(
-      "Option<Vec<u16>>",
-      (await queryContract(gameContract, "getDeckFixedEmoBaseIds")).toU8a()
-    ).unwrap(),
+    (await query(gameContract, inkVersion, "Option<Vec<u16>>", "getDeckFixedEmoBaseIds")).unwrap(),
   deckBuiltEmoBaseIds: async () =>
-    createType(
-      "Option<Vec<u16>>",
-      (await queryContract(gameContract, "getDeckBuiltEmoBaseIds")).toU8a()
-    ).unwrap(),
-  matchmakingGhostsInfo: async (band) =>
-    createType(
+    (await query(gameContract, inkVersion, "Option<Vec<u16>>", "getDeckBuiltEmoBaseIds")).unwrap(),
+  matchmakingGhostsInfo: (band) =>
+    query(
+      gameContract,
+      inkVersion,
       "Option<Vec<(BlockNumber, AccountId)>>",
-      (await queryContract(gameContract, "getMatchmakingGhostsInfo", [band])).toU8a()
+      "getMatchmakingGhostsInfo",
+      [band]
     ),
-  matchmakingGhostByIndex: async (band, index) =>
-    createType(
-      "Option<mtc_Ghost>",
-      (await queryContract(gameContract, "getMatchmakingGhostByIndex", [band, index])).toU8a()
+  matchmakingGhostByIndex: (band, index) =>
+    query(gameContract, inkVersion, "Option<mtc_Ghost>", "getMatchmakingGhostByIndex", [
+      band,
+      index,
+    ]),
+  leaderboard: () => query(gameContract, inkVersion, "Vec<(u16, AccountId)>", "getLeaderboard"),
+  playerEp: (address) => query(gameContract, inkVersion, "Option<u16>", "getPlayerEp", [address]),
+  playerSeed: (address) =>
+    query(gameContract, inkVersion, "Option<u64>", "getPlayerSeed", [address]),
+  playerMtcImmutable: (address) =>
+    query(
+      gameContract,
+      inkVersion,
+      "Option<(Vec<mtc_Emo>, Vec<Option<(AccountId, mtc_Ghost)>>)>",
+      "getPlayerMtcImmutable",
+      [address]
     ),
-  leaderboard: async () =>
-    createType(
-      "Vec<(u16, AccountId)>",
-      (await queryContract(gameContract, "getLeaderboard")).toU8a()
-    ),
-  playerEp: async (address) =>
-    createType(
-      "Option<u16>",
-      (await queryContract(gameContract, "getPlayerEp", [address])).toU8a()
-    ),
-  playerSeed: async (address) =>
-    createType(
-      "Option<u64>",
-      (await queryContract(gameContract, "getPlayerSeed", [address])).toU8a()
-    ),
-  playerMtcImmutable: async (address) =>
-    createType(
-      "Option<(Vec<mtc_Emo>, Vec<(AccountId, mtc_Ghost)>)>",
-      (await queryContract(gameContract, "getPlayerMtcImmutable", [address])).toU8a()
-    ),
-  playerMtcMutable: async (address) =>
-    createType(
-      "Option<mtc_storage_PlayerMutable>",
-      (await queryContract(gameContract, "getPlayerMtcMutable", [address])).toU8a()
-    ),
+  playerMtcMutable: (address) =>
+    query(gameContract, inkVersion, "Option<mtc_storage_PlayerMutable>", "getPlayerMtcMutable", [
+      address,
+    ]),
 })
 
 const buildConnectionTx = (gameContract: ContractPromise): Connection["tx"] => ({

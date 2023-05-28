@@ -5,10 +5,22 @@ import { ContractPromise } from "@polkadot/api-contract"
 import { tx, buildErrorText, createType } from "./api"
 import type { KeyringPairOrAddressAndSigner } from "./utils"
 
-import gameAbi from "../../../contract/deploy/202109210_init/game.json"
+import gameAbiInk3 from "../../../contract/deploy/202109210_init/game.json"
+import gameAbiInk4 from "../../../contract/deploy/202305270_ink4/game.json"
 
-export const getGameContract = (api: ApiPromise, address: string) =>
-  new ContractPromise(api, gameAbi, address)
+export const getGameContract = (api: ApiPromise, address: string, inkVersion: number) => {
+  let abi
+
+  if (inkVersion === 3) {
+    abi = gameAbiInk3
+  } else if (inkVersion === 4) {
+    abi = gameAbiInk4
+  } else {
+    throw new Error(`undefined ink version: ${inkVersion}`)
+  }
+
+  return new ContractPromise(api, abi, address)
+}
 
 export const queryContract = async (
   contract: ContractPromise,
