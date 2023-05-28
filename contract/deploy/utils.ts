@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "fs"
 import path from "path"
 
-import { tx } from "common"
+import { contractBigWeight, tx } from "common"
 
 import { ApiPromise } from "@polkadot/api"
 import { CodePromise, ContractPromise } from "@polkadot/api-contract"
@@ -38,7 +38,7 @@ export const instantiateContract = async (
   const contract = (
     (await tx(
       api,
-      () => code.tx.new({ salt, gasLimit: 200_000n * 1_000_000n }, ...constructorArgs),
+      () => code.tx.new({ salt, gasLimit: contractBigWeight }, ...constructorArgs),
       pair
     )) as any
   ).contract as ContractPromise
