@@ -142,7 +142,7 @@ pub mod contract {
 
         #[ink(message)]
         pub fn get_player_mtc_immutable(&self, account: AccountId) -> Option<PlayerImmutable> {
-            self.player_mtc_immutable.get(&account)
+            self.player_mtc_immutable.get(account)
         }
 
         #[ink(message)]
@@ -150,7 +150,7 @@ pub mod contract {
             &self,
             account: AccountId,
         ) -> Option<mtc::storage::PlayerMutable> {
-            self.player_mtc_mutable.get(&account)
+            self.player_mtc_mutable.get(account)
         }
 
         #[ink(message)]
@@ -374,8 +374,8 @@ pub mod contract {
                 self.add_matchmaking_ghost(player, old_ep, grade_and_board_history);
             }
 
-            self.player_mtc_immutable.remove(&player);
-            self.player_mtc_mutable.remove(&player);
+            self.player_mtc_immutable.remove(player);
+            self.player_mtc_mutable.remove(player);
         }
 
         fn add_matchmaking_ghost(

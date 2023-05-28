@@ -245,7 +245,7 @@ mod tests {
                     if b != 3 {
                         panic!("should not reached");
                     }
-                    Some(create_ghost(i as u8 + 1))
+                    Some(create_ghost(i + 1))
                 }
             ),
             vec![
