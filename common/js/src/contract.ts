@@ -5,10 +5,22 @@ import { ContractPromise } from "@polkadot/api-contract"
 import { tx, buildErrorText, createType } from "./api"
 import type { KeyringPairOrAddressAndSigner } from "./utils"
 
-import gameAbi from "../../../contract/deploy/202109210_init/game.json"
+import gameAbiInk3 from "../../../contract/deploy/202109210_init/game.json"
+import gameAbiInk4 from "../../../contract/deploy/202305270_ink4/game.json"
 
-export const getGameContract = (api: ApiPromise, address: string) =>
-  new ContractPromise(api, gameAbi, address)
+export const getGameContract = (api: ApiPromise, address: string, inkVersion: number) => {
+  let abi
+
+  if (inkVersion === 3) {
+    abi = gameAbiInk3
+  } else if (inkVersion === 4) {
+    abi = gameAbiInk4
+  } else {
+    throw new Error(`undefined ink version: ${inkVersion}`)
+  }
+
+  return new ContractPromise(api, abi, address)
+}
 
 export const queryContract = async (
   contract: ContractPromise,
@@ -23,7 +35,7 @@ export const queryContract = async (
   const { result, output } = await contract.query[fnName](
     caller,
     {
-      gasLimit: bigWeight,
+      gasLimit: contractBigWeight,
       value: 0,
     },
     ...fnArgs
@@ -54,11 +66,14 @@ export const txContract = (
 
   return tx(
     contract.api as ApiPromise,
-    () => contract.tx[fnName]({ gasLimit: bigWeight, value: 0 }, ...fnArgs),
+    () => contract.tx[fnName]({ gasLimit: contractBigWeight, value: 0 }, ...fnArgs),
     account,
     undefined,
     { tip: 1, ...overrideOptions }
   )
 }
 
-const bigWeight = createType("WeightV2", { proofSize: 3_000_000, refTime: 300_000_000_000 })
+export const contractBigWeight = createType("WeightV2", {
+  proofSize: 3_000_000,
+  refTime: 300_000_000_000,
+})

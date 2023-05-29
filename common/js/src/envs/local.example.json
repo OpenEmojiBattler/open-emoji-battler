@@ -4,6 +4,7 @@
   "contract": {
     "name": "local contract",
     "endpoint": "ws://127.0.0.1:9988",
-    "gameAddress": ""
+    "gameAddress": "",
+    "ink": 4
   }
 }

@@ -4,6 +4,7 @@
   "contract": {
     "name": "",
     "endpoint": "",
-    "gameAddress": ""
+    "gameAddress": "",
+    "ink": 4
   }
 }

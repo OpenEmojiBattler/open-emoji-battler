@@ -40,10 +40,10 @@ export const start = (
 
     const ghosts = createType(
       "Vec<mtc_Ghost>",
-      _ghosts.map(([_account, ghost]) => ghost)
+      _ghosts.map((opt) => opt.unwrapOrDefault()[1])
     )
-    const ghostAddresses = _ghosts.map(([account, _ghost]) =>
-      connection.transformAddress(account.toString())
+    const ghostAddresses = _ghosts.map((opt) =>
+      connection.transformAddress(opt.unwrapOrDefault()[0].toString())
     )
 
     const mutable = _mutable.unwrap()

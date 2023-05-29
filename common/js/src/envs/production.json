@@ -4,6 +4,7 @@
   "contract": {
     "name": "Shiden Network",
     "endpoint": "wss://rpc.shiden.astar.network/",
-    "gameAddress": "ZzTNHqvMncxcBJs9P2wQrTWoqGVTNumRtBBLZTekKnsWnS6"
+    "gameAddress": "ZzTNHqvMncxcBJs9P2wQrTWoqGVTNumRtBBLZTekKnsWnS6",
+    "ink": 3
   }
 }

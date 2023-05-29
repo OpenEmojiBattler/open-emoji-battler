@@ -14,9 +14,8 @@ pub fn choose_ghosts<A, F0, F1>(
     seed: u64,
     get_ghosts_info: &F0,
     get_ghost: &F1,
-) -> Vec<(A, mtc::Ghost)>
+) -> Vec<Option<(A, mtc::Ghost)>>
 where
-    A: Default,
     F0: Fn(u16) -> Option<Vec<A>>,
     F1: Fn((u16, u8)) -> Option<mtc::Ghost>,
 {
@@ -49,14 +48,14 @@ where
                 .zip(0u8..)
                 .choose_multiple(&mut rng, GHOST_COUNT_USIZE - choosen_ghosts.len())
                 .into_iter()
-                .map(|(a, index)| (a, get_ghost((band, index)).unwrap())),
+                .map(|(a, index)| Some((a, get_ghost((band, index)).unwrap()))),
         );
     }
 
     choosen_ghosts.shuffle(&mut rng);
 
     for _ in 0..(GHOST_COUNT_USIZE - choosen_ghosts.len()) {
-        choosen_ghosts.push((Default::default(), mtc::Ghost { history: vec![] }));
+        choosen_ghosts.push(None);
     }
 
     choosen_ghosts
@@ -143,7 +142,6 @@ mod tests {
         type A = u8;
         let a_vec_none: Option<Vec<A>> = None;
         let panic_closure = |_| panic!("should not reached");
-        let empty_a_and_ghost: (A, mtc::Ghost) = (0, mtc::Ghost { history: vec![] });
 
         fn create_ghost(grade: u8) -> mtc::Ghost {
             mtc::Ghost {
@@ -156,20 +154,12 @@ mod tests {
 
         assert_eq!(
             choose_ghosts(300, seed, &|_| a_vec_none.clone(), &panic_closure),
-            vec![
-                empty_a_and_ghost.clone(),
-                empty_a_and_ghost.clone(),
-                empty_a_and_ghost.clone()
-            ]
+            vec![None, None, None]
         );
 
         assert_eq!(
             choose_ghosts(1, seed, &|_| a_vec_none.clone(), &panic_closure),
-            vec![
-                empty_a_and_ghost.clone(),
-                empty_a_and_ghost.clone(),
-                empty_a_and_ghost.clone()
-            ]
+            vec![None, None, None]
         );
 
         assert_eq!(
@@ -187,11 +177,7 @@ mod tests {
                     panic!("should not reached")
                 }
             ),
-            vec![
-                (1, create_ghost(1)),
-                empty_a_and_ghost.clone(),
-                empty_a_and_ghost
-            ]
+            vec![Some((1, create_ghost(1))), None, None]
         );
 
         assert_eq!(
@@ -215,9 +201,9 @@ mod tests {
                 }
             ),
             vec![
-                (2, create_ghost(2)),
-                (3, create_ghost(3)),
-                (1, create_ghost(1)),
+                Some((2, create_ghost(2))),
+                Some((3, create_ghost(3))),
+                Some((1, create_ghost(1))),
             ]
         );
 
@@ -240,9 +226,9 @@ mod tests {
                 }
             ),
             vec![
-                (2, create_ghost(2)),
-                (1, create_ghost(1)),
-                (3, create_ghost(3)),
+                Some((2, create_ghost(2))),
+                Some((1, create_ghost(1))),
+                Some((3, create_ghost(3))),
             ]
         );
 
@@ -259,13 +245,13 @@ mod tests {
                     if b != 3 {
                         panic!("should not reached");
                     }
-                    Some(create_ghost(i as u8 + 1))
+                    Some(create_ghost(i + 1))
                 }
             ),
             vec![
-                (8, create_ghost(8)),
-                (4, create_ghost(4)),
-                (9, create_ghost(9)),
+                Some((8, create_ghost(8))),
+                Some((4, create_ghost(4))),
+                Some((9, create_ghost(9))),
             ]
         );
     }

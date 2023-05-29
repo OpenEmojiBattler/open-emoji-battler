@@ -1,42 +1,37 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 
 mod functions;
-
-use ink_lang as ink;
 
 #[ink::contract]
 pub mod contract {
     use crate::functions::*;
     use common::{codec_types::*, mtc::*};
-    use ink_prelude::{vec, vec::Vec};
-    use ink_storage::{
-        traits::{PackedLayout, SpreadAllocate, SpreadLayout},
-        Mapping,
-    };
+    use ink::prelude::{vec, vec::Vec};
+    use ink::storage::Mapping;
     use scale::{Decode, Encode};
 
-    type PlayerImmutable = (Vec<mtc::Emo>, Vec<(AccountId, mtc::Ghost)>); // (pool, ghosts)
+    type PlayerImmutable = (Vec<mtc::Emo>, Vec<Option<(AccountId, mtc::Ghost)>>); // (pool, ghosts)
 
-    #[derive(PartialEq, Eq, Clone, Debug, Encode, Decode, PackedLayout, SpreadLayout)]
+    #[derive(PartialEq, Eq, Clone, Debug, Encode, Decode)]
     #[cfg_attr(
         feature = "std",
-        derive(scale_info::TypeInfo, ink_storage::traits::StorageLayout)
+        derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
     )]
     enum LazyStorageKey {
         Leaderboard,
     }
 
-    #[derive(PartialEq, Eq, Clone, Debug, Encode, Decode, PackedLayout, SpreadLayout)]
+    #[derive(PartialEq, Eq, Clone, Debug, Encode, Decode)]
     #[cfg_attr(
         feature = "std",
-        derive(scale_info::TypeInfo, ink_storage::traits::StorageLayout)
+        derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
     )]
     enum LazyStorageValue {
         Leaderboard(Vec<(u16, AccountId)>),
     }
 
     #[ink(storage)]
-    #[derive(SpreadAllocate)]
+    #[derive(Default)]
     pub struct Contract {
         admins: Vec<AccountId>,
 
@@ -60,9 +55,9 @@ pub mod contract {
     impl Contract {
         #[ink(constructor)]
         pub fn new() -> Self {
-            ink_lang::utils::initialize_contract(|contract: &mut Self| {
-                contract.admins.push(Self::env().caller());
-            })
+            let mut contract: Self = Default::default();
+            contract.admins.push(Self::env().caller());
+            contract
         }
 
         #[ink(message)]
@@ -86,7 +81,7 @@ pub mod contract {
         pub fn set_code(&mut self, code_hash: [u8; 32]) {
             self.assert_admin();
 
-            ink_env::set_code_hash(&code_hash).unwrap_or_else(|err| {
+            ink::env::set_code_hash(&code_hash).unwrap_or_else(|err| {
                 panic!(
                     "Failed to `set_code_hash` to {:?} due to {:?}",
                     code_hash, err
@@ -147,7 +142,7 @@ pub mod contract {
 
         #[ink(message)]
         pub fn get_player_mtc_immutable(&self, account: AccountId) -> Option<PlayerImmutable> {
-            self.player_mtc_immutable.get(&account)
+            self.player_mtc_immutable.get(account)
         }
 
         #[ink(message)]
@@ -155,7 +150,7 @@ pub mod contract {
             &self,
             account: AccountId,
         ) -> Option<mtc::storage::PlayerMutable> {
-            self.player_mtc_mutable.get(&account)
+            self.player_mtc_mutable.get(account)
         }
 
         #[ink(message)]
@@ -269,7 +264,7 @@ pub mod contract {
                 grade,
                 &player_ghosts
                     .into_iter()
-                    .map(|(_, ghost)| ghost)
+                    .map(|o| o.map(|(_, g)| g).unwrap_or_default())
                     .collect::<Vec<_>>(),
                 player_mtc_mutable.battle_ghost_index,
                 turn,
@@ -313,13 +308,11 @@ pub mod contract {
                 "contracts aren't supported yet"
             );
 
-            let (seed, _) =
-                self.env()
-                    .random(&self.env().hash_encoded::<ink_env::hash::Blake2x128, _>(&(
-                        subject,
-                        account_id,
-                        self.env().block_timestamp(),
-                    )));
+            let seed = self.env().hash_encoded::<ink::env::hash::Blake2x128, _>(&(
+                subject,
+                account_id,
+                self.env().block_timestamp(),
+            ));
 
             <u64>::decode(&mut seed.as_ref()).expect("failed to get seed")
         }
@@ -381,8 +374,8 @@ pub mod contract {
                 self.add_matchmaking_ghost(player, old_ep, grade_and_board_history);
             }
 
-            self.player_mtc_immutable.remove(&player);
-            self.player_mtc_mutable.remove(&player);
+            self.player_mtc_immutable.remove(player);
+            self.player_mtc_mutable.remove(player);
         }
 
         fn add_matchmaking_ghost(
@@ -440,14 +433,13 @@ pub mod contract {
     #[cfg(test)]
     mod tests {
         use super::*;
-        use ink_lang as ink;
 
         fn set_caller(caller: AccountId) {
-            ink_env::test::set_caller::<Environment>(caller);
+            ink::env::test::set_caller::<Environment>(caller);
         }
 
-        fn get_default_accounts() -> ink_env::test::DefaultAccounts<Environment> {
-            ink_env::test::default_accounts::<Environment>()
+        fn get_default_accounts() -> ink::env::test::DefaultAccounts<Environment> {
+            ink::env::test::default_accounts::<Environment>()
         }
 
         fn get_account(n: u8) -> AccountId {
@@ -466,11 +458,11 @@ pub mod contract {
         }
 
         fn get_current_block_number() -> BlockNumber {
-            ink_env::block_number::<Environment>()
+            ink::env::block_number::<Environment>()
         }
 
         fn advance_block() -> BlockNumber {
-            ink_env::test::advance_block::<Environment>();
+            ink::env::test::advance_block::<Environment>();
             get_current_block_number()
         }
 

@@ -28,7 +28,7 @@ export interface Connection {
     playerSeed: (address: string) => Promise<Option<u64>>
     playerMtcImmutable: (
       address: string
-    ) => Promise<Option<ITuple<[Vec<mtc_Emo>, Vec<ITuple<[AccountId, mtc_Ghost]>>]>>>
+    ) => Promise<Option<ITuple<[Vec<mtc_Emo>, Vec<Option<ITuple<[AccountId, mtc_Ghost]>>>]>>>
     playerMtcMutable: (address: string) => Promise<Option<mtc_storage_PlayerMutable>>
   }
   tx: {
