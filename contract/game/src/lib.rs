@@ -30,8 +30,8 @@ pub mod contract {
         Leaderboard(Vec<(u16, AccountId)>),
     }
 
-    #[derive(Default)]
     #[ink(storage)]
+    #[derive(Default)]
     pub struct Contract {
         admins: Vec<AccountId>,
 
@@ -308,7 +308,7 @@ pub mod contract {
                 "contracts aren't supported yet"
             );
 
-            let seed = &self.env().hash_encoded::<ink::env::hash::Blake2x128, _>(&(
+            let seed = self.env().hash_encoded::<ink::env::hash::Blake2x128, _>(&(
                 subject,
                 account_id,
                 self.env().block_timestamp(),
@@ -471,7 +471,7 @@ pub mod contract {
             Contract::new()
         }
 
-        #[test]
+        #[ink::test]
         fn new() {
             assert_eq!(init_contract().admins, vec![get_default_accounts().alice]);
         }
