@@ -67,14 +67,27 @@ const buildConnectionQuery = (
   playerEp: (address) => query(gameContract, inkVersion, "Option<u16>", "getPlayerEp", [address]),
   playerSeed: (address) =>
     query(gameContract, inkVersion, "Option<u64>", "getPlayerSeed", [address]),
-  playerMtcImmutable: (address) =>
-    query(
-      gameContract,
-      inkVersion,
-      "Option<(Vec<mtc_Emo>, Vec<Option<(AccountId, mtc_Ghost)>>)>",
-      "getPlayerMtcImmutable",
-      [address]
-    ),
+  playerMtcImmutable: async (address) => {
+    const codec = (
+      await query(
+        gameContract,
+        inkVersion,
+        `Option<(Vec<mtc_Emo>, Vec<${inkVersion === 4 ? "Option<" : ""}(AccountId, mtc_Ghost)${
+          inkVersion === 4 ? ">" : ""
+        }>)>`,
+        "getPlayerMtcImmutable",
+        [address]
+      )
+    ).unwrap()
+
+    return [
+      codec[0],
+      codec[1].toArray().map((x: any) => {
+        const t = inkVersion === 4 ? x.unwrapOrDefault() : x
+        return [t[0], t[1]]
+      }),
+    ]
+  },
   playerMtcMutable: (address) =>
     query(gameContract, inkVersion, "Option<mtc_storage_PlayerMutable>", "getPlayerMtcMutable", [
       address,
