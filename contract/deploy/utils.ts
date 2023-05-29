@@ -53,16 +53,6 @@ export const instantiateContract = async (
   return contract
 }
 
-export const getContract = (
-  api: ApiPromise,
-  contractName: string,
-  address: string,
-  dirname: string
-) => {
-  const abi = readFileSync(path.resolve(dirname, `./${contractName}.json`), "utf8")
-  return new ContractPromise(api, abi, address)
-}
-
 export const query = async (
   contract: ContractPromise,
   fnName: string,
