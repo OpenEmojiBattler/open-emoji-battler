@@ -26,9 +26,7 @@ export interface Connection {
     leaderboard: () => Promise<Vec<ITuple<[u16, AccountId]>>>
     playerEp: (address: string) => Promise<Option<u16>>
     playerSeed: (address: string) => Promise<Option<u64>>
-    playerMtcImmutable: (
-      address: string
-    ) => Promise<Option<ITuple<[Vec<mtc_Emo>, Vec<Option<ITuple<[AccountId, mtc_Ghost]>>>]>>>
+    playerMtcImmutable: (address: string) => Promise<[Vec<mtc_Emo>, Array<[AccountId, mtc_Ghost]>]>
     playerMtcMutable: (address: string) => Promise<Option<mtc_storage_PlayerMutable>>
   }
   tx: {

@@ -36,15 +36,13 @@ export const start = (
       connection.query.playerMtcMutable(account.address),
     ])
 
-    const [pool, _ghosts] = immutable.unwrap()
+    const [pool, _ghosts] = immutable
 
     const ghosts = createType(
       "Vec<mtc_Ghost>",
-      _ghosts.map((opt) => opt.unwrapOrDefault()[1])
+      _ghosts.map(([_a, g]) => g)
     )
-    const ghostAddresses = _ghosts.map((opt) =>
-      connection.transformAddress(opt.unwrapOrDefault()[0].toString())
-    )
+    const ghostAddresses = _ghosts.map(([a, _g]) => connection.transformAddress(a.toString()))
 
     const mutable = _mutable.unwrap()
 
