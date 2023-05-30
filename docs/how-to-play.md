@@ -25,8 +25,8 @@ EMOs are emoji units that fight for players. You can see the detail on the mouse
 
 ![emo|690x499,50%](imgs/emo.png)
 
-Grade: 1 to 6
-Type: Human, Nature, Food, Object
+- Grade: 1 to 6
+- Type: Human, Nature, Food, Object
 
 # Match Flow
 
