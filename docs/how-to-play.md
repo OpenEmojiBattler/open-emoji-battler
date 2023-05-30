@@ -1,7 +1,8 @@
 ---
-title: How to Play
 permalink: /how-to-play
 ---
+
+# How to Play
 
 If you don't know about Open Emoji Battler project itself, read [this post](https://forum.open-emoji-battler.community/t/topic/60) first.
 
@@ -11,7 +12,7 @@ You need the [Polkadot{.js} extension](https://polkadot.js.org/extension/) to pl
 
 Also, you can try the game instantly without the extension and account from the try button. Your data aren't recorded, and you can't change your deck, but it's a good starting point to practice and understands how this game works.
 
-# Overview
+## Overview
 
 Open Emoji Battler is a PvP strategy game. The game mechanics are inspired by popular auto-battler games but adapted for on-chain gaming.
 
@@ -19,7 +20,7 @@ The ultimate goal of this game is to increase your EP (Emoji Power) through comp
 
 In a match, you battle with three rivals. Rivals are previous gameplay data by players, so you don't need to wait for others to start playing. Your aim is to defeat rivals by damaging their health points while keeping your health alive.
 
-# EMO
+## EMO
 
 EMOs are emoji units that fight for players. You can see the detail on the mouse over.
 
@@ -28,7 +29,7 @@ EMOs are emoji units that fight for players. You can see the detail on the mouse
 - Grade: 1 to 6
 - Type: Human, Nature, Food, Object
 
-# Match Flow
+## Match Flow
 
 1. Build your deck.
 1. Start a match. Your rivals are chosen. You have initial health.
@@ -40,7 +41,7 @@ EMOs are emoji units that fight for players. You can see the detail on the mouse
 
 Let's look into each step.
 
-# Preparation
+## Preparation
 
 You can build EMO decks and select one for use, or just continue with the default deck. Please select EMOs for each grade. Decks are saved on your browser's local storage.
 
@@ -50,7 +51,7 @@ When you're ready, press the start button. The first shop phase starts.
 
 Your rivals are automatically chosen based on your EP. Your initial health is 30.
 
-# Shop Phase
+## Shop Phase
 
 At the beginning of this phase, you get some coins. The amount of coins you get starts at 3 on the first turn and increases 1 each turn up to a maximum of 8. Your unused coins aren't carried to the next turn.
 
@@ -75,7 +76,7 @@ When you have three EMOs of the same emoji on your board, they will be fused int
 
 After you finish all operations, proceed to the battle phase.
 
-# Battle Phase
+## Battle Phase
 
 The battle automatically starts with one of your rivals. The player with a greater number of EMOs attacks first. If the numbers of EMOs are equal, a random side starts an attack.
 
@@ -89,11 +90,11 @@ After the battle, the next shop phase starts. Any changes on the boards during t
 
 When all of your rivals or you retire, the whole match finishes.
 
-# Result
+## Result
 
 You see the rank of the match and the change of your EP.
 
-# Notes
+## Notes
 
 - Do not reload the site during gameplay. You can't resume the match, and you're considered lost in the match.
 - Do not reject the transaction signing popup from the extension. As same as above, you can't resume. These behaviors should be improved in the future version.
