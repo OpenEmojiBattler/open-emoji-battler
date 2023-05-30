@@ -1,6 +1,6 @@
 ---
 title: How to Play
-permalink: /how
+permalink: /how-to-play
 ---
 
 If you don't know about Open Emoji Battler project itself, read [this post](https://forum.open-emoji-battler.community/t/topic/60) first.
