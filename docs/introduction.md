@@ -1,6 +1,6 @@
 Open Emoji Battler is a decentralized multiplayer game, and also a game development project. This project is owned and governed by the community. The entire game runs directly on blockchains, and its codebase is open-source. In the game, players battle in fun and strategic matches with their emoji units. The playable prototype is available.
 
-![demo|video](https://user-images.githubusercontent.com/81064017/177928297-7a75fa42-361c-48d8-b361-79a1ecad0eb1.mp4)
+https://user-images.githubusercontent.com/81064017/177928297-7a75fa42-361c-48d8-b361-79a1ecad0eb1.mp4
 
 # Decentralization
 
@@ -45,9 +45,9 @@ This is a competitive strategy game inspired by popular auto-battler games. Play
 
 First, you build your EMO deck. Then, a match starts, and you face three opponent players. Your goal in this match is to defeat the opponents by damaging their health points while keeping your health alive. The match progresses in repeated sets of two phases: a shop phase and a battle phase. In shop phases, you assemble and upgrade your board (field) by buying and selling EMOs at the shop. In battle phases, you face off one random opponent, and your EMOs automatically attack the opponent EMOs without input. When one loses all EMOs, the lost player takes damage. Then, the next shop phase starts. The match ends when there's only one player alive. Lastly, your rating gets updated, reflecting the match result.
 
-![phases|690x309](upload://v3NUyuycLWtkl5R6hrpz7Ir8Ein.jpeg)
+![phases|690x309](imgs/phases.jpeg)
 
-![result|690x343, 50%](upload://fwEBjCjKkS3UBzZj3mKBoud0icX.png)
+![result|690x343, 50%](imgs/result.png)
 
 You can learn more about how to play below:
 https://forum.open-emoji-battler.community/t/topic/17
