@@ -4,7 +4,7 @@ permalink: /introduction
 
 # Welcome to Open Emoji Battler
 
-[Open Emoji Battler](https://game.open-emoji-battler.community) is a decentralized multiplayer game owned by the community. With a vision of developing an open and free game, the entire game runs on blockchains, and the codebase is fully open-source. Our game offers players fun and strategic battles where they deploy their emoji units and challenge others.
+[Open Emoji Battler](https://game.open-emoji-battler.community) is a decentralized multiplayer game owned by the community. Conceived with a vision of developing an open and free gaming experience, the entire game runs on blockchains, with a fully open-source codebase. Our game offers players fun and strategic battles where they can deploy their emoji units and challenge others.
 
 This page will provide an introduction to the Open Emoji Battler project.
 
