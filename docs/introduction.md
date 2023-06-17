@@ -12,11 +12,11 @@ https://user-images.githubusercontent.com/81064017/177928297-7a75fa42-361c-48d8-
 
 ## Decentralization
 
-Contrary to the normal online games (and most blockchain games as of today), where the owner companies have full control and rights, Open Emoji Battler aims to build a truly decentralized and unstoppable game. Traditional games are run by a top-down, centralized approach, and as a result, players are dependent on the developer companies for future updates and policies.
+Contrary to normal online games (and most blockchain games as of today), where the owning companies have full control and rights, Open Emoji Battler aims to build a truly decentralized and unstoppable game. Traditional games are run by a top-down, centralized approach, and as a result, players depend on the developer companies for future updates and policies.
 
-However, Open Emoji Battler is run by the community by staying true to the essence of blockchain - eliminating the dependency on trusted central entities. By leveraging blockchain technology, we create a crypto-native game where the source code and content are free, the execution engine is permissionless, and the governance is open to the community.
+However, Open Emoji Battler operates under the community, staying true to the essence of blockchain - eliminating dependence on trusted central entities. By leveraging blockchain technology, we have created a crypto-native game where the source code and content are free, the execution engine is permissionless, and the governance is open to the community.
 
-Open Emoji Battler is not governed by a CEO or management team. Instead, it thrives as a community project, made for gamers, by gamers.
+Open Emoji Battler is not governed by a CEO or management team. Instead, it thrives as a community project, made by gamers, for gamers.
 
 ## Gameplay Sustainability
 
@@ -24,16 +24,16 @@ At Open Emoji Battler, we have always prioritized sustainable gameplay. We focus
 
 ## Technology
 
-This project is built in the Polkadot ecosystem. The advantages of this ecosystem are not only the cross-chain interoperability and flexibility but also the use of Wasm. Thanks to its efficient platform-agnostic format, our source code, which is written in Rust language, is compiled into Wasm, enabling its use in smart contracts, blockchain runtime, and web frontend.
+This project is built within the Polkadot ecosystem. The advantages of this ecosystem not only include cross-chain interoperability and flexibility but also the use of Wasm. Thanks to its efficient platform-agnostic format, our source code, written in the Rust language, is compiled into Wasm, enabling its use in smart contracts, blockchain runtime, and the web frontend.
 
-The game logic is fully on-chain to process actions in a trustless manner. We have chosen direct on-chain execution architecture for its simplicity and maturity. We have a web frontend that can be hosted on IPFS for the game's UI. We're committed to open technology, so proprietary or non-free software / game engines aren't viable options for us.
+The game logic is fully on-chain to process actions in a trustless manner. We've chosen the direct on-chain execution architecture for its simplicity and maturity. We have a web frontend that can be hosted on IPFS for the game's UI. We're committed to open technology, so proprietary or non-free software / game engines aren't viable options for us.
 
-Our NFT collection is on Statemine. Statemine is a parachain designed for assets in the Polkadot ecosystem. This collection is the first fully on-chain, ecosystem-native NFTs on Statemine and Statemint.
+Our NFT collection resides on Statemine, a parachain designed for assets in the Polkadot ecosystem. This collection represents the first fully on-chain, ecosystem-native NFTs on both Statemine and Statemint.
 
 ## Milestones Achieved
 
-- We had a playable prototype from [day one](https://polkaverse.com/@openemojibattler/announcing-substrate-game-open-emoji-battler-10178) because we believe gameplay is important. That has evolved into [two on-chain implementations](https://forum.open-emoji-battler.community/t/topic/55): a blockchain and a smart contract.
-- We have fairly [distributed NFTs](https://forum.open-emoji-battler.community/t/topic/58) to our community. We've never had any sales or similar activities.
+- We had a playable prototype from [day one](https://polkaverse.com/@openemojibattler/announcing-substrate-game-open-emoji-battler-10178) because we believe in the importance of gameplay. This has evolved into [two on-chain implementations](https://forum.open-emoji-battler.community/t/topic/55): a blockchain and a smart contract.
+- We have fairly [distributed NFTs](https://forum.open-emoji-battler.community/t/topic/58) to our community. We've never held any sales or similar activities.
 - We've [hosted a gameplay event](https://forum.open-emoji-battler.community/t/topic/63) with prizes. The top players on the leaderboard were awarded cryptocurrency and NFTs in the open and free-to-play event.
 
 ## Core Game Mechanics
