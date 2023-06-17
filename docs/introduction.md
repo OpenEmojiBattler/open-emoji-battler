@@ -26,7 +26,7 @@ At Open Emoji Battler, we have always prioritized sustainable gameplay. We focus
 
 This project is built within the Polkadot ecosystem. The advantages of this ecosystem not only include cross-chain interoperability and flexibility but also the use of Wasm. Thanks to its efficient platform-agnostic format, our source code, written in the Rust language, is compiled into Wasm, enabling its use in smart contracts, blockchain runtime, and the web frontend.
 
-The game logic is fully on-chain to process actions in a trustless manner. We've chosen the direct on-chain execution architecture for its simplicity and maturity. We have a web frontend that can be hosted on IPFS for the game's UI. We're committed to open technology, so proprietary or non-free software / game engines aren't viable options for us.
+The game logic is fully on-chain to process actions in a trustless manner. We have a web frontend that can be hosted on IPFS for interacting with the chain. We're committed to open technology, so we don't use proprietary or non-free software / game engines.
 
 Our NFT collection resides on Statemine, a parachain designed for assets in the Polkadot ecosystem. This collection represents the first fully on-chain, ecosystem-native NFTs on both Statemine and Statemint.
 
