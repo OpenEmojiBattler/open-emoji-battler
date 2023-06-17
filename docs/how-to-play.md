@@ -2,102 +2,103 @@
 permalink: /how-to-play
 ---
 
-# How to Play
+# Gameplay Guide
 
-If you don't know about Open Emoji Battler project itself, read [this post](https://forum.open-emoji-battler.community/t/topic/60) first.
+If you're new to the Open Emoji Battler project, please start by checking out [this page](https://openemojibattler.github.io/open-emoji-battler/introduction) first.
 
----
+## Getting Started
 
-You need the [Polkadot{.js} extension](https://polkadot.js.org/extension/) to play this game. Please install this extension on your updated browser and set up your account. You can access the game from [the top page](https://game.open-emoji-battler.community).
+The game works on web browsers. To start playing the game, please visit [the website](https://game.open-emoji-battler.community).
 
-Also, you can try the game instantly without the extension and account from the try button. Your data aren't recorded, and you can't change your deck, but it's a good starting point to practice and understands how this game works.
+Once there, you can explore the game by clicking on the "Try" button, which doesn't require any setup. We encourage you to do this first to familiarize yourself with how the game works.
 
-## Overview
+To save your progress and change your deck, you need to install [the Polkadot{.js} extension](https://polkadot.js.org/extension/) and set up your account. Also, if you're connected to Shiden Network, a small amount of SDN is necessary to cover transaction fees. Just 1 SDN is enough for dozens of matches.
 
-Open Emoji Battler is a PvP strategy game. The game mechanics are inspired by popular auto-battler games but adapted for on-chain gaming.
+## Game Objective and Overview
 
-The ultimate goal of this game is to increase your EP (Emoji Power) through competing matches. EP is a rating-like system for players. It's also used for matchmaking.
+In this game, your primary goal is to increase your EP (Emoji Power) by competing in matches. EP functions like a rating system for players and is also used for matchmaking. When you win a match, your EP increases.
 
-In a match, you battle with three rivals. Rivals are previous gameplay data by players, so you don't need to wait for others to start playing. Your aim is to defeat rivals by damaging their health points while keeping your health alive.
+During a match, you employ emojis called EMOs and battle with three rivals. These rivals are chosen from past gameplay data, eliminating the need to wait for other players to start the game. Your aim is to defeat your rivals and achieve a high rank within the game.
 
-## EMO
+## Understanding EMO
 
-EMOs are emoji units that fight for players. You can see the detail on the mouse over.
+EMOs are emoji units that fight for players. You can see the detail on mouseover.
 
-![emo|690x499,50%](assets/emo.png)
+<img alt="emo" src="assets/emo.png" width="400">
 
 - Grade: 1 to 6
 - Type: Human, Nature, Food, Object
 
 ## Match Flow
 
-1. Build your deck.
-1. Start a match. Your rivals are chosen. You have initial health.
-1. Repeat a turn that consists of the shop phase and battle phase.
-	- shop: Make your board stronger. Buy and sell EMOs, upgrade your player grade, using coins.
-	- battle: Watch the auto-battle. EMOs on boards automatically attack the opponent's EMOs until one loses all EMOs. The winner deals damages to the opponent's health.
-1. The match ends when you are the last one standing or your health reaches 0.
-1. Your EP gets updated based on the result.
+Here's how a match proceeds. Detailed explanations of each step will be provided in the subsequent sections.
 
-Let's look into each step.
+1. Build your EMO deck.
+2. Start a match and three rivals will be presented.
+3. Take turns consisting of Shop and Battle phases.
+	- Shop: Strengthen your board. Use Coins to buy and sell EMOs or upgrade your player grade.
+	- Battle: Watch the auto-battle. EMOs on the boards automatically attack the opponent's EMOs until one side loses all EMOs. The winner deals damage to the opponent's health.
+4. The match concludes when you are the last one standing or your health reaches 0.
+5. Your EP gets updated based on this match result.
 
 ## Preparation
 
-You can build EMO decks and select one for use, or just continue with the default deck. Please select EMOs for each grade. Decks are saved on your browser's local storage.
+Before starting a match, you can select or build an EMO deck. Each deck consists of six EMOs for every grade. During the match, your deck is combined with pre-defined EMOs to create an EMO pool. The count of each EMO is multiplied in this pool.
 
-The combination of your deck and fixed set of EMOs will be used as a pool in the match. The number of EMOs will be multiplied.
+When you're ready, press the start button to begin the match. The first phase is the Shop phase.
 
-When you're ready, press the start button. The first shop phase starts.
-
-Your rivals are automatically chosen based on your EP. Your initial health is 30.
+Your rivals are selected automatically based on your EP. You start with an initial health of 30.
 
 ## Shop Phase
 
-At the beginning of this phase, you get some coins. The amount of coins you get starts at 3 on the first turn and increases 1 each turn up to a maximum of 8. Your unused coins aren't carried to the next turn.
+At the beginning of this phase, you get a certain number of Coins. The amount of Coins you receive starts at 3 on the first turn and increases by 1 each turn, up to a maximum of 8. Note that unused Coins within a phase are not carried over to the next turn.
 
-In this phase, you can do the followings:
+During this phase, you can take the following actions:
 
-- Use 3 coins to buy an EMO from the top line of the Catalog.
-	- EMOs on Catalog are randomly selected from the pool.
-	- Click the "Buy" button to select the EMO and choose where to set it on your board.
-	- You cannot buy an EMO with a higher grade than your player grade.
-- Use 1 coin to proceed to the next Catalog line.
-	- Only on the first turn, you can do this twice for free.
-- Use some coins to upgrade your player grade.
-	- The number of coins necessary to upgrade varies on the grade. It decreases by 1 on each turn.
-- Move an EMO to the desired position on your board for free.
-- Sell an EMO from your board. You get 1 coin.
+- Spend 3 Coins to buy an EMO from the top line of the Catalog.
+	- EMOs in the Catalog are randomly chosen from the pool.
+	- Click the "Buy" button to select an EMO and decide its position on your board.
+	- Keep in mind that you cannot buy an EMO with a higher grade than your player grade.
+- Spend 1 Coin to advance to the next Catalog line.
+	- Exceptionally on the first turn, you can do this twice for free.
+- Spend Coins to upgrade your player grade.
+	- The amount of Coins required to upgrade varies based on the grade and decreases by 1 on each turn.
+- Reposition an EMO on your board for free.
+- Sell an EMO from your board and receive 1 Coin.
 
-You can check the status of your rivals.
+You can also view the status of your rivals.
 
-![shop|690x435](assets/shop.jpeg)
+![shop](assets/shop.jpeg)
 
-When you have three EMOs of the same emoji on your board, they will be fused into a powerful Triple EMO, and you get 5 coins.
+When you have three EMOs of the same emoji on your board, they merge into a powerful Triple EMO with enhanced stats and abilities, and you are rewarded with 5 Coins.
 
-After you finish all operations, proceed to the battle phase.
+Once you have completed all your actions, you can proceed to the Battle phase.
 
 ## Battle Phase
 
-The battle automatically starts with one of your rivals. The player with a greater number of EMOs attacks first. If the numbers of EMOs are equal, a random side starts an attack.
+The battle automatically begins with one of your rivals. The player with a greater number of EMOs attacks first. If the numbers of EMOs are equal, the attack order is determined randomly.
 
-Each EMO on the board from left to right attacks an opponent's random EMO and repeats it.
+EMOs take turns attacking a randomly chosen EMO from the opponent's side. This starts from the leftmost EMO and moves to the right.
 
-The state of health 0 is called "retired."
+An EMO is considered "retired" when its health reaches 0.
 
-The player that all EMOs retired loses the battle. The winner deals damage to the opponent's health. The damage amount is a sum of the player's grade and the remaining EMOs' grades on the board.
+A player loses the battle when all of their EMOs have retired. The winner then deals damage to the defeated player's health. The amount of damage dealt equals the sum of the winner's player grade and the grades of their remaining EMOs on the board.
 
-After the battle, the next shop phase starts. Any changes on the boards during the battle will be reset. A set of shop phase and battle phase is called a turn.
+After the battle, the next Shop phase starts. Any changes made to the boards during the battle will be reset. A set consisting of one Shop phase and one Battle phase is referred to as a turn.
 
-When all of your rivals or you retire, the whole match finishes.
+The match finishes when all of your rivals or you have retired.
 
 ## Result
 
-You see the rank of the match and the change of your EP.
+At the end of a match, you'll see your rank and how your EP has changed.
 
 ## Notes
 
-- Do not reload the site during gameplay. You can't resume the match, and you're considered lost in the match.
-- Do not reject the transaction signing popup from the extension. As same as above, you can't resume. These behaviors should be improved in the future version.
-- You can watch [a gameplay demo video here](https://www.youtube.com/watch?v=ah3-sWMATSM).
+- You can watch [this gameplay video](https://www.youtube.com/watch?v=ah3-sWMATSM) to get a hint.
+- Do not reload the site during gameplay. You won't be able to resume the match, and it will be considered a loss.
+- Do not reject the transaction signing popup from the extension. Similarly to the point above, you can't resume the game. We aim to improve this behavior in future versions.
 
-That's it! If you have any issues, feel free to ask us on [Discord](https://discord.gg/fvXzW8hFQ7) or [Twitter](https://twitter.com/OEB_community).
+## Winning Tips
+
+- Strategies for each EMO type: https://forum.open-emoji-battler.community/t/topic/45
+- A guide for Japanese readers: https://news.blockchaingame.jp/1895
