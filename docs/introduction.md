@@ -8,7 +8,7 @@ permalink: /introduction
 
 This page will provide an introduction to the Open Emoji Battler project.
 
-https://user-images.githubusercontent.com/81064017/177928297-7a75fa42-361c-48d8-b361-79a1ecad0eb1.mp4
+<video src="https://user-images.githubusercontent.com/81064017/177928297-7a75fa42-361c-48d8-b361-79a1ecad0eb1.mp4" controls></video>
 
 ## Decentralization
 
@@ -42,9 +42,9 @@ Inspired by popular auto-battler games, Open Emoji Battler offers competitive st
 
 A match begins with the player building an EMO deck, followed by facing off against three opponent players. The goal is to defeat opponents by reducing their health points while preserving one's own. The match progresses in repeated sets of shop and battle phases. In a shop phase, you build and upgrade your board (field) by buying and selling EMOs. In a battle phase, you face off against one random opponent, and your EMOs automatically attack the opponent EMOs. When one loses all EMOs, the lost player takes damage. Then, the next shop phase starts. The match concludes when only one player remains. Lastly, your rating is updated based on the match result.
 
-![phases|690x309](imgs/phases.jpeg)
+![phases](imgs/phases.jpeg)
 
-![result|690x343, 50%](imgs/result.png)
+<img alt="result" src="imgs/result.png" width="50%">
 
 For more insights into gameplay, [visit this guide](https://openemojibattler.github.io/open-emoji-battler/how-to-play).
 
