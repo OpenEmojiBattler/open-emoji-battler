@@ -8,7 +8,7 @@ permalink: /introduction
 
 This page will provide an introduction to the Open Emoji Battler project.
 
-<video src="imgs/demo.mp4" controls></video>
+<video src="imgs/demo.mp4" controls width="640"></video>
 
 ## Decentralization
 
@@ -44,7 +44,7 @@ A match begins with the player building an EMO deck, followed by facing off agai
 
 ![phases](imgs/phases.jpeg)
 
-<img alt="result" src="imgs/result.png" width="50%">
+<img alt="result" src="imgs/result.png" width="400"><br><br>
 
 For more insights into gameplay, [visit this guide](https://openemojibattler.github.io/open-emoji-battler/how-to-play).
 
