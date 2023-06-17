@@ -24,7 +24,7 @@ In a match, you battle with three rivals. Rivals are previous gameplay data by p
 
 EMOs are emoji units that fight for players. You can see the detail on the mouse over.
 
-![emo|690x499,50%](imgs/emo.png)
+![emo|690x499,50%](assets/emo.png)
 
 - Grade: 1 to 6
 - Type: Human, Nature, Food, Object
@@ -70,7 +70,7 @@ In this phase, you can do the followings:
 
 You can check the status of your rivals.
 
-![shop|690x435](imgs/shop.jpeg)
+![shop|690x435](assets/shop.jpeg)
 
 When you have three EMOs of the same emoji on your board, they will be fused into a powerful Triple EMO, and you get 5 coins.
 

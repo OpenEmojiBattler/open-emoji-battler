@@ -8,7 +8,7 @@ permalink: /introduction
 
 This page will provide an introduction to the Open Emoji Battler project.
 
-<video src="imgs/demo.mp4" controls></video>
+<video src="assets/demo.mp4" controls width="640"></video>
 
 ## Decentralization
 
@@ -26,7 +26,7 @@ At Open Emoji Battler, we have always prioritized sustainable gameplay. We focus
 
 This project is built within the Polkadot ecosystem. The advantages of this ecosystem not only include cross-chain interoperability and flexibility but also the use of Wasm. Thanks to its efficient platform-agnostic format, our source code, written in the Rust language, is compiled into Wasm, enabling its use in smart contracts, blockchain runtime, and the web frontend.
 
-The game logic is fully on-chain to process actions in a trustless manner. We've chosen the direct on-chain execution architecture for its simplicity and maturity. We have a web frontend that can be hosted on IPFS for the game's UI. We're committed to open technology, so proprietary or non-free software / game engines aren't viable options for us.
+The game logic is fully on-chain to process actions in a trustless manner. We have a web frontend that can be hosted on IPFS for interacting with the chain. We're committed to open technology, so we don't use proprietary or non-free software / game engines.
 
 Our NFT collection resides on Statemine, a parachain designed for assets in the Polkadot ecosystem. This collection represents the first fully on-chain, ecosystem-native NFTs on both Statemine and Statemint.
 
@@ -42,9 +42,9 @@ Inspired by popular auto-battler games, Open Emoji Battler offers competitive st
 
 A match begins with the player building an EMO deck, followed by facing off against three opponent players. The goal is to defeat opponents by reducing their health points while preserving one's own. The match progresses in repeated sets of shop and battle phases. In a shop phase, you build and upgrade your board (field) by buying and selling EMOs. In a battle phase, you face off against one random opponent, and your EMOs automatically attack the opponent EMOs. When one loses all EMOs, the lost player takes damage. Then, the next shop phase starts. The match concludes when only one player remains. Lastly, your rating is updated based on the match result.
 
-![phases](imgs/phases.jpeg)
+![phases](assets/phases.jpeg)
 
-<img alt="result" src="imgs/result.png" width="50%">
+<img alt="result" src="assets/result.png" width="400"><br><br>
 
 For more insights into gameplay, [visit this guide](https://openemojibattler.github.io/open-emoji-battler/how-to-play).
 
