@@ -8,7 +8,7 @@ permalink: /introduction
 
 This page will provide an introduction to the Open Emoji Battler project.
 
-<video src="https://user-images.githubusercontent.com/81064017/177928297-7a75fa42-361c-48d8-b361-79a1ecad0eb1.mp4" controls></video>
+<video src="imgs/demo.mp4" controls></video>
 
 ## Decentralization
 
