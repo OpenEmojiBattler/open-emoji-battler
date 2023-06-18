@@ -4,7 +4,7 @@ permalink: /how-to-play
 
 # Gameplay Guide
 
-If you're new to the Open Emoji Battler project, please start by checking out [this page](https://openemojibattler.github.io/open-emoji-battler/introduction) first.
+*If you're new to the Open Emoji Battler project, please start by checking out [this page](https://openemojibattler.github.io/open-emoji-battler/introduction) first.*
 
 ## Getting Started
 
@@ -36,8 +36,8 @@ Here's how a match progresses. Detailed explanations of each step will be provid
 1. Build your EMO deck.
 2. Start a match, and three rivals will be presented.
 3. Take turns consisting of the Shop and Battle phases.
-	- Shop: Strengthen your board. Spend Coins to buy and sell EMOs or upgrade your player grade.
-	- Battle: Watch the auto-battle. EMOs on the boards automatically attack the opponent's EMOs until one side loses all EMOs. The winner deals damage to the opponent's health.
+	- **Shop**: Strengthen your board. Spend Coins to buy and sell EMOs or upgrade your player grade.
+	- **Battle**: Watch the auto-battle. EMOs on the boards automatically attack the opponent's EMOs until one side loses all EMOs. The winner deals damage to the opponent's health.
 4. The match concludes when you are the last one standing or your health reaches 0.
 5. Your EP gets updated based on this match result.
 
