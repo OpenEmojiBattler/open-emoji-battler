@@ -31,12 +31,12 @@ EMOs are emoji units that fight for players. You can see the detail on mouseover
 
 ## Match Flow
 
-Here's how a match proceeds. Detailed explanations of each step will be provided in the subsequent sections.
+Here's how a match progresses. Detailed explanations of each step will be provided in the subsequent sections.
 
 1. Build your EMO deck.
-2. Start a match and three rivals will be presented.
-3. Take turns consisting of Shop and Battle phases.
-	- Shop: Strengthen your board. Use Coins to buy and sell EMOs or upgrade your player grade.
+2. Start a match, and three rivals will be presented.
+3. Take turns consisting of the Shop and Battle phases.
+	- Shop: Strengthen your board. Spend Coins to buy and sell EMOs or upgrade your player grade.
 	- Battle: Watch the auto-battle. EMOs on the boards automatically attack the opponent's EMOs until one side loses all EMOs. The winner deals damage to the opponent's health.
 4. The match concludes when you are the last one standing or your health reaches 0.
 5. Your EP gets updated based on this match result.
