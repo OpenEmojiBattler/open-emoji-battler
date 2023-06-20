@@ -78,15 +78,6 @@ yarn install
 cp common/js/src/envs/local.example.json common/js/src/envs/local.json
 ```
 
-### Serve web
-
-(Back to the repository root, and...)
-
-```
-cd front
-yarn dev
-```
-
 ## Contribution
 
 Any contributions are [welcome](https://forum.open-emoji-battler.community/t/topic/38)! We will appreciate that.
