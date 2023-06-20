@@ -78,21 +78,6 @@ yarn install
 cp common/js/src/envs/local.example.json common/js/src/envs/local.json
 ```
 
-### Start chain
-
-```
-cd chain
-make build
-make dev
-```
-
-### Update chain game data
-
-```
-cd chain/scripts
-yarn seed-data:dev
-```
-
 ### Serve web
 
 (Back to the repository root, and...)
