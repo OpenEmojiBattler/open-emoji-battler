@@ -1,3 +1,7 @@
+[Open Emoji Battler](https://game.open-emoji-battler.community) is a decentralized auto-battler game owned by the community. The game logic is implemented in Rust, compiled to Wasm, and runs on both the blockchain and a web frontend. The SPA frontend, which can be hosted on IPFS, only interacts with the blockchain, thereby eliminating the need for central servers. Our game provides players with fun and strategic battles where they can deploy their emoji units and challenge other players.
+
+To learn more about this project or to refer to the player guide, please visit [our guide site](https://openemojibattler.github.io/open-emoji-battler/introduction).
+
 <div align="center">
 
 <table><tr><td width="500">
@@ -6,59 +10,35 @@ https://user-images.githubusercontent.com/81064017/177928297-7a75fa42-361c-48d8-
 
 </tr></td></table>
 
-[Website](https://game.open-emoji-battler.community/)
-&nbsp;
-•
-&nbsp;
-[Forum](https://forum.open-emoji-battler.community/)
-&nbsp;
-•
-&nbsp;
-[Twitter](https://twitter.com/OEB_community)
-
 </div>
-
-## Introduction
-
-**Open Emoji Battler** is a decentralized blockchain game, owned by the community, running on-chain. This game is implemented in Rust, built into Wasm, and ran in blockchains and web frontend. There is no central server, and the web frontend can be hosted on [IPFS](https://github.com/ipfs/ipfs).
-
-For the on-chain part, we initially started to build this game as an independent chain with blockchain framework [Substrate](https://github.com/paritytech/substrate), but now we also have a smart-contract implementation using [ink!](https://github.com/paritytech/ink). Both implementations share the most codebase with minor differences.
-
-The strategic gameplay is inspired by [auto battler](https://en.wikipedia.org/wiki/Auto_battler) games, mainly Hearthstone Battlegrounds. Build your deck using emojis, and defeat other players!
 
 ## Vision
 
-Our vision is to build a truly decentralized game.
-
-Most blockchain games use central servers with private source code, and they make some in-game assets into NFTs and FTs on the chain. The developer companies have full control of the project.
-
-In Open Emoji Battler, the players themselves build and own this project. Our technical architecture and independence from VC allow us to realize that. We've not achieved complete decentralization yet, but the groundwork is here.
-
-We also put importance on game sustainability. For example, some play-to-earn games use Ponzi-ish schemes to attract players. We don't believe it works well in the long run, so we develop fun gameplay worth playing.
+We are building a decentralized, engaging multiplayer game. While most blockchain games are centralized and often prioritize monetary aspects over gameplay, we are taking a different approach with Open Emoji Battler. Here, the community is at the heart of the project. This project is open and is governed by the community to create a fun gaming experience.
 
 ## Technology
 
-The whole game mechanics are written in Rust. It allows us to implement it once and use it for the chain and its frontend, and it can improve user experiences and reduce chain work. The frontend progresses the game with minimum interactions with the chain. To prevent cheat, the chain validates game operations submitted from the frontend.
+The game mechanics are coded in Rust, built into Wasm, and used for both the blockchain and frontend. It avoids the need to implement the same logic multiple times and also makes a smoother user experience. The frontend advances the game with minimal interactions with the blockchain, and then the blockchain validates the player's actions from the frontend to prevent cheating.
 
-The frontend is a SPA and uses Web Animations API to show battles.
+We use the Polkadot ecosystem for the on-chain execution. The on-chain logic was initially implemented as a standalone chain using [the Substrate framework]((https://github.com/paritytech/substrate)). We later developed a smart contract version with [the ink! eDSL](https://github.com/paritytech/ink), which is our current focus. Both implementations share the same codebase, but the chain implementation has a feeless transaction feature using per-transaction PoW and Web Workers. For more details, please refer to [the chain's README](./chain/README.md).
 
-The game mechanics are designed to be executed on-chain in mind. So the game doesn't look simple, but it only has two transaction interfaces: starting a match and finishing a turn or a match.
+The game system is designed with on-chain execution in mind. So, despite the game's apparent complexity, it only has two transaction interfaces: starting a game and ending a turn or a game.
+
+The frontend is a SPA and uses the Web Animations API to show battles.
 
 ## Development
 
-You need Rust and Yarn.
+Prerequisites:
 
-This is for chain development, but contract development is similar. See contract readme to learn more.
+- Rust
+- Node.js
+- Yarn
 
-### Setup
+To set up your development environment, execute the following commands:
 
 ```
 yarn install
 cp common/js/src/envs/local.example.json common/js/src/envs/local.json
 ```
 
-## Contribution
-
-Any contributions are [welcome](https://forum.open-emoji-battler.community/t/topic/38)! We will appreciate that.
-
-We know this isn't enough documented, so feel free to make an issue or ask us on our Discord server.
+Then, follow the instructions for [the contract](./contract/README.md) and [the front](./front/README.md).
