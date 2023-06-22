@@ -20,7 +20,7 @@ We are building a decentralized, engaging multiplayer game. While most blockchai
 
 The game mechanics are coded in Rust, built into Wasm, and used for both the blockchain and frontend. It avoids the need to implement the same logic multiple times and also makes a smoother user experience. The frontend advances the game with minimal interactions with the blockchain, and then the blockchain validates the player's actions from the frontend to prevent cheating.
 
-We use the Polkadot ecosystem for the on-chain execution. The on-chain logic was initially implemented as a standalone chain using [the Substrate framework]((https://github.com/paritytech/substrate)). We later developed a smart contract version with [the ink! eDSL](https://github.com/paritytech/ink), which is our current focus. Both implementations share the same codebase, but the chain implementation has a feeless transaction feature using per-transaction PoW and Web Workers. For more details, please refer to [the chain's README](./chain/README.md).
+We use the Polkadot ecosystem for the on-chain execution. The on-chain logic was initially implemented as a standalone chain using [the Substrate framework](https://github.com/paritytech/substrate). We later developed a smart contract version with [the ink! eDSL](https://github.com/paritytech/ink), which is our current focus. Both implementations share the same codebase, but the chain implementation has a feeless transaction feature using per-transaction PoW and Web Workers. For more details, please refer to [the chain's README](./chain/README.md).
 
 The game system is designed with on-chain execution in mind. So, despite the game's apparent complexity, it only has two transaction interfaces: starting a game and ending a turn or a game.
 
