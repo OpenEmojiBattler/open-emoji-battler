@@ -81,20 +81,6 @@ export function Top() {
               </li>
             </ul>
           </div>
-          <h1 className={"title"}>Plan</h1>
-          <div className={"content"}>
-            <p>We have a minimum playable prototype now. So what's coming next?</p>
-            <ul>
-              <li>Gameplay upgrade</li>
-              <li>Leaderboard and prizes</li>
-              <li>NFT</li>
-              <li>DAO</li>
-              <li>Tutorial and guide</li>
-              <li>Graphics/UI/UX upgrade</li>
-              <li>Growth</li>
-              <li>and more...</li>
-            </ul>
-          </div>
         </div>
       </section>
     </>
