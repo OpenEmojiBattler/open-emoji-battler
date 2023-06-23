@@ -63,21 +63,19 @@ export function Top() {
           <div className={"content"}>
             <ul>
               <li>
-                <strong>Blockchain</strong>: This is a fully on-chain, open-source game built in the
-                Polkadot ecosystem.
+                <strong>Blockchain</strong>: Open Emoji Battler is a fully on-chain, open-source
+                game leveraging Wasm technology.
               </li>
               <li>
-                <strong>Decentralization</strong>: The DAO owns and governs this project, whereas
-                most other blockchain games are centralized.
+                <strong>Decentralization</strong>: The DAO owns and governs this project.
               </li>
               <li>
-                <strong>Community</strong>: Open Emoji Battler is not a company. Instead, it's an
-                independent community project made by contributors.
+                <strong>Community</strong>: Open Emoji Battler is not a company but a community
+                project built by contributors.
               </li>
               <li>
-                <strong>Fun & Sustainable</strong>: We have skilled gameplay. It's an auto-battler
-                game playable in your browser. Players battle in strategic PvP matches with their
-                emoji units. 😎
+                <strong>Fun & Sustainable</strong>: Our auto-battler game offers strategic PvP
+                battles, where players engage using their emoji units.
               </li>
             </ul>
           </div>
