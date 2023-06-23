@@ -28,21 +28,11 @@ export function Top() {
                 <span className={"mx-3"}>•</span>
                 <ExternalLink href="https://youtu.be/ah3-sWMATSM">Demo Video</ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://twitter.com/OEB_community">Twitter</ExternalLink>
-                <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://discord.gg/fvXzW8hFQ7">Discord</ExternalLink>
-                <br />
-                <ExternalLink href="https://forum.open-emoji-battler.community/">
-                  Forum
-                </ExternalLink>
-                <span className={"mx-3"}>•</span>
                 <ExternalLink href="https://github.com/OpenEmojiBattler/open-emoji-battler">
                   GitHub
                 </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://news.blockchaingame.jp/1895">
-                  Japanese 遊び方 (BlockchainGame Info)
-                </ExternalLink>
+                <ExternalLink href="https://twitter.com/OEB_community">Twitter</ExternalLink>
               </div>
             </div>
             <div style={{ width: "550px" }}>
