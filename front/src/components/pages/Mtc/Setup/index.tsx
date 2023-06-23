@@ -28,17 +28,7 @@ export function Setup(props: {
     <section className="section">
       <div className={"container"}>
         <nav className={"level"} style={{ alignItems: "flex-start" }}>
-          <div className={"level-left"}>
-            {account.kind === "chain" ? (
-              <></>
-            ) : (
-              <div className={"level-item"}>
-                <div>
-                  See the <InternalLink to="/leaderboard">leaderboard</InternalLink>.
-                </div>
-              </div>
-            )}
-          </div>
+          <div className={"level-left"}></div>
           <div className={"level-right"}>
             <div className={"level-item"}>
               <div style={{ marginRight: "8px" }}>
@@ -47,8 +37,9 @@ export function Setup(props: {
                     <>No fee is required. The popup will show the PoW solution on the tip field.</>
                   ) : (
                     <>
-                      Your account needs a small amount of SDN to cover transaction fees.
-                      <br />1 SDN is enough for dozens of matches.
+                      A small amount of SDN is necessary to cover transaction fees.
+                      <br />
+                      Just 1 SDN is enough for dozens of matches.
                     </>
                   )}
                 </small>
@@ -77,6 +68,14 @@ export function Setup(props: {
         <h1 className={"title"}>Account</h1>
         <Accounts ep={props.ep} extensionAccounts={props.extensionAccounts} />
         <div className={"block"}>
+          {account.kind === "chain" ? (
+            <></>
+          ) : (
+            <>
+              <InternalLink to="/leaderboard">EP leaderboard</InternalLink>
+              <br />
+            </>
+          )}
           <small>{props.message}</small>
         </div>
         <h1 className={"title"}>Deck</h1>

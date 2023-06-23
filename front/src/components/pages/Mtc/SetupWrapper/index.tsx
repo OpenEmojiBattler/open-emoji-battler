@@ -53,7 +53,7 @@ export function SetupWrapper(props: {
     connection.query.playerMtcMutable(account.address).then((p) => {
       if (isMounted && p.isSome) {
         setMessage(
-          "The previous match didn't finish successfully. Your EP might decrease a little at the next match."
+          "The previous match didn't finish successfully. Your EP may decrease slightly in the next match."
         )
       } else {
         setMessage("")
