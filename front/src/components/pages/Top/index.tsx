@@ -18,15 +18,17 @@ export function Top() {
                 </h1>
               </div>
               <div className={"block"}>
-                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/60">
+                <ExternalLink href="https://openemojibattler.github.io/open-emoji-battler/introduction">
                   <strong>About</strong>
                 </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/17">
+                <ExternalLink href="https://openemojibattler.github.io/open-emoji-battler/how-to-play">
                   How to Play
                 </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://youtu.be/ah3-sWMATSM">Demo Video</ExternalLink>
+                <ExternalLink href="https://www.youtube.com/watch?v=ah3-sWMATSM">
+                  Demo Video
+                </ExternalLink>
                 <span className={"mx-3"}>•</span>
                 <ExternalLink href="https://github.com/OpenEmojiBattler/open-emoji-battler">
                   GitHub
