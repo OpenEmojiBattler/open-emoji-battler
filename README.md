@@ -1,3 +1,5 @@
+# Open Emoji Battler
+
 [Open Emoji Battler](https://game.open-emoji-battler.community) is a decentralized auto-battler game owned by the community. The game logic is implemented in Rust, compiled to Wasm, and runs on both the blockchain and a web frontend. The SPA frontend, which can be hosted on IPFS, only interacts with the blockchain, thereby eliminating the need for central servers. Our game provides players with fun and strategic battles where they can deploy their emoji units and challenge other players.
 
 To learn more about this project or to refer to the player guide, please visit [our guide site](https://openemojibattler.github.io/open-emoji-battler/introduction).
