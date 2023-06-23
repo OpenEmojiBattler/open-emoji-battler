@@ -18,31 +18,23 @@ export function Top() {
                 </h1>
               </div>
               <div className={"block"}>
-                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/60">
+                <ExternalLink href="https://openemojibattler.github.io/open-emoji-battler/introduction">
                   <strong>About</strong>
                 </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/17">
+                <ExternalLink href="https://openemojibattler.github.io/open-emoji-battler/how-to-play">
                   How to Play
                 </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://youtu.be/ah3-sWMATSM">Demo Video</ExternalLink>
-                <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://twitter.com/OEB_community">Twitter</ExternalLink>
-                <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://discord.gg/fvXzW8hFQ7">Discord</ExternalLink>
-                <br />
-                <ExternalLink href="https://forum.open-emoji-battler.community/">
-                  Forum
+                <ExternalLink href="https://www.youtube.com/watch?v=ah3-sWMATSM">
+                  Demo Video
                 </ExternalLink>
                 <span className={"mx-3"}>•</span>
                 <ExternalLink href="https://github.com/OpenEmojiBattler/open-emoji-battler">
                   GitHub
                 </ExternalLink>
                 <span className={"mx-3"}>•</span>
-                <ExternalLink href="https://news.blockchaingame.jp/1895">
-                  Japanese 遊び方 (BlockchainGame Info)
-                </ExternalLink>
+                <ExternalLink href="https://twitter.com/OEB_community">Twitter</ExternalLink>
               </div>
             </div>
             <div style={{ width: "550px" }}>
@@ -71,36 +63,20 @@ export function Top() {
           <div className={"content"}>
             <ul>
               <li>
-                <strong>Blockchain</strong>: This is a fully on-chain, open-source game built in the
-                Polkadot ecosystem.
+                <strong>Blockchain</strong>: Open Emoji Battler is a fully on-chain, open-source
+                game leveraging Wasm technology.
               </li>
               <li>
-                <strong>Decentralization</strong>: The DAO owns and governs this project, whereas
-                most other blockchain games are centralized.
+                <strong>Decentralization</strong>: The DAO owns and governs this project.
               </li>
               <li>
-                <strong>Community</strong>: Open Emoji Battler is not a company. Instead, it's an
-                independent community project made by contributors.
+                <strong>Community</strong>: Open Emoji Battler is not a company but a community
+                project built by contributors.
               </li>
               <li>
-                <strong>Fun & Sustainable</strong>: We have skilled gameplay. It's an auto-battler
-                game playable in your browser. Players battle in strategic PvP matches with their
-                emoji units. 😎
+                <strong>Fun & Sustainable</strong>: Our auto-battler game offers strategic PvP
+                battles, where players engage using their emoji units.
               </li>
-            </ul>
-          </div>
-          <h1 className={"title"}>Plan</h1>
-          <div className={"content"}>
-            <p>We have a minimum playable prototype now. So what's coming next?</p>
-            <ul>
-              <li>Gameplay upgrade</li>
-              <li>Leaderboard and prizes</li>
-              <li>NFT</li>
-              <li>DAO</li>
-              <li>Tutorial and guide</li>
-              <li>Graphics/UI/UX upgrade</li>
-              <li>Growth</li>
-              <li>and more...</li>
             </ul>
           </div>
         </div>

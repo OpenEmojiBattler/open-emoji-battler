@@ -13,18 +13,14 @@ export function Leaderboard() {
       <div className="container">
         <h1 className="title">Leaderboard</h1>
         <div className="block">
-          The players featured below are top 100 in the best EP. Only players who complete matches
-          at least once are counted. When multiple players have the same EP, the player who scores
-          the EP later places a higher rank. This also shows display names of Kusama identity along
-          with addresses.
-          <br />
-          <br />
-          The reward period for{" "}
+          The players featured below are the top in the best EP. Only players who have completed at
+          least one match are included. In the event of a tie in EP, the player who scored the EP
+          later will be ranked higher. Display names from Kusama identity are shown alongside
+          addresses. The reward period for{" "}
           <ExternalLink href="https://forum.open-emoji-battler.community/t/topic/63">
             the previous event
           </ExternalLink>{" "}
-          has been finished, and no further rewards will come to this leaderboard. Stay tuned for
-          the next update!
+          has ended, and no further rewards will be allocated to this leaderboard.
         </div>
         <div className="block">
           <ConnectionComponent />
