@@ -19,8 +19,8 @@ To deploy and test the ink! 3 contract locally, please follow these instructions
 
 1. Prepare Rust: Change `rust-toolchain.toml`'s channel to `nightly-2023-01-01`
 2. Install old chain: `cargo install contracts-node --git https://github.com/paritytech/substrate-contracts-node.git --tag v0.24.0 --force --locked`
-3. Run chain
-    - Remove `--base-path` directory if necessary
+3. Run chain: `substrate-contracts-node --wc-port 9988`
+    - Note that this chain can't use the same data (`--base-path`) with the latest chain.
 4. Deploy pre-built contract: `cd deploy && yarn ts-node ./202109210_init/script.ts local`
 5. Update environment file: Edit `/common/js/src/envs/local.json`
     - Fill in `gameAddress` and specify `ink` 3
