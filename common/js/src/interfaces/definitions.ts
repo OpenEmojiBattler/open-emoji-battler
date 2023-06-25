@@ -1,1 +1,1 @@
-export { default as all } from './all/definitions';
+export { default as all } from "./all/definitions.js"

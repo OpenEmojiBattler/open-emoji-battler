@@ -5,10 +5,9 @@
   "license": "Apache-2.0",
   "sideEffects": false,
   "main": "./src/index.ts",
+  "type": "module",
   "scripts": {
-    "build": "yarn generate:defs && yarn generate:meta",
-    "generate:defs": "ts-node --project './tsconfig.base.json' --esm node_modules/.bin/polkadot-types-from-defs --package '.' --endpoint 'ws://127.0.0.1:9988' --input './src/interfaces'",
-    "generate:meta": "ts-node --project './tsconfig.base.json' --esm node_modules/.bin/polkadot-types-from-chain --package '.' --endpoint 'ws://127.0.0.1:9988' --output './src/interfaces'",
+    "generate:defs": "ts-node --project './tsconfig.base.json' --esm node_modules/.bin/polkadot-types-from-defs --package '.' --input './src/interfaces'",
     "lint": "prettier --write '{src,scripts}/**/*'",
     "check-ts": "tsc -p . --noEmit"
   },
