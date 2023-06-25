@@ -66,9 +66,6 @@ module.exports = (_env, argv) => {
         "~": path.resolve(__dirname, "src/"),
       },
       extensions: [".ts", ".tsx", ".js"],
-      extensionAlias: {
-        ".js": [".ts", ".js"],
-      },
       fallback: {
         crypto: require.resolve("crypto-browserify"),
         stream: require.resolve("stream-browserify"),

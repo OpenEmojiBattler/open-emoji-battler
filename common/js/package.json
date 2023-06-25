@@ -5,9 +5,7 @@
   "license": "Apache-2.0",
   "sideEffects": false,
   "main": "./src/index.ts",
-  "//": "Before executing the generate:defs, uncomment the assertion in src/interfaces/definitions.ts",
   "scripts": {
-    "generate:defs": "NODE_OPTIONS='--no-warnings=ExperimentalWarning' ts-node --project './tsconfig.base.json' --esm node_modules/.bin/polkadot-types-from-defs --package '.' --input './src/interfaces'",
     "lint": "prettier --write '{src,scripts}/**/*'",
     "check-ts": "tsc -p . --noEmit"
   },
