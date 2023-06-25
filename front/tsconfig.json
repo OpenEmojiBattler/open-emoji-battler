@@ -1,7 +1,6 @@
 {
   "extends": "common/tsconfig.base.json",
   "compilerOptions": {
-    "module": "ESNext",
     "jsx": "react",
     "paths": {
       "~/*": ["./src/*"]

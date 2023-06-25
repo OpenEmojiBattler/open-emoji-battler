@@ -1,1 +1,2 @@
-export { default as all } from "./all/definitions.js"
+import def from "./all/_definitions.json" assert { type: "json" }
+export const all = { types: def }

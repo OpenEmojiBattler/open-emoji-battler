@@ -1,7 +1,7 @@
 import { u8aToString } from "@polkadot/util"
 import { ApiPromise, WsProvider } from "@polkadot/api"
 
-import { uniqueArray } from "common"
+import { uniqueArray } from "./utils"
 
 export const queryAddressNames = async (
   addresses: string[],
