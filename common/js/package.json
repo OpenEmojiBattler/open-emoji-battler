@@ -7,7 +7,7 @@
   "main": "./src/index.ts",
   "type": "module",
   "scripts": {
-    "generate:defs": "ts-node --project './tsconfig.base.json' --esm node_modules/.bin/polkadot-types-from-defs --package '.' --input './src/interfaces'",
+    "generate:defs": "NODE_OPTIONS='--no-warnings=ExperimentalWarning' ts-node --project './tsconfig.base.json' --esm node_modules/.bin/polkadot-types-from-defs --package '.' --input './src/interfaces'",
     "lint": "prettier --write '{src,scripts}/**/*'",
     "check-ts": "tsc -p . --noEmit"
   },
