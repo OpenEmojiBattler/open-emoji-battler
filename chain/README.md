@@ -31,5 +31,5 @@ make dev
 
 ```
 cd scripts
-yarn seed-data:dev
+npm run seed-data:dev
 ```

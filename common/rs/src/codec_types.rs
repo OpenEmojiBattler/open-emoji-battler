@@ -1,4 +1,4 @@
-// Auto-generated via `yarn generate-codec-types`
+// Auto-generated via `/tools/generateCodecTypes.ts`
 use parity_scale_codec::{Decode, Encode};
 use sp_std::{collections::btree_map::BTreeMap, prelude::*};
 
