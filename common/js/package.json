@@ -10,8 +10,8 @@
     "check-ts": "tsc -p . --noEmit"
   },
   "dependencies": {
-    "@polkadot/api-contract": "10.6.1",
-    "@polkadot/typegen": "10.6.1",
+    "@polkadot/api-contract": "10.9.1",
+    "@polkadot/typegen": "10.9.1",
     "prettier": "2.8.8",
     "ts-node": "10.9.1",
     "typescript": "5.0.4"

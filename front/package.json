@@ -14,8 +14,8 @@
   "dependencies": {
     "@babel/core": "7.21.8",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
-    "@polkadot/extension-dapp": "0.46.2",
-    "@polkadot/ui-shared": "3.3.1",
+    "@polkadot/extension-dapp": "0.46.5",
+    "@polkadot/ui-shared": "3.5.1",
     "@types/react-dom": "18.2.4",
     "babel-loader": "9.1.2",
     "buffer": "6.0.3",
