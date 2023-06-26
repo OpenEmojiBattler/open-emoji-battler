@@ -34,12 +34,11 @@ Prerequisites:
 
 - Rust
 - Node.js
-- Yarn
 
 To set up your development environment, execute the following commands:
 
 ```
-yarn install
+npm install
 cp common/js/src/envs/local.example.json common/js/src/envs/local.json
 ```
 

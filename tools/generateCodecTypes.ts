@@ -9,7 +9,7 @@ const main = () => {
 }
 
 const writeRsFile = () => {
-  const lines = ["// Auto-generated via `yarn generate-codec-types`"]
+  const lines = ["// Auto-generated via `/tools/generateCodecTypes.ts`"]
   lines.push("use parity_scale_codec::{Decode, Encode};")
   lines.push("use sp_std::{collections::btree_map::BTreeMap, prelude::*};\n")
 

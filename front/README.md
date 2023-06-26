@@ -1,3 +1,3 @@
 ```sh
-yarn dev # serve web frontend
+npm run dev # serve web frontend
 ```
