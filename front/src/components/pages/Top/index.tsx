@@ -48,10 +48,10 @@ export function Top() {
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
             <div className={"buttons"}>
               <InternalLink className={"button is-medium is-strong mx-3"} to={"/match"}>
-                {"Play with Polkadot{.js} extension account"}
+                {"Play with Polkadot{.js} Account"}
               </InternalLink>
               <InternalLink className={"button is-medium mx-3"} to={"/match_trial"}>
-                Try without account
+                Try as Guest
               </InternalLink>
             </div>
           </div>
