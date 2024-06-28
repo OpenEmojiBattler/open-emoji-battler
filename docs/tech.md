@@ -33,8 +33,8 @@ In contrast, the smart contract implementation lacks these blockchain-level feat
 The smart contract is developed using the `ink!` framework targeted at `pallet-contracts` Wasm VM. Compared to the EVM, this architecture offers:
 
 - 👍 **Greater computational efficiency**: Faster execution and reduced memory usage.
-- 👍 **Less storage consumption**: Variable storage entry size, not fixed to 256 bits.
-- 👎 **Larger contract bytecode size**: Occupies more storage, often reaching the contract size limit.
+- 👍 **Less storage consumption**: Variable storage entry size for states, not fixed to 256 bits.
+- 👎 **Larger contract bytecode size**: Occupies more storage for contracts, often reaching the contract size limit.
     - This is due to EVM/Solidity being specialized for smart contracts, whereas Rust/Wasm is more general.
 
 ## Gameplay Flow
@@ -56,4 +56,4 @@ The main directories located at the repository root are as follows:
 
 ![code](assets/code.png)
 
-`common/rs` is the primary implementation for the game logic. It includes a compile-time configurable flag for optimization. The chain and client share the same codebase, although the client version needs detailed information for intuitive UI updates, unlike the chain, which only requires the final outcome. When compiled for the client target, the code is full-featured, capable of generating detailed logs. However, when compiled for the on-chain target, it is stripped down to include only the essentials.
+`common/rs/` is the primary implementation for the game logic. It includes a compile-time configurable flag for optimization. The chain and client share the same codebase, although the client version needs detailed information for intuitive UI updates, unlike the chain, which only requires the final outcome. When compiled for the client target, the code is full-featured, capable of generating detailed logs. However, when compiled for the on-chain target, it is stripped down to include only the essentials.
