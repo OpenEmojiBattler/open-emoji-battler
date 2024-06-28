@@ -4,3 +4,4 @@ This site is managed via https://github.com/OpenEmojiBattler/open-emoji-battler/
 
 - [Introduction](introduction.md)
 - [How to Play](how-to-play.md)
+- [Technology](tech.md)
