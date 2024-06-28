@@ -28,6 +28,8 @@ The game system is designed with on-chain execution in mind. So, despite the gam
 
 The frontend is a SPA and uses the Web Animations API to show battles.
 
+You can read more about the technology on [this page](https://openemojibattler.github.io/open-emoji-battler/tech).
+
 ## Development
 
 Prerequisites:
